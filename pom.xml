@@ -6,8 +6,9 @@
 
 
     <groupId>ua.kpi.nc</groupId>
-    <artifactId>recrutingSystem</artifactId>
+    <artifactId>recruitingSystem</artifactId>
     <version>1.0</version>
+    <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -16,11 +17,39 @@
         <javax.servlet>3.0.1</javax.servlet>
         <postgresVersion>9.1-901-1.jdbc4</postgresVersion>
         <junit.version>4.11</junit.version>
+        <javax.servlet>3.0.1</javax.servlet>
         <jackson.version>1.9.10</jackson.version>
         <spring.securiry>4.0.3.RELEASE</spring.securiry>
+        <mail.version>1.4</mail.version>
+        <postgres.version>9.1-901-1.jdbc4</postgres.version>
+        <spring.jdbc>4.2.4.RELEASE</spring.jdbc>
     </properties>
 
     <dependencies>
+
+
+        <!--log4j-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--javax mail-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${mail.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresVersion}</version>
+        </dependency>
+
 
         <!-- SPRING -->
         <dependency>
@@ -48,6 +77,12 @@
             <artifactId>spring-security-config</artifactId>
             <version>${spring.securiry}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.jdbc}</version>
+        </dependency>
         <!-- END SPRING -->
 
         <!-- POI -->
@@ -66,7 +101,41 @@
         </dependency>
         <!-- END JUNIT -->
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
     </dependencies>
+
+
+    <build>
+        <finalName>recruitingSystem</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>
