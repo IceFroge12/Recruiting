@@ -47,6 +47,7 @@ hs_err_pid*
 /out/
 /target/
 
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
