@@ -8,8 +8,6 @@
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
 
-
-
 # Sensitive or high-churn files:
 .idea/dataSources.ids
 .idea/dataSources.xml
@@ -22,6 +20,9 @@
 .idea/gradle.xml
 .idea/libraries
 
+# Mongo Explorer plugin:
+.idea/mongoSettings.xml
+
 ## File-based project format:
 *.iws
 
@@ -33,7 +34,8 @@
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
-
+# JIRA plugin
+atlassian-ide-plugin.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
