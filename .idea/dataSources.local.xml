@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="PostgreSQL - recruitingsystem@localhost" uuid="4f5a5d32-d8c8-49c8-b451-d0e672ec4c2e">
+      <secret-storage>master_key</secret-storage>
+      <user-name>dima</user-name>
+    </data-source>
+  </component>
+</project>
