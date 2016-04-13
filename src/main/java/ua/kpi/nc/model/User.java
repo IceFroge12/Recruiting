@@ -1,23 +1,31 @@
 package ua.kpi.nc.model;
 
+import java.util.Date;
+
 /**
  * Created by dima on 12.04.16.
  */
 public class User {
 
     private long id;
-    private String email;
+    private String username;
     private String password;
-    private int roleId;
+    private String firstName;
+    private String lastName;
+    private Date interviewRangeStart;
+    private Date interviewRangeEnd;
 
     public User() {
     }
 
-    public User(long id, String email, String password, int roleId) {
+    public User(long id, String username, String password, String firstName, String lastName, Date interviewRangeStart, Date interviewRangeEnd) {
         this.id = id;
-        this.email = email;
+        this.username = username;
         this.password = password;
-        this.roleId = roleId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.interviewRangeStart = interviewRangeStart;
+        this.interviewRangeEnd = interviewRangeEnd;
     }
 
     public long getId() {
@@ -28,12 +36,12 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -44,21 +52,48 @@ public class User {
         this.password = password;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Date getInterviewRangeStart() {
+        return interviewRangeStart;
+    }
+
+    public void setInterviewRangeStart(Date interviewRangeStart) {
+        this.interviewRangeStart = interviewRangeStart;
+    }
+
+    public Date getInterviewRangeEnd() {
+        return interviewRangeEnd;
+    }
+
+    public void setInterviewRangeEnd(Date interviewRangeEnd) {
+        this.interviewRangeEnd = interviewRangeEnd;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", roleId=" + roleId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", interviewRangeStart=" + interviewRangeStart +
+                ", interviewRangeEnd=" + interviewRangeEnd +
                 '}';
     }
 }
