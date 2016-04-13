@@ -1,5 +1,6 @@
 package ua.kpi.nc.service;
 
+<<<<<<< HEAD
 import ua.kpi.nc.domain.model.User;
 
 /**
@@ -9,4 +10,17 @@ public interface UserService {
     User getUserByUsername(String username);
 
     User getUserByID(Long id);
+=======
+import ua.kpi.nc.model.User;
+
+/**
+ * Created by dima on 13.04.16.
+ */
+public interface UserService {
+
+    public User getUserByEmail();
+
+    public String getRoleByUserId(Long id);
+
+>>>>>>> origin/DmitriyChalienko
 }

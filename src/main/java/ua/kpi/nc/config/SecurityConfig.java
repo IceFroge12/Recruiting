@@ -1,11 +1,13 @@
 package ua.kpi.nc.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.sql.DataSource;
 
@@ -18,16 +20,12 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    DataSource dataSource;
+    @Qualifier("userAuthService")
+    UserDetailsService userDetailsService;
 
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "select id,email,password from users where email=? and active = true")
-                .authoritiesByUsernameQuery(
-                        "select id, role from user_role where id=?");
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
     }
 
     @Override
@@ -41,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ba/**").access("hasRole('ROLE_BA')")
                 .and()
                 .formLogin().loginPage("/login")
-                .usernameParameter("email").passwordParameter("password")
+                .usernameParameter("username").passwordParameter("password")
                 .defaultSuccessUrl("/")
                 .and()
                 .logout().logoutSuccessUrl("/login?logout")
