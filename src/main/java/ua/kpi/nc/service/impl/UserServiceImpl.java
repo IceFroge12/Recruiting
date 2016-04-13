@@ -17,6 +17,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    public UserServiceImpl() {
+    }
+
     private static Logger log = Logger.getLogger(UserServiceImpl.class.getName());
 
     @Override

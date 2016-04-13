@@ -27,6 +27,7 @@ public class DataConfig {
     public DataSource dataSource() {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
         dataSource.setDataSourceName("DataSource");
+        System.out.println(env.getRequiredProperty(PROP_SERVER_NAME));
         dataSource.setServerName(env.getRequiredProperty(PROP_SERVER_NAME));
         dataSource.setDatabaseName(env.getRequiredProperty(PROP_DATABASE_NAME));
         dataSource.setUser(env.getRequiredProperty(PROP_DATABASE_USERNAME));

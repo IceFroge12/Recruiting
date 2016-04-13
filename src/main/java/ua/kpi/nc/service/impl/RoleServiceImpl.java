@@ -19,6 +19,9 @@ public class RoleServiceImpl implements RoleService {
 
     private static Logger log = Logger.getLogger(RoleServiceImpl.class.getName());
 
+    public RoleServiceImpl() {
+    }
+
     @Override
     public Role getRoleById(Long id) {
         try {

@@ -7,7 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ua.kpi.nc.model.User;
+import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.UserService;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class UserAuthServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-            User user = userService.getUserByEmail();
+            User user = userService.getUserByUsername(email);
 
             if(user==null){
                 throw new UsernameNotFoundException("Username not found");
@@ -37,8 +38,10 @@ public class UserAuthServiceImpl implements UserDetailsService{
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(User user){
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(userService.getRoleByUserId(user.getId())));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : userService.getUserByUsername(user.getUsername()).getRoles()){
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
         return authorities;
     }
 
