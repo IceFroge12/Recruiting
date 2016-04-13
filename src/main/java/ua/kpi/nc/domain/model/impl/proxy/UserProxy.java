@@ -1,12 +1,16 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.kpi.nc.config.AppConfig;
 import ua.kpi.nc.config.DataConfig;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
+import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.service.impl.RoleServiceImpl;
+import ua.kpi.nc.service.impl.UserServiceImpl;
 
 import java.util.Set;
 
@@ -114,10 +118,8 @@ public class UserProxy implements User {
     }
 
     private UserImpl downloadUser(){
-        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
-        appContext.register(DataConfig.class);
-        appContext.refresh();
-        UserService userService = (UserService) appContext.getBean("userServiceImpl");
+        ApplicationContext appContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        UserService userService = appContext.getBean(UserServiceImpl.class);
         return (UserImpl) userService.getUserByID(id);
     }
 }
