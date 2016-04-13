@@ -14,6 +14,7 @@ import ua.kpi.nc.service.RoleService;
  */
 @Service
 public class RoleServiceImpl implements RoleService {
+
     @Autowired
     private RoleDao roleDao = new RoleDaoImpl();
 

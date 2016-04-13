@@ -1,8 +1,8 @@
 package ua.kpi.nc.service.impl;
 
 import org.springframework.stereotype.Service;
-import ua.kpi.nc.model.Sender;
-import ua.kpi.nc.model.User;
+import ua.kpi.nc.domain.model.Sender;
+import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.SenderService;
 
 import java.util.List;

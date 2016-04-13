@@ -1,7 +1,6 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ua.kpi.nc.config.AppConfig;
 import ua.kpi.nc.config.DataConfig;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;

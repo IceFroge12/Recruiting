@@ -1,5 +1,6 @@
 package ua.kpi.nc.service.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,7 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ua.kpi.nc.model.User;
+import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.UserService;
 
 import java.util.ArrayList;
@@ -22,10 +24,13 @@ public class UserAuthServiceImpl implements UserDetailsService{
     @Autowired
     UserService userService;
 
+    private java.util.logging.Logger log = java.util.logging.Logger.getLogger(String.valueOf(UserAuthServiceImpl.class));
+
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-            User user = userService.getUserByEmail();
+           User user = userService.getUserByUsername(email);
 
             if(user==null){
                 throw new UsernameNotFoundException("Username not found");
@@ -38,7 +43,11 @@ public class UserAuthServiceImpl implements UserDetailsService{
 
     private List<GrantedAuthority> getGrantedAuthorities(User user){
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(userService.getRoleByUserId(user.getId())));
+
+        for(Role role: user.getRoles()){
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+
         return authorities;
     }
 

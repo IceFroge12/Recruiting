@@ -6,6 +6,7 @@ import java.util.Set;
  * Created by Chalienko on 13.04.2016.
  */
 public interface User extends Model {
+
     String getLastName();
 
     void setLastName(String lastName);
