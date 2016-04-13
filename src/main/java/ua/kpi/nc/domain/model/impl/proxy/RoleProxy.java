@@ -1,12 +1,13 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.kpi.nc.config.AppConfig;
-import ua.kpi.nc.config.DataConfig;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
 import ua.kpi.nc.service.RoleService;
+import ua.kpi.nc.service.impl.RoleServiceImpl;
 
 import java.util.Set;
 
@@ -65,10 +66,8 @@ public class RoleProxy implements Role {
     }
 
     private RoleImpl downloadRole(){
-        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
-        appContext.register(DataConfig.class);
-        appContext.refresh();
-        RoleService roleService = (RoleService) appContext.getBean("roleServiceImpl");
+        ApplicationContext appContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        RoleService roleService = appContext.getBean(RoleServiceImpl.class);
         return (RoleImpl) roleService.getRoleById(id);
     }
 }
