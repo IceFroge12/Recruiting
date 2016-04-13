@@ -2,6 +2,8 @@ package ua.kpi.nc.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ua.kpi.nc.domain.dao.DaoException;
 import ua.kpi.nc.domain.dao.RoleDao;
@@ -12,15 +14,12 @@ import ua.kpi.nc.service.RoleService;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Service
+@Repository
 public class RoleServiceImpl implements RoleService {
     @Autowired
-    private RoleDao roleDao = new RoleDaoImpl();
+    private RoleDao roleDao;
 
-    private static Logger log = Logger.getLogger(RoleServiceImpl.class.getName());
-
-    public RoleServiceImpl() {
-    }
+    private static Logger log = Logger.getLogger(RoleServiceImpl.class);
 
     @Override
     public Role getRoleById(Long id) {

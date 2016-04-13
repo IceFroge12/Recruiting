@@ -21,7 +21,7 @@ import java.util.List;
 public class UserAuthServiceImpl implements UserDetailsService{
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -44,35 +44,35 @@ public class GoogleAuthController {
     String apiSecret = "google.app.secret";
     String callbackUrl = "google.app.redirect.url";
 
-    OAuthService service = new ServiceBuilder().provider(Google2Api.class)
-            .apiKey(env.getRequiredProperty(apiKey)).apiSecret(env.getRequiredProperty(apiSecret)).callback(env.getRequiredProperty(callbackUrl))
-            .scope(SCOPE).build();
+//    OAuthService service = new ServiceBuilder().provider(Google2Api.class)
+//            .apiKey(env.getRequiredProperty(apiKey)).apiSecret(env.getRequiredProperty(apiSecret)).callback(env.getRequiredProperty(callbackUrl))
+//            .scope(SCOPE).build();
 
 
-    @RequestMapping(value = "/google-auth", method = RequestMethod.GET)
-    public String googleAuth(WebRequest request) {
-        Token accessToken = (Token) request.getAttribute("ATTR_OAUTH_ACCESS_TOKEN", SCOPE_SESSION);
-        if (accessToken == null) {
-            String authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
-            return "redirect:" + authorizationUrl;
-        }
-        return "student";
-    }
+//    @RequestMapping(value = "/google-auth", method = RequestMethod.GET)
+//    public String googleAuth(WebRequest request) {
+//        Token accessToken = (Token) request.getAttribute("ATTR_OAUTH_ACCESS_TOKEN", SCOPE_SESSION);
+//        if (accessToken == null) {
+//            String authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
+//            return "redirect:" + authorizationUrl;
+//        }
+//        return "student";
+//    }
 
 
-    @RequestMapping(value = {"/googlecallback"}, method = RequestMethod.GET)
-    public String callBack(@RequestParam("code") String oauthVerifier) {
-
-        Verifier verifier = new Verifier(oauthVerifier);
-
-        Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
-
-        OAuthRequest oauthRequest = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
-        service.signRequest(accessToken, oauthRequest);
-        Response response = oauthRequest.send();
-
-        return "redirect:/student";
-    }
+//    @RequestMapping(value = {"/googlecallback"}, method = RequestMethod.GET)
+//    public String callBack(@RequestParam("code") String oauthVerifier) {
+//
+//        Verifier verifier = new Verifier(oauthVerifier);
+//
+//        Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
+//
+//        OAuthRequest oauthRequest = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+//        service.signRequest(accessToken, oauthRequest);
+//        Response response = oauthRequest.send();
+//
+//        return "redirect:/student";
+//    }
 
 
 }

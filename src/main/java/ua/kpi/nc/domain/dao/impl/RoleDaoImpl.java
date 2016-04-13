@@ -23,6 +23,9 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
 
     private static Logger log = Logger.getLogger(RoleDaoImpl.class.getName());
 
+    public RoleDaoImpl() {
+    }
+
     @Override
     public Role getByID(Long id) throws DaoException {
         String sql = "SELECT * FROM \"role\" WHERE \"role\".id = " + id;

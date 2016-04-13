@@ -1,9 +1,8 @@
 package ua.kpi.nc.domain.dao.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.kpi.nc.config.DataConfig;
+
 import ua.kpi.nc.domain.dao.DaoException;
 import ua.kpi.nc.domain.dao.UserDao;
 import ua.kpi.nc.domain.model.Role;
@@ -11,7 +10,7 @@ import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 
-import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,6 +24,9 @@ import java.util.Set;
 public class UserDaoImpl extends DaoSupport implements UserDao {
 
     private static Logger log = Logger.getLogger(UserDaoImpl.class.getName());
+
+    public UserDaoImpl() {
+    }
 
     @Override
     public User getByID(Long id) throws DaoException {
@@ -42,7 +44,6 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     private User getByQuery(String sql) throws DaoException {
         User user = null;
-       // System.out.println(getDataSource());
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
