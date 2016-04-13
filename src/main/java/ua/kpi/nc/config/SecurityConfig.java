@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ba/**").access("hasRole('ROLE_BA')")
                 .and()
                 .formLogin().loginPage("/login")
-                .usernameParameter("email").passwordParameter("password")
+                .usernameParameter("username").passwordParameter("password")
                 .defaultSuccessUrl("/")
                 .and()
                 .logout().logoutSuccessUrl("/login?logout")
