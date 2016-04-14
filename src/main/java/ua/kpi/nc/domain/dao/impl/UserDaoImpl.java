@@ -44,6 +44,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     private User getByQuery(String sql) throws DaoException {
         User user = null;
+        System.out.println(dataSource);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {

@@ -4,6 +4,8 @@ import org.postgresql.ds.PGPoolingDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
@@ -33,5 +35,10 @@ public class DataConfig {
         dataSource.setPassword(databasePassword);
         dataSource.setMaxConnections(20);
         return dataSource;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }
