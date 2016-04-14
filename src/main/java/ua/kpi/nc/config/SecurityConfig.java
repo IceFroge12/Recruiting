@@ -1,13 +1,13 @@
 package ua.kpi.nc.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import javax.sql.DataSource;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * Created by dima on 12.04.16.
@@ -18,31 +18,32 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    DataSource dataSource;
+    @Qualifier("userAuthService")
+    UserDetailsService userDetailsService;
+
 
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "select username,password, enabled from users where username=?")
-                .authoritiesByUsernameQuery(
-                        "select username, role from user_roles where username =?  ");
+    @Autowired
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/student/**").access("hasRole('ROLE_STUDENT')")
-                .antMatchers("/dev/**").access("hasRole('ROLE_DEV')")
-                .antMatchers("/hr/**").access("hasRole('ROLE_HR')")
-                .antMatchers("/ba/**").access("hasRole('ROLE_BA')")
+                .antMatchers("/account/change_password/**").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/student/**").hasRole("STUDENT")
+                .antMatchers("/dev/**").hasRole("DEV")
+                .antMatchers("/hr/**").hasRole("HR")
+                .antMatchers("/ba/**").hasRole("BA")
                 .and()
                 .formLogin().loginPage("/login")
-                .usernameParameter("email").passwordParameter("password")
-                .defaultSuccessUrl("/")
+                .usernameParameter("username").passwordParameter("password")
+                .successHandler(customAuthenticationSuccessHandler)
                 .and()
                 .logout().logoutSuccessUrl("/login?logout")
                 .and()
@@ -50,5 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
     }
+
 
 }
