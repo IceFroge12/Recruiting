@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 @Configuration
@@ -25,6 +23,7 @@ public class DataConfig {
     private String databaseUsername;
     @Value("${db.name}")
     private String databaseName;
+
 
     @Bean
     public DataSource dataSource() {

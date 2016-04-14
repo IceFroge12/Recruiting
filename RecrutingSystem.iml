@@ -9,7 +9,10 @@
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots />
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
@@ -33,6 +36,17 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-apis:2.5.2" level="project" />
+    <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-core:2.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.scribe:scribe:1.3.7" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.12" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:4.0.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:4.1.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:4.0.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:4.0.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.1.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.8.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.4" level="project" />
     <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-apis:2.5.2" level="project" />
     <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-core:2.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.scribe:scribe:1.3.7" level="project" />
