@@ -10,4 +10,5 @@ public interface Model extends Serializable {
     Long getId();
 
     void setId(Long id);
+
 }

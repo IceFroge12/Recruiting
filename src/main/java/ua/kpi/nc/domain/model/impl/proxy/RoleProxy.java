@@ -1,8 +1,11 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 import ua.kpi.nc.config.AppConfig;
+import ua.kpi.nc.config.DataConfig;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
@@ -15,6 +18,9 @@ import java.util.Set;
  * Created by Chalienko on 13.04.2016.
  */
 public class RoleProxy implements Role {
+
+    @Autowired
+    private RoleService roleService;
 
     private Long id;
     private RoleImpl role;
@@ -66,8 +72,6 @@ public class RoleProxy implements Role {
     }
 
     private RoleImpl downloadRole(){
-        ApplicationContext appContext = new AnnotationConfigApplicationContext(AppConfig.class);
-        RoleService roleService = appContext.getBean(RoleServiceImpl.class);
         return (RoleImpl) roleService.getRoleById(id);
     }
 }

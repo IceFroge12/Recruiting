@@ -8,6 +8,7 @@ import javax.sql.DataSource;
  * Created by Chalienko on 13.04.2016.
  */
 public abstract class DaoSupport {
+
     @Autowired
     protected DataSource dataSource;
 

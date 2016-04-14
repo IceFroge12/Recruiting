@@ -24,13 +24,11 @@ public class LoginController {
     @Autowired
     RoleService roleService;
 
-
     private java.util.logging.Logger logger = java.util.logging.Logger.getLogger(String.valueOf(GoogleAuthController.class));
-
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "logout", required = false) String logout) {
-        
+
         User user = userService.getUserByUsername("dmytromyna@gmail.com");
         for(Role role: user.getRoles()){
             logger.info( role.getRoleName());

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.UserService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ import java.util.List;
 public class UserAuthServiceImpl implements UserDetailsService{
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     private java.util.logging.Logger log = java.util.logging.Logger.getLogger(String.valueOf(UserAuthServiceImpl.class));
 
@@ -38,7 +37,6 @@ public class UserAuthServiceImpl implements UserDetailsService{
 
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     true, true, true, true, getGrantedAuthorities(user));
-
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(User user){
