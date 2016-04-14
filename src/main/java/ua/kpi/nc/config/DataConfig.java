@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
@@ -24,7 +25,6 @@ public class DataConfig {
     @Value("${db.name}")
     private String databaseName;
 
-
     @Bean
     public DataSource dataSource() {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
@@ -41,5 +41,4 @@ public class DataConfig {
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
         return new PropertySourcesPlaceholderConfigurer();
     }
-
 }

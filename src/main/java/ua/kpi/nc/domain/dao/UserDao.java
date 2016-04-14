@@ -10,4 +10,5 @@ public interface UserDao {
     User getByUsername(String username) throws DaoException;
 
     User getByID(Long id) throws DaoException;
+    boolean isExist(String username) throws  DaoException;
 }

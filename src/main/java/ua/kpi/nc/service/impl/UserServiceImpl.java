@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isExist(String username) {
+        try {
+            return userDao.isExist(username);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 }
