@@ -1,34 +1,32 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import ua.kpi.nc.config.AppConfig;
-import ua.kpi.nc.config.DataConfig;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
-import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.UserService;
-import ua.kpi.nc.service.impl.RoleServiceImpl;
-import ua.kpi.nc.service.impl.UserServiceImpl;
 
 import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
  */
-
+@Configurable
 public class UserProxy implements User {
+
+    private Long id;
+
+    private UserImpl user;
 
     @Autowired
     private UserService userService;
 
-    private Long id;
-    private UserImpl user;
+    public UserProxy() {
+    }
 
     public UserProxy(Long id) {
         this.id = id;
@@ -127,5 +125,4 @@ public class UserProxy implements User {
     private UserImpl downloadUser() {
         return (UserImpl) userService.getUserByID(id);
     }
-
 }

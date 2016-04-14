@@ -7,6 +7,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
@@ -15,7 +16,7 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     private static final String DISPATCHER = "dispatcher";
 
     @Override
-    public void onStartup(javax.servlet.ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 
         ctx.register(WebAppConfig.class);
@@ -39,14 +40,12 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
                 DataConfig.class,WebAppConfig.class,SecurityConfig.class
         };
     }
-
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[0];
-    }
-
     @Override
     protected String[] getServletMappings() {
         return new String[0];
+    }
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class<?>[0];
     }
 }
