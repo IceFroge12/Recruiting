@@ -20,6 +20,7 @@ public class DataConfig {
     private static final String PROP_DATABASE_USERNAME = "db.username";
     private static final String PROP_DATABASE_NAME = "db.name";
 
+
     @Resource
     private Environment env;
 
