@@ -2,9 +2,7 @@ package ua.kpi.nc.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import ua.kpi.nc.domain.dao.DaoException;
 import ua.kpi.nc.domain.dao.UserDao;
 import ua.kpi.nc.domain.model.User;
@@ -41,5 +39,10 @@ public class UserServiceImpl implements UserService {
             log.error("Cannot get user with id: " + id, e);
         }
         return null;
+    }
+
+    @Override
+    public boolean isExist(String username) {
+        return false;
     }
 }

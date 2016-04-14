@@ -18,28 +18,29 @@ import java.util.List;
  * Created by dima on 13.04.16.
  */
 @Service("userAuthService")
-public class UserAuthServiceImpl implements UserDetailsService{
+public class UserAuthServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-            User user = userService.getUserByUsername(email);
 
-            if(user==null){
-                throw new UsernameNotFoundException("Username not found");
-            }
+        User user = userService.getUserByUsername(userName);
 
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                    true, true, true, true, getGrantedAuthorities(user));
+        if (user == null) {
+            throw new UsernameNotFoundException("Username not found");
+        }
+
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                true, true, true, true, getGrantedAuthorities(user));
 
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(User user){
+    private List<GrantedAuthority> getGrantedAuthorities(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : userService.getUserByUsername(user.getUsername()).getRoles()){
+        for (Role role : user.getRoles()) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
         return authorities;

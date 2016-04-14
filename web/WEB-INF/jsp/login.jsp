@@ -17,7 +17,7 @@
         <div class="msg">${msg}</div>
     </c:if>
 
-    <form name='loginForm' action="<c:url value='/login' />" method='POST'>
+    <form name='loginForm' id="loginForm" action="<c:url value='/login' />" method='POST' prependId = "false">
         <table>
             <tr>
                 <td>Email:</td>
@@ -32,6 +32,8 @@
             </tr>
         </table>
     </form>
+
+    <a href="/google-auth">GoogleAuth</a>
 </div>
 </body>
 </html>

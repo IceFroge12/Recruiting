@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 /**
  * Created by dima on 13.04.16.
  */
-@Service
 public class Google2Api extends DefaultApi20 {
 
     private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=%s&redirect_uri=%s";
