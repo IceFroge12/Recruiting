@@ -35,6 +35,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         return getByQuery(sql);
     }
 
+
     @Override
     public User getByUsername(String username) throws DaoException {
         String sql = "SELECT * FROM \"user\" WHERE \"user\".username = " + "'" + username + "'";
@@ -42,9 +43,29 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         return getByQuery(sql);
     }
 
+    @Override
+    public boolean isExist(String username) throws DaoException {
+        String sql ="select exists(SELECT username from \"user\" where username =" +  "'"
+                + username + "')";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            log.trace("Open connection");
+            log.trace("Create prepared statement");
+            log.trace("Get result");
+            if (resultSet.next()) {
+               return resultSet.getBoolean("exists");
+            }
+        }
+        catch (SQLException e) {
+            log.error("Cannot read user" + e);
+            throw new DaoException("Cannot read user", e);
+        }
+        return false;
+    }
+
     private User getByQuery(String sql) throws DaoException {
         User user = null;
-        System.out.println(dataSource);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
