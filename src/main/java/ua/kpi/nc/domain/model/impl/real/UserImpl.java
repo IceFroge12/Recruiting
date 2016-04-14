@@ -4,7 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -16,35 +19,69 @@ public class UserImpl implements User {
 
     private Long id;
 
+    @Pattern(regexp="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}",
+        message = "Invalid email address.")
     private String username;
-
+    @Size(min = 3, max = 20,
+        message = "The password mast be at least 6 characters long.")
     private String password;
 
+    @Size(min=2, max=50,
+            message="Your first name must be between 3 and 50 characters long.")
     private String firstName;
 
-    private String last_name;
+    @Size(min=2, max=50,
+            message="Your last name must be between 3 and 50 characters long.")
+    private String lastName;
+
+    private String token;
+
+    private boolean enable;
+
+    private Date expirationTime;
+
+    public Date getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(Date expirationTime) {
+        this.expirationTime = expirationTime;
+    }
 
     private Set<Role> roles;
 
     public UserImpl() {
     }
 
-    public UserImpl(Long id,String username, String password, String firstName, String last_name, Set<Role> roles) {
+    public UserImpl(Long id, String username, String password, String firstName, String lastName, String token,
+                    boolean enable, Date expirationTime, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
-        this.last_name = last_name;
+        this.lastName = lastName;
+        this.token = token;
+        this.enable = enable;
+        this.expirationTime = expirationTime;
+        this.roles = roles;
+    }
+
+    public UserImpl(Long id, String username, String password, String firstName, String lastName, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.roles = roles;
     }
     @Override
     public String getLastName() {
-        return last_name;
+        return lastName;
     }
 
     @Override
     public void setLastName(String lastName) {
-        this.last_name = lastName;
+        this.lastName = lastName;
     }
 
     @Override
@@ -98,10 +135,30 @@ public class UserImpl implements User {
     }
 
     @Override
+    public String getToken() {
+        return token;
+    }
+
+    @Override
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    @Override
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    @Override
     public String toString() {
         return "User:" +
                 " firstName= " + firstName  +
-                ", lastName= " + last_name + "\n";
+                ", lastName= " + lastName + "\n";
     }
 
     @Override
@@ -117,7 +174,7 @@ public class UserImpl implements User {
                 .append(username, user.username)
                 .append(password, user.password)
                 .append(firstName, user.firstName)
-                .append(last_name, user.last_name)
+                .append(lastName, user.lastName)
                 .isEquals();
     }
 
@@ -128,7 +185,7 @@ public class UserImpl implements User {
                 .append(username)
                 .append(password)
                 .append(firstName)
-                .append(last_name)
+                .append(lastName)
                 .toHashCode();
     }
 }
