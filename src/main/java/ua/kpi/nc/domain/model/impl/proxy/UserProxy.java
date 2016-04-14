@@ -1,10 +1,7 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
-import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
@@ -120,6 +117,38 @@ public class UserProxy implements User {
             user = downloadUser();
         }
         user.setRoles(roles);
+    }
+
+    @Override
+    public String getToken() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getToken();
+    }
+
+    @Override
+    public void setToken(String token) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setToken(token);
+    }
+
+    @Override
+    public boolean isEnable() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.isEnable();
+    }
+
+    @Override
+    public void setEnable(boolean enable) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setEnable(enable);
     }
 
     private UserImpl downloadUser() {

@@ -1,5 +1,6 @@
 package ua.kpi.nc.service;
 
+import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 
 /**
@@ -12,4 +13,10 @@ public interface UserService {
     User getUserByID(Long id);
 
     boolean isExist(String username);
+
+    void insertUser(User user, Role role);
+
+    void addRole(User user, Role role);
+
+    void deleteRole(User user, Role role);
 }

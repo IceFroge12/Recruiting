@@ -26,4 +26,12 @@ public interface User extends Model {
     Set<Role> getRoles();
 
     void setRoles(Set<Role> roles);
+
+    String getToken();
+
+    void setToken(String token);
+
+    boolean isEnable();
+
+    void setEnable(boolean enable);
 }

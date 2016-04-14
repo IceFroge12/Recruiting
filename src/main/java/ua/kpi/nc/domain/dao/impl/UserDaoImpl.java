@@ -64,6 +64,17 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         return false;
     }
 
+    @Override
+    public void insertUser(User user, Role role) throws DaoException {
+
+    }
+
+    @Override
+    public void deleteUser(User user) throws DaoException {
+
+    }
+
+
     private User getByQuery(String sql) throws DaoException {
         User user = null;
         try (Connection connection = dataSource.getConnection();
@@ -80,7 +91,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                         resultSet.getString("password"),
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
-                        getRolesById(resultSet.getLong("id")));
+                        getRolesByUserId(resultSet.getLong("id")));
             }
         } catch (SQLException e) {
             log.error("Cannot read user" + e);
@@ -95,7 +106,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         return user;
     }
 
-    private Set<Role> getRolesById(Long userId) throws DaoException {
+    private Set<Role> getRolesByUserId(Long userId) throws DaoException {
         Set<Role> roles = new HashSet<>();
         String sql = "SELECT id_role FROM user_role WHERE id_user = " + userId;
         log.trace("Looking roles for user with userId = " + userId);
