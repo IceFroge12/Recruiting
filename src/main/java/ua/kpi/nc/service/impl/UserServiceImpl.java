@@ -40,4 +40,9 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public boolean isExist(String username) {
+        return false;
+    }
 }
