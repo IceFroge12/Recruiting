@@ -7,31 +7,24 @@ import java.util.Set;
  */
 public interface User extends Model {
 
-    String getLastName();
+    String getEmail();
 
-    void setLastName(String lastName);
-
-    String getUsername();
-
-    void setUsername(String username);
-
-    String getPassword();
-
-    void setPassword(String password);
+    void setEmail(String email);
 
     String getFirstName();
 
     void setFirstName(String firstName);
 
+    String getSecondName();
+
+    void setSecondName(String secondName);
+
+    String getLastName();
+
+    void setLastName(String lastName);
+
     Set<Role> getRoles();
 
     void setRoles(Set<Role> roles);
 
-    String getToken();
-
-    void setToken(String token);
-
-    boolean isEnable();
-
-    void setEnable(boolean enable);
 }

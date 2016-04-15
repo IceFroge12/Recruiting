@@ -20,7 +20,7 @@ public class DataConfig {
     private String databasePassword;
     @Value("${db.server.name}")
     private String databaseServerName;
-    @Value("${db.username}")
+    @Value("${db.email}")
     private String databaseUsername;
     @Value("${db.name}")
     private String databaseName;
