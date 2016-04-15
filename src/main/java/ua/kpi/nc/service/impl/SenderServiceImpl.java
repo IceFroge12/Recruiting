@@ -24,13 +24,13 @@ public class SenderServiceImpl implements SenderService {
 
     @Override
     public void send(User user, String subject, String text) {
-        tlsSender.send(subject, text, user.getUsername());
+        tlsSender.send(subject, text, user.getEmail());
     }
 
     @Override
     public void send(Set<User> userList, String subject, String text) {
         for (User user : userList) {
-            tlsSender.send(subject, text, user.getUsername());
+            tlsSender.send(subject, text, user.getEmail());
         }
     }
 
