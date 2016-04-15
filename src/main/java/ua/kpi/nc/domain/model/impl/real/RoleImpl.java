@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-public class RoleImpl implements Role {
+public class RoleImpl implements Role{
 
     private static final long serialVersionUID = -3446275256614511482L;
 
@@ -20,10 +20,7 @@ public class RoleImpl implements Role {
 
     private Set<User> users;
 
-    public RoleImpl() {
-    }
-
-    public RoleImpl(Long id,String roleName, Set<User> users ) {
+    public RoleImpl(Long id, String roleName, Set<User> users ) {
         this.roleName = roleName;
         this.id = id;
         this.users = users;
@@ -39,18 +36,22 @@ public class RoleImpl implements Role {
         this.id = id;
     }
 
+    @Override
     public String getRoleName() {
         return roleName;
     }
 
+    @Override
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
 
+    @Override
     public Set<User> getUsers() {
         return users;
     }
 
+    @Override
     public void setUsers(Set<User> users) {
         this.users = users;
     }

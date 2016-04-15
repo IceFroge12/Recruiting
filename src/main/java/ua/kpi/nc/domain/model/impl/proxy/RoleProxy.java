@@ -10,20 +10,17 @@ import ua.kpi.nc.service.RoleService;
 import java.util.Set;
 
 /**
- * Created by Chalienko on 13.04.2016.
+ * Created by Chalienko on 15.04.2016.
  */
-
 @Configurable
 public class RoleProxy implements Role {
 
     private Long id;
+
     private RoleImpl role;
 
     @Autowired
     private RoleService roleService;
-
-    public RoleProxy() {
-    }
 
     public RoleProxy(Long id) {
         this.id = id;
@@ -71,7 +68,7 @@ public class RoleProxy implements Role {
         role.setUsers(users);
     }
 
-    private RoleImpl downloadRole(){
+    private RoleImpl downloadRole() {
         return (RoleImpl) roleService.getRoleById(id);
     }
 }

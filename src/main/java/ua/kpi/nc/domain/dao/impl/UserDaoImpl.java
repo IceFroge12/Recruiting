@@ -4,8 +4,10 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ua.kpi.nc.domain.dao.UserDao;
 import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.domain.model.SocialInformation;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.proxy.RoleProxy;
+import ua.kpi.nc.domain.model.impl.proxy.SocialInformationProxy;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 
 import java.sql.Connection;
@@ -17,7 +19,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Component
+@Component("userDao")
 public class UserDaoImpl extends DaoSupport implements UserDao {
 
     private static Logger log = Logger.getLogger(UserDaoImpl.class.getName());
@@ -27,7 +29,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public User getByID(Long id){
-        String sql = "SELECT * FROM \"user\" WHERE \"user\".id = " + "'" + id + "'";
+        String sql = "SELECT * FROM \"user\" WHERE \"user\".id = " + id;
         log.trace("Looking for user with id = " + id);
         return getUserByQuery(sql);
     }
@@ -61,7 +63,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public boolean insertUser(User user){
-        String sql = "INSERT INTO \"user\"(email, first_name, second_name, last_name) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO \"user\"(email, first_name, second_name, last_name,password) VALUES (?,?,?,?,?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             log.trace("Open connection");
@@ -70,6 +72,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
             statement.setString(2,user.getFirstName());
             statement.setString(3,user.getSecondName());
             statement.setString(4,user.getLastName());
+            statement.setString(5,user.getPassword());
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -78,8 +81,6 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         }
     }
 
-    //TODO
-    //Delete not by PK?
     @Override
     public boolean deleteUser(User user){
         String sql = "DELETE FROM \"user\" WHERE email=" + "'" + user.getEmail() + "'";
@@ -119,12 +120,15 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                         resultSet.getLong("id"),
                         resultSet.getString("email"),
                         resultSet.getString("first_name"),
-                        resultSet.getString("second"),
+                        resultSet.getString("second_name"),
                         resultSet.getString("last_name"),
-                        getRolesByUserId(resultSet.getLong("id")));
+                        resultSet.getString("password"),
+                        getRolesByUserId(resultSet.getLong("id")),
+                        getSocialInformationByUserId(resultSet.getLong("id")));
+                return user;
             }
         } catch (SQLException e) {
-            log.error("Cannot read user" + e);
+            log.error("Cannot read user", e);
             return null;
         }
         if (null == user) {
@@ -153,10 +157,34 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 roles.add(tempRole);
                 log.trace("Roles " + tempRole.getId() + " added to set");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("Cannot read role", e);
             return null;
         }
         return roles;
+    }
+
+    private Set<SocialInformation> getSocialInformationByUserId(Long userId){
+        Set<SocialInformation> socialInformations = new HashSet<>();
+        String sql = "SELECT id_social_network FROM social_information WHERE id_user = " + userId;
+        log.trace("Looking Social Information for user with userId = " + userId);
+        SocialInformation tempSocialInformation;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            log.trace("Open connection");
+            log.trace("Create prepared statement");
+            log.trace("Get result set");
+            while (resultSet.next()) {
+                log.trace("Create Social Information to add to the set");
+                tempSocialInformation = new SocialInformationProxy(resultSet.getLong("id"));
+                socialInformations.add(tempSocialInformation);
+                log.trace("SocialInformation " + tempSocialInformation.getId() + " added to set");
+            }
+        } catch (SQLException e) {
+            log.error("Cannot read Social Information", e);
+            return null;
+        }
+        return socialInformations;
     }
 }
