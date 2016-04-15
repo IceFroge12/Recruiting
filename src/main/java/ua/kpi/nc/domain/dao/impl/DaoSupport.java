@@ -15,6 +15,7 @@ public abstract class DaoSupport {
     public DataSource getDataSource(){
         return dataSource;
     }
+
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }

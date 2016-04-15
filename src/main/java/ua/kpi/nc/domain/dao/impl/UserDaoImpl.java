@@ -2,14 +2,11 @@ package ua.kpi.nc.domain.dao.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-
-import ua.kpi.nc.domain.dao.DaoException;
 import ua.kpi.nc.domain.dao.UserDao;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,22 +26,21 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
     }
 
     @Override
-    public User getByID(Long id) throws DaoException {
+    public User getByID(Long id){
         String sql = "SELECT * FROM \"user\" WHERE \"user\".id = " + "'" + id + "'";
         log.trace("Looking for user with id = " + id);
-        return getByQuery(sql);
+        return getUserByQuery(sql);
     }
 
-
     @Override
-    public User getByUsername(String username) throws DaoException {
+    public User getByUsername(String username){
         String sql = "SELECT * FROM \"user\" WHERE \"user\".username = " + "'" + username + "'";
         log.trace("Looking for user with username = " + username);
-        return getByQuery(sql);
+        return getUserByQuery(sql);
     }
 
     @Override
-    public boolean isExist(String username) throws DaoException {
+    public boolean isExist(String username){
         String sql ="select exists(SELECT username from \"user\" where username =" +  "'"
                 + username + "')";
         try (Connection connection = dataSource.getConnection();
@@ -59,23 +55,55 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         }
         catch (SQLException e) {
             log.error("Cannot read user" + e);
-            throw new DaoException("Cannot read user", e);
         }
         return false;
     }
 
     @Override
-    public void insertUser(User user, Role role) throws DaoException {
-
+    public boolean insertUser(User user){
+        String sql = "INSERT INTO \"user\"(username, password, first_name, last_name) VALUES (?,?,?,?)";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            log.trace("Open connection");
+            log.trace("Create prepared statement");
+            statement.setString(1,user.getUsername());
+            statement.setString(2,user.getPassword());
+            statement.setString(3,user.getFirstName());
+            statement.setString(4,user.getLastName());
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            log.error("Cannot insert user", e);
+            return false;
+        }
     }
 
     @Override
-    public void deleteUser(User user) throws DaoException {
-
+    public boolean deleteUser(User user){
+        String sql = "DELETE FROM \"user\" WHERE username=" + "'" + user.getUsername() + "'";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            log.trace("Open connection");
+            log.trace("Create prepared statement");
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            log.error("Cannot delete user" + e);
+            return false;
+        }
     }
 
+    @Override
+    public boolean addRole(User user, Role role){
+        return false;
+    }
 
-    private User getByQuery(String sql) throws DaoException {
+    @Override
+    public boolean deleteRole(User user, Role role) {
+        return false;
+    }
+
+    private User getUserByQuery(String sql){
         User user = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -95,7 +123,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
             }
         } catch (SQLException e) {
             log.error("Cannot read user" + e);
-            throw new DaoException("Cannot read user", e);
+            return null;
         }
         if (null == user) {
             log.debug("User not found");
@@ -106,7 +134,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         return user;
     }
 
-    private Set<Role> getRolesByUserId(Long userId) throws DaoException {
+    private Set<Role> getRolesByUserId(Long userId){
         Set<Role> roles = new HashSet<>();
         String sql = "SELECT id_role FROM user_role WHERE id_user = " + userId;
         log.trace("Looking roles for user with userId = " + userId);
@@ -124,7 +152,8 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 log.trace("Roles " + tempRole.getId() + " added to set");
             }
         } catch (SQLException e) {
-            throw new DaoException("Cannot read role", e);
+            log.error("Cannot read role", e);
+            return null;
         }
         return roles;
     }

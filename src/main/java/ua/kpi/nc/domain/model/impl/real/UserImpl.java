@@ -4,8 +4,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import java.util.Date;
 import java.util.Set;
@@ -19,19 +17,12 @@ public class UserImpl implements User {
 
     private Long id;
 
-    @Pattern(regexp="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}",
-        message = "Invalid email address.")
     private String username;
-    @Size(min = 3, max = 20,
-        message = "The password mast be at least 6 characters long.")
+
     private String password;
 
-    @Size(min=2, max=50,
-            message="Your first name must be between 3 and 50 characters long.")
     private String firstName;
 
-    @Size(min=2, max=50,
-            message="Your last name must be between 3 and 50 characters long.")
     private String lastName;
 
     private String token;
