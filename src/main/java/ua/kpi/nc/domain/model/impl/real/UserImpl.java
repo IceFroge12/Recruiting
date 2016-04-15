@@ -17,82 +17,38 @@ public class UserImpl implements User {
 
     private Long id;
 
-    private String username;
-
-    private String password;
+    private String email;
 
     private String firstName;
 
+    private String secondName;
+
     private String lastName;
-
-    private String token;
-
-    private boolean enable;
-
-    private Date expirationTime;
-
-    public Date getExpirationTime() {
-        return expirationTime;
-    }
-
-    public void setExpirationTime(Date expirationTime) {
-        this.expirationTime = expirationTime;
-    }
 
     private Set<Role> roles;
 
     public UserImpl() {
+
     }
 
-    public UserImpl(Long id, String username, String password, String firstName, String lastName, String token,
-                    boolean enable, Date expirationTime, Set<Role> roles) {
+    public UserImpl(Long id, String email, String firstName, String secondName, String lastName, Set<Role> roles) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.email = email;
         this.firstName = firstName;
+        this.secondName = secondName;
         this.lastName = lastName;
-        this.token = token;
-        this.enable = enable;
-        this.expirationTime = expirationTime;
         this.roles = roles;
     }
 
-    public UserImpl(Long id, String username, String password, String firstName, String lastName, Set<Role> roles) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.roles = roles;
-    }
+
     @Override
-    public String getLastName() {
-        return lastName;
+    public String getEmail() {
+        return email;
     }
 
     @Override
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -103,6 +59,26 @@ public class UserImpl implements User {
     @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    @Override
+    public String getSecondName() {
+        return secondName;
+    }
+
+    @Override
+    public void setSecondName(String secondName) {
+
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -126,26 +102,6 @@ public class UserImpl implements User {
     }
 
     @Override
-    public String getToken() {
-        return token;
-    }
-
-    @Override
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    @Override
-    public boolean isEnable() {
-        return enable;
-    }
-
-    @Override
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
-    @Override
     public String toString() {
         return "User:" +
                 " firstName= " + firstName  +
@@ -162,8 +118,7 @@ public class UserImpl implements User {
 
         return new EqualsBuilder()
                 .append(id, user.id)
-                .append(username, user.username)
-                .append(password, user.password)
+                .append(email, user.email)
                 .append(firstName, user.firstName)
                 .append(lastName, user.lastName)
                 .isEquals();
@@ -173,8 +128,7 @@ public class UserImpl implements User {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
-                .append(username)
-                .append(password)
+                .append(email)
                 .append(firstName)
                 .append(lastName)
                 .toHashCode();

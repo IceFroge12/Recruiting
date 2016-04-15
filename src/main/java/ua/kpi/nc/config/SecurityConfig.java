@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ba/**").hasRole("BA")
                 .and()
                 .formLogin().loginPage("/login")
-                .usernameParameter("username").passwordParameter("password")
+                .usernameParameter("email").passwordParameter("password")
                 .successHandler(customAuthenticationSuccessHandler)
                 .and()
                 .logout().logoutSuccessUrl("/login?logout")

@@ -33,16 +33,16 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
     }
 
     @Override
-    public User getByUsername(String username){
-        String sql = "SELECT * FROM \"user\" WHERE \"user\".username = " + "'" + username + "'";
-        log.trace("Looking for user with username = " + username);
+    public User getByUsername(String email){
+        String sql = "SELECT * FROM \"user\" WHERE \"user\".email = " + "'" + email + "'";
+        log.trace("Looking for user with email = " + email);
         return getUserByQuery(sql);
     }
 
     @Override
-    public boolean isExist(String username){
-        String sql ="select exists(SELECT username from \"user\" where username =" +  "'"
-                + username + "')";
+    public boolean isExist(String email){
+        String sql ="select exists(SELECT email from \"user\" where email =" +  "'"
+                + email + "')";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -61,14 +61,14 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public boolean insertUser(User user){
-        String sql = "INSERT INTO \"user\"(username, password, first_name, last_name) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO \"user\"(email, first_name, second_name, last_name) VALUES (?,?,?,?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             log.trace("Open connection");
             log.trace("Create prepared statement");
-            statement.setString(1,user.getUsername());
-            statement.setString(2,user.getPassword());
-            statement.setString(3,user.getFirstName());
+            statement.setString(1,user.getEmail());
+            statement.setString(2,user.getFirstName());
+            statement.setString(3,user.getSecondName());
             statement.setString(4,user.getLastName());
             statement.executeUpdate();
             return true;
@@ -78,9 +78,11 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         }
     }
 
+    //TODO
+    //Delete not by PK?
     @Override
     public boolean deleteUser(User user){
-        String sql = "DELETE FROM \"user\" WHERE username=" + "'" + user.getUsername() + "'";
+        String sql = "DELETE FROM \"user\" WHERE email=" + "'" + user.getEmail() + "'";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             log.trace("Open connection");
@@ -115,9 +117,9 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 log.trace("Create user to return");
                 user = new UserImpl(
                         resultSet.getLong("id"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
+                        resultSet.getString("email"),
                         resultSet.getString("first_name"),
+                        resultSet.getString("second"),
                         resultSet.getString("last_name"),
                         getRolesByUserId(resultSet.getLong("id")));
             }
