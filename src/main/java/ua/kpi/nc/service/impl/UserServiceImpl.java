@@ -1,10 +1,9 @@
 package ua.kpi.nc.service.impl;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ua.kpi.nc.domain.dao.DaoException;
 import ua.kpi.nc.domain.dao.UserDao;
+import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.UserService;
 
@@ -17,37 +16,46 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    private static Logger log = Logger.getLogger(UserServiceImpl.class);
-
     @Override
     public User getUserByUsername(String username) {
-        try {
-            return userDao.getByUsername(username);
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Cannot get user with username: " + username, e);
-        }
-        return null;
+        return userDao.getByUsername(username);
     }
 
     @Override
     public User getUserByID(Long id) {
-        try {
-            return userDao.getByID(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-            log.error("Cannot get user with id: " + id, e);
-        }
-        return null;
+        return userDao.getByID(id);
     }
 
     @Override
     public boolean isExist(String username) {
-        try {
-            return userDao.isExist(username);
-        } catch (DaoException e) {
-            e.printStackTrace();
+        return userDao.isExist(username);
+    }
+
+    @Override
+    public boolean insertUser(User user, Role role) {
+        if (userDao.insertUser(user)) {
+            if (!userDao.addRole(user, role)) {
+                userDao.deleteUser(user);
+                return false;
+            }else {
+                return true;
+            }
         }
         return false;
+    }
+
+    @Override
+    public boolean addRole(User user, Role role) {
+        return userDao.addRole(user, role);
+    }
+
+    @Override
+    public boolean deleteRole(User user, Role role) {
+        return userDao.deleteRole(user, role);
+    }
+
+    @Override
+    public boolean deleteUser(User user) {
+        return userDao.deleteUser(user);
     }
 }

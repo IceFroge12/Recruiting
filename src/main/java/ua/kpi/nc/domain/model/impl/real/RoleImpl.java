@@ -40,7 +40,6 @@ public class RoleImpl implements Role {
     }
 
     public String getRoleName() {
-
         return roleName;
     }
 

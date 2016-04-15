@@ -34,16 +34,10 @@ public class Sender {
 
         try {
             Message message = new MimeMessage(session);
-
             message.setFrom(new InternetAddress(username));
-
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-
             message.setSubject(subject);
-
             message.setText(text);
-
-
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);

@@ -2,7 +2,6 @@ package ua.kpi.nc.domain.dao.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import ua.kpi.nc.domain.dao.DaoException;
 import ua.kpi.nc.domain.dao.RoleDao;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
@@ -27,7 +26,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
     }
 
     @Override
-    public Role getByID(Long id) throws DaoException {
+    public Role getByID(Long id) {
         String sql = "SELECT * FROM \"role\" WHERE \"role\".id = " + id;
         log.trace("Looking for role with id = " + id);
         Role role = null;
@@ -47,9 +46,8 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
 
             }
         } catch (SQLException e) {
-            log.error("Cannot read user" + e);
-            throw new DaoException("Cannot read user", e);
-        }
+            log.error("Cannot read user", e);
+            }
         if (null == role) {
             log.debug("User not found");
         } else {
@@ -59,7 +57,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
         return role;
     }
 
-    private Set<User> getUsersByID(Long roleId) throws DaoException {
+    private Set<User> getUsersByID(Long roleId){
         Set<User> users = new HashSet<>();
         String sql = "SELECT id_user FROM user_role WHERE id_role = " + roleId;
         log.trace("Looking users for role with roleId = " + roleId);
@@ -77,8 +75,8 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
                 log.trace("User " + tempUser.getId() + " added to set");
             }
         } catch (SQLException e) {
-            throw new DaoException("Cannot read user", e);
-        }
+            log.error("Cannot read user", e);
+            }
         return users;
     }
 

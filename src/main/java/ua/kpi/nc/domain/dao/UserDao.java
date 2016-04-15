@@ -8,13 +8,17 @@ import ua.kpi.nc.domain.model.User;
  */
 public interface UserDao {
 
-    User getByUsername(String username) throws DaoException;
+    User getByUsername(String username);
 
-    User getByID(Long id) throws DaoException;
+    User getByID(Long id);
 
-    boolean isExist(String username) throws DaoException;
+    boolean isExist(String username);
 
-    void insertUser(User user, Role role) throws DaoException;
+    boolean insertUser(User user);
 
-    void deleteUser(User user) throws DaoException;
+    boolean deleteUser(User user);
+
+    boolean addRole(User user, Role role);
+
+    boolean deleteRole(User user, Role role);
 }
