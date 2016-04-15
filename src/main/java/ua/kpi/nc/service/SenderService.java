@@ -10,8 +10,8 @@ import java.util.Set;
  */
 public interface SenderService {
 
-    public void send(User user, String subject, String text);
+    void send(User user, String subject, String text);
 
-    public void send(Set<User> userList, String subject, String text);
+    void send(Set<User> userList, String subject, String text);
 
 }

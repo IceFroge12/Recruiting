@@ -7,6 +7,7 @@ import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.proxy.UserProxy;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

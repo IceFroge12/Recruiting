@@ -1,11 +1,16 @@
 package ua.kpi.nc.domain.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
  */
-public interface User extends Model {
+public interface User extends Serializable {
+
+    Long getId();
+
+    void setId(Long id);
 
     String getEmail();
 
@@ -27,4 +32,11 @@ public interface User extends Model {
 
     void setRoles(Set<Role> roles);
 
+    String getPassword();
+
+    void setPassword(String password);
+
+    Set<SocialInformation> getSocialInformations();
+
+    void setSocialInformations(Set<SocialInformation> socialInformations);
 }

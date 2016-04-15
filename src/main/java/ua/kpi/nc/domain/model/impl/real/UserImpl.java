@@ -3,9 +3,9 @@ package ua.kpi.nc.domain.model.impl.real;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.domain.model.SocialInformation;
 import ua.kpi.nc.domain.model.User;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -27,19 +27,52 @@ public class UserImpl implements User {
 
     private Set<Role> roles;
 
-    public UserImpl() {
+    private String password;
 
-    }
+    private Set<SocialInformation> socialInformations;
 
-    public UserImpl(Long id, String email, String firstName, String secondName, String lastName, Set<Role> roles) {
+    public UserImpl(Long id, String email, String firstName, String secondName, String lastName, String password,
+                    Set<Role> roles, Set<SocialInformation> socialInformations) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
         this.roles = roles;
+        this.password = password;
+        this.socialInformations = socialInformations;
     }
 
+    public UserImpl(String email, String firstName, String secondName, String lastName,String password, Set<Role> roles,
+                     Set<SocialInformation> socialInformations) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.roles = roles;
+        this.password = password;
+        this.socialInformations = socialInformations;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Set<SocialInformation> getSocialInformations() {
+        return socialInformations;
+    }
+
+    @Override
+    public void setSocialInformations(Set<SocialInformation> socialInformations) {
+        this.socialInformations = socialInformations;
+    }
 
     @Override
     public String getEmail() {
@@ -68,7 +101,7 @@ public class UserImpl implements User {
 
     @Override
     public void setSecondName(String secondName) {
-
+        this.secondName = secondName;
     }
 
     @Override
@@ -92,13 +125,13 @@ public class UserImpl implements User {
     }
 
     @Override
-    public Long getId() {
-        return id;
+    public void setPassword(String password){
+        this.password = password;
     }
 
     @Override
-    public void setId(Long id) {
-        this.id = id;
+    public String getPassword(){
+        return password;
     }
 
     @Override

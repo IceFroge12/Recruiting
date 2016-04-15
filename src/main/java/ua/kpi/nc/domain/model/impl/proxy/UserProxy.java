@@ -3,6 +3,7 @@ package ua.kpi.nc.domain.model.impl.proxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.domain.model.SocialInformation;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 import ua.kpi.nc.service.UserService;
@@ -118,6 +119,38 @@ public class UserProxy implements User {
             user = downloadUser();
         }
         user.setRoles(roles);
+    }
+
+    @Override
+    public String getPassword() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getPassword();
+    }
+
+    @Override
+    public void setPassword(String password) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setPassword(password);
+    }
+
+    @Override
+    public Set<SocialInformation> getSocialInformations() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getSocialInformations();
+    }
+
+    @Override
+    public void setSocialInformations(Set<SocialInformation> socialInformations) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setSocialInformations(socialInformations);
     }
 
     private UserImpl downloadUser() {
