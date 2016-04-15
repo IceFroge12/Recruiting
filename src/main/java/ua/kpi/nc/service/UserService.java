@@ -14,9 +14,11 @@ public interface UserService {
 
     boolean isExist(String username);
 
-    void insertUser(User user, Role role);
+    boolean insertUser(User user, Role role);
 
-    void addRole(User user, Role role);
+    boolean addRole(User user, Role role);
 
-    void deleteRole(User user, Role role);
+    boolean deleteRole(User user, Role role);
+
+    boolean deleteUser(User user);
 }
