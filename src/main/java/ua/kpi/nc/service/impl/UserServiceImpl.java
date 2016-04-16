@@ -3,6 +3,7 @@ package ua.kpi.nc.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.kpi.nc.domain.dao.UserDao;
+import ua.kpi.nc.domain.dao.impl.UserDaoImpl;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.UserService;

@@ -30,6 +30,17 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
     public Role getByID(Long id) {
         String sql = "SELECT * FROM \"role\" WHERE \"role\".id = " + id;
         log.trace("Looking for role with id = " + id);
+        return getByQuery(sql);
+    }
+
+    @Override
+    public Role getByTitle(String title) {
+        String sql = "SELECT * FROM \"role\" WHERE \"role\".role= " + title;
+        log.trace("Looking for role with title = " + title);
+        return getByQuery(sql);
+    }
+
+    private Role getByQuery(String sql) {
         Role role = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -43,18 +54,18 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
                         resultSet.getLong("id"),
                         resultSet.getString("role"),
                         getUsersByID(resultSet.getLong("id"))
-                        );
+                );
 
             }
         } catch (SQLException e) {
             log.error("Cannot read user", e);
-            }
-        if (null == role) {
-            log.debug("User not found");
-        } else {
-            log.trace("User " + role + " found");
         }
-        log.trace("Returning user");
+        if (null == role) {
+            log.debug("Role not found");
+        } else {
+            log.trace("Role " + role + " found");
+        }
+        log.trace("Returning role");
         return role;
     }
 
