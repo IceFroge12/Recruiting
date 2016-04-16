@@ -96,9 +96,26 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         }
     }
 
+
+    //Need Refactor
     @Override
     public boolean addRole(User user, Role role){
-        return false;
+        if(user.getId() == null){
+            user = getByUsername(user.getEmail());
+        }
+        String sql = "INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            log.trace("Open connection");
+            log.trace("Create prepared statement");
+            statement.setLong(1,user.getId());
+            statement.setLong(2,role.getId());
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            log.error("Cannot insert role", e);
+            return false;
+        }
     }
 
     @Override
@@ -157,7 +174,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 roles.add(tempRole);
                 log.trace("Roles " + tempRole.getId() + " added to set");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error("Cannot read role", e);
             return null;
         }

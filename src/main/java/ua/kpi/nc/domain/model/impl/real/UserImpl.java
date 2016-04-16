@@ -43,8 +43,11 @@ public class UserImpl implements User {
         this.socialInformations = socialInformations;
     }
 
-    public UserImpl(String email, String firstName, String secondName, String lastName,String password, Set<Role> roles,
-                     Set<SocialInformation> socialInformations) {
+    public UserImpl() {
+    }
+
+    public UserImpl(String email, String firstName, String secondName, String lastName, String password, Set<Role> roles,
+                    Set<SocialInformation> socialInformations) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;

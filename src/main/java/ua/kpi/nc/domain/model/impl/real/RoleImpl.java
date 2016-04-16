@@ -26,6 +26,10 @@ public class RoleImpl implements Role{
         this.users = users;
     }
 
+    public RoleImpl(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public Long getId() {
         return id;
