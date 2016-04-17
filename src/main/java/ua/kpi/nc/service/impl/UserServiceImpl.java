@@ -34,15 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean insertUser(User user, Role role) {
-        if (userDao.insertUser(user)) {
-            if (!userDao.addRole(user, role)) {
-                userDao.deleteUser(user);
-                return false;
-            }else {
-                return true;
-            }
-        }
-        return false;
+        return userDao.insertUser(user,role);
     }
 
     @Override
