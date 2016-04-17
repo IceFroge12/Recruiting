@@ -26,6 +26,9 @@ public class RoleImpl implements Role{
         this.users = users;
     }
 
+    public RoleImpl() {
+    }
+
     public RoleImpl(Long id) {
         this.id = id;
     }
