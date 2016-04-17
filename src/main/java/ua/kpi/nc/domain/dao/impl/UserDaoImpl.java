@@ -63,6 +63,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public boolean insertUser(User user){
+        System.out.println("Insert"+user.toString());
         String sql = "INSERT INTO \"user\"(email, first_name, second_name, last_name,password) VALUES (?,?,?,?,?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -98,7 +99,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public boolean addRole(User user, Role role){
-        return false;
+        return true;
     }
 
     @Override

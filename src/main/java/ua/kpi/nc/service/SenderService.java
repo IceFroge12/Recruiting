@@ -3,6 +3,7 @@ package ua.kpi.nc.service;
 
 import ua.kpi.nc.domain.model.User;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,8 +11,8 @@ import java.util.Set;
  */
 public interface SenderService {
 
-    void send(User user, String subject, String text);
+    public void send(User user);
 
-    void send(Set<User> userList, String subject, String text);
+    public void send(List<User> userList);
 
 }

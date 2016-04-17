@@ -8,6 +8,7 @@ import ua.kpi.nc.domain.model.User;
  */
 
 public interface UserService {
+
     User getUserByUsername(String username);
 
     User getUserByID(Long id);
