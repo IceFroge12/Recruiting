@@ -1,5 +1,4 @@
-package ua.kpi.nc.service;
-
+package ua.kpi.nc.service.mail;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -7,7 +6,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
- * Created by dima on 13.04.16.
+ * Created by dima on 09.04.16.
  */
 public class Sender {
 
@@ -37,7 +36,7 @@ public class Sender {
         });
 
         try {
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress(username));
 
@@ -45,7 +44,7 @@ public class Sender {
 
             message.setSubject(subject);
 
-            message.setText(text);
+            message.setText(text,"utf-8", "html");
 
             message.setFrom();
 
@@ -56,4 +55,3 @@ public class Sender {
         }
     }
 }
-

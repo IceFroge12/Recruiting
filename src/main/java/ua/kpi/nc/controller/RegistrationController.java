@@ -11,8 +11,9 @@ import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 import ua.kpi.nc.service.PasswordEncoderGeneratorService;
-import ua.kpi.nc.service.SenderService;
 import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.service.mail.SenderService;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,15 +57,16 @@ public class RegistrationController {
             System.out.println("exist");
             return "redirect:registration";
         }
-        String token = "http://localhost:8080/" + hashedPassword + user.getFirstName();
 
-        String text = "<html><body><h4>Chiki piki</h4>br" + token + "br" +
-                "</body></html>";
+        String token = "http://localhost:8080/?token=" + hashedPassword;
+
+        String text = "<html><body><h4>Chiki piki</h4><br><img src=\"http://localhost:8084/image/logo.png\" width=\"189\" height=\"255\" alt=\"image\"><br><a href="+ token +">Confirm</a><br></body></html>";
 
         userService.insertUser(user, role);
+
         System.out.println("INSERT");
-//        senderService.send(user, "Please Confirm your account","dmytromyna@gmail.com", "text");
-        senderService.send(user);
+
+        senderService.send(user.getEmail(),"Please Confirm your account NCKPI", text);
 
         return "redirect:/student";
     }
