@@ -4,13 +4,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ua.kpi.nc.domain.dao.RoleDao;
 import ua.kpi.nc.domain.model.Role;
-import ua.kpi.nc.domain.model.SocialInformation;
 import ua.kpi.nc.domain.model.User;
-import ua.kpi.nc.domain.model.impl.proxy.RoleProxy;
-import ua.kpi.nc.domain.model.impl.proxy.SocialInformationProxy;
 import ua.kpi.nc.domain.model.impl.proxy.UserProxy;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
-import ua.kpi.nc.domain.model.impl.real.UserImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +28,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
 
     @Override
     public Role getByID(Long id) {
-        String sql = "SELECT r.id, r.role, ur.id_role\n" +
+        String sql = "SELECT r.id, r.role, ur.id_user\n" +
                 "FROM \"role\" r\n" +
                 "  INNER JOIN user_role ur ON id = id_role\n" +
                 "WHERE r.id = " + id;
@@ -51,7 +47,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
     }
 
     private Role getByQuery(String sql) {
-        Role role = null;
+        Role role = new RoleImpl();
         Set<User> users = new HashSet<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);

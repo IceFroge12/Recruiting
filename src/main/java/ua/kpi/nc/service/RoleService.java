@@ -8,4 +8,5 @@ import ua.kpi.nc.domain.model.Role;
 
 public interface RoleService {
     Role getRoleById(Long id);
+    Role getRoleByTitle(String title);
 }
