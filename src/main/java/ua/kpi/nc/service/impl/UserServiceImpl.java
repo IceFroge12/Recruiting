@@ -3,6 +3,7 @@ package ua.kpi.nc.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.kpi.nc.domain.dao.UserDao;
+import ua.kpi.nc.domain.dao.impl.UserDaoImpl;
 import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.service.UserService;
@@ -33,16 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean insertUser(User user, Role role) {
-        userDao.insertUser(user);
-        if (userDao.insertUser(user)) {
-            if (!userDao.addRole(user, role)) {
-                userDao.deleteUser(user);
-                return false;
-            }else {
-                return true;
-            }
-        }
-        return true;
+        return userDao.insertUser(user,role);
     }
 
     @Override

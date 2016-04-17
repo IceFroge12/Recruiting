@@ -67,7 +67,6 @@ public class GoogleAuthController {
 
     @RequestMapping(value = {"/googlecallback"}, method = RequestMethod.GET)
     public String callBack(@RequestParam("code") String oauthVerifier) {
-        System.out.println("CALLBACK");
         Verifier verifier = new Verifier(oauthVerifier);
 
         Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
