@@ -15,12 +15,12 @@ import java.util.Set;
 public class SenderServiceImpl implements SenderService {
 
     @Value("${sender.email}")
-    private static String email;
+    private String email;
 
     @Value("${sender.password}")
-    private static String password;
+    private String password;
 
-    private static Sender tlsSender = new Sender(email, password);
+    private Sender tlsSender = new Sender(email, password);
 
     @Override
     public void send(User user, String subject, String text) {

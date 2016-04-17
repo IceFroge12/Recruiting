@@ -24,7 +24,10 @@ public class SocialInformationDaoImpl extends DaoSupport implements SocialInform
 
     @Override
     public SocialInformation getById(Long id) {
-        String sql = "SELECT * FROM \"user\" WHERE \"user\".id = " + id;
+        String sql = "SElECT si.*,sn.title\n" +
+                "FROM \"social_information\" si\n" +
+                "   INNER JOIN social_network sn ON si.id_social_network = sn.id "
+                +" WHERE si.id =" + id;
         log.trace("Looking for user with id = " + id);
         return getSocialInformationByQuery(sql);
     }
@@ -43,8 +46,7 @@ public class SocialInformationDaoImpl extends DaoSupport implements SocialInform
                         resultSet.getLong("id"),
                         resultSet.getString("access_info"),
                         new UserProxy(resultSet.getLong("id_user")),
-                        getSocialNetworkBySocInf(resultSet.getLong("id_social_network")));
-
+                        new SocialNetwork(resultSet.getLong("id_social_network"),resultSet.getString("title")));
                 return socialInformation;
             }
         } catch (SQLException e) {
@@ -60,25 +62,4 @@ public class SocialInformationDaoImpl extends DaoSupport implements SocialInform
         return socialInformation;
     }
 
-    //Need Refactor (Chalienko D.)
-    private SocialNetwork getSocialNetworkBySocInf(Long id) {
-        String sql = "SELECT title FROM social_network WHERE id = " + id;
-        log.trace("Looking SocialNetwork for Social Info with id = " + id);
-        SocialNetwork tempSocialNetwork = null;
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-            log.trace("Open connection");
-            log.trace("Create prepared statement");
-            log.trace("Get result set");
-            if (resultSet.next()) {
-                log.trace("Create Social Network");
-                tempSocialNetwork = new SocialNetwork(resultSet.getLong("id"), resultSet.getString("title"));
-            }
-        } catch (SQLException e) {
-            log.error("Cannot read Social Network", e);
-            return null;
-        }
-        return tempSocialNetwork;
-    }
 }

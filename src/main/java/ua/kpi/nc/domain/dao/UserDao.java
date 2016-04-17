@@ -14,7 +14,7 @@ public interface UserDao {
 
     boolean isExist(String username);
 
-    boolean insertUser(User user);
+    boolean insertUser(User user, Role role);
 
     boolean deleteUser(User user);
 
