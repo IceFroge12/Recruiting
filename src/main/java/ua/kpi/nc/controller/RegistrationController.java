@@ -15,6 +15,7 @@ import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.service.mail.SenderService;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -57,8 +58,12 @@ public class RegistrationController {
             System.out.println("exist");
             return "redirect:registration";
         }
+        Random rand = new Random();
 
-        String token = "http://localhost:8080/?token=" + hashedPassword;
+
+        int randomNum = rand.nextInt((100000 - 999999) + 1) + 999999;
+        
+        String token = "http://localhost:8080/?token=" + user.getFirstName()+user.getLastName()+randomNum;
 
         String text = "<html><body><h4>Chiki piki</h4><br><img src=\"http://localhost:8084/image/logo.png\" width=\"189\" height=\"255\" alt=\"image\"><br><a href="+ token +">Confirm</a><br></body></html>";
 

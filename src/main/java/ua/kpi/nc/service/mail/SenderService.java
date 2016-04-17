@@ -13,6 +13,4 @@ public interface SenderService {
 
     public void send(String email, String subject, String text);
 
-    public void send(List<User> userList);
-
 }
