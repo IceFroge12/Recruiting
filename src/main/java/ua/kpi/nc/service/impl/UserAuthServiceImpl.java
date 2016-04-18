@@ -27,7 +27,7 @@ public class UserAuthServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         User user = userService.getUserByUsername(userName);
         for (Role role : user.getRoles()){
-            System.out.println(role);
+            System.out.println("in Service" + role);
         }
         if (user == null) {
             throw new UsernameNotFoundException("Username not found");

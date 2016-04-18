@@ -64,11 +64,12 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
             while (resultSet.next()) {
                 users.add(new UserProxy(resultSet.getLong("id_user")));
             }
+            role.setUsers(users);
         } catch (SQLException e) {
             log.error("Cannot read user", e);
             return null;
         }
-        if (null == role) {
+        if (role.getId() == null) {
             log.debug("Role not found");
         } else {
             log.trace("Role " + role + " found");

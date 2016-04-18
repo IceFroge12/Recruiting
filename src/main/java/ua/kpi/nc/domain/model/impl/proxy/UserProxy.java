@@ -1,5 +1,7 @@
 package ua.kpi.nc.domain.model.impl.proxy;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import ua.kpi.nc.domain.model.Role;
@@ -8,6 +10,7 @@ import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 import ua.kpi.nc.service.UserService;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -106,6 +109,56 @@ public class UserProxy implements User {
     }
 
     @Override
+    public boolean isActive() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.isActive();
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setActive(active);
+
+    }
+
+    @Override
+    public Timestamp getRegistrationDate() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getRegistrationDate();
+    }
+
+    @Override
+    public void setRegistrationDate(Timestamp registrationDate) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setRegistrationDate(registrationDate);
+    }
+
+    @Override
+    public String getConfirmToken() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getConfirmToken();
+    }
+
+    @Override
+    public void setConfirmToken(String confirmToken) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setConfirmToken(confirmToken);
+
+    }
+
+    @Override
     public Set<Role> getRoles() {
         if (user == null) {
             user = downloadUser();
@@ -151,6 +204,26 @@ public class UserProxy implements User {
             user = downloadUser();
         }
         user.setSocialInformations(socialInformations);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserProxy userProxy = (UserProxy) o;
+
+        return new EqualsBuilder()
+                .append(id, userProxy.id)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .toHashCode();
     }
 
     private UserImpl downloadUser() {
