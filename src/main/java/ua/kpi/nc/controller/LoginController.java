@@ -20,7 +20,6 @@ public class LoginController {
             model.addObject("msg", "You've been logged out successfully.");
             return model;
         }
-
         return model;
     }
 }

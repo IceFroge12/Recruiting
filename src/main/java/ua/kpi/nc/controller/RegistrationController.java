@@ -2,21 +2,18 @@ package ua.kpi.nc.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.domain.model.Role;
-import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 import ua.kpi.nc.service.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.service.mail.SenderService;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Created by dima on 12.04.16.
@@ -35,7 +32,6 @@ public class RegistrationController {
     private SenderService senderService;
 
 
-
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView registration() {
         UserImpl user = new UserImpl();
@@ -46,34 +42,47 @@ public class RegistrationController {
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String addUser(UserImpl user, BindingResult result) {
+    public String addUser(UserImpl user) {
 
-        Set<User> users = new HashSet<>();
-        Role role = new RoleImpl(25l, "ROLE_STUDENT", users);
+        Random rand = new Random();
+
+        int randomNum = rand.nextInt((1000000 - 7) + 7);
+
+        String token = "http://localhost:8084/registration/token=" +
+                user.getFirstName() + user.getLastName() + randomNum;
+
+        String text = "<html><body><h4>Chiki piki</h4><br><img src=\"http://localhost:8084/image/logo.png\" width=\"400\" height=\"250\" alt=\"image\"><br><a href=" +
+                token + ">Confirm your account</a><br></body></html>";
+
+        Role role = new RoleImpl();
         String password = user.getPassword();
         String hashedPassword = passwordEncoderGeneratorService.encode(password);
-//        user.setPassword(hashedPassword);
-        System.out.println("HASH" + hashedPassword);
+
         if (userService.isExist(user.getEmail())) {
             System.out.println("exist");
             return "redirect:registration";
         }
-        Random rand = new Random();
-
-
-        int randomNum = rand.nextInt((100000 - 999999) + 1) + 999999;
-        
-        String token = "http://localhost:8080/?token=" + user.getFirstName()+user.getLastName()+randomNum;
-
-        String text = "<html><body><h4>Chiki piki</h4><br><img src=\"http://localhost:8084/image/logo.png\" width=\"189\" height=\"255\" alt=\"image\"><br><a href="+ token +">Confirm</a><br></body></html>";
 
         userService.insertUser(user, role);
 
-        System.out.println("INSERT");
+        userService.addRole(user, role);
 
-        senderService.send(user.getEmail(),"Please Confirm your account NCKPI", text);
+        senderService.send(user.getEmail(), "Please Confirm your account NC KPI", text);
+        System.out.println("PreTok");
+        return "redirect:/login";
+    }
 
-        return "redirect:/student";
+
+    @RequestMapping(value = "/{token}", method = RequestMethod.GET)
+    public String registrationConfirm(@PathVariable String token) {
+
+        if (userService.confirmUser(token)) {
+
+        } else {
+            userService.deleteUserByToken(token);
+        }
+
+        return "login";
     }
 
 }

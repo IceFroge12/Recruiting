@@ -51,4 +51,19 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(User user) {
         return userDao.deleteUser(user);
     }
+
+    @Override
+    public boolean deleteUserByToken(String token) {
+        return false;
+    }
+
+    @Override
+    public boolean getUserByToken(String token) {
+        return false;
+    }
+
+    @Override
+    public void confirmUser(String token) {
+
+    }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class SenderServiceImpl implements SenderService {
 
-    private static Sender tlsSender = new Sender("nckpiua@gmail.com", "nckpiua2016");
+    private static Sender tlsSender = new Sender("dmytromyna@gmail.com", "");
 
     @Override
     public void send(String email, String subject, String text) {

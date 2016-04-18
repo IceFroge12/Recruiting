@@ -22,4 +22,8 @@ public interface UserService {
     boolean deleteRole(User user, Role role);
 
     boolean deleteUser(User user);
+
+    boolean deleteUserByToken(String token);
+
+    boolean confirmUser(String token);
 }
