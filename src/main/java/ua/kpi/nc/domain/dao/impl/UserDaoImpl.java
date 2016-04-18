@@ -27,8 +27,8 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public User getByID(Long id) {
-        String sql = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
-                "u.password, ur.id_role, si.id AS id_social\n" +
+        String sql = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, u.is_active, u.confirm_token, " +
+                "u.registration_date, u.password, ur.id_role, si.id AS id_social\n" +
                 "FROM \"user\" u\n" +
                 "  INNER JOIN user_role ur ON id = id_user\n" +
                 "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
@@ -39,8 +39,8 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public User getByUsername(String email) {
-        String sql = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
-                "u.password, ur.id_role, si.id AS id_social\n" +
+        String sql = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name,u.is_active, u.confirm_token, " +
+                "u.registration_date, u.password, ur.id_role, si.id AS id_social\n" +
                 "FROM \"user\" u\n" +
                 "  INNER JOIN user_role ur ON id = id_user\n" +
                 "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
@@ -67,6 +67,9 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 user.setLastName(resultSet.getString("last_name"));
                 user.setSecondName(resultSet.getString("second_name"));
                 user.setPassword(resultSet.getString("password"));
+                user.setActive(resultSet.getBoolean("is_active"));
+                user.setConfirmToken(resultSet.getString("confirm_token"));
+                user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
                 roles.add(new RoleProxy(resultSet.getLong("id_role")));
                 socialInformations.add(new SocialInformationProxy(resultSet.getLong("id_social")));
             }
@@ -125,26 +128,29 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
 
     @Override
     public boolean insertUser(User user, Role role) {
-        String sqlUser = "INSERT INTO \"user\"(email, first_name, second_name, last_name,password) VALUES (?,?,?,?,?)";
+        String sqlUser = "INSERT INTO \"user\"(email, first_name, second_name, last_name,password, confirm token," +
+                " is_active, rgistration_date) VALUES (?,?,?,?,?,?,?,?)";
         String sql = "INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)";
         try (Connection connection = dataSource.getConnection()) {
             log.trace("Open connection");
             connection.setAutoCommit(false);
-            try (PreparedStatement statement = connection.prepareStatement(sqlUser,Statement.RETURN_GENERATED_KEYS) ) {
+            try (PreparedStatement statement = connection.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS) ) {
                 log.trace("Create prepared statement for user");
                 statement.setString(1, user.getEmail());
                 statement.setString(2, user.getFirstName());
                 statement.setString(3, user.getSecondName());
                 statement.setString(4, user.getLastName());
                 statement.setString(5, user.getPassword());
-                System.out.println("Create generatedKeys");
-                statement.executeUpdate();
+                statement.setString(6, user.getConfirmToken());
+                statement.setBoolean(7, user.isActive());
+                statement.setTimestamp(8,user.getRegistrationDate());
                 ResultSet resultSet = statement.getGeneratedKeys();
                 if (resultSet.next()){
                     user.setId(resultSet.getLong(1));
                 } else {
                     return false;
                 }
+                statement.executeUpdate();
             } catch (SQLException eStatement) {
                 log.error("Cannot insert user: " + user.getEmail(), eStatement);
                 return false;

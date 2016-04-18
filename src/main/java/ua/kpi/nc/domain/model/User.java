@@ -1,6 +1,7 @@
 package ua.kpi.nc.domain.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -27,6 +28,18 @@ public interface User extends Serializable {
     String getLastName();
 
     void setLastName(String lastName);
+
+    boolean isActive();
+
+    void setActive(boolean active);
+
+    Timestamp getRegistrationDate();
+
+    void setRegistrationDate(Timestamp registrationDate);
+
+    String getConfirmToken();
+
+    void setConfirmToken(String confirmToken);
 
     Set<Role> getRoles();
 

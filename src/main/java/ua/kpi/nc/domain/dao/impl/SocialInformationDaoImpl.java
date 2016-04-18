@@ -47,10 +47,9 @@ public class SocialInformationDaoImpl extends DaoSupport implements SocialInform
                         resultSet.getString("access_info"),
                         new UserProxy(resultSet.getLong("id_user")),
                         new SocialNetwork(resultSet.getLong("id_social_network"),resultSet.getString("title")));
-                return socialInformation;
             }
         } catch (SQLException e) {
-            log.error("Cannot read user", e);
+            log.error("Cannot read Social Information", e);
             return null;
         }
         if (null == socialInformation) {

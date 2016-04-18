@@ -6,6 +6,7 @@ import ua.kpi.nc.domain.model.Role;
 import ua.kpi.nc.domain.model.SocialInformation;
 import ua.kpi.nc.domain.model.User;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -29,6 +30,12 @@ public class UserImpl implements User {
     private Set<Role> roles;
 
     private String password;
+
+    private boolean isActive;
+
+    private Timestamp registrationDate;
+
+    private String confirmToken;
 
     private Set<SocialInformation> socialInformations;
 
@@ -116,6 +123,36 @@ public class UserImpl implements User {
     @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    @Override
+    public Timestamp getRegistrationDate() {
+        return registrationDate;
+    }
+
+    @Override
+    public void setRegistrationDate(Timestamp registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public String getConfirmToken() {
+        return confirmToken;
+    }
+
+    @Override
+    public void setConfirmToken(String confirmToken) {
+        this.confirmToken = confirmToken;
     }
 
     @Override
