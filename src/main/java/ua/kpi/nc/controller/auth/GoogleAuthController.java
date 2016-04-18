@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
-import ua.kpi.nc.service.SenderService;
 import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.service.impl.Google2Api;
+import ua.kpi.nc.service.mail.SenderService;
 
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_SESSION;
 

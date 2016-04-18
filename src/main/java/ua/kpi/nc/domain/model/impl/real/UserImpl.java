@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
+
 public class UserImpl implements User {
 
     private static final long serialVersionUID = -5190252598383342478L;
@@ -50,9 +51,6 @@ public class UserImpl implements User {
         this.socialInformations = socialInformations;
     }
 
-    public UserImpl() {
-    }
-
     public UserImpl(String email, String firstName, String secondName, String lastName, String password, Set<Role> roles,
                     Set<SocialInformation> socialInformations) {
         this.email = email;
@@ -62,6 +60,9 @@ public class UserImpl implements User {
         this.roles = roles;
         this.password = password;
         this.socialInformations = socialInformations;
+    }
+
+    public UserImpl() {
     }
 
     @Override
@@ -165,20 +166,27 @@ public class UserImpl implements User {
     }
 
     @Override
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
     @Override
     public String toString() {
-        return "User:" +
-                " firstName= " + firstName  +
-                ", lastName= " + lastName + "\n";
+        return "UserImpl{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", roles=" + roles +
+                ", password='" + password + '\'' +
+                ", socialInformations=" + socialInformations +
+                '}';
     }
 
     @Override
