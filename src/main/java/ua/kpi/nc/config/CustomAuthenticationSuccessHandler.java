@@ -37,14 +37,15 @@ public class CustomAuthenticationSuccessHandler implements
 
         String targetUrl = determineTargetUrl(authentication);
         redirectStrategy.sendRedirect(request, response, targetUrl);
+        
     }
 
     protected String determineTargetUrl(Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (authorities.contains("ROLE_ADMIN")) {
             return "/admin";
-        } else if (authorities.contains("ROLE_USER")) {
-            return "/user";
+        } else if (authorities.contains("ROLE_STUDENT")) {
+            return "/student";
         } else {
             throw new IllegalStateException();
         }

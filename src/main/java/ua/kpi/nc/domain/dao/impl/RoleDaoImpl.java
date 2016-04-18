@@ -30,7 +30,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
     public Role getByID(Long id) {
         String sql = "SELECT r.id, r.role, ur.id_user\n" +
                 "FROM \"role\" r\n" +
-                "  INNER JOIN user_role ur ON id = id_role\n" +
+                "  LEFT JOIN user_role ur ON id = id_role\n" +
                 "WHERE r.id = " + id;
         log.trace("Looking for role with id = " + id);
         return getByQuery(sql);
@@ -40,7 +40,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
     public Role getByTitle(String title) {
         String sql = "SELECT r.id, r.role, ur.id_role\n" +
                 "FROM \"role\" r\n" +
-                "  INNER JOIN user_role ur ON id = id_role\n" +
+                "  LEFT JOIN user_role ur ON id = id_role\n" +
                 "WHERE r.role = " + "'" + title + "'";
         log.trace("Looking for role with title = " + title);
         return getByQuery(sql);

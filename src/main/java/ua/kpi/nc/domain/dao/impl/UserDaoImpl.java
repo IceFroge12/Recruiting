@@ -10,10 +10,7 @@ import ua.kpi.nc.domain.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.domain.model.impl.proxy.SocialInformationProxy;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +31,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 "u.password, ur.id_role, si.id AS id_social\n" +
                 "FROM \"user\" u\n" +
                 "  INNER JOIN user_role ur ON id = id_user\n" +
-                "  INNER JOIN social_information si ON u.id = si.id_user\n" +
+                "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
                 "WHERE u.id =" + id;
         log.trace("Looking for user with id = " + id);
         return getUserByQuery(sql);
@@ -46,7 +43,7 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
                 "u.password, ur.id_role, si.id AS id_social\n" +
                 "FROM \"user\" u\n" +
                 "  INNER JOIN user_role ur ON id = id_user\n" +
-                "  INNER JOIN social_information si ON u.id = si.id_user\n" +
+                "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
                 "WHERE u.email =" + "'" + email + "'";
         log.trace("Looking for user with email = " + email);
         return getUserByQuery(sql);
@@ -133,20 +130,21 @@ public class UserDaoImpl extends DaoSupport implements UserDao {
         try (Connection connection = dataSource.getConnection()) {
             log.trace("Open connection");
             connection.setAutoCommit(false);
-            try (PreparedStatement statement = connection.prepareStatement(sqlUser) ) {
+            try (PreparedStatement statement = connection.prepareStatement(sqlUser,Statement.RETURN_GENERATED_KEYS) ) {
                 log.trace("Create prepared statement for user");
                 statement.setString(1, user.getEmail());
                 statement.setString(2, user.getFirstName());
                 statement.setString(3, user.getSecondName());
                 statement.setString(4, user.getLastName());
                 statement.setString(5, user.getPassword());
+                System.out.println("Create generatedKeys");
+                statement.executeUpdate();
                 ResultSet resultSet = statement.getGeneratedKeys();
                 if (resultSet.next()){
                     user.setId(resultSet.getLong(1));
                 } else {
                     return false;
                 }
-                statement.executeUpdate();
             } catch (SQLException eStatement) {
                 log.error("Cannot insert user: " + user.getEmail(), eStatement);
                 return false;
