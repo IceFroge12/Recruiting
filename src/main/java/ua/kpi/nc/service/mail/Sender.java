@@ -1,8 +1,13 @@
 package ua.kpi.nc.service.mail;
 
+import com.sun.mail.smtp.SMTPMessage;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -36,6 +41,7 @@ public class Sender {
         });
 
         try {
+
             MimeMessage message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress(username));
@@ -47,7 +53,6 @@ public class Sender {
             message.setText(text,"utf-8", "html");
 
             message.setFrom();
-
 
             Transport.send(message);
         } catch (MessagingException e) {

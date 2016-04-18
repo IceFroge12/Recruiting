@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.domain.model.User;
 import ua.kpi.nc.domain.model.impl.real.RoleImpl;
 import ua.kpi.nc.domain.model.impl.real.UserImpl;
 import ua.kpi.nc.service.PasswordEncoderGeneratorService;
+import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.service.mail.SenderService;
 
@@ -31,6 +33,9 @@ public class RegistrationController {
     @Autowired
     private SenderService senderService;
 
+    @Autowired
+    private RoleService roleService;
+
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView registration() {
@@ -49,26 +54,25 @@ public class RegistrationController {
         int randomNum = rand.nextInt((1000000 - 7) + 7);
 
         String token = "http://localhost:8084/registration/token=" +
-                user.getFirstName() + user.getLastName() + randomNum;
+                passwordEncoderGeneratorService.encode(user.getFirstName()) + randomNum;
 
-        String text = "<html><body><h4>Chiki piki</h4><br><img src=\"http://localhost:8084/image/logo.png\" width=\"400\" height=\"250\" alt=\"image\"><br><a href=" +
+
+        String text = "<html><body><h4>Chiki piki</h4><br><img src=\"cid:\"/><br><a href=" +
                 token + ">Confirm your account</a><br></body></html>";
 
-        Role role = new RoleImpl();
         String password = user.getPassword();
         String hashedPassword = passwordEncoderGeneratorService.encode(password);
 
+        user.setPassword(hashedPassword);
         if (userService.isExist(user.getEmail())) {
-            System.out.println("exist");
-            return "redirect:registration";
+            return "redirect:registration";//TODO
         }
 
+        Role role = roleService.getRoleById(2l);
         userService.insertUser(user, role);
 
-        userService.addRole(user, role);
+        senderService.send(user.getEmail(), "Please confirm your account NC KPI", text);
 
-        senderService.send(user.getEmail(), "Please Confirm your account NC KPI", text);
-        System.out.println("PreTok");
         return "redirect:/login";
     }
 
