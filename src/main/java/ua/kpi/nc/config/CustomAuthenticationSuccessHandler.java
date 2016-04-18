@@ -43,8 +43,8 @@ public class CustomAuthenticationSuccessHandler implements
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (authorities.contains("ROLE_ADMIN")) {
             return "/admin";
-        } else if (authorities.contains("ROLE_USER")) {
-            return "/user";
+        } else if (authorities.contains("ROLE_STUDENT")) {
+            return "/student";
         } else {
             throw new IllegalStateException();
         }

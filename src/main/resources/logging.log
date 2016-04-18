@@ -742,3 +742,100 @@ Caused by: java.lang.IllegalArgumentException: Cannot pass null or empty values 
 2016-04-18 14:58:42 INFO  ContextLoader:325 - Root WebApplicationContext: initialization completed in 4352 ms
 2016-04-18 14:58:42 INFO  DispatcherServlet:484 - FrameworkServlet 'dispatcher': initialization started
 2016-04-18 14:58:42 INFO  DispatcherServlet:503 - FrameworkServlet 'dispatcher': initialization completed in 74 ms
+2016-04-18 15:29:14 ERROR UsernamePasswordAuthenticationFilter:226 - An internal error occurred while trying to authenticate the user.
+org.springframework.security.authentication.InternalAuthenticationServiceException: Cannot pass null or empty values to constructor
+	at org.springframework.security.authentication.dao.DaoAuthenticationProvider.retrieveUser(DaoAuthenticationProvider.java:125)
+	at org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider.authenticate(AbstractUserDetailsAuthenticationProvider.java:143)
+	at org.springframework.security.authentication.ProviderManager.authenticate(ProviderManager.java:167)
+	at org.springframework.security.authentication.ProviderManager.authenticate(ProviderManager.java:192)
+	at org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.attemptAuthentication(UsernamePasswordAuthenticationFilter.java:93)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:217)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:64)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:91)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:330)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:213)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:176)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:344)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:261)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:318)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.IllegalArgumentException: Cannot pass null or empty values to constructor
+	at org.springframework.security.core.userdetails.User.<init>(User.java:100)
+	at ua.kpi.nc.service.impl.UserAuthServiceImpl.loadUserByUsername(UserAuthServiceImpl.java:35)
+	at org.springframework.security.authentication.dao.DaoAuthenticationProvider.retrieveUser(DaoAuthenticationProvider.java:114)
+	... 37 more
+2016-04-18 15:30:28 INFO  AnnotationConfigWebApplicationContext:862 - Closing Root WebApplicationContext: startup date [Mon Apr 18 14:58:37 EEST 2016]; root of context hierarchy
+2016-04-18 15:30:30 INFO  ContextLoader:285 - Root WebApplicationContext: initialization started
+2016-04-18 15:30:30 INFO  AnnotationConfigWebApplicationContext:510 - Refreshing Root WebApplicationContext: startup date [Mon Apr 18 15:30:30 EEST 2016]; root of context hierarchy
+2016-04-18 15:30:30 INFO  AnnotationConfigWebApplicationContext:208 - Registering annotated classes: [class ua.kpi.nc.config.WebAppConfig]
+2016-04-18 15:30:31 INFO  DefaultSecurityFilterChain:28 - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@d6da15, org.springframework.security.web.context.SecurityContextPersistenceFilter@7dfa7623, org.springframework.security.web.header.HeaderWriterFilter@2de72ab5, org.springframework.security.web.authentication.logout.LogoutFilter@f20073c, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3638a544, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@58ba997f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@26c1de60, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@985c63c, org.springframework.security.web.session.SessionManagementFilter@428a61b7, org.springframework.security.web.access.ExceptionTranslationFilter@446d9c70, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6d0b375e]
+2016-04-18 15:30:31 INFO  DefaultContextLoadTimeWeaver:75 - Determined server-specific load-time weaver: org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver
+2016-04-18 15:30:31 INFO  DefaultContextLoadTimeWeaver:75 - Determined server-specific load-time weaver: org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/google-auth],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.auth.GoogleAuthController.googleAuth(org.springframework.web.context.request.WebRequest)
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/googlecallback],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.auth.GoogleAuthController.callBack(java.lang.String)
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/dev],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.DeveloperController.adminPage()
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/student],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.StudentController.adminPage()
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/registration/signup],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.RegistrationController.addUser(ua.kpi.nc.domain.model.impl.real.UserImpl)
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/registration/{token}],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.RegistrationController.registrationConfirm(java.lang.String)
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/registration],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.RegistrationController.registration()
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/hr],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.HrController.adminPage()
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/ba],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.BaController.adminPage()
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/admin],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.AdminController.adminPage()
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.LoginController.login(java.lang.String)
+2016-04-18 15:30:33 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.HomeController.home()
+2016-04-18 15:30:33 INFO  SimpleUrlHandlerMapping:314 - Mapped URL path [/image/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-04-18 15:30:33 INFO  SimpleUrlHandlerMapping:314 - Mapped URL path [/js/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-04-18 15:30:33 INFO  SimpleUrlHandlerMapping:314 - Mapped URL path [/css/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-04-18 15:30:33 INFO  RequestMappingHandlerAdapter:517 - Looking for @ControllerAdvice: Root WebApplicationContext: startup date [Mon Apr 18 15:30:30 EEST 2016]; root of context hierarchy
+2016-04-18 15:30:33 INFO  ContextLoader:325 - Root WebApplicationContext: initialization completed in 3068 ms
+2016-04-18 15:30:33 INFO  DispatcherServlet:484 - FrameworkServlet 'dispatcher': initialization started
+2016-04-18 15:30:33 INFO  DispatcherServlet:503 - FrameworkServlet 'dispatcher': initialization completed in 52 ms
+2016-04-18 15:31:50 INFO  AnnotationConfigWebApplicationContext:862 - Closing Root WebApplicationContext: startup date [Mon Apr 18 15:30:30 EEST 2016]; root of context hierarchy
+2016-04-18 15:31:52 INFO  ContextLoader:285 - Root WebApplicationContext: initialization started
+2016-04-18 15:31:52 INFO  AnnotationConfigWebApplicationContext:510 - Refreshing Root WebApplicationContext: startup date [Mon Apr 18 15:31:52 EEST 2016]; root of context hierarchy
+2016-04-18 15:31:52 INFO  AnnotationConfigWebApplicationContext:208 - Registering annotated classes: [class ua.kpi.nc.config.WebAppConfig]
+2016-04-18 15:31:53 INFO  DefaultSecurityFilterChain:28 - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@54476cd2, org.springframework.security.web.context.SecurityContextPersistenceFilter@237c9eb4, org.springframework.security.web.header.HeaderWriterFilter@51e9c4f6, org.springframework.security.web.authentication.logout.LogoutFilter@54e17a27, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@123d6f48, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3118a535, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5a0b7141, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6216a9b0, org.springframework.security.web.session.SessionManagementFilter@7367ce82, org.springframework.security.web.access.ExceptionTranslationFilter@131e9218, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@546f8b61]
+2016-04-18 15:31:53 INFO  DefaultContextLoadTimeWeaver:75 - Determined server-specific load-time weaver: org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver
+2016-04-18 15:31:53 INFO  DefaultContextLoadTimeWeaver:75 - Determined server-specific load-time weaver: org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/google-auth],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.auth.GoogleAuthController.googleAuth(org.springframework.web.context.request.WebRequest)
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/googlecallback],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.auth.GoogleAuthController.callBack(java.lang.String)
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/dev],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.DeveloperController.adminPage()
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/student],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.StudentController.adminPage()
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/registration/signup],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.RegistrationController.addUser(ua.kpi.nc.domain.model.impl.real.UserImpl)
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/registration/{token}],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String ua.kpi.nc.controller.RegistrationController.registrationConfirm(java.lang.String)
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/registration],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.RegistrationController.registration()
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/hr],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.HrController.adminPage()
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/ba],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.BaController.adminPage()
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/admin],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.AdminController.adminPage()
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.LoginController.login(java.lang.String)
+2016-04-18 15:31:54 INFO  RequestMappingHandlerMapping:217 - Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView ua.kpi.nc.controller.HomeController.home()
+2016-04-18 15:31:54 INFO  SimpleUrlHandlerMapping:314 - Mapped URL path [/image/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-04-18 15:31:54 INFO  SimpleUrlHandlerMapping:314 - Mapped URL path [/js/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-04-18 15:31:54 INFO  SimpleUrlHandlerMapping:314 - Mapped URL path [/css/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2016-04-18 15:31:54 INFO  RequestMappingHandlerAdapter:517 - Looking for @ControllerAdvice: Root WebApplicationContext: startup date [Mon Apr 18 15:31:52 EEST 2016]; root of context hierarchy
+2016-04-18 15:31:55 INFO  ContextLoader:325 - Root WebApplicationContext: initialization completed in 3111 ms
+2016-04-18 15:31:55 INFO  DispatcherServlet:484 - FrameworkServlet 'dispatcher': initialization started
+2016-04-18 15:31:55 INFO  DispatcherServlet:503 - FrameworkServlet 'dispatcher': initialization completed in 63 ms
