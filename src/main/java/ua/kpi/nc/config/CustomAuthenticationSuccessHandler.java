@@ -37,6 +37,7 @@ public class CustomAuthenticationSuccessHandler implements
 
         String targetUrl = determineTargetUrl(authentication);
         redirectStrategy.sendRedirect(request, response, targetUrl);
+        
     }
 
     protected String determineTargetUrl(Authentication authentication) {
