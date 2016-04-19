@@ -1,5 +1,9 @@
 package ua.kpi.nc.domain.dao.impl;
 
+import org.springframework.stereotype.Component;
+
+
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ua.kpi.nc.domain.dao.RoleDao;
@@ -24,6 +28,7 @@ public class RoleDaoImpl extends DaoSupport implements RoleDao {
     private static Logger log = Logger.getLogger(RoleDaoImpl.class.getName());
 
     public RoleDaoImpl() {
+
     }
 
     @Override
