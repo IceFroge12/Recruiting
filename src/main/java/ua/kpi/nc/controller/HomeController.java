@@ -23,7 +23,10 @@ public class HomeController{
         ModelAndView modelAndView = new ModelAndView("home");
         DAOFactory daoFactory = DAOFactory.getDAOFactory(DaoFactoryType.PostgreSQL);
         SocialNetworkDAO<SocialNetwork, Long> socialNetworkDAO = daoFactory.getSocialNetworkDAO();
-        ua.kpi.nc.domain.model.SocialNetwork socialNetwork = socialNetworkDAO.getByTitle("FaceBook");
+        SocialNetwork socialNetwork = socialNetworkDAO.getByTitle("FaceBook");
+        SocialNetworkDAO<SocialNetwork, Long> socialNetworkDAO1 = daoFactory.getSocialNetworkDAO();
+        SocialNetwork socialNetwork2 = socialNetworkDAO1.getByTitle("FaceBook");
+
         return modelAndView;
     }
 
