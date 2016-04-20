@@ -13,7 +13,6 @@ public class RegistrationController
     @RequestMapping(value = "/registration")
     public ModelAndView studentRegistration(){
         ModelAndView model = new ModelAndView("registration");
-
         return model;
     }
 }

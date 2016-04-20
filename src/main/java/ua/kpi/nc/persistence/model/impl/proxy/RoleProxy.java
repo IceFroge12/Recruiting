@@ -12,7 +12,6 @@ import java.util.Set;
 /**
  * Created by Chalienko on 15.04.2016.
  */
-@Configurable
 public class RoleProxy implements Role {
 
     private Long id;

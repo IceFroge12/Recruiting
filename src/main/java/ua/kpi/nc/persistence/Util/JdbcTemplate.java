@@ -3,10 +3,7 @@ package ua.kpi.nc.persistence.util;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by Chalienko on 20.04.2016.
@@ -46,6 +43,78 @@ public class JdbcTemplate {
         }
     }
 
+    public Long insert(String sql, Object... objects) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            log.trace("Open connection");
+            log.trace("Create prepared statement");
+            log.trace("Get result");
+            return insert(statement, objects);
+        } catch (SQLException e) {
+            log.error("Cannot read objects", e);
+            return 0L;
+        }
+    }
+
+    public Long insert(String sql, Connection connection, Object... objects) {
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            log.trace("Create prepared statement");
+            return insert(statement,objects);
+        } catch (SQLException e) {
+            log.error("Cannot read objects", e);
+            return 0L;
+        }
+    }
+
+    private Long insert(PreparedStatement statement,Object... objects) {
+        log.trace("Get result");
+        int rowNum = 1;
+        try {
+            for (Object object : objects) {
+                statement.setObject(rowNum++, object);
+            }
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            }
+        } catch (SQLException e) {
+            log.error("Cannot insert objects", e);
+            return null;
+        }
+        return null;
+    }
+
+    public boolean updateWithTransaction(String[] sqls, Object... objects) {
+        try (Connection connection = dataSource.getConnection()) {
+            log.trace("Open connection");
+            connection.setAutoCommit(false);
+            int valueNum = 0;
+            for (String sql : sqls) {
+                try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    log.trace("Create prepared statement");
+                    log.trace("Get result");
+                    int rowNum = 1;
+                    int i;
+                    for (i = valueNum; i < statement.getParameterMetaData().getParameterCount() + valueNum; i++) {
+                        statement.setObject(rowNum++, objects[i]);
+                    }
+                    valueNum = i;
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    connection.rollback();
+                    log.error("Cannot read objects", e);
+                    return false;
+                }
+            }
+            connection.commit();
+            return true;
+        } catch (SQLException e) {
+            log.error("Cannot read objects", e);
+            return false;
+        }
+    }
+
     public <T> T queryForObject(String sql, ResultSetExtractor<T> resultSetExtractor) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -63,7 +132,7 @@ public class JdbcTemplate {
         }
     }
 
-    public  <T> T queryWithParameters(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
+    public <T> T queryWithParameters(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             int rowNum = 1;

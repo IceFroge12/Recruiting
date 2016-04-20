@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -19,6 +20,18 @@ public interface User extends Serializable {
     String getFirstName();
 
     void setFirstName(String firstName);
+
+    String getConfirmToken();
+
+    void setConfirmToken(String confirmToken);
+
+    boolean isActive();
+
+    void setActive(boolean active);
+
+    Timestamp getRegistrationDate();
+
+    void setRegistrationDate(Timestamp registrationDate);
 
     String getSecondName();
 

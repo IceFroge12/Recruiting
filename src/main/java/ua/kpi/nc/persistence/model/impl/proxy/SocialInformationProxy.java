@@ -11,7 +11,6 @@ import ua.kpi.nc.service.SocialInformationService;
 /**
  * Created by Chalienko on 15.04.2016.
  */
-@Configurable
 public class SocialInformationProxy implements SocialInformation {
     private Long id;
 

@@ -8,12 +8,12 @@ import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.UserService;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Configurable
 public class UserProxy implements User {
 
     private Long id;
@@ -71,6 +71,57 @@ public class UserProxy implements User {
             user = downloadUser();
         }
         user.setFirstName(firstName);
+    }
+
+    @Override
+    public String getConfirmToken() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getConfirmToken();
+    }
+
+    @Override
+    public void setConfirmToken(String confirmToken) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setConfirmToken(confirmToken);
+
+    }
+
+    @Override
+    public boolean isActive() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.isActive();
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setActive(active);
+
+    }
+
+    @Override
+    public Timestamp getRegistrationDate() {
+        if (user == null) {
+            user = downloadUser();
+        }
+        return user.getRegistrationDate();
+    }
+
+    @Override
+    public void setRegistrationDate(Timestamp registrationDate) {
+        if (user == null) {
+            user = downloadUser();
+        }
+        user.setRegistrationDate(registrationDate);
+
     }
 
     @Override

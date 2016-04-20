@@ -6,6 +6,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -27,6 +28,12 @@ public class UserImpl implements User {
 
     private Set<Role> roles;
 
+    private String confirmToken;
+
+    private boolean isActive;
+
+    private Timestamp registrationDate;
+
     private String password;
 
     private Set<SocialInformation> socialInformations;
@@ -46,13 +53,17 @@ public class UserImpl implements User {
     public UserImpl() {
     }
 
-    public UserImpl(String email, String firstName, String secondName, String lastName, String password, Set<Role> roles,
+    public UserImpl(String email, String firstName, String secondName, String lastName, Set<Role> roles,
+                    String confirmToken, boolean isActive, Timestamp registrationDate, String password,
                     Set<SocialInformation> socialInformations) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
         this.roles = roles;
+        this.confirmToken = confirmToken;
+        this.isActive = isActive;
+        this.registrationDate = registrationDate;
         this.password = password;
         this.socialInformations = socialInformations;
     }
@@ -75,6 +86,36 @@ public class UserImpl implements User {
     @Override
     public void setSocialInformations(Set<SocialInformation> socialInformations) {
         this.socialInformations = socialInformations;
+    }
+
+    @Override
+    public String getConfirmToken() {
+        return confirmToken;
+    }
+
+    @Override
+    public void setConfirmToken(String confirmToken) {
+        this.confirmToken = confirmToken;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    @Override
+    public Timestamp getRegistrationDate() {
+        return registrationDate;
+    }
+
+    @Override
+    public void setRegistrationDate(Timestamp registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     @Override
@@ -128,19 +169,19 @@ public class UserImpl implements User {
     }
 
     @Override
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
     @Override
     public String toString() {
         return "User:" +
-                " firstName= " + firstName  +
+                " firstName= " + firstName +
                 ", lastName= " + lastName + "\n";
     }
 
