@@ -3,6 +3,7 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
+
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/java/ua/kpi/nc/config/DataConfig.java</file>
           <file>file://$MODULE_DIR$/src/main/java/ua/kpi/nc/config/WebAppConfig.java</file>
