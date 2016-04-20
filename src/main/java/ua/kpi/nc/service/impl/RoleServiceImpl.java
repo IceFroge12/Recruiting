@@ -2,8 +2,8 @@ package ua.kpi.nc.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ua.kpi.nc.domain.dao.RoleDao;
-import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.persistence.dao.RoleDao;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.service.RoleService;
 
 /**

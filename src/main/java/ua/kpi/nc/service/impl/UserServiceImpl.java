@@ -2,10 +2,9 @@ package ua.kpi.nc.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ua.kpi.nc.domain.dao.UserDao;
-import ua.kpi.nc.domain.dao.impl.UserDaoImpl;
-import ua.kpi.nc.domain.model.Role;
-import ua.kpi.nc.domain.model.User;
+import ua.kpi.nc.persistence.dao.UserDao;
+import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.UserService;
 
 /**
@@ -14,8 +13,11 @@ import ua.kpi.nc.service.UserService;
 @Repository
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public User getUserByUsername(String username) {
@@ -33,22 +35,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean insertUser(User user, Role role) {
+    public int insertUser(User user, Role role) {
         return userDao.insertUser(user,role);
     }
 
     @Override
-    public boolean addRole(User user, Role role) {
+    public int addRole(User user, Role role) {
         return userDao.addRole(user, role);
     }
 
     @Override
-    public boolean deleteRole(User user, Role role) {
+    public int deleteRole(User user, Role role) {
         return userDao.deleteRole(user, role);
     }
 
     @Override
-    public boolean deleteUser(User user) {
+    public int deleteUser(User user) {
         return userDao.deleteUser(user);
     }
 }

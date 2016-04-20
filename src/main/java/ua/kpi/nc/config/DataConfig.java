@@ -3,9 +3,7 @@ package ua.kpi.nc.config;
 import org.postgresql.ds.PGPoolingDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
@@ -13,7 +11,6 @@ import javax.sql.DataSource;
 @ComponentScan("ua.kpi.nc")
 @PropertySource("classpath:app.properties")
 @EnableLoadTimeWeaving
-@EnableSpringConfigured
 public class DataConfig {
 
     @Value("${db.password}")

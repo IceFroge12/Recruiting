@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ua.kpi.nc.domain.model.Role;
-import ua.kpi.nc.domain.model.User;
+import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.UserService;
 
 import java.util.ArrayList;

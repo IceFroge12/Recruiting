@@ -1,6 +1,6 @@
 package ua.kpi.nc.service;
 
-import ua.kpi.nc.domain.model.Role;
+import ua.kpi.nc.persistence.model.Role;
 
 /**
  * Created by Chalienko on 13.04.2016.

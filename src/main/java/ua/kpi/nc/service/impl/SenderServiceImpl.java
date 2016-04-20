@@ -2,7 +2,8 @@ package ua.kpi.nc.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ua.kpi.nc.domain.model.User;
+
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.Sender;
 import ua.kpi.nc.service.SenderService;
 

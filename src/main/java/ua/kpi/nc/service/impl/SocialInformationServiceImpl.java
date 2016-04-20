@@ -1,7 +1,7 @@
 package ua.kpi.nc.service.impl;
 
 import org.springframework.stereotype.Repository;
-import ua.kpi.nc.domain.model.SocialInformation;
+import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.service.SocialInformationService;
 
 /**

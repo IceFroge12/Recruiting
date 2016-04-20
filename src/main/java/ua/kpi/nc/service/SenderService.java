@@ -1,7 +1,9 @@
 package ua.kpi.nc.service;
 
 
-import ua.kpi.nc.domain.model.User;
+
+
+import ua.kpi.nc.persistence.model.User;
 
 import java.util.Set;
 
