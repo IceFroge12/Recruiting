@@ -12,7 +12,6 @@ import java.sql.Timestamp;
  */
 public class InterviewImpl implements Interview{
 
-    private static final long serialVersionUID = 7837728826371592710L;
     private Long id;
     private int mark;
     private Timestamp date;
