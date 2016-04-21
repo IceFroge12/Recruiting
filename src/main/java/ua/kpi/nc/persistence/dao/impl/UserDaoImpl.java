@@ -15,8 +15,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Chalienko on 13.04.2016.
@@ -35,11 +34,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.trace("Looking for user with id = " + id);
         }
         return this.getJdbcTemplate().queryWithParameters("SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
-                "u.password, u.confirm_token, u.is_active, u.registration_date, ur.id_role, si.id AS id_social\n" +
+                "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
                 "FROM \"user\" u\n" +
-                "  INNER JOIN user_role ur ON id = id_user\n" +
-                "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
-                "WHERE u.email = ?;", new UserExtractor(), id);
+                "WHERE u.id = ?;", new UserExtractor(), id);
     }
 
     @Override
@@ -48,10 +45,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.trace("Looking for user with email = " + email);
         }
         return this.getJdbcTemplate().queryWithParameters("SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
-                " u.password,u.confirm_token, u.is_active, u.registration_date, ur.id_role, si.id AS id_social\n" +
+                " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
                 "FROM \"user\" u\n" +
-                "   INNER JOIN user_role ur ON id = id_user\n" +
-                "   LEFT JOIN social_information si ON u.id = si.id_user\n" +
                 " WHERE u.email = ?;", new UserExtractor(), email);
     }
 
@@ -106,7 +101,38 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
                 "id_role = ?", user.getId(),role.getId());
     }
 
-    private static final class UserExtractor implements ResultSetExtractor<User> {
+    private Set<Role> getRoles(Long userID){
+        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
+                "FROM \"user_role\" ur\n" +
+                "WHERE ur.id_user = ?;", resultSet -> {
+                    Set<Role> roles = new HashSet<>();
+                    do {
+                        roles.add(new RoleProxy(resultSet.getLong("id_role")));
+                    }while (resultSet.next());
+                    return roles;
+                },userID);
+    }
+
+    private Set<SocialInformation> getSocialInfomations(Long userID){
+        return this.getJdbcTemplate().queryWithParameters("SELECT si.id\n" +
+                "FROM \"social_information\" si\n" +
+                "WHERE si.id_user = ?;", resultSet -> {
+            Set<SocialInformation> set = new HashSet<>();
+            do {
+                set.add(new SocialInformationProxy(resultSet.getLong("id")));
+            }while (resultSet.next());
+            return set;
+        },userID);
+    }
+
+    @Override
+    public Set<User> getAll(){
+        return this.getJdbcTemplate().queryForSet("SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+                " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+                "FROM \"user\" u\n", new UserExtractor());
+    }
+
+    private final class UserExtractor implements ResultSetExtractor<User> {
         @Override
         public User extractData(ResultSet resultSet) throws SQLException {
             User user = new UserImpl();
@@ -119,16 +145,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             user.setConfirmToken(resultSet.getString("confirm_token"));
             user.setActive(resultSet.getBoolean("is_active"));
             user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
-            Set<Role> roles = new HashSet<>();
-            Set<SocialInformation> socialInformations = new HashSet<>();
-            socialInformations.add(new SocialInformationProxy(resultSet.getLong("id_social")));
-            roles.add(new RoleProxy(resultSet.getLong("id_role")));
-            while (resultSet.next()) {
-                socialInformations.add(new SocialInformationProxy(resultSet.getLong("id_social")));
-                roles.add(new RoleProxy(resultSet.getLong("id_role")));
-            }
-            user.setSocialInformations(socialInformations);
-            user.setRoles(roles);
+            user.setRoles(getRoles(resultSet.getLong("id")));
+            user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
             return user;
         }
     }
