@@ -8,6 +8,7 @@ import ua.kpi.nc.persistence.model.FormQuestion;
  */
 public class FormAnswerVariantImpl implements FormAnswerVariant {
 
+    private static final long serialVersionUID = 1091069075594065071L;
     private Long id;
     private String title;
     private FormQuestion idQuestion;

@@ -8,11 +8,8 @@ import ua.kpi.nc.persistence.model.Role;
 import java.sql.Timestamp;
 import java.util.Set;
 
-/**
- * Created by Vova on 21.04.2016.
- */
-public class RecruitmentImpl {
 
+public class RecruitmentImpl implements Recruitment {
 
     private Long id;
 
