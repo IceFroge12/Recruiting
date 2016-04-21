@@ -50,13 +50,13 @@ public interface Recruitment extends Serializable {
 
     void setTimeInterviewSoft(int timeInterviewSoft);
 
-    int getNumberTechInterviwers();
+    int getNumberTechInterviewers();
 
-    void setNumberTechInterviwers(int numberTechInterviwers);
+    void setNumberTechInterviewers(int numberTechInterviewers);
 
-    int getNumberSoftInterviwers();
+    int getNumberSoftInterviewers();
 
-    void setNumberSoftInterviwers(int numberSoftInterviwers);
+    void setNumberSoftInterviewers(int numberSoftInterviewers);
 
     int getNumberOfDays();
 
