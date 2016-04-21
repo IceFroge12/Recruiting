@@ -39,7 +39,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
                 "FROM \"user\" u\n" +
                 "  INNER JOIN user_role ur ON id = id_user\n" +
                 "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
-                "WHERE u.email = ?;", new UserExtractor(), id);
+                "WHERE u.id = ?;", new UserExtractor(), id);
     }
 
     @Override

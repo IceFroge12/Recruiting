@@ -9,11 +9,15 @@ import ua.kpi.nc.service.RoleService;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Repository
+
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
+
     private RoleDao roleDao;
+
+    public RoleServiceImpl(RoleDao roleDao) {
+        this.roleDao = roleDao;
+    }
 
     @Override
     public Role getRoleById(Long id) {

@@ -3,7 +3,7 @@ package ua.kpi.nc.service.util;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * Created by dima on 13.04.16.
+ * Created by dima on 13.04.16.222
  */
 public class SenderServiceImpl implements SenderService {
 
