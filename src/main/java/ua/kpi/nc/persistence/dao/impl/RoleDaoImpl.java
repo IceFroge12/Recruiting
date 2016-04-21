@@ -6,13 +6,16 @@ import org.springframework.stereotype.Component;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.RoleDao;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
+import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,16 +26,39 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Component
+
 public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
+
+    private static Logger log = Logger.getLogger(RoleDaoImpl.class.getName());
+
+    public RoleDaoImpl(DataSource dataSource) {
+        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+    }
+
     @Override
     public Role getByID(Long id) {
-        return null;
+        if (log.isTraceEnabled()){
+            log.trace("Looking for role with id = " + id);
+        }
+        return this.getJdbcTemplate().queryWithParameters("SELECT role.id, role.role FROM public.role where role.id = ?;", new RoleExtractor(), id);
     }
 
     @Override
     public Role getByTitle(String title) {
-        return null;
+        if (log.isTraceEnabled()){
+            log.trace("Looking for role with title = " + title);
+        }
+        return this.getJdbcTemplate().queryWithParameters("SELECT role.id, role.role FROM public.role where role.role = ?;", new RoleExtractor(), title);
+    }
+
+    private static final class RoleExtractor implements ResultSetExtractor<Role>{
+        @Override
+        public Role extractData(ResultSet resultSet) throws SQLException {
+            Role role = new RoleImpl();
+            role.setId(resultSet.getLong("id"));
+            role.setRoleName(resultSet.getString("role"));
+            return role;
+        }
     }
 //
 //    private static Logger log = Logger.getLogger(RoleDaoImpl.class.getName());
