@@ -15,6 +15,6 @@ public interface FormQuestionTypeDao {
 
     int deleteFormQuestionType(FormQuestionType formQuestionType);
 
-    Set<FormQuestionTypeDao> getAll();
+
 
 }

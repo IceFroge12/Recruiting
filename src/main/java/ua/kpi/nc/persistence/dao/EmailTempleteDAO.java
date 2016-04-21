@@ -17,5 +17,5 @@ public interface EmailTempleteDAO {
 
     int deleteEmailTemplate(EmailTemplate emailTemplate);
 
-    Set<EmailTemplate> getAll();
+
 }
