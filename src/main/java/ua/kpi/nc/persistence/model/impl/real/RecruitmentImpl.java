@@ -11,6 +11,8 @@ import java.util.Set;
 
 public class RecruitmentImpl implements Recruitment {
 
+    private static final long serialVersionUID = 4839409160085869405L;
+
     private Long id;
 
     private String name;
@@ -33,9 +35,9 @@ public class RecruitmentImpl implements Recruitment {
 
     private int timeInterviewSoft;
 
-    private int numberTechInterviwers;
+    private int numberTechInterviewers;
 
-    private int numberSoftInterviwers;
+    private int numberSoftInterviewers;
 
     private int numberOfDays;
 
@@ -58,118 +60,146 @@ public class RecruitmentImpl implements Recruitment {
         this.studentsOnInterview = studentsOnInterview;
         this.timeInterviewTech = timeInterviewTech;
         this.timeInterviewSoft = timeInterviewSoft;
-        this.numberTechInterviwers = numberTechInterviwers;
-        this.numberSoftInterviwers = numberSoftInterviwers;
+        this.numberTechInterviewers = numberTechInterviwers;
+        this.numberSoftInterviewers = numberSoftInterviwers;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public Timestamp getStartDate() {
         return startDate;
     }
 
+    @Override
     public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
+    @Override
     public Timestamp getEndDate() {
         return endDate;
     }
 
+    @Override
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
+    @Override
     public int getMaxGeneralGroup() {
         return maxGeneralGroup;
     }
 
+    @Override
     public void setMaxGeneralGroup(int maxGeneralGroup) {
         this.maxGeneralGroup = maxGeneralGroup;
     }
 
+    @Override
     public int getMaxAdvancedGroup() {
         return maxAdvancedGroup;
     }
 
+    @Override
     public void setMaxAdvancedGroup(int maxAdvancedGroup) {
         this.maxAdvancedGroup = maxAdvancedGroup;
     }
 
+    @Override
     public Timestamp getRegistrationDeadline() {
         return registrationDeadline;
     }
 
+    @Override
     public void setRegistrationDeadline(Timestamp registrationDeadline) {
         this.registrationDeadline = registrationDeadline;
     }
 
+    @Override
     public Timestamp getScheduleChoicesDeadline() {
         return scheduleChoicesDeadline;
     }
 
+    @Override
     public void setScheduleChoicesDeadline(Timestamp scheduleChoicesDeadline) {
         this.scheduleChoicesDeadline = scheduleChoicesDeadline;
     }
 
+    @Override
     public int getStudentsOnInterview() {
         return studentsOnInterview;
     }
 
+    @Override
     public void setStudentsOnInterview(int studentsOnInterview) {
         this.studentsOnInterview = studentsOnInterview;
     }
 
+    @Override
     public int getTimeInterviewTech() {
         return timeInterviewTech;
     }
 
+    @Override
     public void setTimeInterviewTech(int timeInterviewTech) {
         this.timeInterviewTech = timeInterviewTech;
     }
 
+    @Override
     public int getTimeInterviewSoft() {
         return timeInterviewSoft;
     }
 
+    @Override
     public void setTimeInterviewSoft(int timeInterviewSoft) {
         this.timeInterviewSoft = timeInterviewSoft;
     }
 
-    public int getNumberTechInterviwers() {
-        return numberTechInterviwers;
+    @Override
+    public int getNumberTechInterviewers() {
+        return numberTechInterviewers;
     }
 
-    public void setNumberTechInterviwers(int numberTechInterviwers) {
-        this.numberTechInterviwers = numberTechInterviwers;
+    @Override
+    public void setNumberTechInterviewers(int numberTechInterviewers) {
+        this.numberTechInterviewers = numberTechInterviewers;
     }
 
-    public int getNumberSoftInterviwers() {
-        return numberSoftInterviwers;
+    @Override
+    public int getNumberSoftInterviewers() {
+        return numberSoftInterviewers;
     }
 
-    public void setNumberSoftInterviwers(int numberSoftInterviwers) {
-        this.numberSoftInterviwers = numberSoftInterviwers;
+    @Override
+    public void setNumberSoftInterviewers(int numberSoftInterviewers) {
+        this.numberSoftInterviewers = numberSoftInterviewers;
     }
 
+    @Override
     public int getNumberOfDays() {
         return numberOfDays;
     }
 
+    @Override
     public void setNumberOfDays(int numberOfDays) {
         this.numberOfDays = numberOfDays;
     }
@@ -188,8 +218,8 @@ public class RecruitmentImpl implements Recruitment {
                 .append(studentsOnInterview, that.studentsOnInterview)
                 .append(timeInterviewTech, that.timeInterviewTech)
                 .append(timeInterviewSoft, that.timeInterviewSoft)
-                .append(numberTechInterviwers, that.numberTechInterviwers)
-                .append(numberSoftInterviwers, that.numberSoftInterviwers)
+                .append(numberTechInterviewers, that.numberTechInterviewers)
+                .append(numberSoftInterviewers, that.numberSoftInterviewers)
                 .append(numberOfDays, that.numberOfDays)
                 .append(id, that.id)
                 .append(name, that.name)
@@ -214,8 +244,8 @@ public class RecruitmentImpl implements Recruitment {
                 .append(studentsOnInterview)
                 .append(timeInterviewTech)
                 .append(timeInterviewSoft)
-                .append(numberTechInterviwers)
-                .append(numberSoftInterviwers)
+                .append(numberTechInterviewers)
+                .append(numberSoftInterviewers)
                 .append(numberOfDays)
                 .toHashCode();
     }
@@ -234,8 +264,8 @@ public class RecruitmentImpl implements Recruitment {
                 ", studentsOnInterview=" + studentsOnInterview +
                 ", timeInterviewTech=" + timeInterviewTech +
                 ", timeInterviewSoft=" + timeInterviewSoft +
-                ", numberTechInterviwers=" + numberTechInterviwers +
-                ", numberSoftInterviwers=" + numberSoftInterviwers +
+                ", numberTechInterviwers=" + numberTechInterviewers +
+                ", numberSoftInterviwers=" + numberSoftInterviewers +
                 ", numberOfDays=" + numberOfDays +
                 '}';
     }
