@@ -1,5 +1,7 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 
@@ -10,7 +12,7 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
 
     private static final long serialVersionUID = 1091069075594065071L;
     private Long id;
-    private String title;
+    private String answer;
     private FormQuestion idQuestion;
 
     public FormAnswerVariantImpl() {
@@ -18,30 +20,30 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
 
     public FormAnswerVariantImpl(Long id, String title, FormQuestion idQuestion) {
         this.id = id;
-        this.title = title;
+        this.answer = title;
         this.idQuestion = idQuestion;
     }
-
+    @Override
     public Long getId() {
         return id;
     }
-
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getTitle() {
-        return title;
+    @Override
+    public String getAnswer() {
+        return answer;
     }
-
-    public void setTitle(String title) {
-        this.title = title;
+    @Override
+    public void setAnswer(String title) {
+        this.answer = title;
     }
-
+    @Override
     public FormQuestion getIdQuestion() {
         return idQuestion;
     }
-
+    @Override
     public void setIdQuestion(FormQuestion idQuestion) {
         this.idQuestion = idQuestion;
     }
@@ -49,29 +51,32 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
 
         FormAnswerVariantImpl that = (FormAnswerVariantImpl) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        return idQuestion != null ? idQuestion.equals(that.idQuestion) : that.idQuestion == null;
-
+        return new EqualsBuilder()
+                .append(id, that.id)
+                .append(answer, that.answer)
+                .append(idQuestion, that.idQuestion)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (idQuestion != null ? idQuestion.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(answer)
+                .append(idQuestion)
+                .toHashCode();
     }
 
     @Override
     public String toString() {
         return "FormAnswerVariantImpl{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
+                ", answer='" + answer + '\'' +
                 ", idQuestion=" + idQuestion +
                 '}';
     }
