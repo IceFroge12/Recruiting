@@ -7,6 +7,7 @@ import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -26,11 +27,13 @@ public interface InterviewDao {
 
     List<Interview> getByApplicationFormId(ApplicationForm applicationFormId);
 
-    void insertInterview(Interview interview);
+    int insertInterview(Interview interview);
 
-    void updateInterview(Long id, Interview interview);
+    int updateInterview(Long id, Interview interview);
 
-    void deliteInterview(Long id);
+    int deliteInterview(Long id);
 
-    void deliteInterview(Interview interview);
+    int deliteInterview(Interview interview);
+
+    Set<Interview> getAll();
 }

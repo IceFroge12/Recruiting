@@ -9,6 +9,7 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 
 /**
@@ -27,7 +28,8 @@ public class FormQuestionTypeDaoImpl extends JdbcDaoSupport implements FormQuest
         if (log.isTraceEnabled()) {
             log.trace("Looking for form question with id  = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters("SELECT form_question_type.id, form_question_type.type_title FROM public.form_question_type WHERE form_question_type.id = ?;", new FormQuestionTypeExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters("SELECT form_question_type.id, form_question_type.type_title FROM public.form_question_type WHERE form_question_type.id = ?;",
+                new FormQuestionTypeExtractor(), id);
     }
 
     @Override
@@ -41,6 +43,7 @@ public class FormQuestionTypeDaoImpl extends JdbcDaoSupport implements FormQuest
         return this.getJdbcTemplate().update("DELETE FROM public.form_question_type WHERE form_question_type.id = ?;", formQuestionType.getId());
     }
 
+
     private static final class FormQuestionTypeExtractor implements ResultSetExtractor<FormQuestionType> {
 
         @Override
@@ -51,4 +54,6 @@ public class FormQuestionTypeDaoImpl extends JdbcDaoSupport implements FormQuest
             return formQuestionType;
         }
     }
+
+
 }
