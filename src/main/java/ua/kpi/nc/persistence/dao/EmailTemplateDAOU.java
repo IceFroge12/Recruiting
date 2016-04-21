@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author Korzh
  */
-public interface EmailTemplateDao {
+public interface EmailTemplateDAOU {
 
     EmailTemplate getById(Long id);
 

@@ -6,17 +6,18 @@ import java.sql.Connection;
 import java.util.Set;
 
 /**
- * Created by Vova on 21.04.2016.
+ * @author Korzh
  */
-public interface RecruitmentDAO  {
+public interface RecruitmentDAO {
 
     Recruitment getRecruitmentById(Long id);
 
     Recruitment getRecruitmentByName(String name);
 
-    boolean updateRecruitment(Recruitment recruitment);
+    int addRecruitment(Recruitment recruitment);
 
-    boolean addRecruitment(Recruitment recruitment);
+    int updateRecruitment(Recruitment recruitment);
+
 
     int deleteRecruitment(Recruitment recruitment);
 
