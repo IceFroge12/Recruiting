@@ -15,6 +15,12 @@ public class FormQuestionProxy implements FormQuestion{
 
     private FormQuestionService formQuestionService;
 
+    public FormQuestionProxy() {
+    }
+
+    public FormQuestionProxy(Long id) {
+        this.id = id;
+    }
 
     @Override
     public Long getId() {
