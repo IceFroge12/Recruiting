@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.*;
 
 /**
  * Created by Chalienko on 20.04.2016.
@@ -66,6 +67,33 @@ public class JdbcTemplate {
         }
     }
 
+    public <T> List<T> queryForList(String sql,ResultSetExtractor<T> resultSetExtractor, Object... objects){
+        return (List<T>) queryForCollection(new HashSet<>(),sql,  resultSetExtractor, (Object[]) objects);
+    }
+
+    private <T> Collection<T> queryForCollection(Collection<T> collection,String sql,
+                                                 ResultSetExtractor<T> resultSetExtractor, Object... objects) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            int rowNum = 1;
+            for (Object object : objects) {
+                statement.setObject(rowNum++, object);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                collection.add(resultSetExtractor.extractData(resultSet));
+            }
+            return collection;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects){
+        return (Set<T>) queryForCollection(new HashSet<>(),sql,  resultSetExtractor, (Object[]) objects);
+    }
+
     private Long insert(PreparedStatement statement,Object... objects) {
         log.trace("Get result");
         int rowNum = 1;
@@ -85,53 +113,6 @@ public class JdbcTemplate {
         return null;
     }
 
-    public boolean updateWithTransaction(String[] sqls, Object... objects) {
-        try (Connection connection = dataSource.getConnection()) {
-            log.trace("Open connection");
-            connection.setAutoCommit(false);
-            int valueNum = 0;
-            for (String sql : sqls) {
-                try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                    log.trace("Create prepared statement");
-                    log.trace("Get result");
-                    int rowNum = 1;
-                    int i;
-                    for (i = valueNum; i < statement.getParameterMetaData().getParameterCount() + valueNum; i++) {
-                        statement.setObject(rowNum++, objects[i]);
-                    }
-                    valueNum = i;
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    connection.rollback();
-                    log.error("Cannot read objects", e);
-                    return false;
-                }
-            }
-            connection.commit();
-            return true;
-        } catch (SQLException e) {
-            log.error("Cannot read objects", e);
-            return false;
-        }
-    }
-
-    public <T> T queryForObject(String sql, ResultSetExtractor<T> resultSetExtractor) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-            log.trace("Open connection");
-            log.trace("Create prepared statement");
-            log.trace("Get result");
-            if (resultSet.next()) {
-                return resultSetExtractor.extractData(resultSet);
-            }
-            return null;
-        } catch (SQLException e) {
-            log.error("Cannot read objects", e);
-            return null;
-        }
-    }
-
     public <T> T queryWithParameters(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -143,7 +124,7 @@ public class JdbcTemplate {
             log.trace("Open connection");
             log.trace("Create prepared statement");
             log.trace("Get result");
-            if (resultSet.next()) {
+            if (resultSet.next()){
                 return resultSetExtractor.extractData(resultSet);
             }
         } catch (SQLException e) {
