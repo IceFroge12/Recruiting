@@ -1,9 +1,13 @@
 package ua.kpi.nc.persistence.model;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class EmailTemplate {
+public class EmailTemplate implements Serializable{
+
+	private static final long serialVersionUID = -325738497072982583L;
 
 	private Long id;
 
