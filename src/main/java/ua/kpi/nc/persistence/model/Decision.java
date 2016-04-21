@@ -1,9 +1,13 @@
 package ua.kpi.nc.persistence.model;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Decision {
+public class Decision implements Serializable {
+
+	private static final long serialVersionUID = 8612505383687321937L;
 
 	private int softMark;
 

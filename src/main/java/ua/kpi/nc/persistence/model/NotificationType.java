@@ -1,9 +1,13 @@
 package ua.kpi.nc.persistence.model;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class NotificationType {
+public class NotificationType implements Serializable {
+
+	private static final long serialVersionUID = 5660260758528854372L;
 
 	private Long id;
 
