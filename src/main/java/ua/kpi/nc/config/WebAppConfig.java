@@ -9,8 +9,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("ua.kpi.nc")
-@Import({SecurityConfig.class})
+@ComponentScan(basePackages = "ua.kpi.nc")
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override

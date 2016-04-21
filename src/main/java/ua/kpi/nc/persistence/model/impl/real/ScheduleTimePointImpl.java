@@ -29,26 +29,27 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 		this.users = users;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
-
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	@Override
 	public Timestamp getTimePoint() {
 		return timePoint;
 	}
-
+	@Override
 	public void setTimePoint(Timestamp timePoint) {
 		this.timePoint = timePoint;
 	}
-
+	@Override
 	public Set<User> getUsers() {
 		return users;
 	}
-
+	@Override
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
