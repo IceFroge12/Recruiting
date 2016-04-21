@@ -48,7 +48,7 @@ public class DataSourceFactory {
     private PGPoolingDataSource getDataSource() throws NamingException {
         dataSource = new PGPoolingDataSource();
         dataSource.setDataSourceName("dataSource");
-        dataSource.setServerName("localhost:5434");
+        dataSource.setServerName("localhost:5433");
         dataSource.setDatabaseName("recruiting");
         dataSource.setUser("admin6qvqzkw");
         dataSource.setPassword("w_-tKa4R-pAJ");

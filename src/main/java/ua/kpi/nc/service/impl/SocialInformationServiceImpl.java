@@ -7,7 +7,7 @@ import ua.kpi.nc.service.SocialInformationService;
 /**
  * Created by IO on 16.04.2016.
  */
-@Repository()
+
 public class SocialInformationServiceImpl implements SocialInformationService {
 
     @Override

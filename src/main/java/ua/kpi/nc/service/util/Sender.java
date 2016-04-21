@@ -1,4 +1,4 @@
-package ua.kpi.nc.service;
+package ua.kpi.nc.service.util;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

@@ -13,17 +13,11 @@ import ua.kpi.nc.persistence.model.SocialNetwork;
 @Controller
 public class HomeController {
 
-//
-//    @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public ModelAndView home() {
-//        ModelAndView modelAndView = new ModelAndView("home");
-//        DaoFactory daoFactory = DaoFactory.getDAOFactory(DaoFactoryType.PostgreSQL);
-//        SocialNetworkDAO<SocialNetwork, Long> socialNetworkDAO = daoFactory.getSocialNetworkDAO();
-//        SocialNetwork socialNetwork = socialNetworkDAO.getByTitle("FaceBook");
-//        SocialNetworkDAO<SocialNetwork, Long> socialNetworkDAO1 = daoFactory.getSocialNetworkDAO();
-//        SocialNetwork socialNetwork2 = socialNetworkDAO1.getByTitle("FaceBook");
-//
-//        return modelAndView;
-//    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView home() {
+        ModelAndView modelAndView = new ModelAndView("home");
+        return modelAndView;
+    }
 
 }

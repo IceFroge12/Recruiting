@@ -180,9 +180,19 @@ public class UserImpl implements User {
 
     @Override
     public String toString() {
-        return "User:" +
-                " firstName= " + firstName +
-                ", lastName= " + lastName + "\n";
+        return "UserImpl{" +
+                "socialInformations=" + socialInformations +
+                ", password='" + password + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", isActive=" + isActive +
+                ", confirmToken='" + confirmToken + '\'' +
+                ", roles=" + roles +
+                ", lastName='" + lastName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", email='" + email + '\'' +
+                ", id=" + id +
+                '}';
     }
 
     @Override

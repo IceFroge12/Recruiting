@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page session="true" %>
 <html>
 <head>
@@ -10,14 +9,9 @@
 
     <h3>Login with Username and Password</h3>
 
-    <c:if test="${not empty error}">
-        <div class="error">${error}</div>
-    </c:if>
-    <c:if test="${not empty msg}">
-        <div class="msg">${msg}</div>
-    </c:if>
 
-    <form name='loginForm' id="loginForm" action="<c:url value='/login' />" method='POST' prependId = "false">
+
+    <form name='loginForm' id="loginForm" action="login" method='POST' prependId = "false">
         <table>
             <tr>
                 <td>Email:</td>
@@ -33,7 +27,6 @@
         </table>
     </form>
 
-    <a href="/google-auth">GoogleAuth</a>
 </div>
 </body>
 </html>

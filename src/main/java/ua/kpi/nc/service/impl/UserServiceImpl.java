@@ -14,7 +14,7 @@ import java.sql.SQLException;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Repository
+
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
