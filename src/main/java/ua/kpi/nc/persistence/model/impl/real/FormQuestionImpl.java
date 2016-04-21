@@ -6,7 +6,9 @@ import ua.kpi.nc.persistence.model.FormQuestionType;
 /**
  * Created by Алексей on 21.04.2016.
  */
-public class FormQuestionImpl implements FormQuestion{
+public class FormQuestionImpl implements FormQuestion {
+
+    private static final long serialVersionUID = -4875241221362139428L;
     private Long id;
     private String title;
     private FormQuestionType idQuestionType;
