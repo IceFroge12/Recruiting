@@ -9,8 +9,17 @@ import ua.kpi.nc.service.FormAnswerService;
  */
 public class FormAnswerProxy implements FormAnswer{
     private Long id;
+
     private FormAnswerImpl formAnswer;
+
     private FormAnswerService answerService;
+
+    public FormAnswerProxy() {
+    }
+
+    public FormAnswerProxy(Long id) {
+        this.id = id;
+    }
 
     @Override
     public Long getId() {
