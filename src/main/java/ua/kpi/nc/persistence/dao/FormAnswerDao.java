@@ -5,7 +5,7 @@ import ua.kpi.nc.persistence.model.FormAnswer;
 /**
  *@author Korzh
  */
-public interface FormAnswerDAOU {
+public interface FormAnswerDao {
     FormAnswer getById(Long id);
 
 }
