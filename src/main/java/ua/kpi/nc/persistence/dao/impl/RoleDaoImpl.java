@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-@Component
+
 public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
     @Override
     public Role getByID(Long id) {

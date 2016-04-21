@@ -7,7 +7,7 @@ import ua.kpi.nc.persistence.model.FormQuestionType;
  */
 public interface FormQuestionTypeDao {
 
-    Long getById(Long id);
+    FormQuestionType getById(Long id);
 
     Long persistFormQuestionType(FormQuestionType formQuestionType);
 

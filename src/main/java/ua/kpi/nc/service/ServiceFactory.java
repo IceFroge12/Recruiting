@@ -1,6 +1,7 @@
 package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.dao.DaoFactory;
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.service.impl.RoleServiceImpl;
 import ua.kpi.nc.service.impl.UserServiceImpl;
 
