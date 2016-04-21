@@ -2,6 +2,7 @@ package ua.kpi.nc.persistence.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -33,4 +34,8 @@ public interface Interview extends Serializable{
     public ApplicationForm getApplicationFormId();
 
     public void setApplicationFormId(ApplicationForm applicationFormId);
+    
+    public Set<FormAnswer> getFormAnswers();
+    
+    public void setFormAnswers(Set<FormAnswer> answers);
 }
