@@ -39,6 +39,8 @@ public interface FormQuestionDao {
 
     Set<FormQuestion> getDisableFormAnswer();
 
+    Set<FormQuestion> getAll();
+
 
 
 }

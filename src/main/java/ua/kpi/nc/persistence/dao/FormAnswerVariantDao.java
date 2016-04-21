@@ -3,6 +3,7 @@ package ua.kpi.nc.persistence.dao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 
 import java.sql.Connection;
+import java.util.Set;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -12,11 +13,13 @@ public interface FormAnswerVariantDao {
 
     FormAnswerVariant getByQuestionId(Long id);
 
-    void insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
+    int insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
 
-    void updateFormAnswerVariant(Long id, FormAnswerVariant formAnswerVariant);
+    int updateFormAnswerVariant(Long id, FormAnswerVariant formAnswerVariant);
 
-    void deleteFormAnswerVariant(FormAnswerVariant formVariant);
+    int deleteFormAnswerVariant(FormAnswerVariant formVariant);
 
-    void deleteFormAnswerVariant(Long id);
+    int deleteFormAnswerVariant(Long id);
+
+    Set<FormAnswerVariantDao> getAll();
 }

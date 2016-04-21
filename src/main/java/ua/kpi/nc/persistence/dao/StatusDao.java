@@ -6,15 +6,12 @@ import ua.kpi.nc.persistence.model.Status;
  * Created by Алексей on 21.04.2016.
  */
 public interface StatusDao {
-    void getById(Long id);
+    Status getById(Long id);
 
-    void getByTitle(String title);
+    int insertStatus(Status status);
 
-    Status insertStatus(Status status);
+    int updateStatus(Status status);
 
-    void updateStatus(Long id, Status status);
+    int deleteStatus(Status status);
 
-    void deleteStatus(Status status);
-
-    void deleteStatus(Long id);
 }
