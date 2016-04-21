@@ -6,6 +6,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
+import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
 
 import java.sql.Timestamp;
@@ -20,13 +21,17 @@ public class UserProxy implements User {
 
     private UserImpl user;
 
-    @Autowired
+//    @Autowired
+//    private UserService userService;
+
     private UserService userService;
 
     public UserProxy() {
+        userService = ServiceFactory.getUserService();
     }
 
     public UserProxy(Long id) {
+        this();
         this.id = id;
     }
 
