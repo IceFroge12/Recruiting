@@ -20,7 +20,7 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 
 	private ScheduleTimePointImpl scheduleTimePoint;
 
-	private ScheduleTimePointService scheduleTimePointService;
+	private ScheduleTimePointService service;
 
 	public ScheduleTimePointProxy() {
 	}
@@ -30,14 +30,17 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 		this.id = id;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	@Override
 	public Timestamp getTimePoint() {
 		if (scheduleTimePoint == null) {
 			scheduleTimePoint = downloadTimePoint();
@@ -45,6 +48,7 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 		return scheduleTimePoint.getTimePoint();
 	}
 
+	@Override
 	public void setTimePoint(Timestamp timePoint) {
 		if (scheduleTimePoint == null) {
 			scheduleTimePoint = downloadTimePoint();
@@ -52,6 +56,7 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 		scheduleTimePoint.setTimePoint(timePoint);
 	}
 
+	@Override
 	public Set<User> getUsers() {
 		if (scheduleTimePoint == null) {
 			scheduleTimePoint = downloadTimePoint();
@@ -59,6 +64,7 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 		return scheduleTimePoint.getUsers();
 	}
 
+	@Override
 	public void setUsers(Set<User> users) {
 		if (scheduleTimePoint == null) {
 			scheduleTimePoint = downloadTimePoint();
@@ -67,7 +73,7 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 	}
 
 	private ScheduleTimePointImpl downloadTimePoint() {
-		return null;
+		return (ScheduleTimePointImpl) service.getScheduleTimePointById(id);
 	}
 
 }
