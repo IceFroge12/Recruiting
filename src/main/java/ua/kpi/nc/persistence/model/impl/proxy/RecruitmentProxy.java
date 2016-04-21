@@ -6,7 +6,9 @@ import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
 import ua.kpi.nc.service.RecruitmentService;
 
 import java.sql.Timestamp;
-
+/**
+ @author Vova Korzh
+ **/
 public class RecruitmentProxy implements Recruitment {
 
     private Long id;

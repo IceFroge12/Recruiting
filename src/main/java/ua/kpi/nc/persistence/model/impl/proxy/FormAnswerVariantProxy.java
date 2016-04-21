@@ -6,8 +6,8 @@ import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.service.FormAnswerVariantService;
 
 /**
- * Created by Vova on 21.04.2016.
- */
+ @author Vova Korzh
+ **/
 public class FormAnswerVariantProxy implements FormAnswerVariant{
     private Long id;
     private FormAnswerVariantImpl formAnswerVariant;
