@@ -32,17 +32,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationSuccessHandler authenticationSuccessHandler = AuthenticationSuccessHandlerService.getInstance();
 
     AuthenticationManagerBuilder a = AuthenticationManagerService.getAuthenticationManagerBuilder();
-
-    @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
-        auth.authenticationProvider(authenticationProvider());
-    }
+//
+//
+//    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailsService);
+//        auth.authenticationProvider(authenticationProvider());
+//    }
 
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+        System.out.println("DETAIL"+userDetailsService);
+        auth.userDetailsService(userDetailsService);
+        System.out.println("autrr"+auth);
+    }
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
                 .antMatchers("/account/change_password/**").authenticated()

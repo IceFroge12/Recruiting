@@ -17,4 +17,11 @@ public class AdminController {
         return modelAndView;
     }
 
+
+    public void getStatisticInformation(){
+
+
+    }
+
+
 }
