@@ -7,4 +7,16 @@ import java.io.Serializable;
  */
 public interface FormAnswerVariant extends Serializable {
 
+    public Long getId();
+
+    public void setId(Long id);
+
+    public String getTitle();
+
+    public void setTitle(String title);
+
+    public FormQuestion getIdQuestion();
+
+    public void setIdQuestion(FormQuestion idQuestion);
+
 }

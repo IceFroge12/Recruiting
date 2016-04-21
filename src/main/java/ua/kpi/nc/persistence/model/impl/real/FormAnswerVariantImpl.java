@@ -7,6 +7,7 @@ import ua.kpi.nc.persistence.model.FormQuestion;
  * Created by Алексей on 21.04.2016.
  */
 public class FormAnswerVariantImpl implements FormAnswerVariant {
+
     private Long id;
     private String title;
     private FormQuestion idQuestion;
