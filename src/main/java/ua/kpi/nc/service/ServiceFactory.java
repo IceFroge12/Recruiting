@@ -2,6 +2,7 @@ package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.service.impl.ApplicationFormServiceImpl;
 import ua.kpi.nc.service.impl.RecruitmentServiceImpl;
 import ua.kpi.nc.service.impl.RoleServiceImpl;
 import ua.kpi.nc.service.impl.UserServiceImpl;
@@ -22,4 +23,7 @@ public class ServiceFactory {
     public static RecruitmentService getRecruitmentService() {
         return new RecruitmentServiceImpl(DaoFactory.getRecruitmentDao());}
 
+    public static ApplicationFormService getApplicationFormService() {
+		return new ApplicationFormServiceImpl(DaoFactory.getApplicationFormDao());
+	}
 }

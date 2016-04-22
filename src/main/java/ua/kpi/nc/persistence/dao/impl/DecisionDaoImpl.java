@@ -31,7 +31,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
     private static final String SQL_DELETE = "DELETE FROM \"decision_matrix\" WHERE soft_mark = ? and tech_mark = ? and final_mark = ?;";
 
     @Override
-    public Decision getByIds(int softMark, int techMark) {
+    public Decision getByMarks(int softMark, int techMark) {
         if (log.isInfoEnabled()){
             log.info("Looking for decision with soft_mark = " + softMark+" and tech_mark = " + techMark);
         }
