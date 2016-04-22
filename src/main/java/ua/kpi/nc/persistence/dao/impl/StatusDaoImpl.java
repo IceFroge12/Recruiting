@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao.impl;
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.StatusDao;

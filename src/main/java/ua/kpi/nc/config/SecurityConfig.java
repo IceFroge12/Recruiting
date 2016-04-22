@@ -31,14 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationSuccessHandler authenticationSuccessHandler = AuthenticationSuccessHandlerService.getInstance();
 
-//    AuthenticationManagerBuilder a = AuthenticationManagerService.getAuthenticationManagerBuilder();
-
-//    @Bean
-//    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService);
-//        auth.authenticationProvider(authenticationProvider());
-//    }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -61,6 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
     }
+
+
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
