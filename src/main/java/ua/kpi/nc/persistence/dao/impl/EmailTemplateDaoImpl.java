@@ -25,25 +25,48 @@ public class EmailTemplateDaoImpl extends JdbcDaoSupport implements EmailTemplat
         if (log.isTraceEnabled()) {
             log.trace("Looking for form email template with id  = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters("SELECT email_template.id, email_template.title, email_template.text, notification_type.title " +
+        return this.getJdbcTemplate().queryWithParameters("SELECT email_template.id, email_template.title, email_template.text, notification_type.n_title " +
                         ",notification_type.id n_id FROM public.email_template , public.notification_type   " +
                         "WHERE notification_type.id = email_template.id and email_template.id=?;",
                 new EmailTemplateExtractor(), id);
     }
-
     @Override
     public EmailTemplate getByTitle(String title) {
-        return null;
+        if (log.isTraceEnabled()) {
+            log.trace("Looking for form email template with title  = " + title);
+        }
+        return this.getJdbcTemplate().queryWithParameters("SELECT email_template.id, email_template.title, email_template.text, notification_type.n_title " +
+                        ",notification_type.id n_id FROM public.email_template , public.notification_type   " +
+                        "WHERE notification_type.id = email_template.id and email_template.title=?;",
+                new EmailTemplateExtractor(), title);
     }
+    @Override
+    public EmailTemplate getByNotificationType(NotificationType notificationType) {
+        if (log.isTraceEnabled()) {
+            log.trace("Looking for form email template with notificationType  = " + notificationType.getTitle());
+        }
+        return this.getJdbcTemplate().queryWithParameters("SELECT email_template.id, email_template.title, email_template.text, notification_type.n_title " +
+                        ",notification_type.id n_id FROM public.email_template , public.notification_type   " +
+                        "WHERE notification_type.id = email_template.id and email_template.id=?;",
+                new EmailTemplateExtractor(), notificationType.getId());
+    }
+
 
     @Override
     public int updateEmailTemplate(EmailTemplate emailTemplate) {
-        return 0;
+        if (log.isTraceEnabled()) {
+            log.trace("Updating email template with id  = " + emailTemplate.getId());
+        }
+        return this.getJdbcTemplate().update("UPDATE public.email_template SET title = ? , text = ?" +
+                "WHERE email_template.id = ?;", emailTemplate.getTitle(),emailTemplate.getText(), emailTemplate.getId());
     }
 
     @Override
     public int deleteEmailTemplate(EmailTemplate emailTemplate) {
-        return 0;
+        if (log.isTraceEnabled()) {
+            log.trace("Deleting email template with id  = " + emailTemplate.getId());
+        }
+        return this.getJdbcTemplate().update("DELETE FROM public.email_template WHERE id = ?;", emailTemplate.getId());
     }
 
     private static final class EmailTemplateExtractor implements ResultSetExtractor<EmailTemplate> {
