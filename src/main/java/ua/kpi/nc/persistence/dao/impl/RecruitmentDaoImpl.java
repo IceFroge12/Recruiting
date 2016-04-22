@@ -24,47 +24,47 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
-    private static final String sqlGetRecruitmentById = "SELECT r.id, r.name,r.start_date,r.end_date," +
+    private static final String SQL_GET_RECRUITMENT_BY_ID = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
             "FROM \"recruitment\" r\n" +
             "WHERE r.id = ?;";
 
-    private static final String sqlGetRecruitmentByName = "SELECT r.id, r.name,r.start_date,r.end_date," +
+    private static final String SQL_GET_RECRUITMENT_BY_NAME = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
             "FROM \"recruitment\" r\n" +
             "WHERE r.name = ?;";
 
-    private static final String sqlGetAll = "SELECT r.id, r.name,r.start_date,r.end_date," +
+    private static final String SQL_GET_ALL = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
             "FROM \"recruitment\" r\n";
 
-    private static final String sqlUpdate = "UPDATE \"recruitment\" " +
+    private static final String SQL_UPDATE = "UPDATE \"recruitment\" " +
             "SET name = ? , start_date = ?,\n" +
             "end_date = ?, max_general_group = ?, max_advanced_group = ?, registration_deadline = ?," +
             "schedule_choices_deadline = ?, students_on_interview = ?, time_interview_tech = ?, " +
             "time_interview_soft = ?, number_tech_interviews = ?, number_soft_interview = ?, number_of_hours = ?\n" +
             "WHERE recruitment.id = ?;";
 
-    private static final String sqlInsert = "INSERT INTO \"recruitment\"(name, start_date," +
+    private static final String SQL_INSERT = "INSERT INTO \"recruitment\"(name, start_date," +
             "end_date, max_general_group, max_advanced_group, registration_deadline, schedule_choices_deadline, " +
             "students_on_interview, time_interview_tech, time_interview_soft, number_tech_interviews," +
             "number_soft_interview, number_of_hours) " +
             "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-    private static final String sqlDelete = "DELETE FROM \"recruitment\" WHERE \"recruitment\".id = ?;";
+    private static final String SQL_DELETE = "DELETE FROM \"recruitment\" WHERE \"recruitment\".id = ?;";
 
     @Override
     public Recruitment getRecruitmentById(Long id) {
         if (log.isInfoEnabled()){
             log.info("Looking for recruitment with id = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters(sqlGetRecruitmentById, new RecruitmentExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_ID, new RecruitmentExtractor(), id);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         if (log.isInfoEnabled()){
             log.info("Looking for recruitment with name = " + name);
         }
-        return this.getJdbcTemplate().queryWithParameters(sqlGetRecruitmentByName, new RecruitmentExtractor(), name);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_NAME, new RecruitmentExtractor(), name);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         if (log.isInfoEnabled()){
             log.info("Update recruitment with name = " + recruitment.getName());
         }
-        return this.getJdbcTemplate().update(sqlUpdate,recruitment.getName(), recruitment.getStartDate(),
+        return this.getJdbcTemplate().update(SQL_UPDATE,recruitment.getName(), recruitment.getStartDate(),
                 recruitment.getEndDate(), recruitment.getMaxGeneralGroup(), recruitment.getMaxAdvancedGroup(),
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(),recruitment.getTimeInterviewTech(),recruitment.getTimeInterviewSoft(),
@@ -93,7 +93,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         if (log.isInfoEnabled()){
             log.info("Insert recruitment with name = " + recruitment.getName());
         }
-        return this.getJdbcTemplate().insert(sqlInsert,recruitment.getName(), recruitment.getStartDate(),
+        return this.getJdbcTemplate().insert(SQL_INSERT,recruitment.getName(), recruitment.getStartDate(),
                 recruitment.getEndDate(), recruitment.getMaxGeneralGroup(), recruitment.getMaxAdvancedGroup(),
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(),recruitment.getTimeInterviewTech(),recruitment.getTimeInterviewSoft(),
@@ -106,15 +106,16 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         if (log.isInfoEnabled()) {
             log.info("Delete Recruitment with id = " + recruitment.getId());
         }
-        return this.getJdbcTemplate().update(sqlDelete, recruitment.getId());
+        return this.getJdbcTemplate().update(SQL_DELETE, recruitment.getId());
     }
 
     @Override
     public List<Recruitment> getAll() {
+
         if (log.isInfoEnabled()){
             log.info("Get all recruitment");
         }
-        return this.getJdbcTemplate().queryForList(sqlGetAll, new RecruitmentExtractor());
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, new RecruitmentExtractor());
     }
 
 
