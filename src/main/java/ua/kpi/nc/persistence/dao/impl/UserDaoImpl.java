@@ -48,7 +48,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "VALUES (?,?,?,?,?,?,?,?);";
 
     private static final String SQL_UPDATE = "UPDATE \"user\" SET email = ?, first_name  = ?," +
-            " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?";
+            " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?" +
+            "WHERE id = &";
 
     private static final String SQL_DELETE = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
 
@@ -92,7 +93,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.info("Update user with id = " + user.getId());
         }
         return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(),user.getFirstName(),user.getSecondName(),
-                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
+                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate(),
+                user.getId());
     }
 
     @Override
