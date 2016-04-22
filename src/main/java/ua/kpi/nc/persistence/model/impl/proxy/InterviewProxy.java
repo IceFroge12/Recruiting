@@ -65,32 +65,32 @@ public class InterviewProxy implements Interview {
 		interview.setDate(date);
 	}
 
-	public User getIdInterviewer() {
+	public User getUser() {
 		if (interview == null) {
 			interview = downloadInterview();
 		}
-		return interview.getIdInterviewer();
+		return interview.getUser();
 	}
 
-	public void setIdInterviewer(User idInterviewer) {
+	public void setUser(User user) {
 		if (interview == null) {
 			interview = downloadInterview();
 		}
-		interview.setIdInterviewer(idInterviewer);
+		interview.setUser(user);
 	}
 
-	public Role getInterviewerRole() {
+	public Role getRole() {
 		if (interview == null) {
 			interview = downloadInterview();
 		}
-		return interview.getInterviewerRole();
+		return interview.getRole();
 	}
 
-	public void setInterviewerRole(Role interviewerRole) {
+	public void setRole(Role role) {
 		if (interview == null) {
 			interview = downloadInterview();
 		}
-		interview.setInterviewerRole(interviewerRole);
+		interview.setRole(role);
 	}
 
 	public boolean isAdequateMark() {
@@ -107,18 +107,18 @@ public class InterviewProxy implements Interview {
 		interview.setAdequateMark(adequateMark);
 	}
 
-	public ApplicationForm getApplicationFormId() {
+	public ApplicationForm getApplicationForm() {
 		if (interview == null) {
 			interview = downloadInterview();
 		}
-		return interview.getApplicationFormId();
+		return interview.getApplicationForm();
 	}
 
-	public void setApplicationFormId(ApplicationForm applicationFormId) {
+	public void setApplicationForm(ApplicationForm applicationForm) {
 		if (interview == null) {
 			interview = downloadInterview();
 		}
-		interview.setApplicationFormId(applicationFormId);
+		interview.setApplicationForm(applicationForm);
 	}
 
 	public Set<FormAnswer> getFormAnswers() {

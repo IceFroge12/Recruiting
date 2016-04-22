@@ -13,15 +13,20 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
     private static final long serialVersionUID = 1091069075594065071L;
     private Long id;
     private String answer;
-    private FormQuestion idQuestion;
+    private FormQuestion formQuestion;
 
     public FormAnswerVariantImpl() {
     }
 
-    public FormAnswerVariantImpl(Long id, String title, FormQuestion idQuestion) {
+    public FormAnswerVariantImpl(String answer, FormQuestion formQuestion) {
+        this.answer = answer;
+        this.formQuestion = formQuestion;
+    }
+
+    public FormAnswerVariantImpl(Long id, String title, FormQuestion formQuestion) {
         this.id = id;
         this.answer = title;
-        this.idQuestion = idQuestion;
+        this.formQuestion = formQuestion;
     }
     @Override
     public Long getId() {
@@ -39,13 +44,11 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
     public void setAnswer(String title) {
         this.answer = title;
     }
-    @Override
-    public FormQuestion getIdQuestion() {
-        return idQuestion;
+    public FormQuestion getFormQuestion() {
+        return formQuestion;
     }
-    @Override
-    public void setIdQuestion(FormQuestion idQuestion) {
-        this.idQuestion = idQuestion;
+    public void setFormQuestion(FormQuestion formQuestion) {
+        this.formQuestion = formQuestion;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
         return new EqualsBuilder()
                 .append(id, that.id)
                 .append(answer, that.answer)
-                .append(idQuestion, that.idQuestion)
+                .append(formQuestion, that.formQuestion)
                 .isEquals();
     }
 
@@ -68,7 +71,7 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(answer)
-                .append(idQuestion)
+                .append(formQuestion)
                 .toHashCode();
     }
 
@@ -77,7 +80,7 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
         return "FormAnswerVariantImpl{" +
                 "id=" + id +
                 ", answer='" + answer + '\'' +
-                ", idQuestion=" + idQuestion +
+                ", formQuestion=" + formQuestion +
                 '}';
     }
 }

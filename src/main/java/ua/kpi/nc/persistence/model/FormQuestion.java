@@ -14,9 +14,9 @@ public interface FormQuestion extends Serializable {
 
     void setTitle(String title);
 
-    FormQuestionType getIdQuestionType();
+    FormQuestionType getFormQuestionType();
 
-    void setIdQuestionType(FormQuestionType idQuestionType);
+    void setFormQuestionType(FormQuestionType formQuestionType);
 
     boolean isEnable();
 

@@ -15,19 +15,19 @@ public interface FormAnswer extends Serializable {
 
     public void setAnswer(String answer);
 
-    public FormQuestion getIdQuestion();
+    public FormQuestion getFormQuestion();
 
-    public void setIdQuestion(FormQuestion idQuestion);
+    public void setFormQuestion(FormQuestion formQuestion);
 
-    public ApplicationForm getIdApplicationForm();
+    public ApplicationForm getApplicationForm();
 
-    public void setIdApplicationForm(ApplicationForm idApplicationForm);
+    public void setApplicationForm(ApplicationForm applicationForm);
 
-    public FormAnswerVariant getIdVariant();
+    public FormAnswerVariant getFormAnswerVariant();
 
-    public void setIdVariant(FormAnswerVariant idVariant);
+    public void setFormAnswerVariant(FormAnswerVariant formAnswerVariant);
 
-    public Interview getIdInterview();
+    public Interview getInterview();
 
-    public void setIdInterview(Interview idInterview);
+    public void setInterview(Interview interview);
 }

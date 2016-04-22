@@ -19,21 +19,21 @@ public interface Interview extends Serializable{
 
     public void setDate(Timestamp date);
 
-    public User getIdInterviewer();
+    public User getUser();
 
-    public void setIdInterviewer(User idInterviewer);
+    public void setUser(User user);
 
-    public Role getInterviewerRole();
+    public Role getRole();
 
-    public void setInterviewerRole(Role interviewerRole);
+    public void setRole(Role role);
 
     public boolean isAdequateMark();
 
     public void setAdequateMark(boolean adequateMark);
 
-    public ApplicationForm getApplicationFormId();
+    public ApplicationForm getApplicationForm();
 
-    public void setApplicationFormId(ApplicationForm applicationFormId);
+    public void setApplicationForm(ApplicationForm applicationForm);
     
     public Set<FormAnswer> getFormAnswers();
     

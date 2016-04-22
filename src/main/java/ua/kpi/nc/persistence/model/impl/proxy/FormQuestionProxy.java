@@ -35,12 +35,11 @@ public class FormQuestionProxy implements FormQuestion{
         return formQuestion.getTitle();
     }
 
-    @Override
-    public FormQuestionType getIdQuestionType() {
+    public FormQuestionType getFormQuestionType() {
         if (formQuestion == null) {
             formQuestion = downloadQuestion();
         }
-        return formQuestion.getIdQuestionType();
+        return formQuestion.getFormQuestionType();
     }
 
     @Override
@@ -69,12 +68,11 @@ public class FormQuestionProxy implements FormQuestion{
         formQuestion.setTitle(title);
     }
 
-    @Override
-    public void setIdQuestionType(FormQuestionType idQuestionType) {
+    public void setFormQuestionType(FormQuestionType formQuestionType) {
         if (formQuestion == null) {
             formQuestion = downloadQuestion();
         }
-        formQuestion.setIdQuestionType(idQuestionType);
+        formQuestion.setFormQuestionType(formQuestionType);
     }
 
     @Override
