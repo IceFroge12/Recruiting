@@ -44,7 +44,7 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
         if (log.isInfoEnabled()) {
             log.info("Looking for FormAnswerVarian with id = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new FormAnswerVariantDaoImpl.FormAnswerVariantExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new FormAnswerVariantExtractor(), id);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
         if (log.isInfoEnabled()) {
             log.info("Looking for FormAnswerVarian with QuestionId = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_QUESTION_ID, new FormAnswerVariantDaoImpl.FormAnswerVariantExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_QUESTION_ID, new FormAnswerVariantExtractor(), id);
     }
 
     @Override
