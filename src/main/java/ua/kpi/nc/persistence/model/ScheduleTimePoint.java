@@ -20,4 +20,6 @@ public interface ScheduleTimePoint extends Serializable {
 	public Set<UserTimePriority> getUserTimePriorities();
 
 	public void setUserTimePriorities(Set<UserTimePriority> priorities);
+
+
 }
