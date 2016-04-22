@@ -47,68 +47,60 @@ public class FormAnswerProxy implements FormAnswer{
         formAnswer.setAnswer(answer);
     }
 
-    @Override
-    public FormQuestion getIdQuestion() {
+    public FormQuestion getFormQuestion() {
         if (formAnswer == null) {
             formAnswer =downloadFormAnswer();
         }
-        return formAnswer.getIdQuestion();
+        return formAnswer.getFormQuestion();
     }
 
-    @Override
-    public void setIdQuestion(FormQuestion idQuestion) {
+    public void setFormQuestion(FormQuestion formQuestion) {
         if (formAnswer == null) {
             formAnswer = downloadFormAnswer();
         }
-        formAnswer.setIdQuestion(idQuestion);
+        formAnswer.setFormQuestion(formQuestion);
     }
 
-    @Override
-    public ApplicationForm getIdApplicationForm() {
+    public ApplicationForm getApplicationForm() {
         if (formAnswer == null) {
             formAnswer =downloadFormAnswer();
         }
-        return formAnswer.getIdApplicationForm();
+        return formAnswer.getApplicationForm();
     }
 
-    @Override
-    public void setIdApplicationForm(ApplicationForm idApplicationForm) {
+    public void setApplicationForm(ApplicationForm applicationForm) {
         if (formAnswer == null) {
             formAnswer = downloadFormAnswer();
         }
-        formAnswer.setIdApplicationForm(idApplicationForm);
+        formAnswer.setApplicationForm(applicationForm);
     }
 
-    @Override
-    public FormAnswerVariant getIdVariant() {
+    public FormAnswerVariant getFormAnswerVariant() {
         if (formAnswer == null) {
             formAnswer =downloadFormAnswer();
         }
-        return formAnswer.getIdVariant();
+        return formAnswer.getFormAnswerVariant();
     }
 
-    @Override
-    public void setIdVariant(FormAnswerVariant idVariant) {
+    public void setFormAnswerVariant(FormAnswerVariant formAnswerVariant) {
         if (formAnswer == null) {
             formAnswer = downloadFormAnswer();
         }
-        formAnswer.setIdVariant(idVariant);
+        formAnswer.setFormAnswerVariant(formAnswerVariant);
     }
 
-    @Override
-    public Interview getIdInterview() {
+    public Interview getInterview() {
         if (formAnswer == null) {
             formAnswer =downloadFormAnswer();
         }
-        return formAnswer.getIdInterview();
+        return formAnswer.getInterview();
     }
 
-    @Override
-    public void setIdInterview(Interview idInterview) {
+    public void setInterview(Interview interview) {
         if (formAnswer == null) {
             formAnswer = downloadFormAnswer();
         }
-        formAnswer.setIdInterview(idInterview);
+        formAnswer.setInterview(interview);
     }
     private FormAnswerImpl downloadFormAnswer() {
         return (FormAnswerImpl) answerService.getFormAnswerByID(id);

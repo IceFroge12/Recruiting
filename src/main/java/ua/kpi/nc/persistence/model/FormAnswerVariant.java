@@ -15,8 +15,8 @@ public interface FormAnswerVariant extends Serializable {
 
     void setAnswer(String answer);
 
-    FormQuestion getIdQuestion();
+    FormQuestion getFormQuestion();
 
-    void setIdQuestion(FormQuestion idQuestion);
+    void setFormQuestion(FormQuestion formQuestion);
 
 }

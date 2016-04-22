@@ -48,20 +48,18 @@ public class FormAnswerVariantProxy implements FormAnswerVariant{
         formAnswerVariant.setAnswer(answer);
     }
 
-    @Override
-    public FormQuestion getIdQuestion() {
+    public FormQuestion getFormQuestion() {
         if (formAnswerVariant == null) {
             formAnswerVariant = downloadRecruitment();
         }
-        return formAnswerVariant.getIdQuestion();
+        return formAnswerVariant.getFormQuestion();
     }
 
-    @Override
-    public void setIdQuestion(FormQuestion idQuestion) {
+    public void setFormQuestion(FormQuestion formQuestion) {
         if (formAnswerVariant == null) {
             formAnswerVariant = downloadRecruitment();
         }
-        formAnswerVariant.setIdQuestion(idQuestion);
+        formAnswerVariant.setFormQuestion(formQuestion);
     }
 
     private FormAnswerVariantImpl downloadRecruitment() {

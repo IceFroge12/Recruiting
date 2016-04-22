@@ -11,17 +11,24 @@ public class FormQuestionImpl implements FormQuestion {
     private static final long serialVersionUID = -4875241221362139428L;
     private Long id;
     private String title;
-    private FormQuestionType idQuestionType;
+    private FormQuestionType formQuestionType;
     private boolean enable;
     private boolean mandatory;
 
     public FormQuestionImpl() {
     }
 
-    public FormQuestionImpl(Long id, String title, FormQuestionType idQuestionType, boolean enable, boolean mandatory) {
+    public FormQuestionImpl(String title, FormQuestionType formQuestionType, boolean enable, boolean mandatory) {
+        this.title = title;
+        this.formQuestionType = formQuestionType;
+        this.enable = enable;
+        this.mandatory = mandatory;
+    }
+
+    public FormQuestionImpl(Long id, String title, FormQuestionType formQuestionType, boolean enable, boolean mandatory) {
         this.id = id;
         this.title = title;
-        this.idQuestionType = idQuestionType;
+        this.formQuestionType = formQuestionType;
         this.enable = enable;
         this.mandatory = mandatory;
     }
@@ -34,8 +41,8 @@ public class FormQuestionImpl implements FormQuestion {
         return title;
     }
 
-    public FormQuestionType getIdQuestionType() {
-        return idQuestionType;
+    public FormQuestionType getFormQuestionType() {
+        return formQuestionType;
     }
 
     public boolean isEnable() {
@@ -54,8 +61,8 @@ public class FormQuestionImpl implements FormQuestion {
         this.title = title;
     }
 
-    public void setIdQuestionType(FormQuestionType idQuestionType) {
-        this.idQuestionType = idQuestionType;
+    public void setFormQuestionType(FormQuestionType formQuestionType) {
+        this.formQuestionType = formQuestionType;
     }
 
     public void setEnable(boolean enable) {
@@ -77,7 +84,7 @@ public class FormQuestionImpl implements FormQuestion {
         if (mandatory != that.mandatory) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        return idQuestionType != null ? idQuestionType.equals(that.idQuestionType) : that.idQuestionType == null;
+        return formQuestionType != null ? formQuestionType.equals(that.formQuestionType) : that.formQuestionType == null;
 
     }
 
@@ -85,7 +92,7 @@ public class FormQuestionImpl implements FormQuestion {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (idQuestionType != null ? idQuestionType.hashCode() : 0);
+        result = 31 * result + (formQuestionType != null ? formQuestionType.hashCode() : 0);
         result = 31 * result + (enable ? 1 : 0);
         result = 31 * result + (mandatory ? 1 : 0);
         return result;
@@ -96,7 +103,7 @@ public class FormQuestionImpl implements FormQuestion {
         return "FormQuestionImpl{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", idQuestionType=" + idQuestionType +
+                ", formQuestionType=" + formQuestionType +
                 ", enable=" + enable +
                 ", mandatory=" + mandatory +
                 '}';
