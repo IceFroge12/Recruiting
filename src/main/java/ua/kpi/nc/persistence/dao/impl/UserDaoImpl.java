@@ -31,28 +31,28 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
-    private static final String sqlGetById = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
+    private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n" +
             "WHERE u.id = ?;";
 
-    private static final String sqlGetByEmail = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+    private static final String SQL_GET_BY_EMAIL = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
             " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n" +
             " WHERE u.email = ?;";
 
-    private static final String sqlExist = "select exists(SELECT email from \"user\" where email =?);";
+    private static final String SQL_EXIST = "select exists(SELECT email from \"user\" where email =?);";
 
-    private static final String sqlInsert = "INSERT INTO \"user\"(email, first_name," +
+    private static final String SQL_INSERT = "INSERT INTO \"user\"(email, first_name," +
             " second_name, last_name, password, confirm_token, is_active, registration_date) " +
             "VALUES (?,?,?,?,?,?,?,?);";
 
-    private static final String sqlUpdate = "UPDATE \"user\" SET email = ?, first_name  = ?," +
+    private static final String SQL_UPDATE = "UPDATE \"user\" SET email = ?, first_name  = ?," +
             " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?";
 
-    private static final String sqlDelete = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
+    private static final String SQL_DELETE = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
 
-    private static final String sqlGetAll = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+    private static final String SQL_GET_ALL = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
             " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n";
 
@@ -61,7 +61,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()){
             log.info("Looking for user with id = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters(sqlGetById, new UserExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new UserExtractor(), id);
     }
 
     @Override
@@ -69,12 +69,12 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Looking for user with email = " + email);
         }
-        return this.getJdbcTemplate().queryWithParameters(sqlGetByEmail, new UserExtractor(), email);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, new UserExtractor(), email);
     }
 
     @Override
     public boolean isExist(String email) {
-        int cnt = this.getJdbcTemplate().update(sqlExist, email);
+        int cnt = this.getJdbcTemplate().update(SQL_EXIST, email);
         return cnt > 0;
     }
 
@@ -83,7 +83,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Insert user with email = " + user.getEmail());
         }
-        return this.getJdbcTemplate().insert(sqlInsert,connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
+        return this.getJdbcTemplate().insert(SQL_INSERT,connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
                 user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
     }
     @Override
@@ -91,7 +91,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Update user with id = " + user.getId());
         }
-        return this.getJdbcTemplate().update(sqlUpdate, user.getEmail(),user.getFirstName(),user.getSecondName(),
+        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(),user.getFirstName(),user.getSecondName(),
                 user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
     }
 
@@ -100,7 +100,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Delete user with id = " + user.getId());
         }
-        return this.getJdbcTemplate().update(sqlDelete, user.getId());
+        return this.getJdbcTemplate().update(SQL_DELETE, user.getId());
     }
 
     @Override
@@ -138,7 +138,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Get all Users");
         }
-        return this.getJdbcTemplate().queryForSet(sqlGetAll, new UserExtractor());
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new UserExtractor());
     }
 
     private Set<Role> getRoles(Long userID){
