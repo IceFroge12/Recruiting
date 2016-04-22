@@ -1,7 +1,5 @@
 package ua.kpi.nc.service.impl;
 
-import org.springframework.stereotype.Repository;
-import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
@@ -10,6 +8,7 @@ import ua.kpi.nc.service.UserService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
@@ -54,6 +53,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updateUser(User user){
+        return userDao.updateUser(user);
+    }
+
+    @Override
     public boolean addRole(User user, Role role) {
         return userDao.addRole(user, role);
     }
@@ -67,4 +71,7 @@ public class UserServiceImpl implements UserService {
     public int deleteUser(User user) {
         return userDao.deleteUser(user);
     }
+
+    @Override
+    public Set<User> getAll(){ return userDao.getAll();}
 }

@@ -1,6 +1,8 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
@@ -23,58 +25,82 @@ import java.util.Set;
  */
 public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
-    private static Logger log = Logger.getLogger(UserDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     public UserDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
+    private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
+            "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u\n" +
+            "WHERE u.id = ?;";
+
+    private static final String SQL_GET_BY_EMAIL = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+            " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u\n" +
+            " WHERE u.email = ?;";
+
+    private static final String SQL_EXIST = "select exists(SELECT email from \"user\" where email =?);";
+
+    private static final String SQL_INSERT = "INSERT INTO \"user\"(email, first_name," +
+            " second_name, last_name, password, confirm_token, is_active, registration_date) " +
+            "VALUES (?,?,?,?,?,?,?,?);";
+
+    private static final String SQL_UPDATE = "UPDATE \"user\" SET email = ?, first_name  = ?," +
+            " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?";
+
+    private static final String SQL_DELETE = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
+
+    private static final String SQL_GET_ALL = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+            " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u\n";
+
     @Override
     public User getByID(Long id) {
-        if (log.isTraceEnabled()){
-            log.trace("Looking for user with id = " + id);
+        if (log.isInfoEnabled()){
+            log.info("Looking for user with id = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters("SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
-                "u.password, u.confirm_token, u.is_active, u.registration_date, ur.id_role, si.id AS id_social\n" +
-                "FROM \"user\" u\n" +
-                "  INNER JOIN user_role ur ON id = id_user\n" +
-                "  LEFT JOIN social_information si ON u.id = si.id_user\n" +
-                "WHERE u.id = ?;", new UserExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new UserExtractor(), id);
     }
 
     @Override
     public User getByUsername(String email) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for user with email = " + email);
+        if (log.isInfoEnabled()) {
+            log.info("Looking for user with email = " + email);
         }
-        return this.getJdbcTemplate().queryWithParameters("SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
-                " u.password,u.confirm_token, u.is_active, u.registration_date, ur.id_role, si.id AS id_social\n" +
-                "FROM \"user\" u\n" +
-                "   INNER JOIN user_role ur ON id = id_user\n" +
-                "   LEFT JOIN social_information si ON u.id = si.id_user\n" +
-                " WHERE u.email = ?;", new UserExtractor(), email);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, new UserExtractor(), email);
     }
 
     @Override
     public boolean isExist(String email) {
-        int cnt = this.getJdbcTemplate().update("select exists(SELECT email from \"user\" where email =?);", email);
+        int cnt = this.getJdbcTemplate().update(SQL_EXIST, email);
         return cnt > 0;
     }
 
     @Override
     public Long insertUser(User user, Connection connection) {
-        return this.getJdbcTemplate().insert("INSERT INTO \"user\"(email, first_name," +
-                " second_name, last_name, password, confirm_token, is_active, registration_date) " +
-                "VALUES (?,?,?,?,?,?,?,?);",connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
+        if (log.isInfoEnabled()) {
+            log.info("Insert user with email = " + user.getEmail());
+        }
+        return this.getJdbcTemplate().insert(SQL_INSERT,connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
+                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
+    }
+    @Override
+    public int updateUser(User user){
+        if (log.isInfoEnabled()) {
+            log.info("Update user with id = " + user.getId());
+        }
+        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(),user.getFirstName(),user.getSecondName(),
                 user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
     }
 
     @Override
     public int deleteUser(User user) {
-        if (log.isTraceEnabled()) {
-            log.trace("Delete user with id = " + user.getId());
+        if (log.isInfoEnabled()) {
+            log.info("Delete user with id = " + user.getId());
         }
-        return this.getJdbcTemplate().update("DELETE FROM \"user\" WHERE \"user\".id = ?;", user.getId());
+        return this.getJdbcTemplate().update(SQL_DELETE, user.getId());
     }
 
     @Override
@@ -86,6 +112,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
                 user.getId(),role.getId()) > 0;
     }
+
     @Override
     public boolean addRole(User user, Role role, Connection connection) {
         if ((user.getId() == null) &&(log.isDebugEnabled())) {
@@ -106,7 +133,39 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
                 "id_role = ?", user.getId(),role.getId());
     }
 
-    private static final class UserExtractor implements ResultSetExtractor<User> {
+    @Override
+    public Set<User> getAll(){
+        if (log.isInfoEnabled()) {
+            log.info("Get all Users");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new UserExtractor());
+    }
+
+    private Set<Role> getRoles(Long userID){
+        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
+                "FROM \"user_role\" ur\n" +
+                "WHERE ur.id_user = ?;", resultSet -> {
+                    Set<Role> roles = new HashSet<>();
+                    do {
+                        roles.add(new RoleProxy(resultSet.getLong("id_role")));
+                    }while (resultSet.next());
+                    return roles;
+                },userID);
+    }
+
+    private Set<SocialInformation> getSocialInfomations(Long userID){
+        return this.getJdbcTemplate().queryWithParameters("SELECT si.id\n" +
+                "FROM \"social_information\" si\n" +
+                "WHERE si.id_user = ?;", resultSet -> {
+            Set<SocialInformation> set = new HashSet<>();
+            do {
+                set.add(new SocialInformationProxy(resultSet.getLong("id")));
+            }while (resultSet.next());
+            return set;
+        },userID);
+    }
+
+    private final class UserExtractor implements ResultSetExtractor<User> {
         @Override
         public User extractData(ResultSet resultSet) throws SQLException {
             User user = new UserImpl();
@@ -119,16 +178,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             user.setConfirmToken(resultSet.getString("confirm_token"));
             user.setActive(resultSet.getBoolean("is_active"));
             user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
-            Set<Role> roles = new HashSet<>();
-            Set<SocialInformation> socialInformations = new HashSet<>();
-            socialInformations.add(new SocialInformationProxy(resultSet.getLong("id_social")));
-            roles.add(new RoleProxy(resultSet.getLong("id_role")));
-            while (resultSet.next()) {
-                socialInformations.add(new SocialInformationProxy(resultSet.getLong("id_social")));
-                roles.add(new RoleProxy(resultSet.getLong("id_role")));
-            }
-            user.setSocialInformations(socialInformations);
-            user.setRoles(roles);
+            user.setRoles(getRoles(resultSet.getLong("id")));
+            user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
             return user;
         }
     }

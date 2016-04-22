@@ -7,7 +7,6 @@ import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.User;
 
 
-
 /**
  * Created by Chalienko on 15.04.2016.
  */
@@ -18,7 +17,7 @@ public class SocialInformationImpl implements SocialInformation {
     private User user;
     private SocialNetwork socialNetwork;
 
-    public SocialInformationImpl(Long id,String accessInfo, User user, SocialNetwork socialNetwork) {
+    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork) {
         this.id = id;
         this.accessInfo = accessInfo;
         this.user = user;

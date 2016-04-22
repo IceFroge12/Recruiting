@@ -62,8 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
     }
 
-
-
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -75,6 +73,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
-
-
 }

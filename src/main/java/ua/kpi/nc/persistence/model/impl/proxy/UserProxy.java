@@ -47,166 +47,131 @@ public class UserProxy implements User {
 
     @Override
     public String getEmail() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getEmail();
     }
 
     @Override
     public void setEmail(String email) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setEmail(email);
     }
 
-
     @Override
     public String getFirstName() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getFirstName();
     }
 
     @Override
     public void setFirstName(String firstName) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setFirstName(firstName);
     }
 
     @Override
     public String getConfirmToken() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getConfirmToken();
     }
 
     @Override
     public void setConfirmToken(String confirmToken) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setConfirmToken(confirmToken);
 
     }
 
     @Override
     public boolean isActive() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.isActive();
     }
 
     @Override
     public void setActive(boolean active) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setActive(active);
 
     }
 
     @Override
     public Timestamp getRegistrationDate() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getRegistrationDate();
     }
 
     @Override
     public void setRegistrationDate(Timestamp registrationDate) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setRegistrationDate(registrationDate);
 
     }
 
     @Override
     public String getSecondName() {
-        if (user == null){
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getSecondName();
     }
 
     @Override
     public void setSecondName(String secondName) {
-        if (user == null){
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setSecondName(secondName);
     }
 
     @Override
     public String getLastName() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getLastName();
     }
 
     @Override
     public void setLastName(String lastName) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setLastName(lastName);
     }
 
     @Override
     public Set<Role> getRoles() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getRoles();
     }
 
     @Override
     public void setRoles(Set<Role> roles) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setRoles(roles);
     }
 
     @Override
     public String getPassword() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getPassword();
     }
 
     @Override
     public void setPassword(String password) {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         user.setPassword(password);
     }
 
     @Override
     public Set<SocialInformation> getSocialInformations() {
-        if (user == null) {
-            user = downloadUser();
-        }
+        checkUserForExist();
         return user.getSocialInformations();
     }
 
     @Override
     public void setSocialInformations(Set<SocialInformation> socialInformations) {
+        checkUserForExist();
+        user.setSocialInformations(socialInformations);
+    }
+
+    private void checkUserForExist() {
         if (user == null) {
             user = downloadUser();
         }
-        user.setSocialInformations(socialInformations);
     }
 
     private UserImpl downloadUser() {

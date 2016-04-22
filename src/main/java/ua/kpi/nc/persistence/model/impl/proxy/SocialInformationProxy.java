@@ -35,47 +35,44 @@ public class SocialInformationProxy implements SocialInformation {
 
     @Override
     public String getAccessInfo() {
-        if (socialInformation == null) {
-            socialInformation = downloadSocialInformation();
-        }
+        checkSocialInformationForExist();
         return socialInformation.getAccessInfo();
     }
 
     @Override
     public void setAccessInfo(String accessInfo) {
-        if (socialInformation == null) {
-            socialInformation = downloadSocialInformation();
-        }
+        checkSocialInformationForExist();
         socialInformation.setAccessInfo(accessInfo);
     }
 
     @Override
     public User getUser() {
-        if (socialInformation == null) {
-            socialInformation = downloadSocialInformation();
-        }
+        checkSocialInformationForExist();
         return socialInformation.getUser();
     }
 
     @Override
     public void setUser(User user) {
-        if (socialInformation == null) {
-            socialInformation = downloadSocialInformation();
-        }
+        checkSocialInformationForExist();
         socialInformation.setUser(user);
     }
 
     @Override
     public SocialNetwork getSocialNetwork() {
-        if (socialInformation == null) {
-            socialInformation = downloadSocialInformation();
-        }
+        checkSocialInformationForExist();
         return socialInformation.getSocialNetwork();
     }
 
     @Override
     public void setSocialNetwork(SocialNetwork socialNetwork) {
+        checkSocialInformationForExist();
+        socialInformation.setSocialNetwork(socialNetwork);
+    }
 
+    private void checkSocialInformationForExist(){
+        if (socialInformation == null) {
+            socialInformation = downloadSocialInformation();
+        }
     }
 
     private SocialInformationImpl downloadSocialInformation() {
