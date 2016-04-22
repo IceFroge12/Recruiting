@@ -37,34 +37,32 @@ public class RoleProxy implements Role {
 
     @Override
     public String getRoleName() {
-        if (role == null) {
-            role = downloadRole();
-        }
+        checkRoleForExist();
         return role.getRoleName();
     }
 
     @Override
     public void setRoleName(String roleName) {
-        if (role == null) {
-            role = downloadRole();
-        }
+        checkRoleForExist();
         role.setRoleName(roleName);
     }
 
     @Override
     public Set<User> getUsers() {
-        if (role == null) {
-            role = downloadRole();
-        }
+        checkRoleForExist();
         return role.getUsers();
     }
 
     @Override
     public void setUsers(Set<User> users) {
+        checkRoleForExist();
+        role.setUsers(users);
+    }
+
+    private void checkRoleForExist(){
         if (role == null) {
             role = downloadRole();
         }
-        role.setUsers(users);
     }
 
     private RoleImpl downloadRole() {

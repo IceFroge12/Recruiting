@@ -37,211 +37,165 @@ public class RecruitmentProxy implements Recruitment {
 
     @Override
     public String getName() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getName();
     }
 
     @Override
     public void setName(String name) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setName(name);
     }
 
     @Override
     public Timestamp getStartDate() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getStartDate();
     }
 
     @Override
     public void setStartDate(Timestamp startDate) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setStartDate(startDate);
     }
 
     @Override
     public Timestamp getEndDate() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getEndDate();
     }
 
     @Override
     public void setEndDate(Timestamp endDate) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setEndDate(endDate);
     }
 
     @Override
     public int getMaxGeneralGroup() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getMaxGeneralGroup();
     }
 
     @Override
     public void setMaxGeneralGroup(int maxGeneralGroup) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setMaxGeneralGroup(maxGeneralGroup);
     }
 
     @Override
     public int getMaxAdvancedGroup() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getMaxAdvancedGroup();
     }
 
     @Override
     public void setMaxAdvancedGroup(int maxAdvancedGroup) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setMaxAdvancedGroup(maxAdvancedGroup);
     }
 
     @Override
     public Timestamp getRegistrationDeadline() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getRegistrationDeadline();
     }
 
     @Override
     public void setRegistrationDeadline(Timestamp registrationDeadline) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setRegistrationDeadline(registrationDeadline);
 
     }
 
     @Override
     public Timestamp getScheduleChoicesDeadline() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getScheduleChoicesDeadline();
     }
 
     @Override
     public void setScheduleChoicesDeadline(Timestamp scheduleChoicesDeadline) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setScheduleChoicesDeadline(scheduleChoicesDeadline);
     }
 
     @Override
     public int getStudentsOnInterview() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getStudentsOnInterview();
     }
 
     @Override
     public void setStudentsOnInterview(int studentsOnInterview) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setStudentsOnInterview(studentsOnInterview);
     }
 
     @Override
     public int getTimeInterviewTech() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getTimeInterviewTech();
     }
 
     @Override
     public void setTimeInterviewTech(int timeInterviewTech) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setTimeInterviewTech(timeInterviewTech);
     }
 
     @Override
     public int getTimeInterviewSoft() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getTimeInterviewSoft();
     }
 
     @Override
     public void setTimeInterviewSoft(int timeInterviewSoft) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setTimeInterviewSoft(timeInterviewSoft);
     }
 
     @Override
     public int getNumberTechInterviewers() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getNumberTechInterviewers();
     }
 
     @Override
     public void setNumberTechInterviewers(int numberTechInterviewers) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setNumberTechInterviewers(numberTechInterviewers);
     }
 
     @Override
     public int getNumberSoftInterviewers() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getNumberSoftInterviewers();
     }
 
     @Override
     public void setNumberSoftInterviewers(int numberSoftInterviewers) {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         recruitment.setNumberSoftInterviewers(numberSoftInterviewers);
     }
 
     @Override
     public int getNumberOfDays() {
-        if (recruitment == null) {
-            recruitment = downloadRecruitment();
-        }
+        checkRecruitmentForExist();
         return recruitment.getNumberOfDays();
     }
 
     @Override
     public void setNumberOfDays(int numberOfDays) {
+        checkRecruitmentForExist();
+        recruitment.setNumberOfDays(numberOfDays);
+    }
+
+    private void checkRecruitmentForExist(){
         if (recruitment == null) {
             recruitment = downloadRecruitment();
         }
-        recruitment.setNumberOfDays(numberOfDays);
     }
 
     private RecruitmentImpl downloadRecruitment() {

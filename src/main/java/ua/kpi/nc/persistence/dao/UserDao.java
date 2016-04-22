@@ -21,6 +21,8 @@ public interface UserDao {
 
     Long insertUser(User user, Connection connection);
 
+    int updateUser(User user);
+
     boolean addRole(User user, Role role);
 
     boolean addRole(User user, Role role, Connection connection);

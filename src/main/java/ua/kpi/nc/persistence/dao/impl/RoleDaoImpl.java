@@ -1,24 +1,7 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import org.springframework.stereotype.Component;
-
-
-
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 import ua.kpi.nc.persistence.dao.RoleDao;
 import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
-import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
-import ua.kpi.nc.persistence.util.JdbcTemplate;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.

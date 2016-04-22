@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.dao.impl;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.SocialNetworkDao;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 
@@ -8,7 +9,7 @@ import ua.kpi.nc.persistence.model.SocialNetwork;
  */
 public class SocialNetworkDaoImpl extends JdbcDaoSupport implements SocialNetworkDao {
 
-    private static Logger log = Logger.getLogger(SocialNetworkDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SocialNetworkDaoImpl.class.getName());
 
     public SocialNetworkDaoImpl() {
 

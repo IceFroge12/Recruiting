@@ -1,6 +1,9 @@
 package ua.kpi.nc.persistence.util;
 
-import org.apache.log4j.Logger;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -13,7 +16,7 @@ public class JdbcTemplate {
 
     private DataSource dataSource;
 
-    private static Logger log = Logger.getLogger(JdbcTemplate.class.getName());
+    private static Logger log = LoggerFactory.getLogger(JdbcTemplate.class.getName());
 
     public DataSource getDataSource() {
         return dataSource;

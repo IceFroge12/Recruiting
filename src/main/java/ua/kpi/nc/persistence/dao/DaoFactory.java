@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
 
+import ua.kpi.nc.persistence.dao.impl.RecruitmentDaoImpl;
 import ua.kpi.nc.persistence.dao.impl.UserDaoImpl;
 
 /**
@@ -9,5 +10,9 @@ import ua.kpi.nc.persistence.dao.impl.UserDaoImpl;
 public class DaoFactory {
     public static UserDao getUserDao(){
         return new UserDaoImpl(DataSourceFactory.getInstance());
+    }
+
+    public static RecruitmentDAO getRecruitmentDao(){
+        return new RecruitmentDaoImpl(DataSourceFactory.getInstance());
     }
 }

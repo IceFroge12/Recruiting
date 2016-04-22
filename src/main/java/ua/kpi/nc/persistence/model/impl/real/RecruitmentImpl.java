@@ -44,12 +44,11 @@ public class RecruitmentImpl implements Recruitment {
     public RecruitmentImpl() {
     }
 
-    public RecruitmentImpl(int numberOfDays, Long id, String name, Timestamp startDate, Timestamp endDate,
+    public RecruitmentImpl(int numberOfDays, String name, Timestamp startDate, Timestamp endDate,
                            int maxGeneralGroup, int maxAdvancedGroup, Timestamp registrationDeadline, Timestamp
                                    scheduleChoicesDeadline, int studentsOnInterview, int timeInterviewTech,
                            int timeInterviewSoft, int numberTechInterviwers, int numberSoftInterviwers) {
         this.numberOfDays = numberOfDays;
-        this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;

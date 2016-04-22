@@ -3,6 +3,8 @@ package ua.kpi.nc.service;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
+import java.util.Set;
+
 /**
  * Created by Chalienko on 13.04.2016.
  */
@@ -16,12 +18,15 @@ public interface UserService {
 
     boolean insertUser(User user, Role role);
 
+    int updateUser(User user);
+
     boolean addRole(User user, Role role);
 
     int deleteRole(User user, Role role);
 
     int deleteUser(User user);
 
+    Set<User> getAll();
 
 
 }

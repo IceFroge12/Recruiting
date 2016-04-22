@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.FormQuestionTypeDao;
 import ua.kpi.nc.persistence.model.FormQuestionType;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -9,7 +10,6 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 
 
 /**
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class FormQuestionTypeDaoImpl extends JdbcDaoSupport implements FormQuestionTypeDao {
 
-    private static Logger log = Logger.getLogger(FormQuestionTypeDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(FormQuestionTypeDaoImpl.class.getName());
 
     public FormQuestionTypeDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));

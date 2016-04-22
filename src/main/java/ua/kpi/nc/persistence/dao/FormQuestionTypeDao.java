@@ -15,6 +15,4 @@ public interface FormQuestionTypeDao {
 
     int deleteFormQuestionType(FormQuestionType formQuestionType);
 
-
-
 }

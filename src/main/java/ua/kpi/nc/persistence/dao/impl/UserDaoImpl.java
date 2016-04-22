@@ -1,6 +1,8 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
@@ -15,61 +17,90 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
  */
 public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
-    private static Logger log = Logger.getLogger(UserDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     public UserDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
+    private static final String sqlGetById = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
+            "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u\n" +
+            "WHERE u.id = ?;";
+
+    private static final String sqlGetByEmail = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+            " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u\n" +
+            " WHERE u.email = ?;";
+
+    private static final String sqlExist = "select exists(SELECT email from \"user\" where email =?);";
+
+    private static final String sqlInsert = "INSERT INTO \"user\"(email, first_name," +
+            " second_name, last_name, password, confirm_token, is_active, registration_date) " +
+            "VALUES (?,?,?,?,?,?,?,?);";
+
+    private static final String sqlUpdate = "UPDATE \"user\" SET email = ?, first_name  = ?," +
+            " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?";
+
+    private static final String sqlDelete = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
+
+    private static final String sqlGetAll = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+            " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u\n";
+
     @Override
     public User getByID(Long id) {
-        if (log.isTraceEnabled()){
-            log.trace("Looking for user with id = " + id);
+        if (log.isInfoEnabled()){
+            log.info("Looking for user with id = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters("SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
-                "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
-                "FROM \"user\" u\n" +
-                "WHERE u.id = ?;", new UserExtractor(), id);
+        return this.getJdbcTemplate().queryWithParameters(sqlGetById, new UserExtractor(), id);
     }
 
     @Override
     public User getByUsername(String email) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for user with email = " + email);
+        if (log.isInfoEnabled()) {
+            log.info("Looking for user with email = " + email);
         }
-        return this.getJdbcTemplate().queryWithParameters("SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
-                " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
-                "FROM \"user\" u\n" +
-                " WHERE u.email = ?;", new UserExtractor(), email);
+        return this.getJdbcTemplate().queryWithParameters(sqlGetByEmail, new UserExtractor(), email);
     }
 
     @Override
     public boolean isExist(String email) {
-        int cnt = this.getJdbcTemplate().update("select exists(SELECT email from \"user\" where email =?);", email);
+        int cnt = this.getJdbcTemplate().update(sqlExist, email);
         return cnt > 0;
     }
 
     @Override
     public Long insertUser(User user, Connection connection) {
-        return this.getJdbcTemplate().insert("INSERT INTO \"user\"(email, first_name," +
-                " second_name, last_name, password, confirm_token, is_active, registration_date) " +
-                "VALUES (?,?,?,?,?,?,?,?);",connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
+        if (log.isInfoEnabled()) {
+            log.info("Insert user with email = " + user.getEmail());
+        }
+        return this.getJdbcTemplate().insert(sqlInsert,connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
+                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
+    }
+    @Override
+    public int updateUser(User user){
+        if (log.isInfoEnabled()) {
+            log.info("Update user with id = " + user.getId());
+        }
+        return this.getJdbcTemplate().update(sqlUpdate, user.getEmail(),user.getFirstName(),user.getSecondName(),
                 user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
     }
 
     @Override
     public int deleteUser(User user) {
-        if (log.isTraceEnabled()) {
-            log.trace("Delete user with id = " + user.getId());
+        if (log.isInfoEnabled()) {
+            log.info("Delete user with id = " + user.getId());
         }
-        return this.getJdbcTemplate().update("DELETE FROM \"user\" WHERE \"user\".id = ?;", user.getId());
+        return this.getJdbcTemplate().update(sqlDelete, user.getId());
     }
 
     @Override
@@ -81,6 +112,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
                 user.getId(),role.getId()) > 0;
     }
+
     @Override
     public boolean addRole(User user, Role role, Connection connection) {
         if ((user.getId() == null) &&(log.isDebugEnabled())) {
@@ -99,6 +131,14 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
                 "id_role = ?", user.getId(),role.getId());
+    }
+
+    @Override
+    public Set<User> getAll(){
+        if (log.isInfoEnabled()) {
+            log.info("Get all Users");
+        }
+        return this.getJdbcTemplate().queryForSet(sqlGetAll, new UserExtractor());
     }
 
     private Set<Role> getRoles(Long userID){
@@ -123,13 +163,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             }while (resultSet.next());
             return set;
         },userID);
-    }
-
-    @Override
-    public Set<User> getAll(){
-        return this.getJdbcTemplate().queryForSet("SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
-                " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
-                "FROM \"user\" u\n", new UserExtractor());
     }
 
     private final class UserExtractor implements ResultSetExtractor<User> {

@@ -1,6 +1,8 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.StatusDao;
 import ua.kpi.nc.persistence.model.Status;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -15,7 +17,7 @@ import java.sql.SQLException;
  */
 public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
 
-    private static Logger log = Logger.getLogger(StatusDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(StatusDaoImpl.class.getName());
 
     public StatusDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
