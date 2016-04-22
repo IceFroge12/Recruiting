@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author Korzh
  */
-public interface NotificationTypeDao {
+public interface NotificationTypeDAO {
 
 
     NotificationType getById(Long id);

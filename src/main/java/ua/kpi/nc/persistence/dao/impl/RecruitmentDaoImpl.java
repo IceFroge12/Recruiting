@@ -111,6 +111,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     @Override
     public List<Recruitment> getAll() {
+
         if (log.isInfoEnabled()){
             log.info("Get all recruitment");
         }
