@@ -29,6 +29,8 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 	private static final String SQL_GET_BY_ID = "SELECT r.id, r.role" + "FROM \"role\" r\n" + "WHERE r.id = ?";
 
 	private static final String SQL_GET_BY_TITLE = "SELECT r.id, r.role" + "FROM \"role\" r\n" + "WHERE r.role = ?";
+	
+	private static final String SQL_GET_ALL = "SELECT r.id, r.role" + "FROM \"role\" r";
 
 	private static final String SQL_INSERT = "INSERT INTO role (role) VALUES (?)";
 
@@ -103,6 +105,14 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 			log.trace("Deleting role with id = " + role.getId());
 		}
 		return this.getJdbcTemplate().update(SQL_DELETE, role.getId());
+	}
+
+	@Override
+	public Set<Role> getAll() {
+		if (log.isTraceEnabled()) {
+			log.trace("Getting all roles");
+		}
+		return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new RoleExtractor());
 	}
 
 }
