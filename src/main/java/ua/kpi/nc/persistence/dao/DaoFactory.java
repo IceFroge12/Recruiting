@@ -27,10 +27,16 @@ public class DaoFactory {
     
     public static StatusDao getStatusDao(){return new StatusDaoImpl(DataSourceFactory.getInstance());}
     
-    public static ScheduleTimePointDao getScheduleTimePointDao(){return new SchedulingPointDaoImpl(DataSourceFactory.getInstance());}
+    public static ScheduleTimePointDao getScheduleTimePointDao(){return new ScheduleTimePointDaoImpl(DataSourceFactory.getInstance());}
     
     public static NotificationTypeDao getNotificationTypeDao(){return new NotificationTypeDaoImpl(DataSourceFactory.getInstance());}
     
-    public static TimePriorityTypeDao getRoleDao(){return new TimePriorityTypeDaoImpl(DataSourceFactory.getInstance());}
+    public static TimePriorityTypeDao getTimePriorityDao(){return new TimePriorityTypeDaoImpl(DataSourceFactory.getInstance());}
+    
+    public static RoleDao getRoleDao(){return new RoleDaoImpl(DataSourceFactory.getInstance());}
+    
+    public static SocialNetworkDao getSocialNetworkDao(){return new SocialNetworkDaoImpl(DataSourceFactory.getInstance());}
+    
+    public static SocialInformationDao getSocialInformationDao() {return new SocialInformationDaoImpl(DataSourceFactory.getInstance());}
 }
 
