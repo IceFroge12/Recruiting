@@ -20,5 +20,4 @@ public interface EmailTemplateDao {
 
     int deleteEmailTemplate(EmailTemplate emailTemplate);
 
-
 }

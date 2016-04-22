@@ -1,8 +1,6 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import ua.kpi.nc.persistence.dao.EmailTemplateDao;
 import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.NotificationType;
@@ -17,7 +15,7 @@ import java.sql.SQLException;
  * @author Korzh
  */
 public class EmailTemplateDaoImpl extends JdbcDaoSupport implements EmailTemplateDao {
-    private static Logger log = LoggerFactory .getLogger(EmailTemplateDaoImpl.class.getName());
+    private static Logger log = Logger.getLogger(EmailTemplateDaoImpl.class.getName());
     public EmailTemplateDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
