@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
-
 public interface ScheduleTimePoint extends Serializable {
 	public Long getId();
 
@@ -17,4 +16,8 @@ public interface ScheduleTimePoint extends Serializable {
 	public Set<User> getUsers();
 
 	public void setUsers(Set<User> users);
+
+	public Set<UserTimePriority> getUserTimePriorities();
+
+	public void setUserTimePriorities(Set<UserTimePriority> priorities);
 }
