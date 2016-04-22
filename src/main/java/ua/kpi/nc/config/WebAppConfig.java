@@ -1,6 +1,7 @@
 package ua.kpi.nc.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -27,4 +28,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".jsp");
         return resolver;
     }
+
+
+
 }

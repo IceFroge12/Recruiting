@@ -15,18 +15,9 @@ import ua.kpi.nc.service.UserService;
 @Controller
 public class LoginController {
 
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView login(@RequestParam(value = "logout", required = false) String logout) {
-
+    public ModelAndView login() {
         ModelAndView model = new ModelAndView();
-
-        if (logout != null) {
-            model.addObject("msg", "You've been logged out successfully.");
-
-            return model;
-        }
-
         return model;
     }
 }

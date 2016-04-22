@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.RoleService;
+import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 
@@ -20,15 +21,14 @@ import java.util.Random;
 @RequestMapping(value = "/registration")
 public class RegistrationController {
 
-    private UserService userService;
+    private UserService userService = ServiceFactory.getUserService();
 
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService
             = PasswordEncoderGeneratorService.getInstance();
 
 //    private SenderService senderService;
 
-    private RoleService roleService;
-
+    private RoleService roleService = ServiceFactory.getRoleService();
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView registration() {
@@ -57,15 +57,17 @@ public class RegistrationController {
                 token + ">Confirm your account</a><br></body></html>";
 
         String password = user.getPassword();
-        String hashedPassword = passwordEncoderGeneratorService.encode(password);
 
-        user.setPassword(hashedPassword);
+
+//        String hashedPassword = passwordEncoderGeneratorService.encode(password);
+
+//        user.setPassword(hashedPassword);
 
 //        if (userService.isExist(user.getEmail())) {
 //            return "redirect:registration";
 //        }
 
-        Role role = roleService.getRoleById(2l);
+        Role role = roleService.getRoleById(2L);
         System.out.println(role);
         userService.insertUser(user, role);
 

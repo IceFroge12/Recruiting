@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
  * Created by Chalienko on 13.04.2016.
  */
 public class UserImpl implements User {
+
 
     private static final long serialVersionUID = -5190252598383342478L;
 
@@ -66,6 +68,25 @@ public class UserImpl implements User {
         this.registrationDate = registrationDate;
         this.password = password;
         this.socialInformations = socialInformations;
+    }
+
+    public UserImpl(String email, String firstName, String secondName, String lastName, String password, boolean isActive,
+                    Timestamp registrationDate) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.password = password;
+        this.isActive = isActive;
+        this.registrationDate = registrationDate;
+    }
+
+    public UserImpl(String email, String firstName, String secondName, String lastName, Set<Role> roles) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.roles = roles;
     }
 
     @Override
