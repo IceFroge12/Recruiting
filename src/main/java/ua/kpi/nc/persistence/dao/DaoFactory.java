@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
 
+import ua.kpi.nc.persistence.dao.impl.ApplicationFormDaoImpl;
 import ua.kpi.nc.persistence.dao.impl.EmailTemplateDaoImpl;
 import ua.kpi.nc.persistence.dao.impl.RecruitmentDaoImpl;
 import ua.kpi.nc.persistence.dao.impl.UserDaoImpl;
@@ -18,5 +19,7 @@ public class DaoFactory {
     }
 
     public static EmailTemplateDao getEmailTemplateDao(){return new EmailTemplateDaoImpl(DataSourceFactory.getInstance());}
+    
+    public static ApplicationFormDao getApplicationFormDao(){return new ApplicationFormDaoImpl(DataSourceFactory.getInstance());}
 }
 

@@ -19,5 +19,5 @@ public interface ApplicationFormDao {
 
 	Long insertApplicationForm(ApplicationForm applicationForm, User user);
 
-	int updatApplicationForm(ApplicationForm applicationForm);
+	int updateApplicationForm(ApplicationForm applicationForm);
 }

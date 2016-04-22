@@ -103,7 +103,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 			+ " id_recruitment = ?, photo_scope = ?, date_create = ? " + "WHERE id = ?";
 
 	@Override
-	public int updatApplicationForm(ApplicationForm applicationForm) {
+	public int updateApplicationForm(ApplicationForm applicationForm) {
 		if (log.isInfoEnabled()) {
 			log.info("Updating application forms with id = " + applicationForm.getId());
 		}
