@@ -49,7 +49,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_UPDATE = "UPDATE \"user\" SET email = ?, first_name  = ?," +
             " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?" +
-            "WHERE id = &";
+            "WHERE id = ?";
 
     private static final String SQL_DELETE = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
 
