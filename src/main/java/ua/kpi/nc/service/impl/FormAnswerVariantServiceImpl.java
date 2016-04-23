@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
+import ua.kpi.nc.persistence.dao.FormQuestionDao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.service.FormAnswerVariantService;
@@ -24,10 +25,13 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
     private static Logger log = LoggerFactory.getLogger(FormAnswerVariantServiceImpl.class.getName());
 
     private FormAnswerVariantDao formAnswerVariantDao;
+    private FormQuestionDao formQuestionDao;
 
 
-    public FormAnswerVariantServiceImpl(FormAnswerVariantDao formAnswerVariantDao) {
+    public FormAnswerVariantServiceImpl(FormAnswerVariantDao formAnswerVariantDao,
+                                        FormQuestionDao formQuestionDao) {
         this.formAnswerVariantDao = formAnswerVariantDao;
+        this.formQuestionDao = formQuestionDao;
     }
 
     @Override
@@ -36,9 +40,10 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
     }
 
     @Override
-    public Long insertFormAnswerVariant(FormAnswerVariant formatVariant) {
+    public Long addAnswerVariant(FormAnswerVariant formatVariant, FormQuestion formQuestion) {
         try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
-            Long generatedFormAnswerId = formAnswerVariantDao.insertFormAnswerVariant(formatVariant, connection);
+            Long generatedFormAnswerId = formAnswerVariantDao
+                    .insertFormAnswerVariant(formatVariant, formQuestion, connection);
             formatVariant.setId(generatedFormAnswerId);
             if (log.isTraceEnabled())
                 log.trace("Inserted new " + formatVariant);
@@ -53,17 +58,13 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
     }
 
     @Override
-    public int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant) {
-        return formAnswerVariantDao.updateFormAnswerVariant(formAnswerVariant);
+    public boolean changeAnswerVariant(FormAnswerVariant formAnswerVariant) {
+        return formAnswerVariantDao.updateFormAnswerVariant(formAnswerVariant) != 0;
     }
 
     @Override
-    public int deleteFormAnswerVariant(FormAnswerVariant formVariant) {
-        return formAnswerVariantDao.deleteFormAnswerVariant(formVariant);
+    public boolean deleteAnswerVariant(FormAnswerVariant formVariant) {
+        return formAnswerVariantDao.deleteFormAnswerVariant(formVariant) != 0;
     }
-
-    @Override
-    public Set<FormAnswerVariant> getAll() {
-        return formAnswerVariantDao.getAll();
-    }
+    
 }

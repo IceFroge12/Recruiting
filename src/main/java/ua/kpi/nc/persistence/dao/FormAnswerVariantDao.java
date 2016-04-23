@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
 
 import java.sql.Connection;
 import java.util.Set;
@@ -13,7 +14,8 @@ public interface FormAnswerVariantDao {
 
     Set<FormAnswerVariant> getByQuestionId(Long id);
 
-    Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
+    Long insertFormAnswerVariant(FormAnswerVariant formatVariant, FormQuestion formQuestion,
+                                 Connection connection);
 
     int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant);
 

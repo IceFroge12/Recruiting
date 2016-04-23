@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.impl.proxy.FormQuestionProxy;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -56,12 +57,13 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
     }
 
     @Override
-    public Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection) {
+    public Long insertFormAnswerVariant(FormAnswerVariant formatVariant, FormQuestion formQuestion,
+                                        Connection connection) {
         if (log.isInfoEnabled()) {
             log.info("Insert FormAnswerVariant with answer = " + formatVariant.getAnswer());
         }
         return this.getJdbcTemplate().insert(SQL_INSERT, connection, formatVariant.getAnswer(),
-                formatVariant.getFormQuestion().getId());
+                formQuestion.getId());
     }//Уточнить с транзакциями
 
     @Override
