@@ -6,7 +6,7 @@ import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.FormQuestionDao;
 import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.FormQuestionType;
+import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.service.FormQuestionService;
 
@@ -144,7 +144,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public boolean setFormQuestionType(FormQuestion formQuestion, FormQuestionType formQuestionType) {
+    public boolean setFormQuestionType(FormQuestion formQuestion, QuestionType formQuestionType) {
         return formQuestionDao.setFormQuestionType(formQuestion, formQuestionType);
     }
 

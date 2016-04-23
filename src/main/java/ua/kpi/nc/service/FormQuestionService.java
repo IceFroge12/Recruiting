@@ -2,7 +2,7 @@ package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.FormQuestionType;
+import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
 
 import java.util.Set;
@@ -25,7 +25,7 @@ public interface FormQuestionService {
 
     boolean deleteRole(FormAnswer formAnswer, Role role);
 
-    boolean setFormQuestionType(FormQuestion formQuestion, FormQuestionType formQuestionType);
+    boolean setFormQuestionType(FormQuestion formQuestion, QuestionType formQuestionType);
 
     boolean setStatusQuestionType(FormQuestion formQuestion, boolean status);
 
