@@ -31,10 +31,10 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
 
     private static final String SQL_GET_BY_QUESTION_ID = "SELECT id, answer, id_question from \"form_answer_variant\" where id_question=?;";
 
-    private static final String SQL_INSERT = "INSERT INTO \"form_answer_variant\"(id, answer, id_question) VALUES (?,?,?);";
+    private static final String SQL_INSERT = "INSERT INTO \"form_answer_variant\"(answer, id_question) VALUES (?,?);";
 
     private static final String SQL_UPDATE = "UPDATE \"form_answer_variant\" " +
-            "SET id = ? , answer = ?, id_question = ? WHERE id = ?;";
+            "SET answer = ?, id_question = ? WHERE id = ?;";
 
     private static final String SQL_DELETE = "DELETE FROM \"form_answer_variant\" WHERE \"form_answer_variant\".id = ?;";
 
@@ -72,7 +72,7 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
             log.info("Update FormAnswerVariant with answer = " + formAnswerVariant.getAnswer());
         }
         return this.getJdbcTemplate().update(SQL_UPDATE, formAnswerVariant.getAnswer(),
-                formAnswerVariant.getFormQuestion().getId());
+                formAnswerVariant.getFormQuestion().getId(), formAnswerVariant.getId());
     }
 
     @Override
