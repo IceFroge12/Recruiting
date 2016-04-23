@@ -42,18 +42,18 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
     @Override
     public Long insertFormAnswerVariant(FormAnswerVariant formatVariant) {
         try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
-            connection.setAutoCommit(false);
             Long generatedFormAnswerId = formAnswerVariantDao.insertFormAnswerVariant(formatVariant, connection);
             formatVariant.setId(generatedFormAnswerId);
             if (log.isTraceEnabled())
                 log.trace("Inserted new " + formatVariant);
-            connection.commit();
+            if (!connection.getAutoCommit())
+                connection.commit();
             return generatedFormAnswerId;
         } catch (SQLException e) {
             if (log.isTraceEnabled())
                 log.trace("An exception appeared while trying to get connection to insert FormAnswerVariant" + e);
+            return 0L;
         }
-        return 0L;
     }
 
     @Override

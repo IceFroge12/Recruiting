@@ -5,26 +5,25 @@ import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.FormQuestionType;
 import ua.kpi.nc.persistence.model.Role;
 
-import java.sql.Connection;
 import java.util.Set;
 
 /**
  * Created by Chalienko on 21.04.2016.
  */
 public interface FormQuestionService {
-    Long insertFormQuestion(FormQuestion formQuestion, Connection connection);
+    Long insertFormQuestion(FormQuestion formQuestion);
 
     int deleteFormQuestion(FormQuestion formQuestion);
 
     int updateFormQuestion(FormQuestion formQuestion);
 
-    boolean addAnswer(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
+    boolean addAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
 
-    boolean removeAnser(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
+    boolean removeAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
 
-    boolean addRole(FormAnswer formAnswer, Role role, Connection connection);
+    boolean addRole(FormAnswer formAnswer, Role role);
 
-    boolean deleteRole(FormAnswer formAnswer, Role role, Connection connection);
+    boolean deleteRole(FormAnswer formAnswer, Role role);
 
     boolean setFormQuestionType(FormQuestion formQuestion, FormQuestionType formQuestionType);
 
