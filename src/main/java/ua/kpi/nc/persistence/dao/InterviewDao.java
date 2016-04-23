@@ -31,9 +31,9 @@ public interface InterviewDao {
 
     int updateInterview(Long id, Interview interview);
 
-    int deliteInterview(Long id);
+    int deleteInterview(Long id);
 
-    int deliteInterview(Interview interview);
+    int deleteInterview(Interview interview);
 
     Set<Interview> getAll();
 }
