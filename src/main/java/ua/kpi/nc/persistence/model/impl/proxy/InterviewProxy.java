@@ -46,98 +46,72 @@ public class InterviewProxy implements Interview {
 	}
 
 	public int getMark() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getMark();
 	}
 
 	public void setMark(int mark) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setMark(mark);
 	}
 
 	public Timestamp getDate() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getDate();
 	}
 
 	public void setDate(Timestamp date) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setDate(date);
 	}
 
 	public User getUser() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getUser();
 	}
 
 	public void setUser(User user) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setUser(user);
 	}
 
 	public Role getRole() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getRole();
 	}
 
 	public void setRole(Role role) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setRole(role);
 	}
 
 	public boolean isAdequateMark() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.isAdequateMark();
 	}
 
 	public void setAdequateMark(boolean adequateMark) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setAdequateMark(adequateMark);
 	}
 
 	public ApplicationForm getApplicationForm() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getApplicationForm();
 	}
 
 	public void setApplicationForm(ApplicationForm applicationForm) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setApplicationForm(applicationForm);
 	}
 
 	public Set<FormAnswer> getFormAnswers() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getFormAnswers();
 	}
 
 	public void setFormAnswers(Set<FormAnswer> answers) {
-
+		checkInterview();
 		interview.setFormAnswers(answers);
 	}
 

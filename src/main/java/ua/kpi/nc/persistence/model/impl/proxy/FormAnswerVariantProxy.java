@@ -61,6 +61,6 @@ public class FormAnswerVariantProxy implements FormAnswerVariant{
         }
     }
     private FormAnswerVariantImpl downloadRecruitment() {
-        return (FormAnswerVariantImpl) formAnswerVariantService.getFormAnswerVariantById(id);
+        return (FormAnswerVariantImpl) formAnswerVariantService.getAnswerVariantById(id);
     }
 }

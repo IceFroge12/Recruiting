@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
 import ua.kpi.nc.service.RecruitmentService;
+import ua.kpi.nc.service.ServiceFactory;
 
 import java.sql.Timestamp;
 /**
@@ -194,6 +195,7 @@ public class RecruitmentProxy implements Recruitment {
 
     private void checkRecruitmentForExist(){
         if (recruitment == null) {
+            recruitmentService = ServiceFactory.getRecruitmentService();
             recruitment = downloadRecruitment();
         }
     }

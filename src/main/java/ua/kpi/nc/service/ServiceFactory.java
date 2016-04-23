@@ -40,10 +40,10 @@ public class ServiceFactory {
     }
 
     public static FormAnswerVariantService getFormAnswerVariantService() {
-        return new FormAnswerVariantServiceImpl(DaoFactory.getFormAnswerVariantDao());
+        return new FormAnswerVariantServiceImpl(DaoFactory.getFormAnswerVariantDao(),DaoFactory.getFormQuestionDao());
     }
 
-    public static FormQuestionService getFormQuestion() {
+    public static FormQuestionService getFormQuestionService() {
         return new FormQuestionServiceImpl(DaoFactory.getFormQuestionDao());
     }
 
@@ -51,4 +51,11 @@ public class ServiceFactory {
         return new InterviewServiceImpl(DaoFactory.getInterviewDao());
     }
 
+    public static ScheduleTimePointService getScheduleTimePointService(){
+        return new ScheduleTimePointServiceImpl(DaoFactory.getScheduleTimePointDao());
+    }
+
+    public static SocialInformationService getSocialInformationService(){
+        return new SocialInformationServiceImpl(DaoFactory.getSocialInformationDao());
+    }
 }

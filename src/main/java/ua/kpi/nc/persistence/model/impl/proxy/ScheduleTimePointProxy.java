@@ -8,16 +8,13 @@ import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.UserTimePriority;
 import ua.kpi.nc.persistence.model.impl.real.ScheduleTimePointImpl;
 import ua.kpi.nc.service.ScheduleTimePointService;
+import ua.kpi.nc.service.ServiceFactory;
 
 public class ScheduleTimePointProxy implements ScheduleTimePoint {
 
     private static final long serialVersionUID = 2160249328142111936L;
 
     private Long id;
-
-    private Timestamp timePoint;
-
-    private Set<User> users;
 
     private ScheduleTimePointImpl scheduleTimePoint;
 
@@ -27,7 +24,6 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
     }
 
     public ScheduleTimePointProxy(Long id) {
-        super();
         this.id = id;
     }
 
@@ -43,50 +39,45 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 
     @Override
     public Timestamp getTimePoint() {
-        if (scheduleTimePoint == null) {
-            scheduleTimePoint = downloadTimePoint();
-        }
+        checkScheduleTimePoit();
         return scheduleTimePoint.getTimePoint();
     }
 
     @Override
     public void setTimePoint(Timestamp timePoint) {
-        if (scheduleTimePoint == null) {
-            scheduleTimePoint = downloadTimePoint();
-        }
+        checkScheduleTimePoit();
         scheduleTimePoint.setTimePoint(timePoint);
     }
 
     @Override
     public Set<User> getUsers() {
-        if (scheduleTimePoint == null) {
-            scheduleTimePoint = downloadTimePoint();
-        }
+        checkScheduleTimePoit();
         return scheduleTimePoint.getUsers();
     }
 
     @Override
     public void setUsers(Set<User> users) {
-        if (scheduleTimePoint == null) {
-            scheduleTimePoint = downloadTimePoint();
-        }
+        checkScheduleTimePoit();
         scheduleTimePoint.setUsers(users);
     }
 
     @Override
     public Set<UserTimePriority> getUserTimePriorities() {
-        if (scheduleTimePoint == null) {
-            scheduleTimePoint = downloadTimePoint();
-        }
+        checkScheduleTimePoit();
         return scheduleTimePoint.getUserTimePriorities();
     }
 
     @Override
     public void setUserTimePriorities(Set<UserTimePriority> priorities) {
+        checkScheduleTimePoit();
+        scheduleTimePoint.setUserTimePriorities(priorities);
+    }
+
+    private void checkScheduleTimePoit(){
         if (scheduleTimePoint == null) {
+            service = ServiceFactory.getScheduleTimePointService();
             scheduleTimePoint = downloadTimePoint();
         }
-        scheduleTimePoint.setUserTimePriorities(priorities);
     }
 
     private ScheduleTimePointImpl downloadTimePoint() {
