@@ -23,15 +23,8 @@ import java.util.Set;
  * @author Korzh
  */
 public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements ScheduleTimePointDao {
+
     private static Logger log = LoggerFactory.getLogger(ScheduleTimePointDaoImpl.class.getName());
-    private static final String USERS_FINAL_TIME_QUERY = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
-            " u.password, u.confirm_token, u.is_active, u.registration_date " +
-            "FROM public.user u join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where s.id=?;";
-    private static final String USER_TIME_PRIORITY = "select  utp.id_user, utp.id_time_point, utp.id_priority_type, " +
-            "tpt.choice  from user_time_priority utp inner join time_priority_type tpt on tpt.id = utp.id_priority_type " +
-            "where utp.id_time_point = ?;";
-    private static final String SCHEDULE_TIME_POINT_BY_USER_ID = "SELECT u.id, FROM public.user u " +
-            "join public.user_time_priority p on u.id=p.id_user join public.schedule_time_point s on  p.id_time_point= s.id Where u.id=?;";
 
     public ScheduleTimePointDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
@@ -39,29 +32,62 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
     private static final String GET_BY_ID = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.id = ?;";
 
+    private static final String USERS_FINAL_TIME_QUERY = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
+            " u.password, u.confirm_token, u.is_active, u.registration_date " +
+            "FROM public.user u join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where s.id=?;";
+
+    private static final String USER_TIME_PRIORITY = "select  utp.id_user, utp.id_time_point, utp.id_priority_type, " +
+            "tpt.choice  from user_time_priority utp inner join time_priority_type tpt on tpt.id = utp.id_priority_type " +
+            "where utp.id_time_point = ?;";
+
+    private static final String SCHEDULE_TIME_POINT_BY_USER_ID = "SELECT s.id FROM public.user u " +
+            "join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where u.id=?;";
+
+    private static final String INSERT_SCHEDULE_TIME_POINT = "INSERT INTO schedule_time_point ( time_point) VALUES (?);";
+
+    private static final String UPDATE_SCHEDULE_TIME_POINT = "UPDATE schedule_time_point set time_point = ? WHERE id = ?;";
+
+    private static final String DELETE_SCHEDULE_TIME_POINT = "DELETE FROM schedule_time_point WHERE id = ?";
+
+
     @Override
     public ScheduleTimePoint getFinalTimePointById(Long id) {
+        if (log.isTraceEnabled()) {
+            log.trace("Looking for Schedule time Point with id = " + id);
+        }
         return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, new ScheduleTimePointExtractor(), id);
     }
 
     @Override
     public Set<ScheduleTimePoint> getScheduleTimePointByUserId(Long id) {
+        if (log.isTraceEnabled()) {
+            log.trace("Looking for Schedule time Point with User_id = " + id);
+        }
         return this.getJdbcTemplate().queryForSet(SCHEDULE_TIME_POINT_BY_USER_ID, new ScheduleTimePointExtractor(), id);
     }
 
     @Override
-    public Long insertScheduleTimePoint(ScheduleTimePointDao scheduleTimePointDao) {
-        return null;
+    public Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
+        if (log.isTraceEnabled()) {
+            log.trace("Inserting Schedule time Point with id = " + scheduleTimePoint.getId());
+        }
+        return this.getJdbcTemplate().insert(INSERT_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint());
     }
 
     @Override
-    public int updateScheduleTimePoint(ScheduleTimePointDao scheduleTimePointDao) {
-        return 0;
+    public int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
+        if (log.isTraceEnabled()) {
+            log.trace("Updating Schedule time Point with id = " + scheduleTimePoint.getId());
+        }
+        return this.getJdbcTemplate().update(UPDATE_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint(), scheduleTimePoint.getId());
     }
 
     @Override
-    public int deleteScheduleTimePoint(ScheduleTimePointDao scheduleTimePointDao) {
-        return 0;
+    public int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
+        if (log.isTraceEnabled()) {
+            log.trace("Deleting Schedule time Point with id = " + scheduleTimePoint.getId());
+        }
+        return this.getJdbcTemplate().update(DELETE_SCHEDULE_TIME_POINT, scheduleTimePoint.getId());
     }
 
     private Set<User> getUsersFinalInTimePoint(Long timeID) {
