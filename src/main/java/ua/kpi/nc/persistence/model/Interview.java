@@ -7,36 +7,40 @@ import java.util.Set;
 /**
  * Created by Алексей on 21.04.2016.
  */
-public interface Interview extends Serializable{
-    Long getId();
+public interface Interview extends Serializable {
+    public Long getId();
 
-    void setId(Long id);
+    public void setId(Long id);
 
-    int getMark();
+    public Set<FormAnswer> getAnswers();
 
-    void setMark(int mark);
+    public void setAnswers(Set<FormAnswer> answers);
 
-    Timestamp getDate();
+    public int getMark();
 
-    void setDate(Timestamp date);
+    public void setMark(int mark);
 
-    User getUser();
+    public Timestamp getDate();
 
-    void setUser(User user);
+    public void setDate(Timestamp date);
 
-    Role getRole();
+    public User getUser();
 
-    void setRole(Role role);
+    public void setUser(User user);
 
-    boolean isAdequateMark();
+    public Role getRole();
 
-    void setAdequateMark(boolean adequateMark);
+    public void setRole(Role role);
 
-    ApplicationForm getApplicationForm();
+    public boolean isAdequateMark();
 
-    void setApplicationForm(ApplicationForm applicationForm);
-    
-    Set<FormAnswer> getFormAnswers();
-    
-    void setFormAnswers(Set<FormAnswer> answers);
+    public void setAdequateMark(boolean adequateMark);
+
+    public ApplicationForm getApplicationForm();
+
+    public void setApplicationForm(ApplicationForm applicationForm);
+
+    public Set<FormAnswer> getFormAnswers();
+
+    public void setFormAnswers(Set<FormAnswer> answers);
 }

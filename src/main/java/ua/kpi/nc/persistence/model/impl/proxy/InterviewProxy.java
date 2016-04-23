@@ -1,16 +1,12 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
-import java.sql.Timestamp;
-import java.util.Set;
-
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.service.InterviewService;
 import ua.kpi.nc.service.ServiceFactory;
+
+import java.sql.Timestamp;
+import java.util.Set;
 
 public class InterviewProxy implements Interview {
 
@@ -21,6 +17,7 @@ public class InterviewProxy implements Interview {
 	private InterviewImpl interview;
 
 	private InterviewService service;
+	private Set<FormAnswer> answers;
 
 	public InterviewProxy() {
 	}
@@ -28,6 +25,16 @@ public class InterviewProxy implements Interview {
 	public InterviewProxy(Long id) {
 		super();
 		this.id = id;
+	}
+
+	@Override
+	public Set<FormAnswer> getAnswers() {
+		return answers;
+	}
+
+	@Override
+	public void setAnswers(Set<FormAnswer> answers) {
+		this.answers = answers;
 	}
 
 	public Long getId() {

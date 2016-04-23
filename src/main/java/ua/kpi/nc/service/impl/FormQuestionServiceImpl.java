@@ -34,7 +34,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public Long insertFormQuestion(FormQuestion formQuestion) {
+    public Long addQuestion(FormQuestion formQuestion, Role role) {
         try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
             Long generatedFormQuestionID = formQuestionDao.insertFormQuestion(formQuestion, connection);
             if (!connection.getAutoCommit())
@@ -51,12 +51,12 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public int deleteFormQuestion(FormQuestion formQuestion) {
-        return formQuestionDao.deleteFormQuestion(formQuestion);
+    public boolean deleteQuestion(FormQuestion formQuestion) {
+        return formQuestionDao.deleteFormQuestion(formQuestion) != 0;
     }
 
     @Override
-    public int updateFormQuestion(FormQuestion formQuestion) {
+    public boolean changeQuestion(FormQuestion formQuestion) {
         try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
             int response = 0;
     //TODO ????        response = formQuestionDao.updateFormQuestion(formQuestion, connection);
@@ -64,12 +64,12 @@ public class FormQuestionServiceImpl implements FormQuestionService {
                 connection.commit();
             if (log.isTraceEnabled())
                 log.trace("Updated " + formQuestion);
-            return response;
+            return response != 0;
         } catch (SQLException e) {
             if (log.isTraceEnabled())
                 log.trace("An exception appeared while trying to update " + formQuestion
                         + "\n" + e);
-            return 0;
+            return false;
         }
     }
 
@@ -95,7 +95,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     @Override
     public boolean removeAnswer(FormQuestion formQuestion, FormAnswer formAnswer) {
         try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
-            boolean response = formQuestionDao.removeAnser(formQuestion, formAnswer, connection);
+            boolean response = formQuestionDao.removeAnswer(formQuestion, formAnswer, connection);
             if (!connection.getAutoCommit())
                 connection.commit();
             if (log.isTraceEnabled())

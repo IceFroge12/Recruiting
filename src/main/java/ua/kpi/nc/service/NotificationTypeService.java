@@ -1,7 +1,20 @@
 package ua.kpi.nc.service;
 
+import ua.kpi.nc.persistence.model.NotificationType;
+
+import java.util.Set;
+
 /**
- * Created by Chalienko on 21.04.2016.
+ * @author Korzh
  */
 public interface NotificationTypeService {
+    NotificationType getById(Long id);
+
+    NotificationType getByTitle(String title);
+
+    int updateNotificationType(NotificationType notificationType);
+
+    int deleteNotificationType(NotificationType notificationType);
+
+    Set<NotificationType> getAll();
 }

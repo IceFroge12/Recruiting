@@ -8,16 +8,28 @@ import ua.kpi.nc.persistence.model.Role;
 import java.util.Set;
 
 /**
- * Created by Chalienko on 21.04.2016.
+ * QuestionForm service
+ *
+ * @author Yaroslav Kruk on 4/23/16.
+ *         e-mail: yakruck@gmail.com
+ *         GitHub: https://github.com/uakruk
+ * @version 1.0
+ * @since 1.7
  */
 public interface FormQuestionService {
-    Long insertFormQuestion(FormQuestion formQuestion);
 
-    int deleteFormQuestion(FormQuestion formQuestion);
+    /**
+     * Add new question to the form
+     * @param formQuestion
+     * @return
+     */
+    Long addQuestion(FormQuestion formQuestion, Role role);
 
-    int updateFormQuestion(FormQuestion formQuestion);
+    boolean deleteQuestion(FormQuestion formQuestion);
 
-    boolean addAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
+    boolean changeQuestion(FormQuestion formQuestion);
+
+    Long addAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
 
     boolean removeAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
 

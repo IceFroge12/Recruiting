@@ -1,6 +1,5 @@
 package ua.kpi.nc.persistence.dao;
 
-import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
@@ -13,34 +12,21 @@ import java.util.Set;
  */
 public interface FormQuestionDao {
 
-    Long insertFormQuestion(FormQuestion formQuestion, Connection connection);
+    Long insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Connection connection);
 
     int deleteFormQuestion(FormQuestion formQuestion);
 
-    //TODO need update?
+    boolean addRole(FormQuestion formQuestion, Role role);
 
-    boolean addAnswer(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
+    boolean addRole(FormQuestion formQuestion, Role role, Connection connection);
 
-    boolean removeAnser(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
-
-    boolean addRole(FormAnswer formAnswer, Role role, Connection connection);
-
-    boolean deleteRole(FormAnswer formAnswer, Role role, Connection connection);
-
-    boolean setFormQuestionType(FormQuestion formQuestion, QuestionType questionType);
-
-    boolean setStatusQuestionType(FormQuestion formQuestion, boolean status);
-
-    boolean setMandatory(FormQuestion formQuestion, boolean mandatory);
+    int deleteRole(FormQuestion formQuestion, Role role);
 
     FormQuestion getById(Long id);
 
-    Set<FormQuestion> getEnableFormAnswer();
-
-    Set<FormQuestion> getDisableFormAnswer();
+    Set<FormQuestion> getByRole(Role role);
 
     Set<FormQuestion> getAll();
-
 
 
 }
