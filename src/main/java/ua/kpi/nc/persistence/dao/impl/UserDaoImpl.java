@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
@@ -56,6 +57,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_GET_ALL = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
             " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n";
+    private static final String INSERT_FINAL_TIME_POINT = "INSERT INTO user_time_final (id_user, id_time_point)" +
+            " VALUES (?,?);";
+
+    private static final String DELETE_FINAL_TIME_POINT = "DELETE FROM user_time_final p " +
+            "WHERE p.id_user = ? and p.id_time_point = ?;";
 
     private static final String SQL_GET_ALL_STUDENTS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
             "u.password,u.confirm_token,u.is_active, u.registration_date, r.role\n"+
@@ -146,6 +152,21 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
                 "id_role = ?", user.getId(),role.getId());
+    }
+
+    @Override
+    public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
+        if (log.isInfoEnabled()) {
+            log.info("Insert Final Time Point");
+        }
+        return this.getJdbcTemplate().insert(INSERT_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
+    }
+    @Override
+    public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
+        if (log.isInfoEnabled()) {
+            log.info("Delete Final Time Point");
+        }
+        return this.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(),scheduleTimePoint.getId());
     }
 
     @Override

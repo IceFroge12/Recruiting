@@ -12,7 +12,7 @@ public interface ScheduleTimePointDao {
 
     ScheduleTimePoint getFinalTimePointById(Long id);
 
-    Set<ScheduleTimePoint> getScheduleTimePointByUserId(Long id);
+    Set<ScheduleTimePoint> getFinalTimePointByUserId(Long id);
 
     Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
