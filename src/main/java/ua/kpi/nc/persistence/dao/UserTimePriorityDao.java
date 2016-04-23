@@ -13,11 +13,11 @@ public interface UserTimePriorityDao {
 
     UserTimePriority getByUserPriority(User user, ScheduleTimePoint scheduleTimePoint);
 
-    Long insertUserPriority(User user, ScheduleTimePoint scheduleTimePoint);
+    Long insertUserPriority(UserTimePriority userTimePriority);
 
-    int updateUserPriority(User user, ScheduleTimePoint scheduleTimePoint);
+    int updateUserPriority(UserTimePriority userTimePriority);
 
-    int deleteUserPriority(User user, ScheduleTimePoint scheduleTimePoint);
+    int deleteUserPriority(UserTimePriority userTimePriority);
 
     Set<UserTimePriority> getAllTimePoints( );
 }

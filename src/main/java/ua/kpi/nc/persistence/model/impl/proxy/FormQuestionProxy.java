@@ -1,7 +1,7 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.FormQuestionType;
+import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.FormQuestionService;
 
@@ -35,11 +35,11 @@ public class FormQuestionProxy implements FormQuestion{
         return formQuestion.getTitle();
     }
 
-    public FormQuestionType getFormQuestionType() {
+    public QuestionType getQuestionType() {
         if (formQuestion == null) {
             formQuestion = downloadQuestion();
         }
-        return formQuestion.getFormQuestionType();
+        return formQuestion.getQuestionType();
     }
 
     @Override
@@ -68,11 +68,11 @@ public class FormQuestionProxy implements FormQuestion{
         formQuestion.setTitle(title);
     }
 
-    public void setFormQuestionType(FormQuestionType formQuestionType) {
+    public void setQuestionType(QuestionType questionType) {
         if (formQuestion == null) {
             formQuestion = downloadQuestion();
         }
-        formQuestion.setFormQuestionType(formQuestionType);
+        formQuestion.setQuestionType(questionType);
     }
 
     @Override

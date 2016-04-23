@@ -2,7 +2,7 @@ package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.FormQuestionType;
+import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
 
 import java.sql.Connection;
@@ -27,7 +27,7 @@ public interface FormQuestionDao {
 
     boolean deleteRole(FormAnswer formAnswer, Role role, Connection connection);
 
-    boolean setFormQuestionType(FormQuestion formQuestion, FormQuestionType formQuestionType);
+    boolean setFormQuestionType(FormQuestion formQuestion, QuestionType questionType);
 
     boolean setStatusQuestionType(FormQuestion formQuestion, boolean status);
 

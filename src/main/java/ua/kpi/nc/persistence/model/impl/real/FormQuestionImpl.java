@@ -1,7 +1,7 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.FormQuestionType;
+import ua.kpi.nc.persistence.model.QuestionType;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -11,24 +11,24 @@ public class FormQuestionImpl implements FormQuestion {
     private static final long serialVersionUID = -4875241221362139428L;
     private Long id;
     private String title;
-    private FormQuestionType formQuestionType;
+    private QuestionType questionType;
     private boolean enable;
     private boolean mandatory;
 
     public FormQuestionImpl() {
     }
 
-    public FormQuestionImpl(String title, FormQuestionType formQuestionType, boolean enable, boolean mandatory) {
+    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory) {
         this.title = title;
-        this.formQuestionType = formQuestionType;
+        this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
     }
 
-    public FormQuestionImpl(Long id, String title, FormQuestionType formQuestionType, boolean enable, boolean mandatory) {
+    public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory) {
         this.id = id;
         this.title = title;
-        this.formQuestionType = formQuestionType;
+        this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
     }
@@ -41,8 +41,8 @@ public class FormQuestionImpl implements FormQuestion {
         return title;
     }
 
-    public FormQuestionType getFormQuestionType() {
-        return formQuestionType;
+    public QuestionType getQuestionType() {
+        return questionType;
     }
 
     public boolean isEnable() {
@@ -61,8 +61,8 @@ public class FormQuestionImpl implements FormQuestion {
         this.title = title;
     }
 
-    public void setFormQuestionType(FormQuestionType formQuestionType) {
-        this.formQuestionType = formQuestionType;
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 
     public void setEnable(boolean enable) {
@@ -84,7 +84,7 @@ public class FormQuestionImpl implements FormQuestion {
         if (mandatory != that.mandatory) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        return formQuestionType != null ? formQuestionType.equals(that.formQuestionType) : that.formQuestionType == null;
+        return questionType != null ? questionType.equals(that.questionType) : that.questionType == null;
 
     }
 
@@ -92,7 +92,7 @@ public class FormQuestionImpl implements FormQuestion {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (formQuestionType != null ? formQuestionType.hashCode() : 0);
+        result = 31 * result + (questionType != null ? questionType.hashCode() : 0);
         result = 31 * result + (enable ? 1 : 0);
         result = 31 * result + (mandatory ? 1 : 0);
         return result;
@@ -103,7 +103,7 @@ public class FormQuestionImpl implements FormQuestion {
         return "FormQuestionImpl{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", formQuestionType=" + formQuestionType +
+                ", questionType=" + questionType +
                 ", enable=" + enable +
                 ", mandatory=" + mandatory +
                 '}';

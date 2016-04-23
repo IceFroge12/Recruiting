@@ -23,7 +23,7 @@ public class DaoFactory {
     
     public static FormAnswerVariantDao getFormAnswerVariantDao(){return new FormAnswerVariantDaoImpl(DataSourceFactory.getInstance());}
     
-    public static FormQuestionTypeDao getFormQuestionTypeDao(){return new FormQuestionTypeDaoImpl(DataSourceFactory.getInstance());}
+    public static QuestionTypeDao getFormQuestionTypeDao(){return new QuestionTypeDaoImpl(DataSourceFactory.getInstance());}
     
     public static StatusDao getStatusDao(){return new StatusDaoImpl(DataSourceFactory.getInstance());}
     
