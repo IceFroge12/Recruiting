@@ -24,8 +24,7 @@ public interface FormQuestionDao {
     boolean addAnswer(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
 
     boolean removeAnswer(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
-
-    boolean addRole(FormAnswer formAnswer, Role role, Connection connection);
+    
 
     boolean deleteRole(FormAnswer formAnswer, Role role, Connection connection);
 
