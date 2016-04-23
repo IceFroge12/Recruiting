@@ -4,6 +4,7 @@ import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.FormQuestionType;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.FormQuestionService;
+import ua.kpi.nc.service.ServiceFactory;
 
 /**
  @author Korzh
@@ -29,24 +30,18 @@ public class FormQuestionProxy implements FormQuestion{
 
     @Override
     public String getTitle() {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         return formQuestion.getTitle();
     }
 
     public FormQuestionType getFormQuestionType() {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         return formQuestion.getFormQuestionType();
     }
 
     @Override
     public boolean isEnable() {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         return formQuestion.isEnable();
     }
 
@@ -62,33 +57,31 @@ public class FormQuestionProxy implements FormQuestion{
 
     @Override
     public void setTitle(String title) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         formQuestion.setTitle(title);
     }
 
     public void setFormQuestionType(FormQuestionType formQuestionType) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         formQuestion.setFormQuestionType(formQuestionType);
     }
 
     @Override
     public void setEnable(boolean enable) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
-        formQuestion.setEnable(enable);
+        checkFormQuestion();formQuestion.setEnable(enable);
     }
 
     @Override
     public void setMandatory(boolean mandatory) {
+        checkFormQuestion();
+        formQuestion.setMandatory(mandatory);
+    }
+
+    private void checkFormQuestion(){
         if (formQuestion == null) {
+            formQuestionService = ServiceFactory.getFormQuestionService();
             formQuestion = downloadQuestion();
         }
-        formQuestion.setMandatory(mandatory);
     }
     private FormQuestionImpl downloadQuestion() {
         return (FormQuestionImpl) formQuestionService.getFormQuestionById(id);
