@@ -15,6 +15,7 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
 
     private FormAnswerVariantDao formAnswerVariantDao;
 
+
     public FormAnswerVariantServiceImpl(FormAnswerVariantDao formAnswerVariantDao) {
         this.formAnswerVariantDao = formAnswerVariantDao;
     }
