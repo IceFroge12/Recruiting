@@ -39,8 +39,19 @@ public class ApplicationFormImpl implements ApplicationForm {
 	public ApplicationFormImpl() {
 	}
 
+	public ApplicationFormImpl(Status status, boolean active, Recruitment recruitment, String photoScope, User user, Timestamp dateCreate, Set<Interview> interviews, Set<FormAnswer> answers) {
+		this.status = status;
+		this.active = active;
+		this.recruitment = recruitment;
+		this.photoScope = photoScope;
+		this.user = user;
+		this.dateCreate = dateCreate;
+		this.interviews = interviews;
+		this.answers = answers;
+	}
+
 	public ApplicationFormImpl(Long id, Status status, boolean active, Recruitment recruitment, String photoScope,
-			User user, Timestamp dateCreate, Set<Interview> interviews, Set<FormAnswer> answers) {
+							   User user, Timestamp dateCreate, Set<Interview> interviews, Set<FormAnswer> answers) {
 		super();
 		this.id = id;
 		this.status = status;

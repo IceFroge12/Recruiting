@@ -19,18 +19,9 @@ public class RoleProxy implements Role {
 
     private RoleImpl role;
 
-//    @Autowired
     private RoleService roleService;
 
-
-    public RoleProxy() {
-
-        roleService = ServiceFactory.getRoleService();
-    }
-
     public RoleProxy(Long id) {
-        this();
-        roleService = ServiceFactory.getRoleService();
         this.id = id;
     }
 
@@ -70,6 +61,7 @@ public class RoleProxy implements Role {
 
     private void checkRoleForExist(){
         if (role == null) {
+            roleService = ServiceFactory.getRoleService();
             role = downloadRole();
         }
     }

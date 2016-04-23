@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.UserTimePriority;
 
 public class ScheduleTimePointImpl implements ScheduleTimePoint {
 
@@ -18,6 +19,8 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 	private Timestamp timePoint;
 
 	private Set<User> users;
+
+	private Set<UserTimePriority> userTimePriorities;
 
 	public ScheduleTimePointImpl() {
 	}
@@ -33,22 +36,27 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 	public Long getId() {
 		return id;
 	}
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	@Override
 	public Timestamp getTimePoint() {
 		return timePoint;
 	}
+
 	@Override
 	public void setTimePoint(Timestamp timePoint) {
 		this.timePoint = timePoint;
 	}
+
 	@Override
 	public Set<User> getUsers() {
 		return users;
 	}
+
 	@Override
 	public void setUsers(Set<User> users) {
 		this.users = users;
@@ -75,6 +83,16 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 		ScheduleTimePointImpl other = (ScheduleTimePointImpl) obj;
 		return new EqualsBuilder().append(id, other.id).append(timePoint, other.timePoint).append(users, other.users)
 				.isEquals();
+	}
+
+	@Override
+	public Set<UserTimePriority> getUserTimePriorities() {
+		return userTimePriorities;
+	}
+
+	@Override
+	public void setUserTimePriorities(Set<UserTimePriority> priorities) {
+		this.userTimePriorities = priorities;
 	}
 
 }

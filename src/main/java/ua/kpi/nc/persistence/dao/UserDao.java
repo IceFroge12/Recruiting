@@ -29,5 +29,9 @@ public interface UserDao {
 
     int deleteRole(User user, Role role);
 
+    Set<User> getAllStudents();
+
+    Set<User> getAllEmploees();
+
     Set<User> getAll();
 }

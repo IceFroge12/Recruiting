@@ -18,24 +18,34 @@ public class InterviewImpl implements Interview {
 	private Long id;
 	private int mark;
 	private Timestamp date;
-	private User idInterviewer;
-	private Role interviewerRole;
+	private User user;
+	private Role role;
 	private boolean adequateMark;
-	private ApplicationForm applicationFormId;
+	private ApplicationForm applicationForm;
 	private Set<FormAnswer> answers;
 
 	public InterviewImpl() {
 	}
 
-	public InterviewImpl(Long id, int mark, Timestamp date, User idInterviewer, Role interviewerRole,
-			boolean adequateMark, ApplicationForm applicationFormId) {
+	public InterviewImpl(int mark, Timestamp date, User user, Role role, boolean adequateMark, ApplicationForm applicationForm, Set<FormAnswer> answers) {
+		this.mark = mark;
+		this.date = date;
+		this.user = user;
+		this.role = role;
+		this.adequateMark = adequateMark;
+		this.applicationForm = applicationForm;
+		this.answers = answers;
+	}
+
+	public InterviewImpl(Long id, int mark, Timestamp date, User user, Role role,
+						 boolean adequateMark, ApplicationForm applicationForm) {
 		this.id = id;
 		this.mark = mark;
 		this.date = date;
-		this.idInterviewer = idInterviewer;
-		this.interviewerRole = interviewerRole;
+		this.user = user;
+		this.role = role;
 		this.adequateMark = adequateMark;
-		this.applicationFormId = applicationFormId;
+		this.applicationForm = applicationForm;
 	}
 
 	public Long getId() {
@@ -62,20 +72,20 @@ public class InterviewImpl implements Interview {
 		this.date = date;
 	}
 
-	public User getIdInterviewer() {
-		return idInterviewer;
+	public User getUser() {
+		return user;
 	}
 
-	public void setIdInterviewer(User idInterviewer) {
-		this.idInterviewer = idInterviewer;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Role getInterviewerRole() {
-		return interviewerRole;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setInterviewerRole(Role interviewerRole) {
-		this.interviewerRole = interviewerRole;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public boolean isAdequateMark() {
@@ -86,12 +96,12 @@ public class InterviewImpl implements Interview {
 		this.adequateMark = adequateMark;
 	}
 
-	public ApplicationForm getApplicationFormId() {
-		return applicationFormId;
+	public ApplicationForm getApplicationForm() {
+		return applicationForm;
 	}
 
-	public void setApplicationFormId(ApplicationForm applicationFormId) {
-		this.applicationFormId = applicationFormId;
+	public void setApplicationForm(ApplicationForm applicationForm) {
+		this.applicationForm = applicationForm;
 	}
 
 	@Override
@@ -111,13 +121,13 @@ public class InterviewImpl implements Interview {
 			return false;
 		if (date != null ? !date.equals(interview.date) : interview.date != null)
 			return false;
-		if (idInterviewer != null ? !idInterviewer.equals(interview.idInterviewer) : interview.idInterviewer != null)
+		if (user != null ? !user.equals(interview.user) : interview.user != null)
 			return false;
-		if (interviewerRole != null ? !interviewerRole.equals(interview.interviewerRole)
-				: interview.interviewerRole != null)
+		if (role != null ? !role.equals(interview.role)
+				: interview.role != null)
 			return false;
-		return applicationFormId != null ? applicationFormId.equals(interview.applicationFormId)
-				: interview.applicationFormId == null;
+		return applicationForm != null ? applicationForm.equals(interview.applicationForm)
+				: interview.applicationForm == null;
 
 	}
 
@@ -126,18 +136,18 @@ public class InterviewImpl implements Interview {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + mark;
 		result = 31 * result + (date != null ? date.hashCode() : 0);
-		result = 31 * result + (idInterviewer != null ? idInterviewer.hashCode() : 0);
-		result = 31 * result + (interviewerRole != null ? interviewerRole.hashCode() : 0);
+		result = 31 * result + (user != null ? user.hashCode() : 0);
+		result = 31 * result + (role != null ? role.hashCode() : 0);
 		result = 31 * result + (adequateMark ? 1 : 0);
-		result = 31 * result + (applicationFormId != null ? applicationFormId.hashCode() : 0);
+		result = 31 * result + (applicationForm != null ? applicationForm.hashCode() : 0);
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return "InterviewImpl{" + "id=" + id + ", mark=" + mark + ", date=" + date + ", idInterviewer=" + idInterviewer
-				+ ", interviewerRole=" + interviewerRole + ", adequateMark=" + adequateMark + ", applicationFormId="
-				+ applicationFormId + '}';
+		return "InterviewImpl{" + "id=" + id + ", mark=" + mark + ", date=" + date + ", user=" + user
+				+ ", role=" + role + ", adequateMark=" + adequateMark + ", applicationForm="
+				+ applicationForm + '}';
 	}
 
 	@Override

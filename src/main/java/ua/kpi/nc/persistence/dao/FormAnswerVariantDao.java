@@ -13,13 +13,11 @@ public interface FormAnswerVariantDao {
 
     FormAnswerVariant getByQuestionId(Long id);
 
-    int insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
+    Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
 
-    int updateFormAnswerVariant(Long id, FormAnswerVariant formAnswerVariant);
+    int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant);
 
     int deleteFormAnswerVariant(FormAnswerVariant formVariant);
 
-    int deleteFormAnswerVariant(Long id);
-
-    Set<FormAnswerVariantDao> getAll();
+    Set<FormAnswerVariant> getAll();
 }

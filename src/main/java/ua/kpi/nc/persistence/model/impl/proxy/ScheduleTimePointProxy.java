@@ -5,6 +5,7 @@ import java.util.Set;
 
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.UserTimePriority;
 import ua.kpi.nc.persistence.model.impl.real.ScheduleTimePointImpl;
 import ua.kpi.nc.service.ScheduleTimePointService;
 
@@ -74,6 +75,22 @@ public class ScheduleTimePointProxy implements ScheduleTimePoint {
 
 	private ScheduleTimePointImpl downloadTimePoint() {
 		return (ScheduleTimePointImpl) service.getScheduleTimePointById(id);
+	}
+
+	@Override
+	public Set<UserTimePriority> getUserTimePriorities() {
+		if (scheduleTimePoint == null) {
+			scheduleTimePoint = downloadTimePoint();
+		}
+		return scheduleTimePoint.getUserTimePriorities();
+	}
+
+	@Override
+	public void setUserTimePriorities(Set<UserTimePriority> priorities) {
+		if (scheduleTimePoint == null) {
+			scheduleTimePoint = downloadTimePoint();
+		}
+		scheduleTimePoint.setUserTimePriorities(priorities);
 	}
 
 }
