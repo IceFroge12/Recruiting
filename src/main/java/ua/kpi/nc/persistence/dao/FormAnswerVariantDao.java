@@ -11,7 +11,7 @@ import java.util.Set;
 public interface FormAnswerVariantDao {
     FormAnswerVariant getById(Long id);
 
-    FormAnswerVariant getByQuestionId(Long id);
+    Set<FormAnswerVariant> getByQuestionId(Long id);
 
     Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
 

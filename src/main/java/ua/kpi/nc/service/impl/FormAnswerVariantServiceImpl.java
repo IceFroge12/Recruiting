@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.service.FormAnswerVariantService;
 
 import java.sql.Connection;
@@ -30,13 +31,8 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
     }
 
     @Override
-    public FormAnswerVariant getFormAnswerVariantById(Long id) {
-        return formAnswerVariantDao.getById(id);
-    }
-
-    @Override
-    public FormAnswerVariant getByQuestionId(Long id) {
-        return formAnswerVariantDao.getByQuestionId(id);
+    public Set<FormAnswerVariant> getAnswerVariantsByQuestion(FormQuestion question) {
+        return formAnswerVariantDao.getByQuestionId(question.getId());
     }
 
     @Override

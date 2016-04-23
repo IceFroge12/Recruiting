@@ -48,11 +48,11 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
     }
 
     @Override
-    public FormAnswerVariant getByQuestionId(Long id) {
+    public Set<FormAnswerVariant> getByQuestionId(Long id) {
         if (log.isInfoEnabled()) {
             log.info("Looking for FormAnswerVarian with QuestionId = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_QUESTION_ID, new FormAnswerVariantExtractor(), id);
+        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_QUESTION_ID, new FormAnswerVariantExtractor(), id);
     }
 
     @Override
