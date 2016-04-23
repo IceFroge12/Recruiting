@@ -40,7 +40,7 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
             "tpt.choice  from user_time_priority utp inner join time_priority_type tpt on tpt.id = utp.id_priority_type " +
             "where utp.id_time_point = ?;";
 
-    private static final String SCHEDULE_TIME_POINT_BY_USER_ID = "SELECT s.id FROM public.user u " +
+    private static final String FINAL_TIME_POINT_BY_USER_ID = "SELECT s.id FROM public.user u " +
             "join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where u.id=?;";
 
     private static final String INSERT_SCHEDULE_TIME_POINT = "INSERT INTO schedule_time_point ( time_point) VALUES (?);";
@@ -59,11 +59,11 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
     }
 
     @Override
-    public Set<ScheduleTimePoint> getScheduleTimePointByUserId(Long id) {
+    public Set<ScheduleTimePoint> getFinalTimePointByUserId(Long id) {
         if (log.isTraceEnabled()) {
             log.trace("Looking for Schedule time Point with User_id = " + id);
         }
-        return this.getJdbcTemplate().queryForSet(SCHEDULE_TIME_POINT_BY_USER_ID, new ScheduleTimePointExtractor(), id);
+        return this.getJdbcTemplate().queryForSet(FINAL_TIME_POINT_BY_USER_ID, new ScheduleTimePointExtractor(), id);
     }
 
     @Override
