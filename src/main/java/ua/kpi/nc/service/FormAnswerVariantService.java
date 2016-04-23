@@ -45,4 +45,11 @@ public interface FormAnswerVariantService {
      */
     boolean deleteAnswerVariant(FormAnswerVariant formVariant);
 
+    /**
+     * Get Answer variant by id
+     * @param id the id by which answer variant will be taken
+     * @return Answer variant
+     */
+    FormAnswerVariant getAnswerVariantById(Long id);
+
 }

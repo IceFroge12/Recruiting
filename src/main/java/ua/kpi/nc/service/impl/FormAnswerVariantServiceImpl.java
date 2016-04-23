@@ -66,5 +66,4 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
     public boolean deleteAnswerVariant(FormAnswerVariant formVariant) {
         return formAnswerVariantDao.deleteFormAnswerVariant(formVariant) != 0;
     }
-    
 }

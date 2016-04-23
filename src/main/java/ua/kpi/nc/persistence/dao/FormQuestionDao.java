@@ -17,11 +17,13 @@ public interface FormQuestionDao {
 
     int deleteFormQuestion(FormQuestion formQuestion);
 
-    //TODO need update?
+    int updateFormQuestion(FormQuestion formQuestion);
+
+    Set<FormQuestion> getByRole(Role role);
 
     boolean addAnswer(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
 
-    boolean removeAnser(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
+    boolean removeAnswer(FormQuestion formQuestion, FormAnswer formAnswer, Connection connection);
 
     boolean addRole(FormAnswer formAnswer, Role role, Connection connection);
 
@@ -32,6 +34,8 @@ public interface FormQuestionDao {
     boolean setStatusQuestionType(FormQuestion formQuestion, boolean status);
 
     boolean setMandatory(FormQuestion formQuestion, boolean mandatory);
+
+
 
     FormQuestion getById(Long id);
 
