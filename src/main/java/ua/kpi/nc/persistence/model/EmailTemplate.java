@@ -20,6 +20,12 @@ public class EmailTemplate implements Serializable {
     public EmailTemplate() {
     }
 
+    public EmailTemplate(String title, String text, NotificationType notificationType) {
+        this.title = title;
+        this.text = text;
+        this.notificationType = notificationType;
+    }
+
     public EmailTemplate(Long id, String title, String text, NotificationType notificationType) {
         this.id = id;
         this.title = title;

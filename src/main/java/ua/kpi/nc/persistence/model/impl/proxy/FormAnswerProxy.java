@@ -3,6 +3,7 @@ package ua.kpi.nc.persistence.model.impl.proxy;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.service.FormAnswerService;
+import ua.kpi.nc.service.ServiceFactory;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -23,85 +24,72 @@ public class FormAnswerProxy implements FormAnswer{
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     @Override
     public void setId(Long id) {
-
+        this.id = id;
     }
 
     @Override
     public String getAnswer() {
-        if (formAnswer == null) {
-            formAnswer =downloadFormAnswer();
-        }
+        checkFormAnswer();
         return formAnswer.getAnswer();
     }
 
     @Override
     public void setAnswer(String answer) {
-        if (formAnswer == null) {
-            formAnswer = downloadFormAnswer();
-        }
+        checkFormAnswer();
         formAnswer.setAnswer(answer);
     }
 
     public FormQuestion getFormQuestion() {
-        if (formAnswer == null) {
-            formAnswer =downloadFormAnswer();
-        }
+        checkFormAnswer();
         return formAnswer.getFormQuestion();
     }
 
     public void setFormQuestion(FormQuestion formQuestion) {
-        if (formAnswer == null) {
-            formAnswer = downloadFormAnswer();
-        }
+        checkFormAnswer();
         formAnswer.setFormQuestion(formQuestion);
     }
 
     public ApplicationForm getApplicationForm() {
-        if (formAnswer == null) {
-            formAnswer =downloadFormAnswer();
-        }
+        checkFormAnswer();
         return formAnswer.getApplicationForm();
     }
 
     public void setApplicationForm(ApplicationForm applicationForm) {
-        if (formAnswer == null) {
-            formAnswer = downloadFormAnswer();
-        }
+        checkFormAnswer();
         formAnswer.setApplicationForm(applicationForm);
     }
 
     public FormAnswerVariant getFormAnswerVariant() {
-        if (formAnswer == null) {
-            formAnswer =downloadFormAnswer();
-        }
+        checkFormAnswer();
         return formAnswer.getFormAnswerVariant();
     }
 
     public void setFormAnswerVariant(FormAnswerVariant formAnswerVariant) {
-        if (formAnswer == null) {
-            formAnswer = downloadFormAnswer();
-        }
+        checkFormAnswer();
         formAnswer.setFormAnswerVariant(formAnswerVariant);
     }
 
     public Interview getInterview() {
-        if (formAnswer == null) {
-            formAnswer =downloadFormAnswer();
-        }
-        return formAnswer.getInterview();
+        checkFormAnswer();return formAnswer.getInterview();
     }
 
     public void setInterview(Interview interview) {
-        if (formAnswer == null) {
-            formAnswer = downloadFormAnswer();
-        }
+        checkFormAnswer();
         formAnswer.setInterview(interview);
     }
+
+    private void checkFormAnswer(){
+        if (formAnswer == null) {
+            answerService = ServiceFactory.getFormAnswerService();
+            formAnswer = downloadFormAnswer();
+        }
+    }
+
     private FormAnswerImpl downloadFormAnswer() {
         return (FormAnswerImpl) answerService.getFormAnswerByID(id);
     }

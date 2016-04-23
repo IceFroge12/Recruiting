@@ -8,34 +8,35 @@ import java.util.Set;
  * Created by Алексей on 21.04.2016.
  */
 public interface Interview extends Serializable{
-    public Long getId();
-    public void setId(Long id);
+    Long getId();
 
-    public int getMark();
+    void setId(Long id);
 
-    public void setMark(int mark);
+    int getMark();
 
-    public Timestamp getDate();
+    void setMark(int mark);
 
-    public void setDate(Timestamp date);
+    Timestamp getDate();
 
-    public User getUser();
+    void setDate(Timestamp date);
 
-    public void setUser(User user);
+    User getUser();
 
-    public Role getRole();
+    void setUser(User user);
 
-    public void setRole(Role role);
+    Role getRole();
 
-    public boolean isAdequateMark();
+    void setRole(Role role);
 
-    public void setAdequateMark(boolean adequateMark);
+    boolean isAdequateMark();
 
-    public ApplicationForm getApplicationForm();
+    void setAdequateMark(boolean adequateMark);
 
-    public void setApplicationForm(ApplicationForm applicationForm);
+    ApplicationForm getApplicationForm();
+
+    void setApplicationForm(ApplicationForm applicationForm);
     
-    public Set<FormAnswer> getFormAnswers();
+    Set<FormAnswer> getFormAnswers();
     
-    public void setFormAnswers(Set<FormAnswer> answers);
+    void setFormAnswers(Set<FormAnswer> answers);
 }

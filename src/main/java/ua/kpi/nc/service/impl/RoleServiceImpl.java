@@ -14,6 +14,10 @@ public class RoleServiceImpl implements RoleService {
 
     private RoleDao roleDao;
 
+    public RoleServiceImpl(RoleDao roleDao) {
+        this.roleDao = roleDao;
+    }
+
     @Override
     public Role getRoleById(Long id) {
         return roleDao.getByID(id);

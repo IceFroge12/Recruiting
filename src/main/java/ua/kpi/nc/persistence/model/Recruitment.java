@@ -61,5 +61,4 @@ public interface Recruitment extends Serializable {
     int getNumberOfDays();
 
     void setNumberOfDays(int numberOfDays);
-
 }

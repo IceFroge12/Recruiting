@@ -25,8 +25,13 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 	public ScheduleTimePointImpl() {
 	}
 
+	public ScheduleTimePointImpl(Timestamp timePoint, Set<User> users, Set<UserTimePriority> userTimePriorities) {
+		this.timePoint = timePoint;
+		this.users = users;
+		this.userTimePriorities = userTimePriorities;
+	}
+
 	public ScheduleTimePointImpl(Long id, Timestamp timePoint, Set<User> users) {
-		super();
 		this.id = id;
 		this.timePoint = timePoint;
 		this.users = users;
@@ -63,6 +68,16 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 	}
 
 	@Override
+	public Set<UserTimePriority> getUserTimePriorities() {
+		return userTimePriorities;
+	}
+
+	@Override
+	public void setUserTimePriorities(Set<UserTimePriority> priorities) {
+		this.userTimePriorities = priorities;
+	}
+
+	@Override
 	public String toString() {
 		return "ScheduleTimePointImpl [id=" + id + ", timePoint=" + timePoint + ", users=" + users + "]";
 	}
@@ -83,16 +98,6 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 		ScheduleTimePointImpl other = (ScheduleTimePointImpl) obj;
 		return new EqualsBuilder().append(id, other.id).append(timePoint, other.timePoint).append(users, other.users)
 				.isEquals();
-	}
-
-	@Override
-	public Set<UserTimePriority> getUserTimePriorities() {
-		return userTimePriorities;
-	}
-
-	@Override
-	public void setUserTimePriorities(Set<UserTimePriority> priorities) {
-		this.userTimePriorities = priorities;
 	}
 
 }

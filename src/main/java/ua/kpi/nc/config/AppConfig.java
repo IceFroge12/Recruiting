@@ -30,8 +30,8 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         servlet.addMapping("/");
         servlet.setLoadOnStartup(1);
 
-        FilterRegistration.Dynamic securityFilter = servletContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class);
-        securityFilter.addMappingForUrlPatterns(null, false, "/*");
+//        FilterRegistration.Dynamic securityFilter = servletContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class);
+//        securityFilter.addMappingForUrlPatterns(null, false, "/*");
     }
 
     @Override

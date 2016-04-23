@@ -5,21 +5,21 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 public interface ScheduleTimePoint extends Serializable {
-	public Long getId();
+	Long getId();
 
-	public void setId(Long id);
+	void setId(Long id);
 
-	public Timestamp getTimePoint();
+	Timestamp getTimePoint();
 
-	public void setTimePoint(Timestamp timePoint);
+	void setTimePoint(Timestamp timePoint);
 
-	public Set<User> getUsers();
+	Set<User> getUsers();
 
-	public void setUsers(Set<User> users);
+	void setUsers(Set<User> users);
 
-	public Set<UserTimePriority> getUserTimePriorities();
+	Set<UserTimePriority> getUserTimePriorities();
 
-	public void setUserTimePriorities(Set<UserTimePriority> priorities);
+	void setUserTimePriorities(Set<UserTimePriority> priorities);
 
 
 }

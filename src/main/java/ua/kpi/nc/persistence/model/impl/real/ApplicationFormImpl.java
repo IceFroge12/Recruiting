@@ -18,6 +18,8 @@ import ua.kpi.nc.persistence.model.User;
  */
 public class ApplicationFormImpl implements ApplicationForm {
 
+	private static final long serialVersionUID = 2573334038825578138L;
+
 	private Long id;
 
 	private Status status;
@@ -52,7 +54,6 @@ public class ApplicationFormImpl implements ApplicationForm {
 
 	public ApplicationFormImpl(Long id, Status status, boolean active, Recruitment recruitment, String photoScope,
 							   User user, Timestamp dateCreate, Set<Interview> interviews, Set<FormAnswer> answers) {
-		super();
 		this.id = id;
 		this.status = status;
 		this.active = active;

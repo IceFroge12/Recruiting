@@ -16,8 +16,11 @@ public class TimePriorityType implements Serializable {
 	public TimePriorityType() {
 	}
 
+	public TimePriorityType(String priority) {
+		this.priority = priority;
+	}
+
 	public TimePriorityType(Long id, String priority) {
-		super();
 		this.id = id;
 		this.priority = priority;
 	}

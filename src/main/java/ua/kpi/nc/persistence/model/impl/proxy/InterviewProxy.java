@@ -10,6 +10,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.service.InterviewService;
+import ua.kpi.nc.service.ServiceFactory;
 
 public class InterviewProxy implements Interview {
 
@@ -129,10 +130,15 @@ public class InterviewProxy implements Interview {
 	}
 
 	public void setFormAnswers(Set<FormAnswer> answers) {
+
+		interview.setFormAnswers(answers);
+	}
+
+	private void checkInterview(){
 		if (interview == null) {
+			service = ServiceFactory.getInterviewService();
 			interview = downloadInterview();
 		}
-		interview.setFormAnswers(answers);
 	}
 
 	private InterviewImpl downloadInterview() {

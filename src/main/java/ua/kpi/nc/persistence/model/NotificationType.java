@@ -16,6 +16,10 @@ public class NotificationType implements Serializable {
 	public NotificationType() {
 	}
 
+	public NotificationType(String title) {
+		this.title = title;
+	}
+
 	public NotificationType(Long id, String title) {
 		super();
 		this.id = id;
@@ -59,5 +63,4 @@ public class NotificationType implements Serializable {
 		NotificationType other = (NotificationType) obj;
 		return new EqualsBuilder().append(id, other.id).append(title, other.title).isEquals();
 	}
-
 }

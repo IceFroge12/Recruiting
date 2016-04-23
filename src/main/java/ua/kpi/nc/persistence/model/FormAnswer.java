@@ -6,28 +6,27 @@ import java.io.Serializable;
  * Created by Алексей on 21.04.2016.
  */
 public interface FormAnswer extends Serializable {
-    public Long getId();
+    Long getId();
 
+    void setId(Long id);
 
-    public void setId(Long id);
+    String getAnswer();
 
-    public String getAnswer();
+    void setAnswer(String answer);
 
-    public void setAnswer(String answer);
+    FormQuestion getFormQuestion();
 
-    public FormQuestion getFormQuestion();
+    void setFormQuestion(FormQuestion formQuestion);
 
-    public void setFormQuestion(FormQuestion formQuestion);
+    ApplicationForm getApplicationForm();
 
-    public ApplicationForm getApplicationForm();
+    void setApplicationForm(ApplicationForm applicationForm);
 
-    public void setApplicationForm(ApplicationForm applicationForm);
+    FormAnswerVariant getFormAnswerVariant();
 
-    public FormAnswerVariant getFormAnswerVariant();
+    void setFormAnswerVariant(FormAnswerVariant formAnswerVariant);
 
-    public void setFormAnswerVariant(FormAnswerVariant formAnswerVariant);
+    Interview getInterview();
 
-    public Interview getInterview();
-
-    public void setInterview(Interview interview);
+    void setInterview(Interview interview);
 }

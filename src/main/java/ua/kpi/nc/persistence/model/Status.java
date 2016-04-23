@@ -14,6 +14,10 @@ public class Status implements Serializable {
     public Status() {
     }
 
+    public Status(String title) {
+        this.title = title;
+    }
+
     public Status(Long id, String title) {
         this.id = id;
         this.title = title;

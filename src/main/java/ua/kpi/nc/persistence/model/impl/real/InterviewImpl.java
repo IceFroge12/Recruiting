@@ -105,6 +105,17 @@ public class InterviewImpl implements Interview {
 	}
 
 	@Override
+	public Set<FormAnswer> getFormAnswers() {
+		return answers;
+	}
+
+	@Override
+	public void setFormAnswers(Set<FormAnswer> answers) {
+		this.answers = answers;
+	}
+
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
@@ -148,15 +159,5 @@ public class InterviewImpl implements Interview {
 		return "InterviewImpl{" + "id=" + id + ", mark=" + mark + ", date=" + date + ", user=" + user
 				+ ", role=" + role + ", adequateMark=" + adequateMark + ", applicationForm="
 				+ applicationForm + '}';
-	}
-
-	@Override
-	public Set<FormAnswer> getFormAnswers() {
-		return answers;
-	}
-
-	@Override
-	public void setFormAnswers(Set<FormAnswer> answers) {
-		this.answers = answers;
 	}
 }

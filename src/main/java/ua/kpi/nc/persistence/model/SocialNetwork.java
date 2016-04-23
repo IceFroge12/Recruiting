@@ -16,6 +16,10 @@ public class SocialNetwork implements Serializable {
     public SocialNetwork() {
     }
 
+    public SocialNetwork(String title) {
+        this.title = title;
+    }
+
     public SocialNetwork(Long id, String title) {
         this.id = id;
         this.title = title;

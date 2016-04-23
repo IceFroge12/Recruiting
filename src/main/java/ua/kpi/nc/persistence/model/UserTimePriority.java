@@ -20,9 +20,7 @@ public class UserTimePriority implements Serializable {
 	public UserTimePriority() {
 	}
 
-	public UserTimePriority(User user, ScheduleTimePoint scheduleTimePoint, TimePriorityType timePriorityType) {
-		super();
-		this.user = user;
+	public UserTimePriority(User user, ScheduleTimePoint scheduleTimePoint, TimePriorityType timePriorityType) {		this.user = user;
 		this.scheduleTimePoint = scheduleTimePoint;
 		this.timePriorityType = timePriorityType;
 	}

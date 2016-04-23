@@ -19,7 +19,6 @@ public class Decision implements Serializable {
 	}
 
 	public Decision(int softMark, int techMark, int finalMark) {
-		super();
 		this.softMark = softMark;
 		this.techMark = techMark;
 		this.finalMark = finalMark;
