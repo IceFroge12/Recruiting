@@ -13,6 +13,10 @@ public class FormQuestionType implements Serializable {
     public FormQuestionType() {
     }
 
+    public FormQuestionType(String typeTitle) {
+        this.typeTitle = typeTitle;
+    }
+
     public FormQuestionType(Long id, String typeTitle) {
         this.id = id;
         this.typeTitle = typeTitle;
