@@ -25,7 +25,7 @@ public interface InterviewDao {
 
     List<Interview> getByAdequateMark(boolean adequateMark);
 
-    List<Interview> getByApplicationFormId(ApplicationForm applicationFormId);
+    List<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
     int insertInterview(Interview interview);
 
