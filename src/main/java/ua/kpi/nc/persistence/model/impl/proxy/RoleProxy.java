@@ -6,6 +6,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.service.RoleService;
+import ua.kpi.nc.service.ServiceFactory;
 
 import java.util.Set;
 
@@ -18,7 +19,6 @@ public class RoleProxy implements Role {
 
     private RoleImpl role;
 
-    @Autowired
     private RoleService roleService;
 
     public RoleProxy(Long id) {
@@ -61,6 +61,7 @@ public class RoleProxy implements Role {
 
     private void checkRoleForExist(){
         if (role == null) {
+            roleService = ServiceFactory.getRoleService();
             role = downloadRole();
         }
     }

@@ -12,7 +12,6 @@ import ua.kpi.nc.service.RoleService;
 @Repository
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
     private RoleDao roleDao;
 
     @Override

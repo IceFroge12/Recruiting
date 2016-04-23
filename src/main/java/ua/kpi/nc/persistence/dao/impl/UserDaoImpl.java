@@ -57,6 +57,19 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n";
 
+    private static final String SQL_GET_ALL_STUDENTS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
+            "u.password,u.confirm_token,u.is_active, u.registration_date, r.role\n"+
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n"+
+            "  INNER JOIN role r ON ur.id_role = r.id\n"+
+            "WHERE r.role = 'ROLE_STUDENT'\n";
+
+    private static final String SQL_GET_ALL_EMPLOYEES= "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
+            "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "INNER JOIN role r ON ur.id_role = r.id\n" +
+            "WHERE r.role <> 'ROLE_STUDENT';";
+
+
     @Override
     public User getByID(Long id) {
         if (log.isInfoEnabled()){
@@ -133,6 +146,22 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
                 "id_role = ?", user.getId(),role.getId());
+    }
+
+    @Override
+    public Set<User> getAllStudents() {
+        if (log.isInfoEnabled()) {
+            log.info("Get all Students");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, new UserExtractor());
+    }
+
+    @Override
+    public Set<User> getAllEmploees() {
+        if (log.isInfoEnabled()) {
+            log.info("Get all Employees");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, new UserExtractor());
     }
 
     @Override

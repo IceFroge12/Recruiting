@@ -6,6 +6,7 @@ import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.SocialInformationImpl;
+import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.SocialInformationService;
 
 /**
@@ -16,7 +17,6 @@ public class SocialInformationProxy implements SocialInformation {
 
     private SocialInformationImpl socialInformation;
 
-    @Autowired
     private SocialInformationService socialInformationService;
 
     public SocialInformationProxy(Long id) {
