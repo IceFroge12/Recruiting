@@ -5,15 +5,15 @@ import java.io.Serializable;
 /**
  * Created by Алексей on 21.04.2016.
  */
-public class FormQuestionType implements Serializable {
+public class QuestionType implements Serializable {
 
     private Long id;
     private String typeTitle;
 
-    public FormQuestionType() {
+    public QuestionType() {
     }
 
-    public FormQuestionType(Long id, String typeTitle) {
+    public QuestionType(Long id, String typeTitle) {
         this.id = id;
         this.typeTitle = typeTitle;
     }
@@ -39,7 +39,7 @@ public class FormQuestionType implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FormQuestionType that = (FormQuestionType) o;
+        QuestionType that = (QuestionType) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         return typeTitle != null ? typeTitle.equals(that.typeTitle) : that.typeTitle == null;
@@ -55,7 +55,7 @@ public class FormQuestionType implements Serializable {
 
     @Override
     public String toString() {
-        return "FormQuestionType{" +
+        return "QuestionType{" +
                 "id=" + id +
                 ", typeTitle='" + typeTitle + '\'' +
                 '}';

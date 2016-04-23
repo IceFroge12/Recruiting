@@ -1,14 +1,16 @@
-package ua.kpi.nc.service;
+package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.QuestionType;
 
 /**
- * Created by Chalienko on 21.04.2016.
+ * Created by IO on 21.04.2016.
  */
-public interface QuestionTypeService {
-    QuestionType getQuestionTypeById(Long id);
+public interface QuestionTypeDao {
+
+    QuestionType getById(Long id);
 
     Long persistQuestionType(QuestionType questionType);
 
     int deleteQuestionType(QuestionType questionType);
+
 }
