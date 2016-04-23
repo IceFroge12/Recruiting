@@ -25,15 +25,15 @@ public interface InterviewDao {
 
     List<Interview> getByAdequateMark(boolean adequateMark);
 
-    List<Interview> getByApplicationFormId(ApplicationForm applicationFormId);
+    List<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
     int insertInterview(Interview interview);
 
-    int updateInterview(Long id, Interview interview);
+    int updateInterview(Interview interview);
 
-    int deliteInterview(Long id);
+    int deleteInterview(Long id);
 
-    int deliteInterview(Interview interview);
+    int deleteInterview(Interview interview);
 
     Set<Interview> getAll();
 }

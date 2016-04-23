@@ -14,10 +14,10 @@ public interface ScheduleTimePointDao {
 
     Set<ScheduleTimePoint> getScheduleTimePointByUserId(Long id);
 
-    Long insertScheduleTimePoint(ScheduleTimePointDao scheduleTimePointDao);
+    Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
-    int updateScheduleTimePoint(ScheduleTimePointDao scheduleTimePointDao);
+    int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
-    int deleteScheduleTimePoint(ScheduleTimePointDao scheduleTimePointDao);
+    int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
 }
