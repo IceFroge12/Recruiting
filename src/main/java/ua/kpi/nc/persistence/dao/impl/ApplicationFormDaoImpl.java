@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.dao.impl;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -90,11 +91,11 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	}
 
 	@Override
-	public Long insertApplicationForm(ApplicationForm applicationForm, User user) {
+	public Long insertApplicationForm(ApplicationForm applicationForm, User user, Connection connection) {
 		if (log.isInfoEnabled()) {
 			log.info("Inserting application forms with user_id = " + user.getId());
 		}
-		return this.getJdbcTemplate().insert(SQL_INSERT, applicationForm.getStatus().getId(),
+		return this.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
 				applicationForm.isActive(), applicationForm.getRecruitment().getId(), applicationForm.getPhotoScope(),
 				applicationForm.getUser().getId(), applicationForm.getDateCreate());
 	}
