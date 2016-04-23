@@ -29,7 +29,7 @@ public interface InterviewDao {
 
     int insertInterview(Interview interview);
 
-    int updateInterview(Long id, Interview interview);
+    int updateInterview(Interview interview);
 
     int deleteInterview(Long id);
 
