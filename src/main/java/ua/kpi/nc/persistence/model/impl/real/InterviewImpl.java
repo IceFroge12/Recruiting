@@ -1,10 +1,6 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -46,6 +42,16 @@ public class InterviewImpl implements Interview {
 		this.role = role;
 		this.adequateMark = adequateMark;
 		this.applicationForm = applicationForm;
+	}
+
+	@Override
+	public Set<FormAnswer> getAnswers() {
+		return answers;
+	}
+
+	@Override
+	public void setAnswers(Set<FormAnswer> answers) {
+		this.answers = answers;
 	}
 
 	public Long getId() {

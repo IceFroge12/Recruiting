@@ -7,9 +7,14 @@ import java.util.Set;
 /**
  * Created by Алексей on 21.04.2016.
  */
-public interface Interview extends Serializable{
+public interface Interview extends Serializable {
     public Long getId();
+
     public void setId(Long id);
+
+    public Set<FormAnswer> getAnswers();
+
+    public void setAnswers(Set<FormAnswer> answers);
 
     public int getMark();
 
@@ -34,8 +39,8 @@ public interface Interview extends Serializable{
     public ApplicationForm getApplicationForm();
 
     public void setApplicationForm(ApplicationForm applicationForm);
-    
+
     public Set<FormAnswer> getFormAnswers();
-    
+
     public void setFormAnswers(Set<FormAnswer> answers);
 }
