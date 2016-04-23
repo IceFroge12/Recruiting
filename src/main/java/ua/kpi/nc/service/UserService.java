@@ -10,6 +10,7 @@ import java.util.Set;
  */
 
 public interface UserService {
+
     User getUserByUsername(String username);
 
     User getUserByID(Long id);
@@ -27,6 +28,5 @@ public interface UserService {
     int deleteUser(User user);
 
     Set<User> getAll();
-
 
 }

@@ -17,7 +17,11 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/image/**").addResourceLocations("/image/");
+        registry.addResourceHandler("/img/**").addResourceLocations("/img/");
+        registry.addResourceHandler("/fonts/**").addResourceLocations("/fonts/");
+        registry.addResourceHandler("/fullcalendar/**").addResourceLocations("/fullcalendar/");
+        registry.addResourceHandler("/lib/**").addResourceLocations("/lib/");
+        registry.addResourceHandler("/slider/**").addResourceLocations("/slider/");
     }
 
     @Bean

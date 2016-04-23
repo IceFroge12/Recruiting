@@ -21,8 +21,6 @@ public class UserProxy implements User {
 
     private UserImpl user;
 
-//    @Autowired
-//    private UserService userService;
 
     private UserService userService;
 

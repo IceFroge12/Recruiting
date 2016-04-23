@@ -8,56 +8,63 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <title>Main page</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script type="text/javascript" src="/js/admin.js"></script>
-    <title>Admin</title>
 </head>
 <body>
-FORM ADD EMPLOYEE
-<input type="text" id="firstName">
-<input type="text" id="secondName">
-<input type="text" id="lastName">
-<input type="text" id="email">
+    <a id="showAllEmployee">Staff managment</a>
 
-<input type="checkbox" id="tech">
-<input type="checkbox" id="soft">
-<input type="checkbox" id="admin">
+    FORM ADD EMPLOYEE
+    <input type="text" id="firstName">
+    <input type="text" id="secondName">
+    <input type="text" id="lastName">
+    <input type="text" id="email">
 
-<button id="addEmployee" type="button" name="Add">Add Employee</button>
+    <input type="checkbox" id="tech">
+    <input type="checkbox" id="soft">
+    <input type="checkbox" id="admin">
 
+    <button id="addEmployee" type="button" name="Add">Add Employee</button>
 
-FORM EDIT EMPLOYEE
-​<table>
-<tr>
-    <td>6</td>
-    <td>Shon</td>
-    <td class="userEmail">shon@me.com</td>
-    <td>Tech</td>
-    <td><button class="btn btn-info" type="button">Delegate</button></td>
-    <td>
-        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#assignedList">Show list</button>
-    </td>
-    <td>
-        <button class="btn btn-link editEmployee" type="button" data-toggle="modal" >
-            <span class="glyphicon glyphicon-edit">Edit Employee</span>
-        </button>
-    </td>
-</tr>​</table>
+    <table id="employee-table"></table>
 
 
-<input type="text" id="firstNameEdit">
-<input type="text" id="secondNameEdit">
-<input type="text" id="lastNameEdit">
-<input type="text" id="emailEdit">
+    FORM EDIT EMPLOYEE
+    ​
+    <table>
+        <tr>
+            <td>6</td>
+            <td>Shon</td>
+            <td class="userEmail">shon@me.com</td>
+            <td>Tech</td>
+            <td>
+                <button class="btn btn-info" type="button">Delegate</button>
+            </td>
+            <td>
+                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#assignedList">Show list
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-link editEmployee" type="button" data-toggle="modal">
+                    <span class="glyphicon glyphicon-edit">Edit Employee</span>
+                </button>
+            </td>
+        </tr>
+    </table>
 
-<input type="checkbox" id="techEdit">
-<input type="checkbox" id="softEdit">
-<input type="checkbox" id="adminEdit">
+
+    <input type="text" id="firstNameEdit">
+    <input type="text" id="secondNameEdit">
+    <input type="text" id="lastNameEdit">
+    <input type="text" id="emailEdit">
+
+    <input type="checkbox" id="techEdit">
+    <input type="checkbox" id="softEdit">
+    <input type="checkbox" id="adminEdit">
 
 
-
-<button id="saveChanges" type="button">Save</button>
-
+    <button id="saveChanges" type="button">Save</button>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.Role;
@@ -99,11 +100,13 @@ public class UserImpl implements User {
         this.id = id;
     }
 
+    @JsonIgnore
     @Override
     public Set<SocialInformation> getSocialInformations() {
         return socialInformations;
     }
 
+    @JsonIgnore
     @Override
     public void setSocialInformations(Set<SocialInformation> socialInformations) {
         this.socialInformations = socialInformations;

@@ -9,7 +9,6 @@ import java.util.Set;
  */
 public interface NotificationTypeDao {
 
-
     NotificationType getById(Long id);
 
     NotificationType getByTitle(String title);

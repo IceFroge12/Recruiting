@@ -48,7 +48,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "VALUES (?,?,?,?,?,?,?,?);";
 
     private static final String SQL_UPDATE = "UPDATE \"user\" SET email = ?, first_name  = ?," +
-            " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ?";
+            " second_name = ?, last_name = ?, password = ?, confirm_token = ?, is_active = ?, registration_date = ? WHERE id=?";
 
     private static final String SQL_DELETE = "DELETE FROM \"user\" WHERE \"user\".id = ?;";
 
@@ -58,7 +58,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public User getByID(Long id) {
-        if (log.isInfoEnabled()){
+        if (log.isInfoEnabled()) {
             log.info("Looking for user with id = " + id);
         }
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new UserExtractor(), id);
@@ -83,16 +83,17 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Insert user with email = " + user.getEmail());
         }
-        return this.getJdbcTemplate().insert(SQL_INSERT,connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
-                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
+        return this.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
+                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
     }
+
     @Override
-    public int updateUser(User user){
+    public int updateUser(User user) {
         if (log.isInfoEnabled()) {
             log.info("Update user with id = " + user.getId());
         }
-        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(),user.getFirstName(),user.getSecondName(),
-                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
+        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
+                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(), user.getId());
     }
 
     @Override
@@ -105,64 +106,64 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public boolean addRole(User user, Role role) {
-        if ((user.getId() == null) &&(log.isDebugEnabled())) {
-            log.warn("User: "+ user.getEmail() + " don`t have id");
+        if ((user.getId() == null) && (log.isDebugEnabled())) {
+            log.warn("User: " + user.getEmail() + " don`t have id");
             return false;
         }
         return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
-                user.getId(),role.getId()) > 0;
+                user.getId(), role.getId()) > 0;
     }
 
     @Override
     public boolean addRole(User user, Role role, Connection connection) {
-        if ((user.getId() == null) &&(log.isDebugEnabled())) {
-            log.warn("User: "+ user.getEmail() + " don`t have id");
+        if ((user.getId() == null) && (log.isDebugEnabled())) {
+            log.warn("User: " + user.getEmail() + " don`t have id");
             return false;
         }
-        return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);",connection,
-                user.getId(),role.getId()) > 0;
+        return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);", connection,
+                user.getId(), role.getId()) > 0;
     }
 
     @Override
     public int deleteRole(User user, Role role) {
-        if ((user.getId() == null) &&(log.isDebugEnabled())) {
-            log.warn("User: "+ user.getEmail() + " don`t have id");
+        if ((user.getId() == null) && (log.isDebugEnabled())) {
+            log.warn("User: " + user.getEmail() + " don`t have id");
             return 0;
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
-                "id_role = ?", user.getId(),role.getId());
+                "id_role = ?", user.getId(), role.getId());
     }
 
     @Override
-    public Set<User> getAll(){
+    public Set<User> getAll() {
         if (log.isInfoEnabled()) {
             log.info("Get all Users");
         }
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new UserExtractor());
     }
 
-    private Set<Role> getRoles(Long userID){
+    private Set<Role> getRoles(Long userID) {
         return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
                 "FROM \"user_role\" ur\n" +
                 "WHERE ur.id_user = ?;", resultSet -> {
-                    Set<Role> roles = new HashSet<>();
-                    do {
-                        roles.add(new RoleProxy(resultSet.getLong("id_role")));
-                    }while (resultSet.next());
-                    return roles;
-                },userID);
+            Set<Role> roles = new HashSet<>();
+            do {
+                roles.add(new RoleProxy(resultSet.getLong("id_role")));
+            } while (resultSet.next());
+            return roles;
+        }, userID);
     }
 
-    private Set<SocialInformation> getSocialInfomations(Long userID){
+    private Set<SocialInformation> getSocialInfomations(Long userID) {
         return this.getJdbcTemplate().queryWithParameters("SELECT si.id\n" +
                 "FROM \"social_information\" si\n" +
                 "WHERE si.id_user = ?;", resultSet -> {
             Set<SocialInformation> set = new HashSet<>();
             do {
                 set.add(new SocialInformationProxy(resultSet.getLong("id")));
-            }while (resultSet.next());
+            } while (resultSet.next());
             return set;
-        },userID);
+        }, userID);
     }
 
     private final class UserExtractor implements ResultSetExtractor<User> {

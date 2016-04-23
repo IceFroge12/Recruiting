@@ -22,4 +22,7 @@ public class ServiceFactory {
     public static RecruitmentService getRecruitmentService() {
         return new RecruitmentServiceImpl(DaoFactory.getRecruitmentDao());}
 
+
+
+
 }
