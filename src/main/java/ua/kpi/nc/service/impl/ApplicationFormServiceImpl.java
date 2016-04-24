@@ -1,5 +1,6 @@
 package ua.kpi.nc.service.impl;
 
+import java.sql.Connection;
 import java.util.Set;
 
 import ua.kpi.nc.persistence.dao.ApplicationFormDao;
@@ -40,10 +41,15 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	public int deleteApplicationForm(ApplicationForm applicationForm) {
 		return applicationFormDao.deleteApplicationForm(applicationForm);
 	}
+//TODO: transaction
+	@Override
+	public Long insertApplicationForm(ApplicationForm applicationForm, User user, Connection connection) {
+		return null;
+	}
 
 	@Override
-	public Long insertApplicationForm(ApplicationForm applicationForm, User user) {
-		return applicationFormDao.insertApplicationForm(applicationForm, user);
+	public Set<ApplicationForm> getAll() {
+		return null;
 	}
 
 	@Override

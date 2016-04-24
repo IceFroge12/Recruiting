@@ -112,7 +112,7 @@ public class InterviewProxy implements Interview {
 	}
 
 	private InterviewImpl downloadInterview() {
-		return (InterviewImpl) interviewService.getInterviewById(id);
+		return (InterviewImpl) interviewService.getById(id);
 	}
 
 }
