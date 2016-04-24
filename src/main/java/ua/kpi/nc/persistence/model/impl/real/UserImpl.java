@@ -13,6 +13,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
+
 public class UserImpl implements User {
 
 
@@ -53,6 +54,7 @@ public class UserImpl implements User {
     }
 
     public UserImpl() {
+
     }
 
     public UserImpl(String email, String firstName, String secondName, String lastName, Set<Role> roles,

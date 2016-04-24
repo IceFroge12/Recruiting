@@ -4,7 +4,7 @@ $(document).ready(function () {
     var soft = false;
     var tech = false;
     var user;
-
+    
     function addRemoveRoles() {
         $("#tech").on("click", function () {
             if ($(this).is(":checked")) {
@@ -35,28 +35,7 @@ $(document).ready(function () {
     }
 
     addRemoveRoles();
-
-    $("#addEmployee").click(function (event) {
-
-        var firstName = $("#firstName").val();
-        var secondName = $("#secondName").val();
-        var lastName = $("#lastName").val();
-        var email = $("#email").val();
-
-
-        $.ajax({
-            url: 'admin/addEmployee',
-            type: 'POST',
-            data: {
-                "firstName": firstName, "secondName": secondName, "lastName": lastName,
-                "email": email, "admin": admin, "soft": soft, "tech": tech
-            },
-            success: function (data) {
-                console.log("save Employee")
-            }
-        });
-    });
-
+    
     // get employee prop
     $(".editEmployee").click(function (event) {
         var email = $(this).closest("tr").find('td:eq(2)').text();
