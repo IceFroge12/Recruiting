@@ -14,25 +14,17 @@ import java.util.Set;
  */
 public interface InterviewService {
 
-	Interview getInterviewById(Long id);
+	Interview getById(Long id);
 
-	List<Interview> getInterviewsByMark(int mark);
+	Set<Interview> getByInterviewer(User user);
 
-	List<Interview> getInterviewsByDate(Timestamp date);
+	Set<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
-	List<Interview> getInterviewsByInterviewer(User user);
-
-	List<Interview> getInterviewsByInterviewerRole(Role role);
-
-	List<Interview> getInterviewsByAdequateMark(boolean adequateMark);
-
-	List<Interview> getInterviewsByApplicationForm(ApplicationForm applicationFormId);
-
-	int insertInterview(Interview interview);
+	Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
 
 	int updateInterview(Interview interview);
 
 	int deleteInterview(Interview interview);
 
-	Set<Interview> getAllInterviews();
+	Set<Interview> getAll();
 }
