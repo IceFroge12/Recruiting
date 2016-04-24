@@ -16,6 +16,7 @@ public interface ReportDao {
 
     Long insertReport(Report report);
 
+
     int updateReport(Report report);
 
     int deleteReport(Report report);

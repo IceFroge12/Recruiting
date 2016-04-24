@@ -77,7 +77,6 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
         }
         return this.getJdbcTemplate().update(SQL_DELETE, report.getId());
     }
-
     private final class ReportExtractor implements ResultSetExtractor<Report> {
 
         @Override
