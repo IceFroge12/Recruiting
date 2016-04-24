@@ -75,7 +75,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
 	@Override
 	public Set<ApplicationForm> getAll() {
-		return null;
+		return applicationFormDao.getAll();
 	}
 
 	@Override

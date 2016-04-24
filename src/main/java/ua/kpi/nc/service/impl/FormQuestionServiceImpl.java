@@ -2,8 +2,11 @@ package ua.kpi.nc.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.persistence.dao.DataSourceFactory;
+import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.dao.FormQuestionDao;
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
@@ -38,8 +41,30 @@ public class FormQuestionServiceImpl implements FormQuestionService {
             formQuestionDao.addRole(formQuestion, role, connection);
             connection.commit();
         } catch (SQLException e) {
-            if (log.isDebugEnabled()) {
-                log.warn("Transaction failed When Trying to add Form Question to Role");
+            if (log.isWarnEnabled()) {
+                log.warn("Transaction failed When Trying to add Form Question and Role");
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role, Set<FormAnswerVariant> formAnswerVariants) {
+        try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+            connection.setAutoCommit(false);
+            Long generatedFormQuestionId = formQuestionDao.insertFormQuestion(formQuestion, questionType, connection);
+            formQuestion.setId(generatedFormQuestionId);
+            formQuestionDao.addRole(formQuestion, role, connection);
+            FormAnswerVariantDao formAnswerVariantDao = DaoFactory.getFormAnswerVariantDao();
+            for (FormAnswerVariant formAnswerVariant : formAnswerVariants ) {
+                formAnswerVariantDao.insertFormAnswerVariant(formAnswerVariant,formQuestion,connection);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Transaction failed When Trying to add Form Question with Variants and Role");
             }
             return false;
         }

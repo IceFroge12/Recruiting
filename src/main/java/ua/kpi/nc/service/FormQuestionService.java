@@ -1,9 +1,6 @@
 package ua.kpi.nc.service;
 
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
-import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.*;
 
 import java.sql.Connection;
 import java.util.Set;
@@ -20,6 +17,8 @@ import java.util.Set;
 public interface FormQuestionService {
 
     boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role);
+
+    boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role, Set<FormAnswerVariant> formAnswerVariants);
 
     int deleteFormQuestion(FormQuestion formQuestion);
 
