@@ -60,9 +60,9 @@ public class ServiceFactory {
         return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
     }
 
-//    public static ReportSerivce getReportSerivce() {
-//        return new ReportServiceImpl(DaoFactory.getReportDao()); // Don`t work WHY???
-//    }
+    public static ReportService getReportService() {
+        return new ReportServiceImpl(DaoFactory.getReportDao());
+    }
 
     public static ScheduleTimePointService getScheduleTimePointService() {
         return new ScheduleTimePointServiceImpl(DaoFactory.getScheduleTimePointDao());
