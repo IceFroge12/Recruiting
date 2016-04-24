@@ -58,7 +58,7 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
         if (log.isTraceEnabled()) {
             log.trace("Inserting report with title = " + report.getTitle());
         }
-        return this.getJdbcTemplate().insert(SQL_INSERT, report.getTitle());
+        return this.getJdbcTemplate().insert(SQL_INSERT, report.getQuery(), report.getTitle());
     }
 
     @Override
