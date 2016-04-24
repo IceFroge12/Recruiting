@@ -30,9 +30,9 @@ public interface UserDao {
 
     int deleteRole(User user, Role role);
 
-    Long insertFinalTimePoint(User user,ScheduleTimePoint scheduleTimePoint);
+    Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
-    int deleteFinalTimePoint (User user,ScheduleTimePoint scheduleTimePoint);
+    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     Set<User> getAllStudents();
 

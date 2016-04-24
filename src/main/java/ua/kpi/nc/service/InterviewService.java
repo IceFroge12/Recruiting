@@ -1,9 +1,6 @@
 package ua.kpi.nc.service;
 
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -21,6 +18,9 @@ public interface InterviewService {
 	Set<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
 	Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
+
+	boolean insertInterviewWithAnswers(Interview interview, ApplicationForm applicationForm,
+									   User interviewer, Role role, Set<FormAnswer> formAnswers);
 
 	int updateInterview(Interview interview);
 

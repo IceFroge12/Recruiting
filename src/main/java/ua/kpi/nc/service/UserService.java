@@ -1,6 +1,7 @@
 package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
  */
 
 public interface UserService {
+
     User getUserByUsername(String username);
 
     User getUserByID(Long id);
@@ -25,6 +27,14 @@ public interface UserService {
     int deleteRole(User user, Role role);
 
     int deleteUser(User user);
+
+    Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+
+    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+
+    Set<User> getAllStudents();
+
+    Set<User> getAllEmploees();
 
     Set<User> getAll();
 

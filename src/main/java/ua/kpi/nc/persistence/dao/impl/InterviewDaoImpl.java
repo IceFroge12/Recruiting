@@ -14,6 +14,7 @@ import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
@@ -80,6 +81,15 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
             log.info("Insert interview with id = " + interview.getId());
         }
         return this.getJdbcTemplate().insert(SQL_INSERT, interview.getMark(), interview.getDate(), interview.getId(),
+                role.getId(), interview.isAdequateMark(), applicationForm.getId());
+    }
+
+    @Override
+    public Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role, Connection connection) {
+        if (log.isInfoEnabled()) {
+            log.info("Insert interview with id = " + interview.getId());
+        }
+        return this.getJdbcTemplate().insert(SQL_INSERT,connection, interview.getMark(), interview.getDate(), interview.getId(),
                 role.getId(), interview.isAdequateMark(), applicationForm.getId());
     }
 

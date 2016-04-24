@@ -1,8 +1,11 @@
 package ua.kpi.nc.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.UserService;
 
@@ -15,6 +18,8 @@ import java.util.Set;
  */
 
 public class UserServiceImpl implements UserService {
+
+    private static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private UserDao userDao;
 
@@ -46,7 +51,9 @@ public class UserServiceImpl implements UserService {
             userDao.addRole(user,role,connection);
             connection.commit();
         } catch (SQLException e) {
-            //logg
+            if (log.isWarnEnabled()) {
+                log.warn("Cannot insert user");
+            }
             return false;
         }
         return true;
@@ -70,6 +77,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public int deleteUser(User user) {
         return userDao.deleteUser(user);
+    }
+
+    @Override
+    public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
+        return userDao.insertFinalTimePoint(user,scheduleTimePoint);
+    }
+
+    @Override
+    public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
+        return userDao.deleteFinalTimePoint(user,scheduleTimePoint);
+    }
+
+    @Override
+    public Set<User> getAllStudents() {
+        return userDao.getAllStudents();
+    }
+
+    @Override
+    public Set<User> getAllEmploees() {
+        return userDao.getAllEmploees();
     }
 
     @Override
