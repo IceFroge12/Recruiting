@@ -2,6 +2,7 @@ package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.*;
 
+import java.sql.Connection;
 import java.util.Set;
 
 /**
@@ -9,21 +10,21 @@ import java.util.Set;
  */
 public interface FormAnswerDao {
 
-    FormAnswer getById(Long id);
+	FormAnswer getById(Long id);
 
-    Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
+	Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
 
-    Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
-                          FormAnswerVariant answerVariant, ApplicationForm applicationForm);
-    
-    Long insertFormAnswerForApplicationForm(FormAnswer formAnswer,FormQuestion question,
-            FormAnswerVariant answerVariant, ApplicationForm applicationForm);
-    
-    Long insertFormAnswerForInterview(FormAnswer formAnswer,FormQuestion question,
-            FormAnswerVariant answerVariant, Interview interview);
+	Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
+			FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
 
-    int updateFormAnswer(FormAnswer formAnswer);
+	Long insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
+			FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
 
-    int deleteFormAnswer(FormAnswer formAnswer);
+	Long insertFormAnswerForInterview(FormAnswer formAnswer, FormQuestion question, FormAnswerVariant answerVariant,
+			Interview interview, Connection connection);
+
+	int updateFormAnswer(FormAnswer formAnswer);
+
+	int deleteFormAnswer(FormAnswer formAnswer);
 
 }
