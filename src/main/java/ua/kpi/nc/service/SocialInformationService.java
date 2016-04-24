@@ -1,10 +1,22 @@
 package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.SocialInformation;
+import ua.kpi.nc.persistence.model.SocialNetwork;
+import ua.kpi.nc.persistence.model.User;
+
+import java.util.Set;
 
 /**
- * Created by Chalienko on 15.04.2016.
+ * @author Chalienko 15.04.2016.
  */
 public interface SocialInformationService {
     SocialInformation getById(Long id);
+
+    Set<SocialInformation> getByUserId(Long id);
+
+    Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork);
+
+    int updateSocialInformation(SocialInformation socialInformation);
+
+    int deleteSocialInformation(SocialInformation socialInformation);
 }

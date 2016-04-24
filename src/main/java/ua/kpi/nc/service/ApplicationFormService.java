@@ -1,9 +1,9 @@
 package ua.kpi.nc.service;
 
-import java.sql.Connection;
 import java.util.Set;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.User;
 
 /**
@@ -11,19 +11,19 @@ import ua.kpi.nc.persistence.model.User;
  */
 public interface ApplicationFormService {
 
-    ApplicationForm getApplicationFormById(Long id);
+	ApplicationForm getApplicationFormById(Long id);
 
-    Set<ApplicationForm> getByUserId(Long id);
+	Set<ApplicationForm> getByUserId(Long id);
 
-    Set<ApplicationForm> getByStatus(String status);
+	Set<ApplicationForm> getByStatus(String status);
 
-    Set<ApplicationForm> getByState(boolean state);
+	Set<ApplicationForm> getByState(boolean state);
 
-    int deleteApplicationForm(ApplicationForm applicationForm);
+	int deleteApplicationForm(ApplicationForm applicationForm);
 
-    Long insertApplicationForm(ApplicationForm applicationForm, User user, Connection connection);
+	boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers);
 
-    int updateApplicationForm(ApplicationForm applicationForm);
+	int updateApplicationForm(ApplicationForm applicationForm);
 
-    Set<ApplicationForm> getAll();
+	Set<ApplicationForm> getAll();
 }
