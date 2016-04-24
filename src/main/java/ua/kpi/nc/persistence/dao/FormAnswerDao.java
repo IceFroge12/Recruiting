@@ -15,6 +15,12 @@ public interface FormAnswerDao {
 
     Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
                           FormAnswerVariant answerVariant, ApplicationForm applicationForm);
+    
+    Long insertFormAnswerForApplicationForm(FormAnswer formAnswer,FormQuestion question,
+            FormAnswerVariant answerVariant, ApplicationForm applicationForm);
+    
+    Long insertFormAnswerForInterview(FormAnswer formAnswer,FormQuestion question,
+            FormAnswerVariant answerVariant, Interview interview);
 
     int updateFormAnswer(FormAnswer formAnswer);
 
