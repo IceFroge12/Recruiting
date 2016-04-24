@@ -33,24 +33,6 @@ public class FormQuestionProxy implements FormQuestion{
     }
 
     @Override
-    public String getTitle() {
-        checkFormQuestion();
-        return formQuestion.getTitle();
-    }
-
-    @Override
-    public boolean isEnable() {
-        checkFormQuestion();
-        return formQuestion.isEnable();
-    }
-
-    @Override
-    public boolean isMandatory() {
-        checkFormQuestion();
-        return formQuestion.isMandatory();
-    }
-
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -80,21 +62,31 @@ public class FormQuestionProxy implements FormQuestion{
     }
 
     @Override
+    public String getTitle() {
+        checkFormQuestion();
+        return formQuestion.getTitle();
+    }
+
+    @Override
     public void setTitle(String title) {
         checkFormQuestion();
         formQuestion.setTitle(title);
     }
 
-    @Override
     public QuestionType getQuestionType() {
         checkFormQuestion();
         return formQuestion.getQuestionType();
     }
 
-    @Override
     public void setQuestionType(QuestionType questionType) {
         checkFormQuestion();
         formQuestion.setQuestionType(questionType);
+    }
+
+    @Override
+    public boolean isEnable() {
+        checkFormQuestion();
+        return formQuestion.isEnable();
     }
 
     @Override
@@ -104,11 +96,15 @@ public class FormQuestionProxy implements FormQuestion{
     }
 
     @Override
+    public boolean isMandatory() {
+        return formQuestion.isMandatory();
+    }
+
+    @Override
     public void setMandatory(boolean mandatory) {
         checkFormQuestion();
         formQuestion.setMandatory(mandatory);
     }
-
     private void checkFormQuestion(){
         if (formQuestion == null) {
             formQuestionService = ServiceFactory.getFormQuestionService();

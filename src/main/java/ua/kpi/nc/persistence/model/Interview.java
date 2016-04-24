@@ -12,6 +12,10 @@ public interface Interview extends Serializable {
 
     public void setId(Long id);
 
+    public Role getRole();
+
+    public void setRole(Role role);
+
     public Set<FormAnswer> getAnswers();
 
     public void setAnswers(Set<FormAnswer> answers);
@@ -24,13 +28,9 @@ public interface Interview extends Serializable {
 
     public void setDate(Timestamp date);
 
-    public User getUser();
+    public User getInterviewer();
 
-    public void setUser(User user);
-
-    public Role getRole();
-
-    public void setRole(Role role);
+    public void setInterviewer(User user);
 
     public boolean isAdequateMark();
 
@@ -40,7 +40,4 @@ public interface Interview extends Serializable {
 
     public void setApplicationForm(ApplicationForm applicationForm);
 
-    public Set<FormAnswer> getFormAnswers();
-
-    public void setFormAnswers(Set<FormAnswer> answers);
 }

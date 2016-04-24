@@ -16,7 +16,7 @@ public class InterviewProxy implements Interview {
 
 	private InterviewImpl interview;
 
-	private InterviewService service;
+	private InterviewService interviewService;
 	private Set<FormAnswer> answers;
 
 	public InterviewProxy() {
@@ -65,14 +65,14 @@ public class InterviewProxy implements Interview {
 		interview.setDate(date);
 	}
 
-	public User getUser() {
+	public User getInterviewer() {
 		checkInterview();
-		return interview.getUser();
+		return interview.getInterviewer();
 	}
 
-	public void setUser(User user) {
+	public void setInterviewer(User user) {
 		checkInterview();
-		interview.setUser(user);
+		interview.setInterviewer(user);
 	}
 
 	public Role getRole() {
@@ -104,26 +104,15 @@ public class InterviewProxy implements Interview {
 		checkInterview();
 		interview.setApplicationForm(applicationForm);
 	}
-
-	public Set<FormAnswer> getFormAnswers() {
-		checkInterview();
-		return interview.getFormAnswers();
-	}
-
-	public void setFormAnswers(Set<FormAnswer> answers) {
-		checkInterview();
-		interview.setFormAnswers(answers);
-	}
-
 	private void checkInterview(){
 		if (interview == null) {
-			service = ServiceFactory.getInterviewService();
+			interviewService = ServiceFactory.getInterviewService();
 			interview = downloadInterview();
 		}
 	}
 
 	private InterviewImpl downloadInterview() {
-		return (InterviewImpl) service.getInterviewById(id);
+		return (InterviewImpl) interviewService.getInterviewById(id);
 	}
 
 }
