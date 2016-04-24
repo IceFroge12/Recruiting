@@ -36,7 +36,7 @@ public class ServiceFactory {
     }
 
     public static FormAnswerService getFormAnswerService() {
-        return new FormAnswerSeviceImpl(DaoFactory.getFormAnswerDao());
+        return new FormAnswerServiceImpl(DaoFactory.getFormAnswerDao());
     }
 
     public static FormAnswerVariantService getFormAnswerVariantService() {
