@@ -19,13 +19,11 @@ import java.util.Set;
  */
 public interface FormQuestionService {
 
-    Long insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Connection connection);
+    boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role);
 
     int deleteFormQuestion(FormQuestion formQuestion);
 
     boolean addRole(FormQuestion formQuestion, Role role);
-
-    boolean addRole(FormQuestion formQuestion, Role role, Connection connection);
 
     int deleteRole(FormQuestion formQuestion, Role role);
 

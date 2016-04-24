@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.FormQuestionDao;
-import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
@@ -15,11 +14,10 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * @author Despareted Houseviwes
+ * @author Korzh
  */
-
 public class FormQuestionServiceImpl implements FormQuestionService {
-
+    private static Logger log = LoggerFactory.getLogger(FormQuestionServiceImpl.class.getName());
     private FormQuestionDao formQuestionDao;
 
     public FormQuestionServiceImpl(FormQuestionDao formQuestionDao) {
@@ -27,42 +25,50 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public Long insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Connection connection) {
-        return null;
+    public FormQuestion getById(Long id) {
+        return formQuestionDao.getById(id);
+    }
+
+    @Override
+    public boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role) {
+        try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+            connection.setAutoCommit(false);
+            Long generatedFormQuestionId = formQuestionDao.insertFormQuestion(formQuestion, questionType, connection);
+            formQuestion.setId(generatedFormQuestionId);
+            formQuestionDao.addRole(formQuestion, role, connection);
+            connection.commit();
+        } catch (SQLException e) {
+            if (log.isDebugEnabled()) {
+                log.warn("Transaction failed When Trying to add Form Question to Role");
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override
     public int deleteFormQuestion(FormQuestion formQuestion) {
-        return 0;
+        return formQuestionDao.deleteFormQuestion(formQuestion);
     }
 
     @Override
     public boolean addRole(FormQuestion formQuestion, Role role) {
-        return false;
-    }
-
-    @Override
-    public boolean addRole(FormQuestion formQuestion, Role role, Connection connection) {
-        return false;
+        return formQuestionDao.addRole(formQuestion, role);
     }
 
     @Override
     public int deleteRole(FormQuestion formQuestion, Role role) {
-        return 0;
+        return formQuestionDao.deleteRole(formQuestion, role);
     }
 
-    @Override
-    public FormQuestion getById(Long id) {
-        return null;
-    }
 
     @Override
     public Set<FormQuestion> getByRole(Role role) {
-        return null;
+        return formQuestionDao.getByRole(role);
     }
 
     @Override
     public Set<FormQuestion> getAll() {
-        return null;
+        return formQuestionDao.getAll();
     }
 }
