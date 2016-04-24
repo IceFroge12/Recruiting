@@ -5,8 +5,6 @@ import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
-import java.sql.Timestamp;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,19 +13,11 @@ import java.util.Set;
 public interface InterviewDao {
     Interview getById(Long id);
 
-    List<Interview> getByMark(int mark);
+    Set<Interview> getByInterviewer(User user);
 
-    List<Interview> getByDate(Timestamp date);
+    Set<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
-    List<Interview> getByInterviewer(User user);
-
-    List<Interview> getByInterviewerRole(Role role);
-
-    List<Interview> getByAdequateMark(boolean adequateMark);
-
-    List<Interview> getByApplicationForm(ApplicationForm applicationForm);
-
-    int insertInterview(Interview interview);
+    Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
 
     int updateInterview(Interview interview);
 
