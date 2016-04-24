@@ -4,6 +4,7 @@ import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Interview;
+import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.service.impl.*;
 
 /**
@@ -40,22 +41,51 @@ public class ServiceFactory {
     }
 
     public static FormAnswerVariantService getFormAnswerVariantService() {
-        return new FormAnswerVariantServiceImpl(DaoFactory.getFormAnswerVariantDao(),DaoFactory.getFormQuestionDao());
+        return new FormAnswerVariantServiceImpl(DaoFactory.getFormAnswerVariantDao(), DaoFactory.getFormQuestionDao());
     }
 
     public static FormQuestionService getFormQuestionService() {
         return new FormQuestionServiceImpl(DaoFactory.getFormQuestionDao());
     }
 
-    public static InterviewService getInterviewService(){
+    public static InterviewService getInterviewService() {
         return new InterviewServiceImpl(DaoFactory.getInterviewDao());
     }
 
-    public static ScheduleTimePointService getScheduleTimePointService(){
+    public static NotificationTypeService getNotificationTypeService() {
+        return new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
+    }
+
+    public static QuestionTypeService getQuestionTypeService() {
+        return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
+    }
+
+//    public static ReportSerivce getReportSerivce() {
+//        return new ReportServiceImpl(DaoFactory.getReportDao()); // Don`t work WHY???
+//    }
+
+    public static ScheduleTimePointService getScheduleTimePointService() {
         return new ScheduleTimePointServiceImpl(DaoFactory.getScheduleTimePointDao());
     }
 
-    public static SocialInformationService getSocialInformationService(){
+    public static SocialInformationService getSocialInformationService() {
         return new SocialInformationServiceImpl(DaoFactory.getSocialInformationDao());
     }
+
+    public static SocialNetworkService getSocialNetworkService() {
+        return new SocialNetworkServiceImpl(DaoFactory.getSocialNetworkDao());
+    }
+
+    public static StatusService getStatusService() {
+        return new StatusServiceImpl(DaoFactory.getStatusDao());
+    }
+
+    public static TimePriorityTypeService getTimePriorityTypeService() {
+        return new TimePriorityTypeServiceImpl(DaoFactory.getTimePriorityDao());
+    }
+
+    public static UserTimePriorityService getUserTimePriorityService() {
+        return new UserTimePriorityServiceImpl(DaoFactory.getUserTimePriorityDao());
+    }
+
 }
