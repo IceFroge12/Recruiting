@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public interface UserTimePriorityDao {
 
-    UserTimePriority getByUserPriority(User user, ScheduleTimePoint scheduleTimePoint);
+    UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint);
 
     Long insertUserPriority(UserTimePriority userTimePriority);
 
@@ -19,5 +19,5 @@ public interface UserTimePriorityDao {
 
     int deleteUserPriority(UserTimePriority userTimePriority);
 
-    Set<UserTimePriority> getAllTimePoints( );
+    Set<UserTimePriority> getAllUserTimePriorities();
 }
