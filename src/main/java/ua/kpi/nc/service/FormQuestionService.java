@@ -1,10 +1,8 @@
 package ua.kpi.nc.service;
 
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
-import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.*;
 
+import java.sql.Connection;
 import java.util.Set;
 
 /**
@@ -18,36 +16,19 @@ import java.util.Set;
  */
 public interface FormQuestionService {
 
-    /**
-     * Add new question to the form
-     * @param formQuestion
-     * @return
-     */
-    Long addQuestion(FormQuestion formQuestion, Role role);
+    boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role);
 
-    boolean deleteQuestion(FormQuestion formQuestion);
+    boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role, Set<FormAnswerVariant> formAnswerVariants);
 
-    boolean changeQuestion(FormQuestion formQuestion);
+    int deleteFormQuestion(FormQuestion formQuestion);
 
-    Long addAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
+    boolean addRole(FormQuestion formQuestion, Role role);
 
-    boolean removeAnswer(FormQuestion formQuestion, FormAnswer formAnswer);
-
-    boolean addRole(FormAnswer formAnswer, Role role);
-
-    boolean deleteRole(FormAnswer formAnswer, Role role);
-
-    boolean setFormQuestionType(FormQuestion formQuestion, QuestionType formQuestionType);
-
-    boolean setStatusQuestionType(FormQuestion formQuestion, boolean status);
-
-    boolean setMandatory(FormQuestion formQuestion, boolean mandatory);
+    int deleteRole(FormQuestion formQuestion, Role role);
 
     FormQuestion getById(Long id);
 
-    Set<FormQuestion> getEnableFormAnswer();
-
-    Set<FormQuestion> getDisableFormAnswer();
+    Set<FormQuestion> getByRole(Role role);
 
     Set<FormQuestion> getAll();
 }

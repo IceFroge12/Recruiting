@@ -7,7 +7,7 @@ import ua.kpi.nc.service.RecruitmentService;
 import java.util.List;
 
 /**
- * Created by Chalienko on 22.04.2016.
+ * @author Chalienko  22.04.2016.
  */
 public class RecruitmentServiceImpl implements RecruitmentService {
 
@@ -23,7 +23,28 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     }
 
     @Override
+    public Recruitment getRecruitmentByName(String name) {
+        return recruitmentDAO.getRecruitmentByName(name);
+    }
+
+    @Override
+    public int updateRecruitment(Recruitment recruitment) {
+        return recruitmentDAO.updateRecruitment(recruitment);
+    }
+
+    @Override
+    public boolean addRecruitment(Recruitment recruitment) {
+        return recruitmentDAO.addRecruitment(recruitment);
+    }
+
+    @Override
+    public int deleteRecruitment(Recruitment recruitment) {
+        return recruitmentDAO.deleteRecruitment(recruitment);
+    }
+
+    @Override
     public List<Recruitment> getAll() {
         return recruitmentDAO.getAll();
     }
+
 }

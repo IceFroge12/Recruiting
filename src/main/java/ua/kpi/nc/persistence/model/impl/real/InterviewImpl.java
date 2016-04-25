@@ -78,11 +78,11 @@ public class InterviewImpl implements Interview {
 		this.date = date;
 	}
 
-	public User getUser() {
+	public User getInterviewer() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setInterviewer(User user) {
 		this.user = user;
 	}
 
@@ -109,17 +109,6 @@ public class InterviewImpl implements Interview {
 	public void setApplicationForm(ApplicationForm applicationForm) {
 		this.applicationForm = applicationForm;
 	}
-
-	@Override
-	public Set<FormAnswer> getFormAnswers() {
-		return answers;
-	}
-
-	@Override
-	public void setFormAnswers(Set<FormAnswer> answers) {
-		this.answers = answers;
-	}
-
 
 	@Override
 	public boolean equals(Object o) {

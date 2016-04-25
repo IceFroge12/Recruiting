@@ -1,20 +1,24 @@
 package ua.kpi.nc.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ua.kpi.nc.persistence.dao.DaoFactory;
+import ua.kpi.nc.persistence.dao.DataSourceFactory;
+import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.dao.InterviewDao;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.service.InterviewService;
 
-import java.sql.Timestamp;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Created by Алексей on 23.04.2016.
+ * @author Desparete Housewives
  */
-public class InterviewServiceImpl implements InterviewService{
+public class InterviewServiceImpl implements InterviewService {
+
+    private static Logger log = LoggerFactory.getLogger(InterviewServiceImpl.class);
 
     InterviewDao interviewDao;
 
@@ -23,43 +27,49 @@ public class InterviewServiceImpl implements InterviewService{
     }
 
     @Override
-    public Interview getInterviewById(Long id) {
+    public Set<Interview> getAll() {
+        return interviewDao.getAll();
+    }
+
+    @Override
+    public Interview getById(Long id) {
         return interviewDao.getById(id);
     }
 
     @Override
-    public List<Interview> getInterviewsByMark(int mark) {
-        return interviewDao.getByMark(mark);
-    }
-
-    @Override
-    public List<Interview> getInterviewsByDate(Timestamp date) {
-        return interviewDao.getByDate(date);
-    }
-
-    @Override
-    public List<Interview> getInterviewsByInterviewer(User user) {
+    public Set<Interview> getByInterviewer(User user) {
         return interviewDao.getByInterviewer(user);
     }
 
     @Override
-    public List<Interview> getInterviewsByInterviewerRole(Role role) {
-        return interviewDao.getByInterviewerRole(role);
-    }
-
-    @Override
-    public List<Interview> getInterviewsByAdequateMark(boolean adequateMark) {
-        return interviewDao.getByAdequateMark(adequateMark);
-    }
-
-    @Override
-    public List<Interview> getInterviewsByApplicationForm(ApplicationForm applicationForm) {
+    public Set<Interview> getByApplicationForm(ApplicationForm applicationForm) {
         return interviewDao.getByApplicationForm(applicationForm);
     }
 
     @Override
-    public int insertInterview(Interview interview) {
-        return interviewDao.insertInterview(interview);
+    public Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role) {
+        return interviewDao.insertInterview(interview, applicationForm, interviewer, role);
+    }
+
+    @Override
+    public boolean insertInterviewWithAnswers(Interview interview, ApplicationForm applicationForm, User interviewer, Role role, Set<FormAnswer> formAnswers) {
+        try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+            connection.setAutoCommit(false);
+            Long generatedId = interviewDao.insertInterview(interview,applicationForm,interviewer,role, connection);
+            interview.setId(generatedId);
+            FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
+            for (FormAnswer formAnswer : formAnswers) {
+                formAnswerDao.insertFormAnswerForInterview(formAnswer, formAnswer.getFormQuestion(),
+                        formAnswer.getFormAnswerVariant(), interview, connection);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Cannot insert Interview with answers");
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -70,10 +80,5 @@ public class InterviewServiceImpl implements InterviewService{
     @Override
     public int deleteInterview(Interview interview) {
         return interviewDao.deleteInterview(interview);
-    }
-
-    @Override
-    public Set<Interview> getAllInterviews() {
-        return interviewDao.getAll();
     }
 }
