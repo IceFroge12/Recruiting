@@ -18,7 +18,7 @@ public class ServiceFactory {
 	}
 
 	public static RoleService getRoleService() {
-		return new RoleServiceImpl();
+		return new RoleServiceImpl(DaoFactory.getRoleDao());
 	}
 
 	public static RecruitmentService getRecruitmentService() {

@@ -3,7 +3,6 @@ package ua.kpi.nc.persistence.model;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-
 public interface Recruitment extends Serializable {
 
     Long getId();

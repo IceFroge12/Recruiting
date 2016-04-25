@@ -1,4 +1,4 @@
-package ua.kpi.nc.controller;
+package ua.kpi.nc.controller.admin;
 
 /**
  * Created by dima on 23.04.16.

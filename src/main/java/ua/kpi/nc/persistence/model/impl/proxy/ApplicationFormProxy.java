@@ -1,16 +1,11 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
-import java.sql.Timestamp;
-import java.util.Set;
-
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Recruitment;
-import ua.kpi.nc.persistence.model.Status;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.service.ApplicationFormService;
+
+import java.sql.Timestamp;
+import java.util.Set;
 
 public class ApplicationFormProxy implements ApplicationForm {
 

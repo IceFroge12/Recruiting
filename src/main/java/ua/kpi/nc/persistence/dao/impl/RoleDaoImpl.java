@@ -11,6 +11,7 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
@@ -38,6 +39,26 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
             log.trace("Looking for role with title = " + title);
         }
         return this.getJdbcTemplate().queryWithParameters("SELECT role.id, role.role FROM public.role where role.role = ?;", new RoleExtractor(), title);
+    }
+
+    @Override
+    public Set<Role> getAll() {
+        return null;
+    }
+
+    @Override
+    public Long insertRole(Role role) {
+        return null;
+    }
+
+    @Override
+    public int updateRole(Role role) {
+        return 0;
+    }
+
+    @Override
+    public int deleteRole(Role role) {
+        return 0;
     }
 
     private static final class RoleExtractor implements ResultSetExtractor<Role> {

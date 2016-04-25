@@ -1,5 +1,7 @@
 package ua.kpi.nc.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import java.sql.Timestamp;
 import java.util.Set;
 

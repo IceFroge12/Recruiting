@@ -134,9 +134,9 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             recruitment.setStudentsOnInterview(resultSet.getInt("students_on_interview"));
             recruitment.setTimeInterviewSoft(resultSet.getInt("time_interview_soft"));
             recruitment.setTimeInterviewTech(resultSet.getInt("time_interview_tech"));
-            recruitment.setNumberSoftInterviewers(resultSet.getInt("number_soft_interview"));
-            recruitment.setNumberTechInterviewers(resultSet.getInt("number_tech_interview"));
-            recruitment.setNumberOfDays(resultSet.getInt("number_of_hours"));
+//            recruitment.setNumberSoftInterviewers(resultSet.getInt("number_soft_interview"));
+//            recruitment.setNumberTechInterviewers(resultSet.getInt("number_tech_interview"));
+//            recruitment.setNumberOfDays(resultSet.getInt("number_of_hours"));
             return recruitment;
         }
     }

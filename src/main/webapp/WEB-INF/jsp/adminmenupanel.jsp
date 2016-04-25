@@ -5,7 +5,7 @@
                     class="glyphicon glyphicon-home"></i> Main</a>
             <a href="staffmanagement" class="btn btn-primary left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-user"></i> Staff management</a>
-            <a href="studentManagement.html" class="btn btn-primary left-menu-btn menu-text"><i
+            <a href="studentmanagement" class="btn btn-primary left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-eye-open"></i> Student management</a>
             <a href="Scheduling.html" class="btn btn-primary left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-calendar"></i> Scheduling</a>

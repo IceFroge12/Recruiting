@@ -1,5 +1,7 @@
 package ua.kpi.nc.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,6 @@ import java.io.Serializable;
  */
 public interface FormAnswer extends Serializable {
     public Long getId();
-
 
     public void setId(Long id);
 

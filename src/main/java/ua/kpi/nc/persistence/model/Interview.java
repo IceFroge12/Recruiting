@@ -8,7 +8,9 @@ import java.util.Set;
  * Created by Алексей on 21.04.2016.
  */
 public interface Interview extends Serializable{
+
     public Long getId();
+
     public void setId(Long id);
 
     public int getMark();

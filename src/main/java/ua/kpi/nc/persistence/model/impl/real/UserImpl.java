@@ -90,6 +90,13 @@ public class UserImpl implements User {
         this.roles = roles;
     }
 
+    public UserImpl(String email, String firstName, String secondName, String lastName) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+    }
+
     @Override
     public Long getId() {
         return id;

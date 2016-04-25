@@ -13,7 +13,7 @@ public class SenderServiceImpl implements SenderService {
     @Value("${sender.password}")
     private String password;
 
-    private Sender tlsSender = new Sender(email, password);
+    private Sender tlsSender = new Sender("dmytromyna@gmail.com", "");
 
     @Override
     public void send(String email, String subject, String text) {

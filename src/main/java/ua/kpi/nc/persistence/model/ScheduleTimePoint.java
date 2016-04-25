@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 public interface ScheduleTimePoint extends Serializable {
+
 	public Long getId();
 
 	public void setId(Long id);

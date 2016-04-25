@@ -1,5 +1,8 @@
 package ua.kpi.nc.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 /**
@@ -11,14 +14,16 @@ public interface SocialInformation extends Serializable{
 
     void setId(Long id);
 
+    @JsonIgnore
     String getAccessInfo();
 
     void setAccessInfo(String accessInfo);
 
+    @JsonIgnore
     User getUser();
 
     void setUser(User user);
-
+    @JsonIgnore
     SocialNetwork getSocialNetwork();
 
     void setSocialNetwork(SocialNetwork socialNetwork);

@@ -1,5 +1,8 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
@@ -9,10 +12,13 @@ import java.sql.Timestamp;
 /**
  @author Vova Korzh
  **/
+
 public class RecruitmentProxy implements Recruitment {
 
     private Long id;
+
     private RecruitmentImpl recruitment;
+
 
     private RecruitmentService recruitmentService;
 
@@ -34,6 +40,7 @@ public class RecruitmentProxy implements Recruitment {
         this.id = id;
 
     }
+
 
     @Override
     public String getName() {
