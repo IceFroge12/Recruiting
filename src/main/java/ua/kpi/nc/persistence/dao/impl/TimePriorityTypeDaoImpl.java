@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author Korzh
  */
 public class TimePriorityTypeDaoImpl extends JdbcDaoSupport implements TimePriorityTypeDao {
-    private static Logger log = LoggerFactory.getLogger(EmailTemplateDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger( TimePriorityTypeDaoImpl.class.getName());
     private static final String GET_BY_ID = "SELECT t.id, t.choice FROM public.time_priority_type t WHERE t.id = ?;";
     private static final String GET_BY_PRIORITY = "SELECT t.id, t.choice FROM public.time_priority_type t WHERE t.choice = ?;";
 

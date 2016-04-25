@@ -38,7 +38,7 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
             "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id);";
 
     @Override
-    public UserTimePriority getByUserPriority(User user, ScheduleTimePoint scheduleTimePoint) {
+    public UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint) {
         if (log.isTraceEnabled()) {
             log.trace("Looking for User time priority  with id user,  id  scheduleTimePoint = " + user.getId() + scheduleTimePoint.getId());
         }
@@ -74,7 +74,7 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     }
 
     @Override
-    public Set<UserTimePriority> getAllTimePoints() {
+    public Set<UserTimePriority> getAllUserTimePriorities() {
         if (log.isTraceEnabled()) {
             log.trace("Getting all User time priorities ");
         }

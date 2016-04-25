@@ -6,6 +6,8 @@ import ua.kpi.nc.persistence.dao.RoleDao;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.service.RoleService;
 
+import java.util.Set;
+
 /**
  * Created by Chalienko on 13.04.2016.
  */
@@ -27,5 +29,25 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleByTitle(String title) {
         return roleDao.getByTitle(title);
+    }
+
+    @Override
+    public Set<Role> getAll() {
+        return roleDao.getAll();
+    }
+
+    @Override
+    public Long insertRole(Role role) {
+        return roleDao.insertRole(role);
+    }
+
+    @Override
+    public int updateRole(Role role) {
+        return roleDao.updateRole(role);
+    }
+
+    @Override
+    public int deleteRole(Role role) {
+        return roleDao.deleteRole(role);
     }
 }

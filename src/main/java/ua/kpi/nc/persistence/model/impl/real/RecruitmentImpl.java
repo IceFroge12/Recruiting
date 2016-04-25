@@ -46,8 +46,8 @@ public class RecruitmentImpl implements Recruitment {
     }
 
     public RecruitmentImpl(int numberOfDays, String name, Timestamp startDate, Timestamp endDate,
-                           int maxGeneralGroup, int maxAdvancedGroup, Timestamp registrationDeadline, Timestamp
-                                   scheduleChoicesDeadline, int studentsOnInterview, int timeInterviewTech,
+                           int maxGeneralGroup, int maxAdvancedGroup, Timestamp registrationDeadline,
+                           Timestamp scheduleChoicesDeadline, int studentsOnInterview, int timeInterviewTech,
                            int timeInterviewSoft, int numberTechInterviwers, int numberSoftInterviwers) {
         this.numberOfDays = numberOfDays;
         this.name = name;
@@ -62,6 +62,26 @@ public class RecruitmentImpl implements Recruitment {
         this.timeInterviewSoft = timeInterviewSoft;
         this.numberTechInterviewers = numberTechInterviwers;
         this.numberSoftInterviewers = numberSoftInterviwers;
+    }
+
+    public RecruitmentImpl(Long id, String name, Timestamp startDate, Timestamp endDate, int maxGeneralGroup,
+                           int maxAdvancedGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline,
+                           int studentsOnInterview, int timeInterviewTech, int timeInterviewSoft,
+                           int numberTechInterviewers, int numberSoftInterviewers, int numberOfDays) {
+        this.id = id;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.maxGeneralGroup = maxGeneralGroup;
+        this.maxAdvancedGroup = maxAdvancedGroup;
+        this.registrationDeadline = registrationDeadline;
+        this.scheduleChoicesDeadline = scheduleChoicesDeadline;
+        this.studentsOnInterview = studentsOnInterview;
+        this.timeInterviewTech = timeInterviewTech;
+        this.timeInterviewSoft = timeInterviewSoft;
+        this.numberTechInterviewers = numberTechInterviewers;
+        this.numberSoftInterviewers = numberSoftInterviewers;
+        this.numberOfDays = numberOfDays;
     }
 
     @Override

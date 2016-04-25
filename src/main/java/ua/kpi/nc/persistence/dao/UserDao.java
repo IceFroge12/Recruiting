@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Connection;
@@ -28,6 +29,10 @@ public interface UserDao {
     boolean addRole(User user, Role role, Connection connection);
 
     int deleteRole(User user, Role role);
+
+    Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+
+    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     Set<User> getAllStudents();
 

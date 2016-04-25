@@ -4,6 +4,7 @@ import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.service.FormAnswerVariantService;
+import ua.kpi.nc.service.ServiceFactory;
 
 /**
  @author Vova Korzh
@@ -29,40 +30,37 @@ public class FormAnswerVariantProxy implements FormAnswerVariant{
     @Override
     public void setId(Long id) {
         this.id = id;
-
     }
 
     @Override
     public String getAnswer() {
-        if (formAnswerVariant == null) {
-            formAnswerVariant = downloadRecruitment();
-        }
+        checkFormAnswerVariant();
         return formAnswerVariant.getAnswer();
     }
 
     @Override
     public void setAnswer(String answer) {
-        if (formAnswerVariant == null) {
-            formAnswerVariant = downloadRecruitment();
-        }
+        checkFormAnswerVariant();
         formAnswerVariant.setAnswer(answer);
     }
 
     public FormQuestion getFormQuestion() {
-        if (formAnswerVariant == null) {
-            formAnswerVariant = downloadRecruitment();
-        }
+        checkFormAnswerVariant();
         return formAnswerVariant.getFormQuestion();
     }
 
     public void setFormQuestion(FormQuestion formQuestion) {
-        if (formAnswerVariant == null) {
-            formAnswerVariant = downloadRecruitment();
-        }
+        checkFormAnswerVariant();
         formAnswerVariant.setFormQuestion(formQuestion);
     }
 
+    private void checkFormAnswerVariant(){
+        if (formAnswerVariant == null) {
+            formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
+            formAnswerVariant = downloadRecruitment();
+        }
+    }
     private FormAnswerVariantImpl downloadRecruitment() {
-        return (FormAnswerVariantImpl) formAnswerVariantService.getFormAnswerVariantById(id);
+        return (FormAnswerVariantImpl) formAnswerVariantService.getAnswerVariantById(id);
     }
 }

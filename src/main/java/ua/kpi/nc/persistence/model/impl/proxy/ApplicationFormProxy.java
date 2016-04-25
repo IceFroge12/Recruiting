@@ -3,6 +3,7 @@ package ua.kpi.nc.persistence.model.impl.proxy;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.service.ApplicationFormService;
+import ua.kpi.nc.service.ServiceFactory;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -34,130 +35,105 @@ public class ApplicationFormProxy implements ApplicationForm {
 
 	@Override
 	public Status getStatus() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getStatus();
 	}
 
 	@Override
 	public void setStatus(Status status) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setStatus(status);
 	}
 
 	@Override
 	public boolean isActive() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.isActive();
 	}
 
 	@Override
 	public void setActive(boolean active) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setActive(active);
 	}
 
 	@Override
 	public Recruitment getRecruitment() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getRecruitment();
 	}
 
 	@Override
 	public void setRecruitment(Recruitment recruitment) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setRecruitment(recruitment);
 	}
 
 	@Override
 	public String getPhotoScope() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getPhotoScope();
 	}
 
 	@Override
 	public void setPhotoScope(String photoScope) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setPhotoScope(photoScope);
 	}
 
 	@Override
 	public User getUser() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getUser();
 	}
 
 	@Override
 	public void setUser(User user) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setUser(user);
 	}
 
 	@Override
 	public Timestamp getDateCreate() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getDateCreate();
 	}
 
 	@Override
 	public void setDateCreate(Timestamp dateCreate) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setDateCreate(dateCreate);
 	}
 
 	@Override
 	public Set<Interview> getInterviews() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getInterviews();
 	}
 
 	@Override
 	public void setInterviews(Set<Interview> interviews) {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		applicationFormImpl.setInterviews(interviews);
 	}
 
 	@Override
 	public Set<FormAnswer> getAnswers() {
-		if (applicationFormImpl == null) {
-			applicationFormImpl = downloadApplicationForm(id);
-		}
+		checkApplicationForm();
 		return applicationFormImpl.getAnswers();
 	}
 
 	@Override
 	public void setAnswers(Set<FormAnswer> answers) {
+		checkApplicationForm();
+		applicationFormImpl.setAnswers(answers);
+	}
+
+	private void checkApplicationForm(){
 		if (applicationFormImpl == null) {
+			service = ServiceFactory.getApplicationFormService();
 			applicationFormImpl = downloadApplicationForm(id);
 		}
-		applicationFormImpl.setAnswers(answers);
 	}
 
 	private ApplicationFormImpl downloadApplicationForm(Long id) {

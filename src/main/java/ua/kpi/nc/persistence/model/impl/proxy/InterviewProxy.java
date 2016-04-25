@@ -1,15 +1,12 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
-import java.sql.Timestamp;
-import java.util.Set;
-
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.service.InterviewService;
+import ua.kpi.nc.service.ServiceFactory;
+
+import java.sql.Timestamp;
+import java.util.Set;
 
 public class InterviewProxy implements Interview {
 
@@ -19,7 +16,8 @@ public class InterviewProxy implements Interview {
 
 	private InterviewImpl interview;
 
-	private InterviewService service;
+	private InterviewService interviewService;
+	private Set<FormAnswer> answers;
 
 	public InterviewProxy() {
 	}
@@ -27,6 +25,16 @@ public class InterviewProxy implements Interview {
 	public InterviewProxy(Long id) {
 		super();
 		this.id = id;
+	}
+
+	@Override
+	public Set<FormAnswer> getAnswers() {
+		return answers;
+	}
+
+	@Override
+	public void setAnswers(Set<FormAnswer> answers) {
+		this.answers = answers;
 	}
 
 	public Long getId() {
@@ -38,105 +46,73 @@ public class InterviewProxy implements Interview {
 	}
 
 	public int getMark() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getMark();
 	}
 
 	public void setMark(int mark) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setMark(mark);
 	}
 
 	public Timestamp getDate() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getDate();
 	}
 
 	public void setDate(Timestamp date) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setDate(date);
 	}
 
-	public User getUser() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
-		return interview.getUser();
+	public User getInterviewer() {
+		checkInterview();
+		return interview.getInterviewer();
 	}
 
-	public void setUser(User user) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
-		interview.setUser(user);
+	public void setInterviewer(User user) {
+		checkInterview();
+		interview.setInterviewer(user);
 	}
 
 	public Role getRole() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getRole();
 	}
 
 	public void setRole(Role role) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setRole(role);
 	}
 
 	public boolean isAdequateMark() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.isAdequateMark();
 	}
 
 	public void setAdequateMark(boolean adequateMark) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setAdequateMark(adequateMark);
 	}
 
 	public ApplicationForm getApplicationForm() {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		return interview.getApplicationForm();
 	}
 
 	public void setApplicationForm(ApplicationForm applicationForm) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
+		checkInterview();
 		interview.setApplicationForm(applicationForm);
 	}
-
-	public Set<FormAnswer> getFormAnswers() {
+	private void checkInterview(){
 		if (interview == null) {
+			interviewService = ServiceFactory.getInterviewService();
 			interview = downloadInterview();
 		}
-		return interview.getFormAnswers();
-	}
-
-	public void setFormAnswers(Set<FormAnswer> answers) {
-		if (interview == null) {
-			interview = downloadInterview();
-		}
-		interview.setFormAnswers(answers);
 	}
 
 	private InterviewImpl downloadInterview() {
-		return (InterviewImpl) service.getInterviewById(id);
+		return (InterviewImpl) interviewService.getById(id);
 	}
 
 }

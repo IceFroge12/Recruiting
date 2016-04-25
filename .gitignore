@@ -47,6 +47,7 @@ hs_err_pid*
 /out/
 /target/
 /src/main/resources/app.properties
+/RecrutingSystem.iml
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

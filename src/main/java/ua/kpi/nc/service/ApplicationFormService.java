@@ -3,6 +3,7 @@ package ua.kpi.nc.service;
 import java.util.Set;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.User;
 
 /**
@@ -20,7 +21,9 @@ public interface ApplicationFormService {
 
 	int deleteApplicationForm(ApplicationForm applicationForm);
 
-	Long insertApplicationForm(ApplicationForm applicationForm, User user);
+	boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers);
 
 	int updateApplicationForm(ApplicationForm applicationForm);
+
+	Set<ApplicationForm> getAll();
 }

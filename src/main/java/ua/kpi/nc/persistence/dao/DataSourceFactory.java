@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 /**
  * Created by Chalienko on 20.04.2016.
  */
-
 public class DataSourceFactory {
     private static PGPoolingDataSource dataSource;
     private static DataSourceFactory dataSourceFactory;

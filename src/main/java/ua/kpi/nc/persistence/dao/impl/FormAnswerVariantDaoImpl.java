@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.impl.proxy.FormQuestionProxy;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -30,10 +31,10 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
 
     private static final String SQL_GET_BY_QUESTION_ID = "SELECT id, answer, id_question from \"form_answer_variant\" where id_question=?;";
 
-    private static final String SQL_INSERT = "INSERT INTO \"form_answer_variant\"(id, answer, id_question) VALUES (?,?,?);";
+    private static final String SQL_INSERT = "INSERT INTO \"form_answer_variant\"(answer, id_question) VALUES (?,?);";
 
     private static final String SQL_UPDATE = "UPDATE \"form_answer_variant\" " +
-            "SET id = ? , answer = ?, id_question = ? WHERE id = ?;";
+            "SET answer = ?, id_question = ? WHERE id = ?;";
 
     private static final String SQL_DELETE = "DELETE FROM \"form_answer_variant\" WHERE \"form_answer_variant\".id = ?;";
 
@@ -48,20 +49,21 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
     }
 
     @Override
-    public FormAnswerVariant getByQuestionId(Long id) {
+    public Set<FormAnswerVariant> getByQuestionId(Long id) {
         if (log.isInfoEnabled()) {
             log.info("Looking for FormAnswerVarian with QuestionId = " + id);
         }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_QUESTION_ID, new FormAnswerVariantExtractor(), id);
+        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_QUESTION_ID, new FormAnswerVariantExtractor(), id);
     }
 
     @Override
-    public Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection) {
+    public Long insertFormAnswerVariant(FormAnswerVariant formatVariant, FormQuestion formQuestion,
+                                        Connection connection) {
         if (log.isInfoEnabled()) {
             log.info("Insert FormAnswerVariant with answer = " + formatVariant.getAnswer());
         }
         return this.getJdbcTemplate().insert(SQL_INSERT, connection, formatVariant.getAnswer(),
-                formatVariant.getFormQuestion().getId());
+                formQuestion.getId());
     }//Уточнить с транзакциями
 
     @Override
@@ -70,7 +72,7 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
             log.info("Update FormAnswerVariant with answer = " + formAnswerVariant.getAnswer());
         }
         return this.getJdbcTemplate().update(SQL_UPDATE, formAnswerVariant.getAnswer(),
-                formAnswerVariant.getFormQuestion().getId());
+                formAnswerVariant.getFormQuestion().getId(), formAnswerVariant.getId());
     }
 
     @Override

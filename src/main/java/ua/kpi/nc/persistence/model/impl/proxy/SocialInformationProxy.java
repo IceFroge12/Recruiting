@@ -74,6 +74,7 @@ public class SocialInformationProxy implements SocialInformation {
 
     private void checkSocialInformationForExist(){
         if (socialInformation == null) {
+            socialInformationService = ServiceFactory.getSocialInformationService();
             socialInformation = downloadSocialInformation();
         }
     }

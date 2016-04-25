@@ -1,9 +1,14 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
+import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.FormQuestionType;
+import ua.kpi.nc.persistence.model.QuestionType;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.FormQuestionService;
+import ua.kpi.nc.service.ServiceFactory;
+
+import java.util.Set;
 
 /**
  @author Korzh
@@ -28,26 +33,66 @@ public class FormQuestionProxy implements FormQuestion{
     }
 
     @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Set<FormAnswer> getAnswers() {
+        checkFormQuestion();
+        return formQuestion.getAnswers();
+    }
+
+    @Override
+    public void setAnswers(Set<FormAnswer> answers) {
+        checkFormQuestion();
+        formQuestion.setAnswers(answers);
+    }
+
+    @Override
+    public Set<Role> getRoles() {
+        checkFormQuestion();
+        return formQuestion.getRoles();
+    }
+
+    @Override
+    public void setRoles(Set<Role> roles) {
+        checkFormQuestion();
+        formQuestion.setRoles(roles);
+    }
+
+    @Override
     public String getTitle() {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         return formQuestion.getTitle();
     }
 
-    public FormQuestionType getFormQuestionType() {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
-        return formQuestion.getFormQuestionType();
+    @Override
+    public void setTitle(String title) {
+        checkFormQuestion();
+        formQuestion.setTitle(title);
+    }
+
+    public QuestionType getQuestionType() {
+        checkFormQuestion();
+        return formQuestion.getQuestionType();
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        checkFormQuestion();
+        formQuestion.setQuestionType(questionType);
     }
 
     @Override
     public boolean isEnable() {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         return formQuestion.isEnable();
+    }
+
+    @Override
+    public void setEnable(boolean enable) {
+        checkFormQuestion();
+        formQuestion.setEnable(enable);
     }
 
     @Override
@@ -56,41 +101,17 @@ public class FormQuestionProxy implements FormQuestion{
     }
 
     @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
-        formQuestion.setTitle(title);
-    }
-
-    public void setFormQuestionType(FormQuestionType formQuestionType) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
-        formQuestion.setFormQuestionType(formQuestionType);
-    }
-
-    @Override
-    public void setEnable(boolean enable) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
-        formQuestion.setEnable(enable);
-    }
-
-    @Override
     public void setMandatory(boolean mandatory) {
-        if (formQuestion == null) {
-            formQuestion = downloadQuestion();
-        }
+        checkFormQuestion();
         formQuestion.setMandatory(mandatory);
     }
+    private void checkFormQuestion(){
+        if (formQuestion == null) {
+            formQuestionService = ServiceFactory.getFormQuestionService();
+            formQuestion = downloadQuestion();
+        }
+    }
     private FormQuestionImpl downloadQuestion() {
-        return (FormQuestionImpl) formQuestionService.getFormQuestionById(id);
+        return (FormQuestionImpl) formQuestionService.getById(id);
     }
 }

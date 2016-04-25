@@ -1,48 +1,47 @@
 package ua.kpi.nc.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
 /**
  * Created by Алексей on 21.04.2016.
  */
-public interface ApplicationForm {
+public interface ApplicationForm extends Serializable {
 
-	public Long getId();
+	Long getId();
 
-	public void setId(Long id);
+	void setId(Long id);
 
-	public Status getStatus();
+	Status getStatus();
 
-	public void setStatus(Status status);
+	void setStatus(Status status);
 
-	public boolean isActive();
+	boolean isActive();
 
-	public void setActive(boolean active);
+	void setActive(boolean active);
 
-	public Recruitment getRecruitment();
+	Recruitment getRecruitment();
 
-	public void setRecruitment(Recruitment recruitment);
+	void setRecruitment(Recruitment recruitment);
 
-	public String getPhotoScope();
+	String getPhotoScope();
 
-	public void setPhotoScope(String photoScope);
+	void setPhotoScope(String photoScope);
 
-	public User getUser();
+	User getUser();
 
-	public void setUser(User user);
+	void setUser(User user);
 
-	public Timestamp getDateCreate();
+	Timestamp getDateCreate();
 
-	public void setDateCreate(Timestamp dateCreate);
+	void setDateCreate(Timestamp dateCreate);
 
-	public Set<Interview> getInterviews();
+	Set<Interview> getInterviews();
 
-	public void setInterviews(Set<Interview> interviews);
+	void setInterviews(Set<Interview> interviews);
 
-	public Set<FormAnswer> getAnswers();
+	Set<FormAnswer> getAnswers();
 
-	public void setAnswers(Set<FormAnswer> answers);
+	void setAnswers(Set<FormAnswer> answers);
 }

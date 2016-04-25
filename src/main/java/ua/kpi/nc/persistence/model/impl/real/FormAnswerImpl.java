@@ -35,10 +35,6 @@ public class FormAnswerImpl implements FormAnswer {
         this.interview = interview;
     }
 
-    static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public Long getId() {
         return id;
     }
