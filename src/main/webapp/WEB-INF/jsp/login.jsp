@@ -1,32 +1,19 @@
 <%@page session="true" %>
-<html>
-<head>
-    <title>Login Page</title>
-    <script src="/js/jquery-1.12.3.min.js"></script>
-    <script src="/js/authentication.js"></script>
-
-<head>
-<body>
-<h1>Spring Security Login Form (Database Authentication)</h1>
-<div id="login">
-
-    <h3>Login with Username and Password</h3>
-
-        <table>
-            <tr>
-                <td>Email:</td>
-                <td><input id="username" type='text' name='email'></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><input id="password" type='password' name='password'/></td>
-            </tr>
-            <tr>
-                <td colspan='2'><input name="submit" href="/user" type="submit" value="submit"/></td>
-            </tr>
-        </table>
-    <button id="loginButton" type="submit">Login</button>
-
+<html ng-app="recruiting">
+<head lang="en">
+    <title>Stateless Authentication Example</title>
+    <script src="/js/angular.js"></script>
+    <script src="/js/controllers.js"></script>
+</head>
+<body ng-controller="AuthCtrl" ng-init="init()" style="padding: 10% 20%">
+<div ng-hide="authenticated">
+    Login as user/user or admin/admin:<br>
+    <label for="un">Email:</label><input id="un" type="text" ng-model="email"><br>
+    <label for="pw">Password:</label><input id="pw" type="password" ng-model="password"><br>
+    <button ng-click="login()">Login</button>
+</div>
+<div ng-show="authenticated">
+    Token content: <pre>{{token}}</pre>
 </div>
 </body>
 </html>

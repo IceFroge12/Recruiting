@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,17 +23,16 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
 
     private static AuthenticationSuccessHandlerService customAuthenticationSuccessHandler;
 
-    private AuthenticationSuccessHandlerService(){
+    private AuthenticationSuccessHandlerService() {
 
     }
 
-    public static AuthenticationSuccessHandlerService getInstance(){
-        if(customAuthenticationSuccessHandler==null){
+    public static AuthenticationSuccessHandlerService getInstance() {
+        if (customAuthenticationSuccessHandler == null) {
             customAuthenticationSuccessHandler = new AuthenticationSuccessHandlerService();
         }
         return customAuthenticationSuccessHandler;
     }
-
 
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -41,26 +41,23 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException,
             ServletException, IOException {
-        HttpSession session = request.getSession();
+        response.addHeader("redirectURl", "/student");
 
-        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        session.setAttribute("uname", authUser.getUsername());
-        session.setAttribute("authorities", authentication.getAuthorities());
-
-        String targetUrl = determineTargetUrl(authentication);
-        redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(Authentication authentication) {
-        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (authorities.contains("ROLE_ADMIN")) {
-            return "/admin";
-        } else if (authorities.contains("ROLE_USER")) {
-            return "/user";
-        } else {
-            throw new IllegalStateException();
-        }
+
+    private String determineTargetUrl(Authentication authentication) {
+//        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+//        if (authorities.contains("ROLE_ADMIN")) {
+//            return "/admin";
+//        } else if (authorities.contains("ROLE_STUDENT")) {
+//            return "/student";
+//        } else {
+//            throw new IllegalStateException();
+//        }
+        return "";
     }
+
 
 }
 

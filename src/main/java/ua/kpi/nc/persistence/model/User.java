@@ -1,5 +1,8 @@
 package ua.kpi.nc.persistence.model;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import ua.kpi.nc.service.UserService;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -7,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-public interface User extends Serializable {
+public interface User extends Serializable, UserDetails {
 
     Long getId();
 
@@ -52,4 +55,6 @@ public interface User extends Serializable {
     Set<SocialInformation> getSocialInformations();
 
     void setSocialInformations(Set<SocialInformation> socialInformations);
+
+    Long getExpireDate();
 }

@@ -2,7 +2,8 @@ package ua.kpi.nc.controller.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import ua.kpi.nc.persistence.model.User;
+
 
 import java.util.Collection;
 

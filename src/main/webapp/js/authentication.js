@@ -12,15 +12,15 @@ $(document).ready(function () {
 
         
         $.ajax({
-            url: '/login/auth',
+            url: 'loginIn',
             dataType: "json",
             type: 'POST',
             data: user,
             success: function (data) {
-                console.log("success edit")
+                console.log(data);
             }
-            
-        });
+
+        })
         
     });
 

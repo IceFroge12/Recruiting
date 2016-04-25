@@ -6,15 +6,22 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import ua.kpi.nc.controller.auth.NoOpAuthenticationManager;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
 import ua.kpi.nc.controller.auth.UserAuthentication;
+import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.impl.real.UserImpl;
+import ua.kpi.nc.service.util.AuthenticationSuccessHandlerService;
 import ua.kpi.nc.service.util.UserAuthService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,12 +40,13 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
         this.userAuthService = userAuthService;
         this.tokenAuthenticationService = tokenAuthenticationService;
         setAuthenticationManager(authManager);
+        setAuthenticationSuccessHandler(AuthenticationSuccessHandlerService.getInstance());
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-        final User user = userAuthService.loadUserByUsername((String) request.getAttribute("username"));
+        final User user = new ObjectMapper().readValue(request.getInputStream(), UserImpl.class);
         final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
         return getAuthenticationManager().authenticate(loginToken);
@@ -54,8 +62,15 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 
         // Add the custom token as HTTP header to the response
         tokenAuthenticationService.addAuthentication(response, request, userAuthentication);
+        String token = response.getHeader("X-AUTH-TOKEN");
 
         // Add the authentication to the Security context
         SecurityContextHolder.getContext().setAuthentication(userAuthentication);
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        super.doFilter(req, res, chain);
     }
 }

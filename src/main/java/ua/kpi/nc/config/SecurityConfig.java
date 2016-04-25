@@ -1,6 +1,8 @@
 package ua.kpi.nc.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +18,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ua.kpi.nc.config.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.config.filter.StatelessLoginFilter;
+import ua.kpi.nc.controller.auth.DataBaseAuthenticationProvider;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
 import ua.kpi.nc.service.util.AuthenticationSuccessHandlerService;
 import ua.kpi.nc.service.util.UserAuthService;
@@ -26,12 +29,15 @@ import ua.kpi.nc.service.util.UserAuthService;
 
 @Configuration
 @EnableWebSecurity
+@ComponentScan("nc.kpi.ua")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    DataBaseAuthenticationProvider dataBaseAuthenticationProvider;
 
     private UserAuthService userAuthService = UserAuthService.getInstance();
 
     private TokenAuthenticationService tokenAuthenticationService;
-
 
 
     public SecurityConfig() {
@@ -43,17 +49,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login/auth").permitAll()
-                .anyRequest().permitAll().and()
-                .addFilterBefore(new StatelessLoginFilter("/login/auth", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .antMatchers("/").permitAll()
+                .antMatchers("/login**").permitAll()
+                .antMatchers("/student/**").hasRole("STUDENT")
+                .antMatchers(HttpMethod.POST, "/loginIn").permitAll().and()
+                .csrf().disable()
+
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().and()
+
                 .anonymous().and()
                 .servletApi().and()
-                .headers().cacheControl().and();
+                .headers().cacheControl();
+
     }
-
-
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -76,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userAuthService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.authenticationProvider(dataBaseAuthenticationProvider);
     }
 
     @Override

@@ -1,11 +1,15 @@
 package ua.kpi.nc.controller.auth;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+
+
+import org.springframework.security.core.authority.AuthorityUtils;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.util.UserAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Created by IO on 23.04.2016.
@@ -27,6 +31,7 @@ public class TokenAuthenticationService {
         User user = authentication.getDetails();
         String token = tokenHandler.createTokenForUser(user);
         response.addHeader(AUTH_HEADER_NAME, token);
+        response.addHeader("redirectURL", determineTargetUrl(authentication));
         return token;
     }
 
@@ -34,7 +39,7 @@ public class TokenAuthenticationService {
     public Authentication getAuthentication(HttpServletRequest request) {
         final String token = request.getHeader(AUTH_HEADER_NAME);
         if (token != null) {
-            final User user = tokenHandler.parseUserFromToken(token);
+            final ua.kpi.nc.persistence.model.User user = tokenHandler.parseUserFromToken(token);
             if (user != null) {
                 return new UserAuthentication(user);
             }
@@ -42,5 +47,14 @@ public class TokenAuthenticationService {
         return null;
     }
 
-
+    private String determineTargetUrl(Authentication authentication) {
+        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        if (authorities.contains("ROLE_ADMIN")) {
+            return "/admin";
+        } else if (authorities.contains("ROLE_STUDENT")) {
+            return "/student";
+        } else {
+            throw new IllegalStateException();
+        }
+    }
 }

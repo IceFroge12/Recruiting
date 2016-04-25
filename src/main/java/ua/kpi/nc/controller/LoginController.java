@@ -9,6 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by dima on 12.04.16.
  */
@@ -16,8 +18,15 @@ import ua.kpi.nc.service.UserService;
 public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView login() {
-        ModelAndView model = new ModelAndView();
-        return model;
+    public ModelAndView login(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public String loginIn(HttpServletRequest request) {
+        request.getHeader("X-AUTH-TOKEN");
+        System.out.println(request.getHeader("X-AUTH-TOKEN"));
+        return "student";
     }
 }
