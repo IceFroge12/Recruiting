@@ -26,7 +26,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     private static final String SQL_GET_RECRUITMENT_BY_ID = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
-            " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
+            " r.schedule_choices_deadline, r.students_on_interview  ,r.time_interview_soft, r.time_interview_tech," +
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
             "FROM \"recruitment\" r\n" +
             "WHERE r.id = ?;";
@@ -111,7 +111,6 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     @Override
     public List<Recruitment> getAll() {
-
         if (log.isInfoEnabled()){
             log.info("Get all recruitment");
         }
@@ -134,8 +133,8 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             recruitment.setStudentsOnInterview(resultSet.getInt("students_on_interview"));
             recruitment.setTimeInterviewSoft(resultSet.getInt("time_interview_soft"));
             recruitment.setTimeInterviewTech(resultSet.getInt("time_interview_tech"));
-            recruitment.setNumberSoftInterviewers(resultSet.getInt("number_soft_interview"));
-            recruitment.setNumberTechInterviewers(resultSet.getInt("number_tech_interview"));
+            recruitment.setNumberSoftInterviewers(resultSet.getInt("number_soft_interviewers"));
+            recruitment.setNumberTechInterviewers(resultSet.getInt("number_tech_interviewers"));
             recruitment.setNumberOfDays(resultSet.getInt("number_of_hours"));
             return recruitment;
         }

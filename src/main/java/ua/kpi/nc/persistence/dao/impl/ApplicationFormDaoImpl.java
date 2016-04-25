@@ -125,7 +125,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     private Set<FormAnswer> getAnswers(Long applicationFormId) {
         return this.getJdbcTemplate().queryWithParameters(
-                "SELECT fa.id\n" + "FROM \"form_answer\" fa\n" + "WHERE fa.id_application_form = ?;", resultSet -> {
+                "SELECT fa.id\n FROM \"form_answer\" fa\n WHERE fa.id_application_form = ?;", resultSet -> {
                     Set<FormAnswer> set = new HashSet<>();
                     do {
                         set.add(new FormAnswerProxy(resultSet.getLong("id")));
@@ -139,13 +139,13 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         @Override
         public ApplicationForm extractData(ResultSet resultSet) throws SQLException {
             ApplicationForm applicationForm = new ApplicationFormImpl();
-            long applicationFormId = resultSet.getLong("id_user");
+            long id = resultSet.getLong("id");
             applicationForm.setActive(resultSet.getBoolean("is_active"));
-            applicationForm.setAnswers(getAnswers(applicationFormId));
+            applicationForm.setAnswers(getAnswers(id));
             applicationForm.setDateCreate(resultSet.getTimestamp("date_create"));
-            applicationForm.setId(applicationFormId);
+            applicationForm.setId(id);
             applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong("id_recruitment")));
-            applicationForm.setInterviews(getInterviews(applicationFormId));
+            applicationForm.setInterviews(getInterviews(id));
             applicationForm.setPhotoScope(resultSet.getString("photo_scope"));
             applicationForm.setStatus(new Status(resultSet.getLong("id_status"), resultSet.getString("title")));
             applicationForm.setUser(new UserProxy(resultSet.getLong("id_user")));

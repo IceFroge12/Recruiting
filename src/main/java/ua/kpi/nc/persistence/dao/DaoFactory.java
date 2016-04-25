@@ -25,11 +25,11 @@ public class DaoFactory {
     
     public static FormAnswerVariantDao getFormAnswerVariantDao(){return new FormAnswerVariantDaoImpl(DataSourceFactory.getInstance());}
 
-    public static InterviewDao getInterviewDao(){return InterviewDaoImpl(DataSourceFactory.getInstance())}
+    public static InterviewDao getInterviewDao(){return new InterviewDaoImpl(DataSourceFactory.getInstance());}
 
     public static FormQuestionDao getFormQuestionDao(){return new FormQuestionDaoImpl(DataSourceFactory.getInstance());}
 
-    public static FormAnswerDao getFormAnswerDao(){return  new FormAnswerDAOImpl(DataSourceFactory.getInstance());}
+    public static FormAnswerDao getFormAnswerDao(){return  new FormAnswerDaoImpl(DataSourceFactory.getInstance());}
     
     public static StatusDao getStatusDao(){return new StatusDaoImpl(DataSourceFactory.getInstance());}
     
