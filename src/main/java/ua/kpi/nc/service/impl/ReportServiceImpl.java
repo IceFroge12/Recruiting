@@ -2,15 +2,19 @@ package ua.kpi.nc.service.impl;
 
 import ua.kpi.nc.persistence.dao.ReportDao;
 import ua.kpi.nc.persistence.model.Report;
-import ua.kpi.nc.service.ReportSerivce;
+import ua.kpi.nc.service.ReportService;
 
 import java.util.Set;
 
 /**
  * Created by Nikita on 24.04.2016.
  */
-public class ReportServiceImpl implements ReportSerivce {
-    ReportDao reportDao;
+public class ReportServiceImpl implements ReportService {
+    private ReportDao reportDao;
+
+    public ReportServiceImpl(ReportDao reportDao) {
+        this.reportDao = reportDao;
+    }
 
     @Override
     public Report getByID(Long id) {

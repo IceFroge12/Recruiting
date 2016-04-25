@@ -11,10 +11,10 @@ import java.util.Set;
 /**
  * @author Korzh
  */
-public class UserTimeRiorityServiceImpl implements UserTimePriorityService{
+public class UserTimePriorityServiceImpl implements UserTimePriorityService{
 private UserTimePriorityDao userTimePriorityDao;
 
-    public UserTimeRiorityServiceImpl(UserTimePriorityDao userTimePriorityDao) {
+    public UserTimePriorityServiceImpl(UserTimePriorityDao userTimePriorityDao) {
         this.userTimePriorityDao = userTimePriorityDao;
     }
 
