@@ -4,23 +4,23 @@ import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
 
 public interface ApplicationFormDao {
 
     ApplicationForm getById(Long id);
 
-    Set<ApplicationForm> getByUserId(Long id);
+    List<ApplicationForm> getByUserId(Long id);
 
-    Set<ApplicationForm> getByStatus(String status);
+    List<ApplicationForm> getByStatus(String status);
 
-    Set<ApplicationForm> getByState(boolean state);
+    List<ApplicationForm> getByState(boolean state);
 
     int deleteApplicationForm(ApplicationForm applicationForm);
 
-    Long insertApplicationForm(ApplicationForm applicationForm, User user, Connection connection);
+    Long insertApplicationForm(ApplicationForm applicationForm, Connection connection);
 
     int updateApplicationForm(ApplicationForm applicationForm);
 
-    Set<ApplicationForm> getAll();
+    List<ApplicationForm> getAll();
 }

@@ -1,7 +1,7 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -34,14 +34,14 @@ public class ApplicationFormImpl implements ApplicationForm {
 
 	private Timestamp dateCreate;
 
-	private Set<Interview> interviews;
+	private List<Interview> interviews;
 
-	private Set<FormAnswer> answers;
+	private List<FormAnswer> answers;
 
 	public ApplicationFormImpl() {
 	}
 
-	public ApplicationFormImpl(Status status, boolean active, Recruitment recruitment, String photoScope, User user, Timestamp dateCreate, Set<Interview> interviews, Set<FormAnswer> answers) {
+	public ApplicationFormImpl(Status status, boolean active, Recruitment recruitment, String photoScope, User user, Timestamp dateCreate, List<Interview> interviews, List<FormAnswer> answers) {
 		this.status = status;
 		this.active = active;
 		this.recruitment = recruitment;
@@ -53,7 +53,7 @@ public class ApplicationFormImpl implements ApplicationForm {
 	}
 
 	public ApplicationFormImpl(Long id, Status status, boolean active, Recruitment recruitment, String photoScope,
-							   User user, Timestamp dateCreate, Set<Interview> interviews, Set<FormAnswer> answers) {
+							   User user, Timestamp dateCreate, List<Interview> interviews, List<FormAnswer> answers) {
 		this.id = id;
 		this.status = status;
 		this.active = active;
@@ -136,22 +136,22 @@ public class ApplicationFormImpl implements ApplicationForm {
 	}
 
 	@Override
-	public Set<Interview> getInterviews() {
+	public List<Interview> getInterviews() {
 		return interviews;
 	}
 
 	@Override
-	public void setInterviews(Set<Interview> interviews) {
+	public void setInterviews(List<Interview> interviews) {
 		this.interviews = interviews;
 	}
 
 	@Override
-	public Set<FormAnswer> getAnswers() {
+	public List<FormAnswer> getAnswers() {
 		return answers;
 	}
 
 	@Override
-	public void setAnswers(Set<FormAnswer> answers) {
+	public void setAnswers(List<FormAnswer> answers) {
 		this.answers = answers;
 	}
 

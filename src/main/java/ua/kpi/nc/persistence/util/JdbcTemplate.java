@@ -71,7 +71,7 @@ public class JdbcTemplate {
     }
 
     public <T> List<T> queryForList(String sql,ResultSetExtractor<T> resultSetExtractor, Object... objects){
-        return (List<T>) queryForCollection(new HashSet<>(),sql,  resultSetExtractor, (Object[]) objects);
+        return (List<T>) queryForCollection(new ArrayList<>(),sql,  resultSetExtractor, (Object[]) objects);
     }
 
     private <T> Collection<T> queryForCollection(Collection<T> collection,String sql,

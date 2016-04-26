@@ -1,6 +1,6 @@
 package ua.kpi.nc.service;
 
-import java.util.Set;
+import java.util.List;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
@@ -13,17 +13,17 @@ public interface ApplicationFormService {
 
 	ApplicationForm getApplicationFormById(Long id);
 
-	Set<ApplicationForm> getByUserId(Long id);
+	List<ApplicationForm> getByUserId(Long id);
 
-	Set<ApplicationForm> getByStatus(String status);
+	List<ApplicationForm> getByStatus(String status);
 
-	Set<ApplicationForm> getByState(boolean state);
+	List<ApplicationForm> getByState(boolean state);
 
 	int deleteApplicationForm(ApplicationForm applicationForm);
 
-	boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers);
+	boolean insertApplicationForm(ApplicationForm applicationForm);
 
 	int updateApplicationForm(ApplicationForm applicationForm);
 
-	Set<ApplicationForm> getAll();
+	List<ApplicationForm> getAll();
 }
