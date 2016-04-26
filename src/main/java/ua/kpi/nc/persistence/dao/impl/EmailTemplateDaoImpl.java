@@ -1,6 +1,5 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.EmailTemplateDao;
@@ -17,76 +16,85 @@ import java.sql.SQLException;
  * @author Korzh
  */
 public class EmailTemplateDaoImpl extends JdbcDaoSupport implements EmailTemplateDao {
-    private static Logger log = LoggerFactory.getLogger(EmailTemplateDaoImpl.class.getName());
-    private static final String GET_BY_ID = "SELECT e.id, e.title, e.text, n.n_title " +
-            ", n.id n_id FROM public.email_template e, public.notification_type  n " +
-            "WHERE n.id = e.id and e.id=?;";
-    private static final String GET_BY_TITLE = "SELECT e.id, e.title, e.text, n.n_title " +
-            ", n.id n_id FROM public.email_template e, public.notification_type n  " +
-            "WHERE n.id = e.id and e.title=?;";
-    private static final String GET_BY_NOTIFICATION_TYPE = "SELECT e.id, e.title, e.text, n.n_title " +
-            ", n.id n_id FROM public.email_template e, public.notification_type  n " +
-            "WHERE n.id = e.id and n.id=?;";
-    private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE public.email_template SET title = ? , text = ?" +
-            "WHERE email_template.id = ?;";
-    private static final String DELETE_EMAIL_TEMPLATE = "DELETE FROM public.email_template WHERE id = ?;";
+	private static Logger log = LoggerFactory.getLogger(EmailTemplateDaoImpl.class.getName());
 
-    public EmailTemplateDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }
+	static final String TABLE_NAME = "email_template";
 
-    @Override
-    public EmailTemplate getById(Long id) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for form email template with id  = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, new EmailTemplateExtractor(), id);
-    }
+	static final String ID_COL = "id";
+	static final String TITLE_COL = "title";
+	static final String TEXT_COL = "text";
+	static final String ID_NOTIFICATION_TYPE_COL = "id_notification_type";
 
-    @Override
-    public EmailTemplate getByTitle(String title) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for form email template with title  = " + title);
-        }
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_TITLE, new EmailTemplateExtractor(), title);
-    }
+	private static final String GET_BY_ID = "SELECT e." + ID_COL + ", e." + TITLE_COL + ", e." + TEXT_COL + ", n.n_"
+			+ TITLE_COL + " " + ", n.id n_id FROM public." + TABLE_NAME + " e, public.notification_type  n "
+			+ "WHERE n.id = e." + ID_NOTIFICATION_TYPE_COL + " and e." + ID_COL + "=?;";
+	private static final String GET_BY_TITLE = "SELECT e." + ID_COL + ", e." + TITLE_COL + ", e." + TEXT_COL + ", n.n_"
+			+ TITLE_COL + " " + ", n.id n_id FROM public." + TABLE_NAME + " e, public.notification_type n  "
+			+ "WHERE n.id = e." + ID_COL + " and e." + TITLE_COL + "=?;";
+	private static final String GET_BY_NOTIFICATION_TYPE = "SELECT e." + ID_COL + ", e." + TITLE_COL + ", e." + TEXT_COL
+			+ ", n.n_" + TITLE_COL + " " + ", n.id n_id FROM public." + TABLE_NAME + " e, public.notification_type  n "
+			+ "WHERE n.id = e." + ID_COL + " and n.id=?;";
+	private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE public." + TABLE_NAME + " SET " + TITLE_COL + " = ? , "
+			+ TEXT_COL + " = ?" + "WHERE " + TABLE_NAME + ".id = ?;";
+	private static final String DELETE_EMAIL_TEMPLATE = "DELETE FROM public." + TABLE_NAME + " WHERE id = ?;";
 
-    @Override
-    public EmailTemplate getByNotificationType(NotificationType notificationType) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for form email template with notificationType  = " + notificationType.getTitle());
-        }
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_NOTIFICATION_TYPE,
-                new EmailTemplateExtractor(), notificationType.getId());
-    }
+	public EmailTemplateDaoImpl(DataSource dataSource) {
+		this.setJdbcTemplate(new JdbcTemplate(dataSource));
+	}
 
-    @Override
-    public int updateEmailTemplate(EmailTemplate emailTemplate) {
-        if (log.isTraceEnabled()) {
-            log.trace("Updating email template with id  = " + emailTemplate.getId());
-        }
-        return this.getJdbcTemplate().update(UPDATE_EMAIL_TEMPLATE, emailTemplate.getTitle(),
-                emailTemplate.getText(), emailTemplate.getId());
-    }
+	@Override
+	public EmailTemplate getById(Long id) {
+		if (log.isTraceEnabled()) {
+			log.trace("Looking for form email template with id  = " + id);
+		}
+		return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, new EmailTemplateExtractor(), id);
+	}
 
-    @Override
-    public int deleteEmailTemplate(EmailTemplate emailTemplate) {
-        if (log.isTraceEnabled()) {
-            log.trace("Deleting email template with id  = " + emailTemplate.getId());
-        }
-        return this.getJdbcTemplate().update(DELETE_EMAIL_TEMPLATE, emailTemplate.getId());
-    }
+	@Override
+	public EmailTemplate getByTitle(String title) {
+		if (log.isTraceEnabled()) {
+			log.trace("Looking for form email template with title  = " + title);
+		}
+		return this.getJdbcTemplate().queryWithParameters(GET_BY_TITLE, new EmailTemplateExtractor(), title);
+	}
 
-    private static final class EmailTemplateExtractor implements ResultSetExtractor<EmailTemplate> {
-        @Override
-        public EmailTemplate extractData(ResultSet resultSet) throws SQLException {
-            EmailTemplate emailTemplate = new EmailTemplate();
-            emailTemplate.setId(resultSet.getLong("id"));
-            emailTemplate.setTitle(resultSet.getString("title"));
-            emailTemplate.setText(resultSet.getString("text"));
-            emailTemplate.setNotificationType(new NotificationType(resultSet.getLong("n_id"), resultSet.getString("n_title")));
+	@Override
+	public EmailTemplate getByNotificationType(NotificationType notificationType) {
+		if (log.isTraceEnabled()) {
+			log.trace("Looking for form email template with notificationType  = " + notificationType.getTitle());
+		}
+		return this.getJdbcTemplate().queryWithParameters(GET_BY_NOTIFICATION_TYPE, new EmailTemplateExtractor(),
+				notificationType.getId());
+	}
 
-            return emailTemplate;
-        }
-    }
+	@Override
+	public int updateEmailTemplate(EmailTemplate emailTemplate) {
+		if (log.isTraceEnabled()) {
+			log.trace("Updating email template with id  = " + emailTemplate.getId());
+		}
+		return this.getJdbcTemplate().update(UPDATE_EMAIL_TEMPLATE, emailTemplate.getTitle(), emailTemplate.getText(),
+				emailTemplate.getId());
+	}
+
+	@Override
+	public int deleteEmailTemplate(EmailTemplate emailTemplate) {
+		if (log.isTraceEnabled()) {
+			log.trace("Deleting email template with id  = " + emailTemplate.getId());
+		}
+		return this.getJdbcTemplate().update(DELETE_EMAIL_TEMPLATE, emailTemplate.getId());
+	}
+
+	private static final class EmailTemplateExtractor implements ResultSetExtractor<EmailTemplate> {
+		@Override
+		public EmailTemplate extractData(ResultSet resultSet) throws SQLException {
+			EmailTemplate emailTemplate = new EmailTemplate();
+			emailTemplate.setId(resultSet.getLong(ID_COL));
+			emailTemplate.setTitle(resultSet.getString(TITLE_COL));
+			emailTemplate.setText(resultSet.getString(TEXT_COL));
+			emailTemplate.setNotificationType(
+					new NotificationType(resultSet.getLong("n_id"), resultSet.getString("n_title")));
+
+			return emailTemplate;
+		}
+	}
 }
