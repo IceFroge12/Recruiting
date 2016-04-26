@@ -2,7 +2,7 @@ package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.*;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Chalienko on 21.04.2016.
@@ -10,7 +10,7 @@ import java.util.Set;
 public interface FormAnswerService {
     FormAnswer getFormAnswerByID(Long id);
 
-    Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
+    List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
 
     int updateFormAnswer(FormAnswer formAnswer);
 

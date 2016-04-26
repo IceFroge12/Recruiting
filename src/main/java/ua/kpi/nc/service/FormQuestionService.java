@@ -2,33 +2,33 @@ package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.*;
 
-import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * QuestionForm service
  *
- * @author Yaroslav Kruk on 4/23/16.
- *         e-mail: yakruck@gmail.com
- *         GitHub: https://github.com/uakruk
+ * @author Yaroslav Kruk on 4/23/16. e-mail: yakruck@gmail.com GitHub:
+ *         https://github.com/uakruk
  * @version 1.0
  * @since 1.7
  */
 public interface FormQuestionService {
 
-    boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role);
+	public boolean insertFormQuestion(FormQuestion formQuestion, Role role);
 
-    boolean insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Role role, Set<FormAnswerVariant> formAnswerVariants);
+	int updateFormQuestion(FormQuestion formQuestion);
 
-    int deleteFormQuestion(FormQuestion formQuestion);
+	boolean insertFormQuestion(FormQuestion formQuestion, Role role, List<FormAnswerVariant> formAnswerVariants);
 
-    boolean addRole(FormQuestion formQuestion, Role role);
+	int deleteFormQuestion(FormQuestion formQuestion);
 
-    int deleteRole(FormQuestion formQuestion, Role role);
+	boolean addRole(FormQuestion formQuestion, Role role);
 
-    FormQuestion getById(Long id);
+	int deleteRole(FormQuestion formQuestion, Role role);
 
-    Set<FormQuestion> getByRole(Role role);
+	FormQuestion getById(Long id);
 
-    Set<FormQuestion> getAll();
+	List<FormQuestion> getByRole(Role role);
+
+	List<FormQuestion> getAll();
 }

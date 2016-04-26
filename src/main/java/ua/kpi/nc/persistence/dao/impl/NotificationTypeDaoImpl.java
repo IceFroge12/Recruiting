@@ -22,10 +22,10 @@ public class NotificationTypeDaoImpl extends JdbcDaoSupport implements Notificat
 
 	static final String TABLE_NAME = "notification_type";
 
-	private static final String SQL_GET_ALL = "SELECT n." + ID_COL + ", n." + TITLE_COL + " FROM public." + TABLE_NAME
+	private static final String SQL_GET = "SELECT n." + ID_COL + ", n." + TITLE_COL + " FROM public." + TABLE_NAME
 			+ "  n ";
-	private static final String SQL_GET_BY_ID = SQL_GET_ALL + " WHERE n." + ID_COL + " = ?;";
-	private static final String SQL_GET_BY_TITLE = SQL_GET_ALL + " WHERE n." + TITLE_COL + " = ?;";
+	private static final String SQL_GET_BY_ID = SQL_GET + " WHERE n." + ID_COL + " = ?;";
+	private static final String SQL_GET_BY_TITLE = SQL_GET + " WHERE n." + TITLE_COL + " = ?;";
 	private static final String SQL_UPDATE_NOTIFICATION_TYPE = "UPDATE public." + TABLE_NAME + " SET " + TITLE_COL
 			+ " = ? " + "WHERE " + TABLE_NAME + "." + ID_COL + " = ?;";
 	private static final String SQL_DELETE_NOTIFICATION_TYPE = "DELETE FROM public." + TABLE_NAME + " WHERE " + ID_COL
@@ -84,7 +84,7 @@ public class NotificationTypeDaoImpl extends JdbcDaoSupport implements Notificat
 		if (log.isTraceEnabled()) {
 			log.trace("Getting All Notification Types");
 		}
-		return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new NotificationTypeExtractor());
+		return this.getJdbcTemplate().queryForSet(SQL_GET, new NotificationTypeExtractor());
 	}
 
 }

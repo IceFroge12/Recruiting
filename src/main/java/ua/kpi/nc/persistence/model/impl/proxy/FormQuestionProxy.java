@@ -8,7 +8,7 @@ import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.ServiceFactory;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  @author Korzh
@@ -38,25 +38,25 @@ public class FormQuestionProxy implements FormQuestion{
     }
 
     @Override
-    public Set<FormAnswer> getAnswers() {
+    public List<FormAnswer> getAnswers() {
         checkFormQuestion();
         return formQuestion.getAnswers();
     }
 
     @Override
-    public void setAnswers(Set<FormAnswer> answers) {
+    public void setAnswers(List<FormAnswer> answers) {
         checkFormQuestion();
         formQuestion.setAnswers(answers);
     }
 
     @Override
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         checkFormQuestion();
         return formQuestion.getRoles();
     }
 
     @Override
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         checkFormQuestion();
         formQuestion.setRoles(roles);
     }

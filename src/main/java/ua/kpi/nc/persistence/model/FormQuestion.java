@@ -1,7 +1,7 @@
 package ua.kpi.nc.persistence.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -11,13 +11,13 @@ public interface FormQuestion extends Serializable {
 
     void setId(Long id);
 
-    Set<FormAnswer> getAnswers();
+    List<FormAnswer> getAnswers();
 
-    void setAnswers(Set<FormAnswer> answers);
+    void setAnswers(List<FormAnswer> answers);
 
-    Set<Role> getRoles();
+    List<Role> getRoles();
 
-    void setRoles(Set<Role> roles);
+    void setRoles(List<Role> roles);
 
     String getTitle();
 
