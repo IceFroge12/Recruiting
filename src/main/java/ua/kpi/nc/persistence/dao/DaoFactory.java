@@ -48,5 +48,7 @@ public class DaoFactory {
     public static UserTimePriorityDao getUserTimePriorityDao() {return new UserTimePriorityDaoImpl(DataSourceFactory.getInstance());}
 
 	public static QuestionTypeDao getQuestionTypeDao() {return new QuestionTypeDaoImpl(DataSourceFactory.getInstance());}
+
+    public static ResendMessageDao getResendMessageDao() {return new ResendMessageDaoImpl(DataSourceFactory.getInstance());}
 }
 

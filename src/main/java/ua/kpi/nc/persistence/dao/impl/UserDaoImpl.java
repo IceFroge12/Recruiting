@@ -63,6 +63,16 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String DELETE_FINAL_TIME_POINT = "DELETE FROM user_time_final p " +
             "WHERE p.id_user = ? and p.id_time_point = ?;";
 
+    private static final String SQL_GET_USERS_BY_TOKEN = "SELECT u.id, u.email, u.first_name, u.last_name," +
+            " u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date\n" +
+            " FROM \"user\" u  WHERE u.confirm_token = ?;";
+
+    private static final String SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID = "SELECT u.id, u.email, u.first_name, u.last_name," +
+            " u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date\n" +
+            " FROM \"user\" u JOIN application_form a on (a.id_user = u.id and a.is_active = 'true')  " +
+            "JOIN interview i ON ( i.id_application_form = a.id )\n" +
+            "  JOIN \"user\" us on (us.id = i.id_interviewer) WHERE  us.id = ?;";
+
     private static final String SQL_GET_ALL_STUDENTS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
             "u.password,u.confirm_token,u.is_active, u.registration_date, r.role\n"+
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n"+
@@ -167,6 +177,22 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.info("Delete Final Time Point");
         }
         return this.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(),scheduleTimePoint.getId());
+    }
+
+    @Override
+    public Set<User> getUsersByToken(String token) {
+        if (log.isInfoEnabled()) {
+            log.info("Get users by token");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_USERS_BY_TOKEN,new UserExtractor(),token);
+    }
+
+    @Override
+    public Set<User> getAssignedStudents(Long id) {
+        if (log.isInfoEnabled()) {
+            log.info("Get Assigned Students");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, new UserExtractor(),id);
     }
 
     @Override
