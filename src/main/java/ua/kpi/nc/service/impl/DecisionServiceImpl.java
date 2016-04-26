@@ -1,5 +1,7 @@
 package ua.kpi.nc.service.impl;
 
+import java.util.List;
+
 import ua.kpi.nc.persistence.dao.DecisionDao;
 import ua.kpi.nc.persistence.model.Decision;
 import ua.kpi.nc.service.DecisionService;
@@ -30,6 +32,11 @@ public class DecisionServiceImpl implements DecisionService {
 	@Override
 	public int deleteDecision(Decision decision) {
 		return decisionDao.deleteDecision(decision);
+	}
+
+	@Override
+	public List<Decision> getAll() {
+		return decisionDao.getAll();
 	}
 
 }
