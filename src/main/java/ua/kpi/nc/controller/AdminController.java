@@ -1,10 +1,6 @@
 package ua.kpi.nc.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,7 +30,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView adminPage() {
-        ModelAndView modelAndView = new ModelAndView("admin");
+        ModelAndView modelAndView = new ModelAndView("/WEB-INF/admin.jsp");
         return modelAndView;
     }
 

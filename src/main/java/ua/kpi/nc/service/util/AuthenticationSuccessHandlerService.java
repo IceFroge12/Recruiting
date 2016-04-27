@@ -3,12 +3,14 @@ package ua.kpi.nc.service.util;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import ua.kpi.nc.persistence.model.User;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,21 +43,26 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException,
             ServletException, IOException {
-        response.addHeader("redirectURl", "/student");
+//        HttpSession session = request.getSession();
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        session.setAttribute("uname", user.getUsername());
+//        session.setAttribute("authorities", user.getAuthorities());
 
+        String redirectURL = determineTargetUrl(authentication);
+        redirectStrategy.sendRedirect(request,response, redirectURL);
     }
 
 
     private String determineTargetUrl(Authentication authentication) {
-//        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-//        if (authorities.contains("ROLE_ADMIN")) {
-//            return "/admin";
-//        } else if (authorities.contains("ROLE_STUDENT")) {
-//            return "/student";
-//        } else {
-//            throw new IllegalStateException();
-//        }
-        return "";
+        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        if (authorities.contains("ADMIN")) {
+            return "/admin";
+        } else if (authorities.contains("STUDENT")) {
+            return "/student";
+        } else {
+            throw new IllegalStateException();
+        }
     }
 
 

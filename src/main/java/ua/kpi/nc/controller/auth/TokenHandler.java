@@ -30,12 +30,6 @@ public class TokenHandler {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-        try {
-            Date date = claims.getExpiration();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
         return userService.loadUserByUsername(claims.getSubject());
     }
 
@@ -43,7 +37,6 @@ public class TokenHandler {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .signWith(SignatureAlgorithm.HS512, secret)
-                .setExpiration(new Date(new Date().getTime() + epriretime))
                 .compact();
     }
 }

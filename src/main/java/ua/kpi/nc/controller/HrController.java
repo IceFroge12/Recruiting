@@ -12,7 +12,7 @@ public class HrController {
 
     @RequestMapping("/hr")
     public ModelAndView adminPage() {
-        ModelAndView modelAndView = new ModelAndView("hr");
+        ModelAndView modelAndView = new ModelAndView("/WEB-INF/hr.jsp");
         return modelAndView;
     }
 }

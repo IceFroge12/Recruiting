@@ -33,7 +33,7 @@ public class RegistrationController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView registration() {
         UserImpl user = new UserImpl();
-        ModelAndView modelAndView = new ModelAndView("registration");
+        ModelAndView modelAndView = new ModelAndView("/WEB-INF/registration.jsp");
         modelAndView.addObject("user", user);
         return modelAndView;
     }
@@ -86,7 +86,7 @@ public class RegistrationController {
 //            userService.deleteUserByToken(token);
 //        }
 
-        return "login";
+        return "/login.jsp";
     }
 
 }

@@ -18,6 +18,7 @@ public class UserAuthentication implements Authentication {
 
     public UserAuthentication(User user) {
         this.user = user;
+        user.getRoles();
     }
 
     @Override

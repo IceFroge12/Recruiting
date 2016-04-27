@@ -29,7 +29,7 @@ import ua.kpi.nc.service.util.UserAuthService;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan("nc.kpi.ua")
+@ComponentScan(basePackages = "ua.kpi.nc")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -50,15 +50,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/login**").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/loginIn").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/login").permitAll()
+
                 .antMatchers("/student/**").hasRole("STUDENT")
-                .antMatchers(HttpMethod.POST, "/loginIn").permitAll().and()
-                .csrf().disable()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
 
                 .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().and()
-
+                .csrf().disable()
                 .anonymous().and()
                 .servletApi().and()
                 .headers().cacheControl();

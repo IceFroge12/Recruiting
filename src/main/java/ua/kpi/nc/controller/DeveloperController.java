@@ -12,7 +12,7 @@ public class DeveloperController {
 
     @RequestMapping("/dev")
     public ModelAndView adminPage() {
-        ModelAndView modelAndView = new ModelAndView("dev");
+        ModelAndView modelAndView = new ModelAndView("/WEB-INF/dev.jsp");
         return modelAndView;
     }
 

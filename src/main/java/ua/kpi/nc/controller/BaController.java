@@ -13,7 +13,7 @@ public class BaController {
 
     @RequestMapping("/ba")
     public ModelAndView adminPage() {
-        ModelAndView modelAndView = new ModelAndView("ba");
+        ModelAndView modelAndView = new ModelAndView("/WEB-INF/ba.jsp");
         return modelAndView;
     }
 

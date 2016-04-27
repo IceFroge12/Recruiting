@@ -120,180 +120,185 @@ public class UserImpl implements User {
         this.expireDate = expireDate;
     }
 
-    @JsonIgnore
+    public UserImpl(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+
     @Override
     public Long getId() {
         return id;
     }
 
-    @JsonIgnore
+
     @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-    @JsonIgnore
+
     @Override
     public Set<SocialInformation> getSocialInformations() {
         return socialInformations;
     }
 
-    @JsonIgnore
+
     @Override
     public void setSocialInformations(Set<SocialInformation> socialInformations) {
         this.socialInformations = socialInformations;
     }
 
-    @JsonIgnore
+
     @Override
     public String getConfirmToken() {
         return confirmToken;
     }
 
-    @JsonIgnore
+
     @Override
     public void setConfirmToken(String confirmToken) {
         this.confirmToken = confirmToken;
     }
 
-    @JsonIgnore
+
     @Override
     public boolean isActive() {
         return isActive;
     }
 
-    @JsonIgnore
+
     @Override
     public void setActive(boolean active) {
         isActive = active;
     }
 
-    @JsonIgnore
+
     @Override
     public Timestamp getRegistrationDate() {
         return registrationDate;
     }
 
-    @JsonIgnore
+
     @Override
     public void setRegistrationDate(Timestamp registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    @JsonIgnore
+
     @Override
     public String getEmail() {
         return email;
     }
 
-    @JsonProperty
+
     @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @JsonIgnore
+
     @Override
     public String getFirstName() {
         return firstName;
     }
 
-    @JsonIgnore
+
     @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    @JsonIgnore
+
     @Override
     public String getSecondName() {
         return secondName;
     }
 
-    @JsonIgnore
+
     @Override
     public void setSecondName(String secondName) {
         this.secondName = secondName;
     }
 
-    @JsonIgnore
+
     @Override
     public String getLastName() {
         return lastName;
     }
 
-    @JsonIgnore
+
     @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @JsonIgnore
+
     @Override
     public Set<Role> getRoles() {
         return roles;
     }
 
-    @JsonIgnore
+
     @Override
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    @JsonProperty
+
     @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @JsonIgnore
+
     @Override
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty
+
     @Override
     public Long getExpireDate() {
         return expireDate;
     }
 
-    @JsonIgnore
+
     public void setExpireDate(Long expireDate) {
         this.expireDate = expireDate;
     }
 
-    @JsonProperty
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
 
-    @JsonIgnore
+
     @Override
     public String getUsername() {
         return email;
     }
 
-    @JsonProperty
+
     @Override
     public boolean isAccountNonExpired() {
         return false;
     }
 
-    @JsonIgnore
+
     @Override
     public boolean isAccountNonLocked() {
         return false;
     }
 
-    @JsonProperty
+
     @Override
     public boolean isCredentialsNonExpired() {
         return false;
     }
 
-    @JsonIgnore
+
     @Override
     public boolean isEnabled() {
         return false;

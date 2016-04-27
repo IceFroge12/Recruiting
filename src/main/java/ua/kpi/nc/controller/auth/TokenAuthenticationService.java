@@ -30,14 +30,13 @@ public class TokenAuthenticationService {
     public String addAuthentication(HttpServletResponse response, HttpServletRequest request, UserAuthentication authentication) {
         User user = authentication.getDetails();
         String token = tokenHandler.createTokenForUser(user);
-        response.addHeader(AUTH_HEADER_NAME, token);
-        response.addHeader("redirectURL", determineTargetUrl(authentication));
+        request.getSession().setAttribute(AUTH_HEADER_NAME, token);
         return token;
     }
 
 
     public Authentication getAuthentication(HttpServletRequest request) {
-        final String token = request.getHeader(AUTH_HEADER_NAME);
+        String token = (String) request.getSession().getAttribute(AUTH_HEADER_NAME);
         if (token != null) {
             final ua.kpi.nc.persistence.model.User user = tokenHandler.parseUserFromToken(token);
             if (user != null) {
@@ -45,16 +44,5 @@ public class TokenAuthenticationService {
             }
         }
         return null;
-    }
-
-    private String determineTargetUrl(Authentication authentication) {
-        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (authorities.contains("ROLE_ADMIN")) {
-            return "/admin";
-        } else if (authorities.contains("ROLE_STUDENT")) {
-            return "/student";
-        } else {
-            throw new IllegalStateException();
-        }
     }
 }

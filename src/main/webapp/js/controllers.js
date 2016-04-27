@@ -27,22 +27,23 @@ var app = angular.module('recruiting', []).factory('TokenStorage', function() {
 			return $q.reject(error);
 		}
 	};
+
 }).config(function($httpProvider) {
 	$httpProvider.interceptors.push('TokenAuthInterceptor');
 });
 
-app.controller('AuthCtrl', function ($scope, $http, TokenStorage) {
+app.controller('AuthCtrl', function ($scope, $http, $window) {
 	$scope.authenticated = false;
 	$scope.token; // For display purposes only
 	
 	// $scope.init = function () {
-	// 	$http.get('/api/users/current').success(function (user) {
+	// 	$http.get('/logined').success(function (user) {
 	// 		if(user.email !== 'anonymousUser'){
 	// 			$scope.authenticated = true;
 	// 			$scope.email = user.email;
     //
 	// 			// For display purposes only
-	// 			$scope.token = JSON.parse(atob(TokenStorage.retrieve().split('.')[0]));
+	//
 	// 		}
 	// 	});
 	// };
@@ -51,27 +52,12 @@ app.controller('AuthCtrl', function ($scope, $http, TokenStorage) {
 		console.assert($scope.email);
 		console.assert($scope.password);
 		$http.post('/loginIn', { email: $scope.email, password: $scope.password }).success(function (result, status, headers) {
-			$scope.authenticated = true;
-			TokenStorage.store(headers('X-AUTH-TOKEN'));
-			redirect(headers('redirectURL'));
+            //$window.location.href = headers('redirectURL');
 		});
 	};
 
 	$scope.logout = function () {
-		// Just clear the local storage
 		TokenStorage.clear();	
 		$scope.authenticated = false;
 	};
-
-	function redirect(redirectURL) {
-		$http.get(redirectURL).success(function (user) {
-			// if(user.email !== 'anonymousUser'){
-			// 	$scope.authenticated = true;
-			// 	$scope.email = user.email;
-            //
-			// 	// For display purposes only
-			// 	$scope.token = JSON.parse(atob(TokenStorage.retrieve().split('.')[0]));
-			// }
-		});
-	}
 });
