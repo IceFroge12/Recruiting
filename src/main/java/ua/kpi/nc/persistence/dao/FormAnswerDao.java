@@ -3,7 +3,7 @@ package ua.kpi.nc.persistence.dao;
 import ua.kpi.nc.persistence.model.*;
 
 import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Desparete Houseviwes
@@ -12,7 +12,7 @@ public interface FormAnswerDao {
 
 	FormAnswer getById(Long id);
 
-	Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
+	List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
 
 	Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
 						  FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);

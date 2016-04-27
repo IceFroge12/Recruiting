@@ -1,25 +1,26 @@
 package ua.kpi.nc.persistence.dao;
 
-import ua.kpi.nc.persistence.model.FormAnswerVariant;
-import ua.kpi.nc.persistence.model.FormQuestion;
-
 import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
+
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
 
 /**
  * Created by Алексей on 21.04.2016.
  */
 public interface FormAnswerVariantDao {
-    FormAnswerVariant getById(Long id);
+	FormAnswerVariant getById(Long id);
 
-    Set<FormAnswerVariant> getByQuestionId(Long id);
+	List<FormAnswerVariant> getByQuestionId(Long id);
 
-    Long insertFormAnswerVariant(FormAnswerVariant formatVariant, FormQuestion formQuestion,
-                                 Connection connection);
+	Long insertFormAnswerVariant(FormAnswerVariant formatVariant);
 
-    int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant);
+	Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection);
 
-    int deleteFormAnswerVariant(FormAnswerVariant formVariant);
+	int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant);
 
-    Set<FormAnswerVariant> getAll();
+	int deleteFormAnswerVariant(FormAnswerVariant formVariant);
+
+	List<FormAnswerVariant> getAll();
+
 }

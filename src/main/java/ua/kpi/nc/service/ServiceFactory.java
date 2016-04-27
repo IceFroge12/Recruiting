@@ -88,4 +88,7 @@ public class ServiceFactory {
         return new UserTimePriorityServiceImpl(DaoFactory.getUserTimePriorityDao());
     }
 
+    public static ResendMessageService getResendMessageService() {
+        return new ResendMessageServiceImpl(DaoFactory.getResendMessageDao());
+    }
 }

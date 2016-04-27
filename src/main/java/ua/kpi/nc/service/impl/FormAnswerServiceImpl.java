@@ -6,7 +6,7 @@ import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.service.FormAnswerService;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Yaroslav Kruk on 4/23/16.
@@ -34,7 +34,7 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     }
 
     @Override
-    public Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question) {
+    public List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question) {
         return formAnswerDao.getByInterviewAndQuestion(interview,question);
     }
 

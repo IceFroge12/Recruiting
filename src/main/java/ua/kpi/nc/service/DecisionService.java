@@ -1,5 +1,7 @@
 package ua.kpi.nc.service;
 
+import java.util.List;
+
 import ua.kpi.nc.persistence.model.Decision;
 
 /**
@@ -14,5 +16,7 @@ public interface DecisionService {
     int updateDecision(Decision decision);
 
     int deleteDecision(Decision decision);
+    
+    List<Decision> getAll();
 	
 }

@@ -17,21 +17,50 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Nikita on 22.04.2016.
  */
 public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
-	private static final String SQL_GET_BY_ID = "SELECT fa.id, fa.answer, fa.id_question, fa.id_application_form, fa.id_variant, fa.id_interview \n"
-			+ "FROM form_answer fa \n" + "WHERE fa.id = ?;";
-	private static final String SQL_GET_BY_INTERVIEW_AND_QUESTION = "SELECT fa.id, fa.answer, fa.id_question, fa.id_application_form, fa.id_variant, fa.id_interview \n"
-			+ "FROM form_answer fa \n" + "WHERE fa.id_interview= ? and  fa.id_question = ?;";
-	private static final String SQL_INSERT = "INSERT INTO form_answer(answer, id_question, id_application_form, id_variant, id_interview) \n"
+
+	static final String TABLE_NAME = "form_answer";
+
+	static final String ID_COL = "id";
+	static final String ANSWER_COL = "answer";
+	static final String ID_QUESTION_COL = "id_question";
+	static final String ID_VARIANT_COL = "id_variant";
+	static final String ID_INTERVIEW_COL = "id_interview";
+	static final String ID_APPLICATION_FORM_COL = "id_application_form";
+
+	private static final String SQL_GET = "SELECT fa." + ID_COL + ", fa." + ANSWER_COL + ", fa." + ID_QUESTION_COL
+			+ ", fa." + ID_APPLICATION_FORM_COL + ", fa." + ID_VARIANT_COL + ", fa." + ID_INTERVIEW_COL + " FROM "
+			+ TABLE_NAME + " fa";
+
+	private static final String SQL_GET_BY_ID = SQL_GET + " WHERE fa." + ID_COL + " = ?;";
+	private static final String SQL_GET_BY_INTERVIEW_AND_QUESTION = SQL_GET + " WHERE fa." + ID_INTERVIEW_COL
+			+ "= ? and  fa." + ID_QUESTION_COL + " = ?;";
+	private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + ANSWER_COL + ", " + ID_QUESTION_COL
+			+ ", " + ID_APPLICATION_FORM_COL + ", " + ID_VARIANT_COL + ", " + ID_INTERVIEW_COL + ") \n"
 			+ "VALUES (?,?,?,?,?);";
-	private static final String SQL_UPDATE = "UPDATE form_answer SET answer = ? WHERE id= ?;";
-	private static final String SQL_DELETE = "DELETE FROM form_answer WHERE form_answer.id = ?;";
+	private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + ANSWER_COL + " = ? WHERE " + ID_COL
+			+ "= ?;";
+	private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = ?;";
 	private static Logger log = LoggerFactory.getLogger(FormAnswerDaoImpl.class.getName());
+
+	private final class FormAnswerExtractor implements ResultSetExtractor<FormAnswer> {
+		@Override
+		public FormAnswer extractData(ResultSet resultSet) throws SQLException {
+			FormAnswer formAnswer = new FormAnswerImpl();
+			formAnswer.setId(resultSet.getLong(ID_COL));
+			formAnswer.setAnswer(resultSet.getString(ANSWER_COL));
+			formAnswer.setInterview(new InterviewProxy(resultSet.getLong(ID_INTERVIEW_COL)));
+			formAnswer.setApplicationForm(new ApplicationFormProxy(resultSet.getLong(ID_APPLICATION_FORM_COL)));
+			formAnswer.setFormAnswerVariant(new FormAnswerVariantProxy(resultSet.getLong(ID_VARIANT_COL)));
+			formAnswer.setFormQuestion(new FormQuestionProxy(resultSet.getLong(ID_QUESTION_COL)));
+			return formAnswer;
+		}
+	}
 
 	public FormAnswerDaoImpl(DataSource dataSource) {
 		this.setJdbcTemplate(new JdbcTemplate(dataSource));
@@ -47,12 +76,12 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
 	}
 
 	@Override
-	public Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question) {
+	public List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question) {
 		if (log.isInfoEnabled()) {
 			log.info("Looking for answer with interview_id= " + interview.getId() + "and question= "
 					+ question.getTitle());
 		}
-		return this.getJdbcTemplate().queryForSet(SQL_GET_BY_INTERVIEW_AND_QUESTION,
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEW_AND_QUESTION,
 				new FormAnswerDaoImpl.FormAnswerExtractor(), interview.getId(), question.getId());
 	}
 
@@ -83,20 +112,6 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
 			log.info("Delete form answer with id = " + formAnswer.getId());
 		}
 		return this.getJdbcTemplate().update(SQL_DELETE, formAnswer.getId());
-	}
-
-	private final class FormAnswerExtractor implements ResultSetExtractor<FormAnswer> {
-		@Override
-		public FormAnswer extractData(ResultSet resultSet) throws SQLException {
-			FormAnswer formAnswer = new FormAnswerImpl();
-			formAnswer.setId(resultSet.getLong("id"));
-			formAnswer.setAnswer(resultSet.getString("answer"));
-			formAnswer.setInterview(new InterviewProxy(resultSet.getLong("id_interview")));
-			formAnswer.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
-			formAnswer.setFormAnswerVariant(new FormAnswerVariantProxy(resultSet.getLong("id_variant")));
-			formAnswer.setFormQuestion(new FormQuestionProxy(resultSet.getLong("id_question")));
-			return formAnswer;
-		}
 	}
 
 	@Override

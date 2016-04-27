@@ -5,7 +5,7 @@ import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -18,14 +18,14 @@ public class FormQuestionImpl implements FormQuestion {
     private QuestionType questionType;
     private boolean enable;
     private boolean mandatory;
-    private Set<FormAnswer> answers;
-    private Set<Role> roles;
+    private List<FormAnswer> answers;
+    private List<Role> roles;
 
     public FormQuestionImpl() {
     }
 
     public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory,
-                            Set<FormAnswer> answers, Set<Role> roles) {
+                            List<FormAnswer> answers, List<Role> roles) {
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;
@@ -35,7 +35,7 @@ public class FormQuestionImpl implements FormQuestion {
     }
 
     public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory,
-                            Set<FormAnswer> answers, Set<Role> roles) {
+                            List<FormAnswer> answers, List<Role> roles) {
         this.id = id;
         this.title = title;
         this.questionType = questionType;
@@ -54,22 +54,22 @@ public class FormQuestionImpl implements FormQuestion {
     }
 
     @Override
-    public Set<FormAnswer> getAnswers() {
+    public List<FormAnswer> getAnswers() {
         return answers;
     }
 
     @Override
-    public void setAnswers(Set<FormAnswer> answers) {
+    public void setAnswers(List<FormAnswer> answers) {
         this.answers = answers;
     }
 
     @Override
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
     @Override
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

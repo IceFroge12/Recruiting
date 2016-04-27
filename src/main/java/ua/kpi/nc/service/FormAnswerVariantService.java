@@ -3,7 +3,7 @@ package ua.kpi.nc.service;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * AnswerVariant service
@@ -16,12 +16,13 @@ import java.util.Set;
  */
 public interface FormAnswerVariantService {
 
+	
     /**
      * Answer variants by question
      * @param formQuestion question by which the search will be done
      * @return  set of available answer variants for the question
      */
-    Set<FormAnswerVariant> getAnswerVariantsByQuestion(FormQuestion formQuestion);
+    List<FormAnswerVariant> getAnswerVariantsByQuestion(FormQuestion formQuestion);
 
     /**
      * Add new answer variant for the question
@@ -29,7 +30,7 @@ public interface FormAnswerVariantService {
      * @param formQuestion The question for which answer variant will be assigned
      * @return the id of added answer variant
      */
-    Long addAnswerVariant(FormAnswerVariant answerVariant, FormQuestion formQuestion);
+    Long addAnswerVariant(FormAnswerVariant answerVariant);
 
     /**
      * Update answer variant

@@ -1,16 +1,15 @@
 package ua.kpi.nc.service.impl;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.ApplicationFormDao;
 import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.dao.DataSourceSingleton;
+import ua.kpi.nc.persistence.dao.DataSourceFactory;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
@@ -34,17 +33,17 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
-	public Set<ApplicationForm> getByUserId(Long id) {
+	public List<ApplicationForm> getByUserId(Long id) {
 		return applicationFormDao.getByUserId(id);
 	}
 
 	@Override
-	public Set<ApplicationForm> getByStatus(String status) {
+	public List<ApplicationForm> getByStatus(String status) {
 		return applicationFormDao.getByStatus(status);
 	}
 
 	@Override
-	public Set<ApplicationForm> getByState(boolean state) {
+	public List<ApplicationForm> getByState(boolean state) {
 		return applicationFormDao.getByState(state);
 	}
 
@@ -54,13 +53,13 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
-	public boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers) {
-		try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+	public boolean insertApplicationForm(ApplicationForm applicationForm) {
+		try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
 			connection.setAutoCommit(false);
-			Long generatedId = applicationFormDao.insertApplicationForm(applicationForm, user, connection);
+			Long generatedId = applicationFormDao.insertApplicationForm(applicationForm, connection);
 			applicationForm.setId(generatedId);
 			FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
-			for (FormAnswer formAnswer : formAnswers) {
+			for (FormAnswer formAnswer : applicationForm.getAnswers()) {
 				formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
 						formAnswer.getFormAnswerVariant(), applicationForm, connection);
 			}
@@ -75,7 +74,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
-	public Set<ApplicationForm> getAll() {
+	public List<ApplicationForm> getAll() {
 		return applicationFormDao.getAll();
 	}
 

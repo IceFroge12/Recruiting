@@ -1,12 +1,17 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
-import ua.kpi.nc.persistence.model.*;
+import java.sql.Timestamp;
+import java.util.List;
+
+import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
+import ua.kpi.nc.persistence.model.Interview;
+import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.Status;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
-
-import java.sql.Timestamp;
-import java.util.Set;
 
 public class ApplicationFormProxy implements ApplicationForm {
 
@@ -106,25 +111,25 @@ public class ApplicationFormProxy implements ApplicationForm {
 	}
 
 	@Override
-	public Set<Interview> getInterviews() {
+	public List<Interview> getInterviews() {
 		checkApplicationForm();
 		return applicationFormImpl.getInterviews();
 	}
 
 	@Override
-	public void setInterviews(Set<Interview> interviews) {
+	public void setInterviews(List<Interview> interviews) {
 		checkApplicationForm();
 		applicationFormImpl.setInterviews(interviews);
 	}
 
 	@Override
-	public Set<FormAnswer> getAnswers() {
+	public List<FormAnswer> getAnswers() {
 		checkApplicationForm();
 		return applicationFormImpl.getAnswers();
 	}
 
 	@Override
-	public void setAnswers(Set<FormAnswer> answers) {
+	public void setAnswers(List<FormAnswer> answers) {
 		checkApplicationForm();
 		applicationFormImpl.setAnswers(answers);
 	}

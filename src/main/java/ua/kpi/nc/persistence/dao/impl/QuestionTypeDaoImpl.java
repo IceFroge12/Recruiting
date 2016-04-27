@@ -11,49 +11,56 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 /**
  * Created by IO on 21.04.2016.
  */
 public class QuestionTypeDaoImpl extends JdbcDaoSupport implements QuestionTypeDao {
 
-    private static Logger log = LoggerFactory.getLogger(QuestionTypeDaoImpl.class.getName());
+	private static Logger log = LoggerFactory.getLogger(QuestionTypeDaoImpl.class.getName());
 
-    public QuestionTypeDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }
+	static final String TABLE_NAME = "form_question_type";
+	static final String ID_COL = "id";
+	static final String TYPE_TITLE_COL = "type_title";
 
-    @Override
-    public QuestionType getById(Long id) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for form question with id  = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters("SELECT form_question_type.id, form_question_type.type_title FROM public.form_question_type WHERE form_question_type.id = ?;",
-                new FormQuestionTypeExtractor(), id);
-    }
+	private static final String SQL_GET_ID = "SELECT " + ID_COL + ", " + TYPE_TITLE_COL + " FROM " + TABLE_NAME
+			+ " WHERE " + ID_COL + " = ?";
 
-    @Override
-    public Long persistQuestionType(QuestionType questionType) {
-        return this.getJdbcTemplate().insert("INSERT INTO public.form_question_type(type_title) VALUES(?);", questionType.getTypeTitle());
+	private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + TYPE_TITLE_COL + ") VALUES(?);";
 
-    }
+	private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + TABLE_NAME + " = ?;";
 
-    @Override
-    public int deleteQuestionType(QuestionType questionType) {
-        return this.getJdbcTemplate().update("DELETE FROM public.form_question_type WHERE form_question_type.id = ?;", questionType.getId());
-    }
+	public QuestionTypeDaoImpl(DataSource dataSource) {
+		this.setJdbcTemplate(new JdbcTemplate(dataSource));
+	}
 
+	@Override
+	public QuestionType getById(Long id) {
+		if (log.isTraceEnabled()) {
+			log.trace("Looking for form question with id  = " + id);
+		}
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_ID, new FormQuestionTypeExtractor(), id);
+	}
 
-    private static final class FormQuestionTypeExtractor implements ResultSetExtractor<QuestionType> {
+	@Override
+	public Long persistQuestionType(QuestionType questionType) {
+		return this.getJdbcTemplate().insert(SQL_INSERT, questionType.getTypeTitle());
 
-        @Override
-        public QuestionType extractData(ResultSet resultSet) throws SQLException {
-            QuestionType questionType = new QuestionType();
-            questionType.setId(resultSet.getLong("id"));
-            questionType.setTypeTitle(resultSet.getString("type_title"));
-            return questionType;
-        }
-    }
+	}
 
+	@Override
+	public int deleteQuestionType(QuestionType questionType) {
+		return this.getJdbcTemplate().update(SQL_DELETE, questionType.getId());
+	}
+
+	private static final class FormQuestionTypeExtractor implements ResultSetExtractor<QuestionType> {
+
+		@Override
+		public QuestionType extractData(ResultSet resultSet) throws SQLException {
+			QuestionType questionType = new QuestionType();
+			questionType.setId(resultSet.getLong(ID_COL));
+			questionType.setTypeTitle(resultSet.getString(TYPE_TITLE_COL));
+			return questionType;
+		}
+	}
 
 }

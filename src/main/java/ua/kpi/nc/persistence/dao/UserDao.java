@@ -34,6 +34,10 @@ public interface UserDao {
 
     int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
+    Set<User> getUsersByToken(String token);
+
+    Set<User> getAssignedStudents(Long id);
+
     Set<User> getAllStudents();
 
     Set<User> getAllEmploees();

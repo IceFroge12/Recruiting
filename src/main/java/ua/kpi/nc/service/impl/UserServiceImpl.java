@@ -90,6 +90,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set<User> getUsersByToken(String token) {
+        return userDao.getUsersByToken(token);
+    }
+
+    @Override
+    public Set<User> getAssignedStudents(Long id) {
+        return userDao.getAssignedStudents(id);
+    }
+
+    @Override
     public Set<User> getAllStudents() {
         return userDao.getAllStudents();
     }

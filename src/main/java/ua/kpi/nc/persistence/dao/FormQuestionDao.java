@@ -1,18 +1,17 @@
 package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
 
 import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by IO on 21.04.2016.
  */
 public interface FormQuestionDao {
 
-    Long insertFormQuestion(FormQuestion formQuestion, QuestionType questionType, Connection connection);
+    Long insertFormQuestion(FormQuestion formQuestion, Connection connection);
 
     int deleteFormQuestion(FormQuestion formQuestion);
 
@@ -24,9 +23,11 @@ public interface FormQuestionDao {
 
     FormQuestion getById(Long id);
 
-    Set<FormQuestion> getByRole(Role role);
+    List<FormQuestion> getByRole(Role role);
 
-    Set<FormQuestion> getAll();
+    List<FormQuestion> getAll();
+
+	int updateFormQuestion(FormQuestion formQuestion);
 
 
 }
