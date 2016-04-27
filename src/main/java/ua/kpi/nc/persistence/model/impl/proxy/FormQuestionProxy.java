@@ -97,6 +97,7 @@ public class FormQuestionProxy implements FormQuestion{
 
     @Override
     public boolean isMandatory() {
+        checkFormQuestion();
         return formQuestion.isMandatory();
     }
 

@@ -13,6 +13,7 @@ import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.Set;
  * Created by Nikita on 22.04.2016.
  */
 public class FormAnswerDAOImpl extends JdbcDaoSupport implements FormAnswerDao {
+
     private static final String SQL_GET_BY_ID =
             "SELECT fa.id, fa.answer, fa.id_question, fa.id_application_form, fa.id_variant, fa.id_interview \n" +
                     "FROM form_answer fa \n" +
@@ -59,13 +61,36 @@ public class FormAnswerDAOImpl extends JdbcDaoSupport implements FormAnswerDao {
 
     @Override
     public Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
-                                 FormAnswerVariant answerVariant, ApplicationForm applicationForm) {
+                                 FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection) {
         if (log.isInfoEnabled()) {
-            log.info("Inserting form answer with interview_id= " + interview.getId() + ", question_id= " + question.getTitle() +
-                    ", application form id=" + applicationForm.getId() + ", form answer variant id= " + answerVariant.getId());
+            log.info("Inserting form answer with interview_id= " + interview.getId() + ", question_id= "
+                    + question.getTitle() + ", application form id=" + applicationForm.getId()
+                    + ", form answer variant id= " + answerVariant.getId());
         }
-        return this.getJdbcTemplate().insert(SQL_INSERT, formAnswer.getAnswer(), question.getId(),
-                applicationForm.getId(), answerVariant.getId(), interview.getId());
+        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formAnswer.getAnswer(), question.getId(),
+                applicationForm.getId(), answerVariant != null ? answerVariant.getId() : null, interview.getId());
+    }
+
+    @Override
+    public Long insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
+                                                   FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection) {
+        if (log.isInfoEnabled()) {
+            log.info("Inserting form answer with question_id= " + question.getTitle() + ", application form id="
+                    + applicationForm.getId() + ", form answer variant id= " + answerVariant.getId());
+        }
+        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formAnswer.getAnswer(), question.getId(),
+                applicationForm.getId(), answerVariant != null ? answerVariant.getId() : null, null);
+    }
+
+    @Override
+    public Long insertFormAnswerForInterview(FormAnswer formAnswer, FormQuestion question,
+                                             FormAnswerVariant answerVariant, Interview interview, Connection connection) {
+        if (log.isInfoEnabled()) {
+            log.info("Inserting form answer with interview_id= " + interview.getId() + ", question_id= "
+                    + question.getTitle() + ", form answer variant id= " + answerVariant.getId());
+        }
+        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formAnswer.getAnswer(), question.getId(), null,
+                answerVariant != null ? answerVariant.getId() : null, interview.getId());
     }
 
     @Override

@@ -19,7 +19,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://dinbror.dk/bpopup/assets/jquery.bpopup-0.9.4.min.js"></script>
     <script type="text/javascript" src="http://dinbror.dk/bpopup/assets/jquery.easing.1.3.js"></script>
-    <script type="text/javascript" src="/js/adminstuffmanagement.js"></script>
+    <script type="text/javascript" src="/js/admin/adminstuffmanagement.js"></script>
 </head>
 <body>
 <div id="main-container" class="container-fluid">
@@ -180,7 +180,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/js/client.js"></script>
-<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/util/client.js"></script>
+<script type="text/javascript" src="/js/util/bootstrap.js"></script>
 </body>
 </html>

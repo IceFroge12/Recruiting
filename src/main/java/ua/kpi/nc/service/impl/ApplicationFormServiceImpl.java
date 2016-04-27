@@ -1,5 +1,6 @@
 package ua.kpi.nc.service.impl;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Set;
@@ -9,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.ApplicationFormDao;
 import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.dao.DataSourceFactory;
+import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
@@ -54,7 +55,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
 	@Override
 	public boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers) {
-		try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+		try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
 			connection.setAutoCommit(false);
 			Long generatedId = applicationFormDao.insertApplicationForm(applicationForm, user, connection);
 			applicationForm.setId(generatedId);

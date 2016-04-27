@@ -3,7 +3,7 @@ package ua.kpi.nc.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.dao.DataSourceFactory;
+import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.dao.InterviewDao;
 import ua.kpi.nc.persistence.model.*;
@@ -53,7 +53,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public boolean insertInterviewWithAnswers(Interview interview, ApplicationForm applicationForm, User interviewer, Role role, Set<FormAnswer> formAnswers) {
-        try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
             Long generatedId = interviewDao.insertInterview(interview,applicationForm,interviewer,role, connection);
             interview.setId(generatedId);

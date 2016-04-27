@@ -88,7 +88,7 @@ public class JdbcTemplate {
             }
             return collection;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //TODO logger
             return null;
         }
     }

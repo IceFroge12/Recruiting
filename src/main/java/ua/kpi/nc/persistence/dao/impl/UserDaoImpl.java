@@ -79,7 +79,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public User getByID(Long id) {
         if (log.isInfoEnabled()){
-            log.info("Looking for user with id = " + id);
+            log.info("Looking for user with id = ", id);
         }
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new UserExtractor(), id);
     }

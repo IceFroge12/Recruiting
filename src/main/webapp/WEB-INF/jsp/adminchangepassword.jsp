@@ -16,9 +16,9 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700&subset=latin,cyrillic'
           rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/client.css">
-    <script type="text/javascript" src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/js/adminchangepassword.js"></script>
+    <script type="text/javascript" src="/js/util/jquery.js"></script>
+    <script type="text/javascript" src="/js/util/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/admin/adminchangepassword.js"></script>
 
 </head>
 <body>

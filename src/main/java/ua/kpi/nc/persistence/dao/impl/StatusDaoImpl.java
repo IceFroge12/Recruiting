@@ -54,7 +54,7 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
             Status status = new Status();
             status.setId(resultSet.getLong("id"));
             status.setTitle(resultSet.getString("title"));
-            return null;
+            return status;
         }
     }
 

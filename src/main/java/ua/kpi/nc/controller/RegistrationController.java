@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.EmailTemplateService;
 import ua.kpi.nc.service.RoleService;
@@ -17,6 +19,8 @@ import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -38,8 +42,8 @@ public class RegistrationController {
     private RoleService roleService = ServiceFactory.getRoleService();
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView registration() {
-        UserImpl user = new UserImpl();
+    public ModelAndView registrationModel() {
+        User user = new UserImpl();
         ModelAndView modelAndView = new ModelAndView("registration");
         modelAndView.addObject("user", user);
         return modelAndView;
@@ -47,7 +51,7 @@ public class RegistrationController {
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String addUser(UserImpl user) {
+    public String addUser(UserImpl user) throws MessagingException {
 
         if (userService.isExist(user.getEmail())) {
             return "redirect:registration";
@@ -55,16 +59,17 @@ public class RegistrationController {
 
         String hashedPassword = passwordEncoderGeneratorService.encode(user.getPassword());
 
+        String token = RandomStringUtils.randomAlphabetic(50);
+        user.setConfirmToken(token);
         user.setPassword(hashedPassword);
 
-        Role role = roleService.getRoleById(2L);
+        Role role = roleService.getRoleByTitle(String.valueOf(RoleEnum.STUDENT));
         System.out.println(role);
         userService.insertUser(user, role);
 
-        String token = "http://localhost:8084/registration/token=" +
-                passwordEncoderGeneratorService.encode(user.getFirstName()) + RandomStringUtils.randomAlphabetic(40);
+        String url = "http://localhost:8084/registration/token="+token;
 
-        System.out.println("TOKEN"+token);
+        System.out.println("TOKEN"+url);
 
         EmailTemplate emailTemplate = emailTemplateService.getById(2L);
 
@@ -75,18 +80,18 @@ public class RegistrationController {
 
         senderService.send(user.getEmail(), "Please confirm your account NC KPI", text);
 
+
         return "redirect:/login";
     }
 
 
     @RequestMapping(value = "/{token}", method = RequestMethod.GET)
     public String registrationConfirm(@PathVariable String token) {
-//
+
 //        if (userService.confirmUser(token)) {
 //
-//        } else {
-//            userService.deleteUserByToken(token);
 //        }
+        //todo
 
         return "login";
     }

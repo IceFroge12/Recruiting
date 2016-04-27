@@ -8,15 +8,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="adminheader.jsp" %>
 <%@ include file="adminfooter.jsp" %>
-<%@ include file="adminmenupanel.jsp" %>
+<%--<%@ include file="adminmenupanel.jsp" %>--%>
 <html>
 <head>
-    <script type="text/javascript" src="/js/jquery-1.12.3.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/util/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="/js/util/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/client.css">
-    <script type="text/javascript" src="/js/adminstudentmanagement.js"></script>
+    <script type="text/javascript" src="/js/admin/adminstudentmanagement.js"></script>
 
     <title>Student Management</title>
 </head>
@@ -42,7 +42,24 @@
                 </form>
             </div>
         </div>
+
+        <table id="employee-table" class="table table-hover ">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Assigned students</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
+
 </div>
 
 </body>

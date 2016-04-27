@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/student")
-public class StudentMainController {
+public class StudentApplicationFormController {
 
     @RequestMapping("/student")
     public ModelAndView adminPage() {

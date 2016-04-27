@@ -52,13 +52,13 @@ public class ServiceFactory {
         return new InterviewServiceImpl(DaoFactory.getInterviewDao());
     }
 
-    public static NotificationTypeService getNotificationTypeService() {
-        return new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
-    }
-
-    public static QuestionTypeService getQuestionTypeService() {
-        return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
-    }
+//    public static NotificationTypeService getNotificationTypeService() {
+//        return new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
+//    }
+//
+//    public static QuestionTypeService getQuestionTypeService() {
+//        return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
+//    }
 
     public static ReportService getReportService() {
         return new ReportServiceImpl(DaoFactory.getReportDao());

@@ -15,13 +15,13 @@ public interface FormAnswerDao {
 	Set<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
 
 	Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
-			FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
+						  FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
 
 	Long insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
-			FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
+											FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
 
 	Long insertFormAnswerForInterview(FormAnswer formAnswer, FormQuestion question, FormAnswerVariant answerVariant,
-			Interview interview, Connection connection);
+									  Interview interview, Connection connection);
 
 	int updateFormAnswer(FormAnswer formAnswer);
 

@@ -1,12 +1,9 @@
 $(document).ready(function () {
 
-
-    var admin = false;
-    var soft = false;
-    var tech = false;
     var adminEdit = false;
     var softEdit = false;
     var techEdit = false;
+    var roles = [];
 
     $("body").on("click", "#status", function () {
         $('#assignedList').bPopup({
@@ -26,7 +23,6 @@ $(document).ready(function () {
                 console.log(data);
             }
         });
-        
     });
 
 
@@ -82,7 +78,7 @@ $(document).ready(function () {
         if (data = true) {
             $(this).closest("tr").find('td:eq(4)').replaceWith("<td><button class='btn btn-info' " +
                 "type='button' id='delegate'><span class='glyphicon glyphicon-remove'></span></button></td>");
-        }else {
+        } else {
             $(this).closest("tr").find('td:eq(4)').replaceWith("<td><button class='btn btn-info' " +
                 "id='delegate' type='button'></button></td>");
         }
@@ -138,28 +134,28 @@ $(document).ready(function () {
 
         $("#tech").on("click", function () {
             if ($(this).is(":checked")) {
-                tech = true;
+                roles.push({roleName: "TECH"});
             }
             else {
-                tech = false;
+                roles.pop("TECH");
             }
         });
 
         $("#soft").on("click", function () {
             if ($(this).is(":checked")) {
-                soft = true
+                roles.push({roleName: "SOFT"})
             }
             else {
-                soft = false;
+                roles.pop("SOFT");
             }
         });
 
         $("#admin").on("click", function () {
             if ($(this).is(":checked")) {
-                admin = true;
+                roles.push({roleName: "ADMIN"})
             }
             else {
-                admin = false;
+                roles.pop("ADMIN");
             }
         });
     }
@@ -174,19 +170,23 @@ $(document).ready(function () {
         var lastName = $("#lastName").val();
         var email = $("#email").val();
 
+        console.log(roles);
 
         $.ajax({
             url: 'addEmployee',
             type: 'POST',
-            data: {
-                "firstName": firstName, "secondName": secondName, "lastName": lastName,
-                "email": email, "admin": admin, "soft": soft, "tech": tech
-            },
+            data: JSON.stringify({
+                firstName: firstName,
+                secondName: secondName,
+                lastName: lastName,
+                email: email,
+                roleList: roles
+            }),
+            contentType: 'application/json',
             success: function (data) {
-                console.log("save Employee")
-
             }
         });
+
     });
 
 
@@ -229,7 +229,6 @@ $(document).ready(function () {
         var secondName = $("#secondNameEdit").val();
         var lastName = $("#lastNameEdit").val();
         var email = $("#emailEdit").val();
-
 
         var user = {
             email: email, firstName: firstName, secondName: secondName,

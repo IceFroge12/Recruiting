@@ -2,7 +2,7 @@ package ua.kpi.nc.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.kpi.nc.persistence.dao.DataSourceFactory;
+import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.dao.FormQuestionDao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
@@ -41,7 +41,7 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
 
     @Override
     public Long addAnswerVariant(FormAnswerVariant formatVariant, FormQuestion formQuestion) {
-        try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             Long generatedFormAnswerId = formAnswerVariantDao
                     .insertFormAnswerVariant(formatVariant, formQuestion, connection);
             formatVariant.setId(generatedFormAnswerId);

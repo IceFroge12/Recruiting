@@ -1,5 +1,6 @@
 package ua.kpi.nc.service;
 
+import java.io.IOException;
 import java.util.Set;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
@@ -21,7 +22,7 @@ public interface ApplicationFormService {
 
 	int deleteApplicationForm(ApplicationForm applicationForm);
 
-	boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers);
+	boolean insertApplicationForm(ApplicationForm applicationForm, User user, Set<FormAnswer> formAnswers) throws IOException;
 
 	int updateApplicationForm(ApplicationForm applicationForm);
 
