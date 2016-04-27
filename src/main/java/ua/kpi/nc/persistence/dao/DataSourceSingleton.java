@@ -18,15 +18,15 @@ public class DataSourceSingleton {
     private static PropertiesReader propertiesReader = PropertiesReader.getInstance();
 
 
-    private String databasePassword = propertiesReader.propertiesReader("db.password");
+    private static String databasePassword = propertiesReader.propertiesReader("db.password");
 
-    private String databaseServerName = propertiesReader.propertiesReader("db.server.name");
+    private static String databaseServerName = propertiesReader.propertiesReader("db.server.name");
 
-    private String databaseUsername = propertiesReader.propertiesReader("db.username");;
+    private static String databaseUsername = propertiesReader.propertiesReader("db.username");;
 
-    private String databaseName = propertiesReader.propertiesReader("db.name");;
+    private static String databaseName = propertiesReader.propertiesReader("db.name");;
 
-    private  int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));;
+    private static   int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));;
 
     private DataSourceSingleton(){
         try {

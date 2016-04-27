@@ -45,8 +45,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showAllEmployee", method = RequestMethod.POST)
     @ResponseBody
-    public Set<User> showAllEmployees() throws IOException {
-
+    public Set<User> showAllEmployees(){
         Set<User> users = userService.getAllEmploees();
         return users;
     }

@@ -1,10 +1,6 @@
 package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.model.FormAnswerVariant;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.service.impl.*;
 
 /**
@@ -53,12 +49,12 @@ public class ServiceFactory {
     }
 
 //    public static NotificationTypeService getNotificationTypeService() {
-//        return new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
+////        return new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
 //    }
-//
-//    public static QuestionTypeService getQuestionTypeService() {
-//        return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
-//    }
+
+    public static QuestionTypeService getQuestionTypeService() {
+        return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
+    }
 
     public static ReportService getReportService() {
         return new ReportServiceImpl(DaoFactory.getReportDao());
