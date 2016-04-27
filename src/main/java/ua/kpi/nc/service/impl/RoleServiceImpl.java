@@ -11,9 +11,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-
 public class RoleServiceImpl implements RoleService {
-
 
     private RoleDao roleDao;
 
