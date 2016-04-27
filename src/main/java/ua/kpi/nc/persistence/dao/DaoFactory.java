@@ -55,9 +55,9 @@ public class DaoFactory {
         return new ScheduleTimePointDaoImpl(DataSourceSingleton.getInstance());
     }
 
-//    public static NotificationTypeDao getNotificationTypeDao() {
-//        return new NotificationTypeDaoImpl(DataSourceSingleton.getInstance());
-//    }
+    public static NotificationTypeDao getNotificationTypeDao() {
+        return new NotificationTypeDaoImpl(DataSourceSingleton.getInstance());
+    }
 
     public static TimePriorityTypeDao getTimePriorityDao() {
         return new TimePriorityTypeDaoImpl(DataSourceSingleton.getInstance());

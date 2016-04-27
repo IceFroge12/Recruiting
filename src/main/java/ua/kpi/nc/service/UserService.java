@@ -32,7 +32,7 @@ public interface UserService {
 
     int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
-    Set<User> getUsersByToken(String token);
+    User getUserByToken(String token);
 
     Set<User> getAssignedStudents(Long id);
 

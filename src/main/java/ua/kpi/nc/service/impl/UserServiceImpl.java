@@ -90,8 +90,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<User> getUsersByToken(String token) {
-        return userDao.getUsersByToken(token);
+    public User getUserByToken(String token) {
+        return userDao.getUserByToken(token);
     }
 
     @Override

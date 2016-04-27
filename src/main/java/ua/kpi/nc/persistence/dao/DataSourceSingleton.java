@@ -22,13 +22,16 @@ public class DataSourceSingleton {
 
     private static String databaseServerName = propertiesReader.propertiesReader("db.server.name");
 
-    private static String databaseUsername = propertiesReader.propertiesReader("db.username");;
+    private static String databaseUsername = propertiesReader.propertiesReader("db.username");
 
-    private static String databaseName = propertiesReader.propertiesReader("db.name");;
 
-    private static   int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));;
+    private static String databaseName = propertiesReader.propertiesReader("db.name");
 
-    private DataSourceSingleton(){
+
+    private static int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));
+
+
+    private DataSourceSingleton() {
         try {
             dataSource = getDataSource();
         } catch (NamingException e) {
@@ -36,8 +39,8 @@ public class DataSourceSingleton {
         }
     }
 
-    public static DataSource getInstance(){
-        if(dataSourceSingleton == null){
+    public static DataSource getInstance() {
+        if (dataSourceSingleton == null) {
             dataSourceSingleton = new DataSourceSingleton();
         }
         return dataSource;

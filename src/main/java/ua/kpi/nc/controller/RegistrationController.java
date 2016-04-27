@@ -20,8 +20,8 @@ import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import javax.mail.MessagingException;
-import java.io.IOException;
-import java.util.Random;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by dima on 12.04.16.
@@ -64,34 +64,28 @@ public class RegistrationController {
         user.setPassword(hashedPassword);
 
         Role role = roleService.getRoleByTitle(String.valueOf(RoleEnum.STUDENT));
-        System.out.println(role);
         userService.insertUser(user, role);
 
-        String url = "http://localhost:8084/registration/token="+token;
-
-        System.out.println("TOKEN"+url);
+        String url = "http://localhost:8084/registration/" + token;
 
         EmailTemplate emailTemplate = emailTemplateService.getById(2L);
 
-        String text =  emailTemplate.getTitle()+
-                token  + emailTemplate.getText();
-
-        System.out.println(user.getEmail().toString());
+        String text = emailTemplate.getTitle() +
+                url + emailTemplate.getText();
 
         senderService.send(user.getEmail(), "Please confirm your account NC KPI", text);
-
 
         return "redirect:/login";
     }
 
 
-    @RequestMapping(value = "/{token}", method = RequestMethod.GET)
-    public String registrationConfirm(@PathVariable String token) {
-
-//        if (userService.confirmUser(token)) {
-//
-//        }
-        //todo
+    @RequestMapping(value = "{token}", method = RequestMethod.GET)
+    public String registrationConfirm(@PathVariable("token") String token) {
+        User user = userService.getUserByToken(token);
+        user.setActive(true);
+        Date date = new Date();
+        user.setRegistrationDate(new Timestamp(date.getTime()));
+        userService.updateUser(user);
 
         return "login";
     }
