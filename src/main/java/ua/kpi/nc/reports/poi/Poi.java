@@ -7,8 +7,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.reports.Line;
+import ua.kpi.nc.reports.Report;
 import ua.kpi.nc.service.ReportService;
 import ua.kpi.nc.service.ServiceFactory;
 
@@ -22,41 +22,39 @@ import java.util.List;
 /**
  * Created by Алексей on 28.04.2016.
  */
-public class Poi {
+class Poi {
     private BufferedOutputStream bos;
     private Workbook wb;
-    private ReportService rs;
     private ArrayList<Object> rows;
     private ArrayList<Line> cells;
     private static Logger log = LoggerFactory.getLogger(Poi.class.getName());
 
-    Poi() {
+    Poi(Report report) {
         wb = new SXSSFWorkbook();
-        rs = ServiceFactory.getReportService();
-        rows = (ArrayList) rs.getReportOfApproved().getHeader().getCells();
-        cells = (ArrayList) rs.getReportOfApproved().getLines();
+        rows = (ArrayList<Object>) report.getHeader().getCells();
+        cells = (ArrayList<Line>) report.getLines();
     }
 
-    public void init(String path) {
+    private void init(String path) {
         try {
             bos = new BufferedOutputStream(new FileOutputStream(path));
-            log.trace("open BufferedOutputStream");
+            log.trace("Open BufferedOutputStream was successful");
         } catch (FileNotFoundException e) {
             log.error("Cannot initialize OutputStream", e);
         }
     }
 
-    void close() {
+    private void close() {
         try {
             bos.close();
-            log.trace("close BufferedOutputStream");
+            log.trace("Close BufferedOutputStream was successful");
         } catch (IOException e) {
             log.error("Cannot close OutputStream", e);
         }
     }
 
 
-    void write(List<Object> objects, List<Line> lines) {
+    private void write(List<Object> objects, List<Line> lines) {
 
         ArrayList<Object> rows = (ArrayList<Object>) objects;
         ArrayList<Line> cells = (ArrayList<Line>) lines;
@@ -77,7 +75,7 @@ public class Poi {
         }
         try {
             wb.write(bos);
-            log.trace("Write data into Workbook");
+            log.trace("Write data into Workbook was successful");
         } catch (IOException e) {
             log.error("Cannot write data into Workbook", e);
         }
@@ -89,6 +87,13 @@ public class Poi {
         close();
     }
 
-
+//    public static void main(String[] args) {
+//        Poi poi = new Poi(ServiceFactory.getReportService().getReportOfApproved());
+//        poi.writeXLSX("report1.xlsx");
+//
+//                ReportService rs = ServiceFactory.getReportService();
+//                rows = (ArrayList) rs.getReportOfApproved().getHeader().getCells();
+//                cells = (ArrayList) rs.getReportOfApproved().getLines();
+//    }
 }
 
