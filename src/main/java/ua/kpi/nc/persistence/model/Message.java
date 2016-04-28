@@ -6,27 +6,22 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 /**
  * @author Korzh
  */
-public class ResendMessage {
+public class Message {
+
     private Long id;
     private String subject;
     private String text;
     private String email;
+    private Boolean status;
 
-    public ResendMessage() {
+    public Message() {
     }
 
-    public ResendMessage(String subject, String text, String email, boolean status) {
+    public Message(String subject, String text, String email, Boolean status) {
         this.subject = subject;
         this.text = text;
         this.email = email;
-
-    }
-
-    public ResendMessage(Long id, String subject, String text, String email, boolean status) {
-        this.id = id;
-        this.subject = subject;
-        this.text = text;
-        this.email = email;
+        this.status = status;
     }
 
     public Long getId() {
@@ -61,6 +56,13 @@ public class ResendMessage {
         this.email = email;
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -68,13 +70,14 @@ public class ResendMessage {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        ResendMessage that = (ResendMessage) o;
+        Message that = (Message) o;
 
         return new EqualsBuilder()
                 .append(id, that.id)
                 .append(subject, that.subject)
                 .append(text, that.text)
                 .append(email, that.email)
+                .append(status, that.status)
                 .isEquals();
     }
 
@@ -85,6 +88,18 @@ public class ResendMessage {
                 .append(subject)
                 .append(text)
                 .append(email)
+                .append(status)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", subject='" + subject + '\'' +
+                ", text='" + text + '\'' +
+                ", email='" + email + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

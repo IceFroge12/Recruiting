@@ -1,6 +1,5 @@
 package ua.kpi.nc.persistence.dto;
 
-import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 
 import java.util.List;

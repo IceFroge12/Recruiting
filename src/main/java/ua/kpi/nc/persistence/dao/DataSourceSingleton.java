@@ -24,9 +24,7 @@ public class DataSourceSingleton {
 
     private static String databaseUsername = propertiesReader.propertiesReader("db.username");
 
-
     private static String databaseName = propertiesReader.propertiesReader("db.name");
-
 
     private static int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));
 

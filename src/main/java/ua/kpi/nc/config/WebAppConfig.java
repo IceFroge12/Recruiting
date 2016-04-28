@@ -22,6 +22,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/fullcalendar/**").addResourceLocations("/fullcalendar/");
         registry.addResourceHandler("/lib/**").addResourceLocations("/lib/");
         registry.addResourceHandler("/slider/**").addResourceLocations("/slider/");
+        registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+        registry.addResourceHandler("/photo/**").addResourceLocations("/photo/");
     }
 
     @Bean

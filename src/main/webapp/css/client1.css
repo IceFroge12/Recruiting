@@ -1,0 +1,284 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+html{
+	min-height:100%;
+}
+body{
+	background: #ededed;
+	height:100%;
+}
+.navmenu{
+	padding-top: 50px;
+}
+.navbar{
+	display: block;
+	text-align:center;
+}
+.navbar-brand{
+	display:inline-block;
+	float:none;
+}
+.navbar-toggle{
+	position:absolute;
+	float: left;
+	margin-left: 15px;
+}
+.container{
+	max-width:100%;
+}
+@media (min-width: 1px){
+	.navbar-toggle{
+		display:block !important;
+	}
+}
+@media (min-width: 992px){
+	body{
+		padding:0 0 0 300px;
+	}
+	.navmenu{
+		padding-top: 0;
+	}
+	.navbar{
+		display: none !important; /*for IE8*/
+	}
+}
+.semi-header {
+    background: #ededed;
+    border: 1px solid #000000;
+    padding: 20px 0px 20px 0px;
+	margin:0;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.row {
+    margin-left: -35px;
+	}
+#not-row{
+	margin-left: 0px;
+}
+#navbar-headerR{
+	background: #4f7ba2;
+	color:white;
+	border-bottom: 1px solid white;
+	z-index:1;
+}
+#left-menu1{
+	padding:20;
+	padding-bottom:300px;
+	background: #4f7ba2;
+	top:0;
+	padding-top:50px;
+}
+#left-menu1-title{
+	padding:20;
+	padding-bottom:300px;
+	background: #4f7ba2;
+	top:0;
+	padding-top:0px;
+}
+#main-container{
+	padding:0;
+	min-height:100%;
+	margin-top:50px;
+	padding-bottom:50px;
+}
+#main-container-title{
+	padding:0;
+	min-height:100%;
+	margin-top:0px;
+	padding-bottom:50px;
+}
+#navbar-text{
+	color:white;
+	padding:10px;
+	padding-left:20px;
+}
+.menu-text{
+	text-align:left;
+	padding-left:10px;
+}
+.table-cells {
+	text-align:left;
+	margin:10px;
+}
+.sub-menu{
+	width:100%;
+	height:100%;
+	margin:0 !important;
+	border-radius: 0px;
+}
+.wide-not{
+	width:100%
+}
+.width-all{
+	width:100%;
+}
+.top-marg{
+	margin-top:10px;
+}
+.btn-left{
+	margin-top:10px;
+}
+h4{
+text-align:left;
+}
+.header-text{
+	color:white;
+}
+.li-header{
+	padding-top:2px;
+}
+.info-row{
+	height: 67vh;
+}
+.second-header{
+	margin-bottom:1px;
+}
+.navbar{
+	margin-bottom:0;
+}
+.full-height{
+	height:100%;
+}
+.semi-footer {
+    text-align: center;
+    color: #333333;
+    background: #ededed;
+    border: 1px solid #000000;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+.logo {
+    background: 0 0 no-repeat ;
+    width: 395px;
+    height: 71px;
+    margin: 0 auto;
+}
+
+.row-div {
+    margin-top: 10px;
+}
+
+.logo-description {
+    text-align: right;
+    color: #333333;
+}
+
+.right-col-menu {
+    padding: 0;
+}
+
+.left-info-col {
+    border-radius: 3px;
+    color: #333333;
+    padding: 10px 20px;
+}
+
+.half-width {
+    width: 40%;
+    margin: 0 auto;
+}
+
+#alert {
+    width: 20%;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: none;
+}
+
+.panel-body {
+    color: #c8c8c8;
+}
+
+.application-form-header {
+    float: left;
+}
+.but-cell {
+    float: top;
+}
+.export {
+    position: absolute;
+    top: 11px;
+    right: 20px;
+}
+.left-menu-btn{
+	height:50px;
+	padding:15px;
+}
+.middle-align{
+	padding:5px;
+}
+.left-align {
+    margin: 0;
+}
+.table{
+	text-align: left;
+}
+.input-nums{
+	width:60px;
+}
+.table>tbody>tr>td{
+	vertical-align:middle;
+}
+.theme-appl{
+	text-align:center;
+	font-size:large;
+	color:#4f7ba2;
+}
+.marks-cell{
+	padding:5px;
+	text-align:left;
+}
+.inline-display{
+	display:inline-block;
+}
+.right-align{
+	float:right;
+}
+.rec-edit {
+    text-align: center;
+}
+.title1{
+	background-color:#7B68EE;
+	padding:40px;
+}
+.title2{
+	background-color:#1E90FF;
+	padding:40px;
+}
+.info{
+	text-align:left;
+}
+.search-element{
+	margin-left:5px;
+}
+legend {
+    color: #333333;
+}
+
+.btn-label {
+	position: relative;
+	left: -12px;
+	display: inline-block;
+	padding: 6px 12px;
+	background: rgba(0,0,0,0.15);
+	border-radius: 3px 0 0 3px;
+}
+.btn-labeled {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.input-group {
+	margin-bottom:10px;
+}
+.separator { border-right: 1px solid #dfdfe0; }
+.facebook,.twitter { min-width:170px; }
+.facebook { background-color:#354E84;color:#fff; }
+.twitter { background-color:#00A5E3;color:#fff; }
+.facebook:hover,.twitter:hover { color:#fff; }
