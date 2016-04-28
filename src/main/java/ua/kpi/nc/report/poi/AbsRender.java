@@ -7,12 +7,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ua.kpi.nc.report.Line;
 import ua.kpi.nc.report.Report;
-import ua.kpi.nc.service.ReportService;
-import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.report.renderer.ReportRenderer;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,29 +22,23 @@ import java.util.List;
 /**
  * Created by Алексей on 28.04.2016.
  */
-class Poi {
-    private BufferedOutputStream bos;
-    private Workbook wb;
-    private ArrayList<Object> rows;
-    private ArrayList<Line> cells;
-    private static Logger log = LoggerFactory.getLogger(Poi.class.getName());
+public abstract class AbsRender implements ReportRenderer{
+    protected BufferedOutputStream bos;
+    protected HttpServletResponse response;
+    protected Workbook wb;
+    protected String filename;
+    protected ArrayList<Object> rows;
+    protected ArrayList<Line> cells;
+    protected static Logger log = LoggerFactory.getLogger(AbsRender.class.getName());
 
-    Poi(Report report) {
-        wb = new SXSSFWorkbook();
+    @Override
+    public void render(Report report, HttpServletResponse response) {
         rows = (ArrayList<Object>) report.getHeader().getCells();
         cells = (ArrayList<Line>) report.getLines();
+        write(rows, cells, response);
     }
 
-    private void init(String path) {
-        try {
-            bos = new BufferedOutputStream(new FileOutputStream(path));
-            log.trace("Open BufferedOutputStream was successful");
-        } catch (FileNotFoundException e) {
-            log.error("Cannot initialize OutputStream", e);
-        }
-    }
-
-    private void close() {
+    protected void close() {
         try {
             bos.close();
             log.trace("Close BufferedOutputStream was successful");
@@ -54,13 +47,10 @@ class Poi {
         }
     }
 
-
-    private void write(List<Object> objects, List<Line> lines) {
-
+    protected void write(List<Object> objects, List<Line> lines, HttpServletResponse response) {
         ArrayList<Object> rows = (ArrayList<Object>) objects;
         ArrayList<Line> cells = (ArrayList<Line>) lines;
         log.trace("rows and cells initialization was successful");
-        Workbook wb = new SXSSFWorkbook();
         Sheet sheet = wb.createSheet();
         Row row = sheet.createRow(0);
         for (int i = 0; i < rows.size(); i++) {
@@ -75,26 +65,13 @@ class Poi {
             }
         }
         try {
-            wb.write(bos);
+            wb.write(response.getOutputStream());
             log.trace("Write data into Workbook was successful");
         } catch (IOException e) {
             log.error("Cannot write data into Workbook", e);
         }
-    }
-
-    public void writeXLSX(String path) {
-        init(path);
-        write(rows, cells);
         close();
     }
 
-//    public static void main(String[] args) {
-//        Poi poi = new Poi(ServiceFactory.getReportService().getReportOfApproved());
-//        poi.writeXLSX("report1.xlsx");
-//
-//                ReportService rs = ServiceFactory.getReportService();
-//                rows = (ArrayList) rs.getReportOfApproved().getHeader().getCells();
-//                cells = (ArrayList) rs.getReportOfApproved().getLines();
-//    }
-}
 
+}
