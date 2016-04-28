@@ -32,8 +32,24 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	static final String PHOTO_SCOPE_COL = "photo_scope";
 	static final String ID_USER_COL = "id_user";
 	static final String DATE_CREATE_COL = "date_create";
-	
+
+
 	static final String TABLE_NAME = "application_form";
+
+	private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
+        ApplicationForm applicationForm = new ApplicationFormImpl();
+        long id = resultSet.getLong(ID_COL);
+        applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
+        applicationForm.setAnswers(getAnswers(id));
+        applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
+        applicationForm.setId(id);
+        applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
+        applicationForm.setInterviews(getInterviews(id));
+        applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
+        applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
+        applicationForm.setUser(new UserProxy(resultSet.getLong(ID_USER_COL)));
+        return applicationForm;
+    };
 
 	private static final String SQL_GET_BY_ID = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
 			+ ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
@@ -62,6 +78,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	private static final String SQL_UPDATE = "UPDATE \"" + TABLE_NAME + "\" SET " + ID_STATUS_COL + " = ?, "
 			+ IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ? " + "WHERE " + ID_COL
 			+ " = ?";
+	private static final String SQL_GET_INTERVIEWS = "SELECT i.id\n" + "FROM \"interview\" i\n"
+			+ "WHERE i.id_application_form = ?";
+
 	private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
 	public ApplicationFormDaoImpl(DataSource dataSource) {
@@ -70,49 +89,37 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public ApplicationForm getById(Long id) {
-		if (log.isInfoEnabled()) {
-			log.info("Looking for application form with id = " + id);
-		}
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new ApplicationFormExtractor(), id);
+		log.info("Looking for application form with id = ", id);
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
 	}
 
 	@Override
 	public List<ApplicationForm> getByUserId(Long id) {
-		if (log.isInfoEnabled()) {
-			log.info("Looking for application forms of user with id = " + id);
-		}
-		return this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_ID, new ApplicationFormExtractor(), id);
+		log.info("Looking for application forms of user with id = " ,id);
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_ID, extractor, id);
 	}
 
 	@Override
 	public List<ApplicationForm> getByStatus(String status) {
-		if (log.isInfoEnabled()) {
-			log.info("Looking for application forms with status = " + status);
-		}
-		return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATUS, new ApplicationFormExtractor(), status);
+		log.info("Looking for application forms with status = ", status);
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATUS, extractor, status);
 	}
 
 	@Override
 	public List<ApplicationForm> getByState(boolean state) {
-		if (log.isInfoEnabled()) {
-			log.info("Looking for application forms with is_active = " + state);
-		}
-		return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATE, new ApplicationFormExtractor(), state);
+		log.info("Looking for application forms with is_active = ", state);
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATE, extractor, state);
 	}
 
 	@Override
 	public int deleteApplicationForm(ApplicationForm applicationForm) {
-		if (log.isInfoEnabled()) {
-			log.info("Deleting application form with id = " + applicationForm.getId());
-		}
+		log.info("Deleting application form with id = " , applicationForm.getId());
 		return this.getJdbcTemplate().update(SQL_DELETE, applicationForm.getId());
 	}
 
 	@Override
 	public Long insertApplicationForm(ApplicationForm applicationForm, Connection connection) {
-		if (log.isInfoEnabled()) {
-			log.info("Inserting application forms with user_id = " + applicationForm.getUser().getId());
-		}
+		log.info("Inserting application forms with user_id = " + applicationForm.getUser().getId());
 		return this.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
 				applicationForm.isActive(), applicationForm.getRecruitment().getId(), applicationForm.getPhotoScope(),
 				applicationForm.getUser().getId(), applicationForm.getDateCreate());
@@ -120,9 +127,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public int updateApplicationForm(ApplicationForm applicationForm) {
-		if (log.isInfoEnabled()) {
-			log.info("Updating application forms with id = " + applicationForm.getId());
-		}
+		log.info("Updating application forms with id = " + applicationForm.getId());
 		return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
 				applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
 				applicationForm.getId());
@@ -130,59 +135,27 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public List<ApplicationForm> getAll() {
-		if (log.isInfoEnabled()) {
-			log.info("Get all application forms");
-		}
-		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, new ApplicationFormExtractor());
+		log.info("Get all application forms");
+		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
 	}
 
-	private static final String SQL_GET_INTERVIEWS = "SELECT i.id\n" + "FROM \"interview\" i\n"
-			+ "WHERE i.id_application_form = ?";
+	;
 
 	private List<Interview> getInterviews(Long applicationFormId) {
-		return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, new ResultSetExtractor<Interview>() {
-
-			@Override
-			public Interview extractData(ResultSet resultSet) throws SQLException {
-				InterviewProxy interviewProxy = new InterviewProxy(resultSet.getLong("id"));
-				return interviewProxy;
-			}
-		}, applicationFormId);
+		return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, (ResultSetExtractor<Interview>) resultSet -> {
+            InterviewProxy interviewProxy = new InterviewProxy(resultSet.getLong("id"));
+            return interviewProxy;
+        }, applicationFormId);
 	}
 
 	private static final String SQL_GET_ANSWERS = "SELECT fa.id\n FROM \"form_answer\" fa\n WHERE fa.id_application_form = ?;";
 
 	private List<FormAnswer> getAnswers(Long applicationFormId) {
-		return this.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, new ResultSetExtractor<FormAnswer>() {
-
-			@Override
-			public FormAnswer extractData(ResultSet resultSet) throws SQLException {
-				FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
-				return formAnswerProxy;
-			}
-		}, applicationFormId);
+		return this.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
+            FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
+            return formAnswerProxy;
+        }, applicationFormId);
 		
 		
 	}
-
-	private final class ApplicationFormExtractor implements ResultSetExtractor<ApplicationForm> {
-
-		@Override
-		public ApplicationForm extractData(ResultSet resultSet) throws SQLException {
-			ApplicationForm applicationForm = new ApplicationFormImpl();
-			long id = resultSet.getLong(ID_COL);
-			applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
-			applicationForm.setAnswers(getAnswers(id));
-			applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
-			applicationForm.setId(id);
-			applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
-			applicationForm.setInterviews(getInterviews(id));
-			applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
-			applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
-			applicationForm.setUser(new UserProxy(resultSet.getLong(ID_USER_COL)));
-			return applicationForm;
-		}
-
-	}
-
 }

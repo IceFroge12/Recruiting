@@ -9,11 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.ApplicationFormDao;
 import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.dao.DataSourceFactory;
+import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.ApplicationFormService;
 
 public class ApplicationFormServiceImpl implements ApplicationFormService {
@@ -23,7 +22,6 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	private ApplicationFormDao applicationFormDao;
 
 	public ApplicationFormServiceImpl(ApplicationFormDao applicationFormDao) {
-		super();
 		this.applicationFormDao = applicationFormDao;
 	}
 
@@ -54,7 +52,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
 	@Override
 	public boolean insertApplicationForm(ApplicationForm applicationForm) {
-		try (Connection connection = DataSourceFactory.getInstance().getConnection()) {
+		try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
 			connection.setAutoCommit(false);
 			Long generatedId = applicationFormDao.insertApplicationForm(applicationForm, connection);
 			applicationForm.setId(generatedId);
@@ -66,7 +64,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 			connection.commit();
 		} catch (SQLException e) {
 			if (log.isWarnEnabled()) {
-				log.warn("Cannot insert Application form");
+				log.error("Cannot insert Application form",e);
 			}
 			return false;
 		}

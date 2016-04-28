@@ -29,6 +29,14 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
 	static final String TECH_MARK_COL = "tech_mark";
 	static final String FINAL_MARK_COL = "final_mark";
 
+	private ResultSetExtractor<Decision> extractor = resultSet -> {
+        Decision decision = new Decision();
+        decision.setSoftMark(resultSet.getInt(SOFT_MARK_COL));
+        decision.setTechMark(resultSet.getInt(TECH_MARK_COL));
+        decision.setFinalMark(resultSet.getInt(FINAL_MARK_COL));
+        return decision;
+    };
+
 	private static final String SQL_GET_ALL = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL
 			+ " FROM decision_matrix";
 
@@ -46,59 +54,37 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
 
 	@Override
 	public Decision getByMarks(int softMark, int techMark) {
-		if (log.isInfoEnabled()) {
-			log.info("Looking for decision with soft_mark = " + softMark + " and tech_mark = " + techMark);
-		}
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_IDS, new DecisionExtractor(), softMark, techMark);
+		log.info("Looking for decision with soft_mark, tech_mark = ",softMark, techMark);
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_IDS, extractor, softMark, techMark);
 	}
 
 	@Override
 	public Long insertDecision(Decision decision) {
-		if (log.isInfoEnabled()) {
-			log.info("Insert decision with soft_mark = " + decision.getSoftMark() + " tech_mark = "
-					+ decision.getTechMark() + " and final_mark = " + decision.getFinalMark());
-		}
+		log.info("Insert decision with soft_mark, tech_mark, final_mark = ", decision.getSoftMark(),
+				decision.getTechMark(), decision.getFinalMark());
 		return this.getJdbcTemplate().insert(SQL_INSERT, decision.getSoftMark(), decision.getTechMark(),
 				decision.getFinalMark());
 	}
 
 	@Override
 	public int updateDecision(Decision decision) {
-		if (log.isInfoEnabled()) {
-			log.info("Update decision with soft_mark = " + decision.getSoftMark() + " and tech_mark = "
-					+ decision.getTechMark());
-		}
+		log.info("Update decision with soft_mark, tech_mark  = ", decision.getSoftMark(), decision.getTechMark());
 		return this.getJdbcTemplate().update(SQL_UPDATE, decision.getFinalMark(), decision.getSoftMark(),
 				decision.getTechMark());
 	}
 
 	@Override
 	public int deleteDecision(Decision decision) {
-		if (log.isInfoEnabled()) {
-			log.info("Delete decision with soft_mark = " + decision.getSoftMark() + " tech_mark = "
-					+ decision.getTechMark() + " and final_mark = " + decision.getFinalMark());
-		}
+		log.info("Delete decision with soft_mark, tech_mark,final_mark = ",decision.getSoftMark(),
+				decision.getTechMark(), decision.getFinalMark());
 		return this.getJdbcTemplate().update(SQL_DELETE, decision.getSoftMark(), decision.getTechMark(),
 				decision.getFinalMark());
 	}
-
-	private final class DecisionExtractor implements ResultSetExtractor<Decision> {
-		@Override
-		public Decision extractData(ResultSet resultSet) throws SQLException {
-			Decision decision = new Decision();
-			decision.setSoftMark(resultSet.getInt(SOFT_MARK_COL));
-			decision.setTechMark(resultSet.getInt(TECH_MARK_COL));
-			decision.setFinalMark(resultSet.getInt(FINAL_MARK_COL));
-			return decision;
-		}
-	}
-
+	
 	@Override
 	public List<Decision> getAll() {
-		if (log.isInfoEnabled()) {
-			log.info("Getting all decisions");
-		}
-		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, new DecisionExtractor());
+		log.info("Getting all decisions");
+		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
 	}
 
 }

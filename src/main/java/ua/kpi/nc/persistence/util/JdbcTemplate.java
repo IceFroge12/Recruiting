@@ -88,9 +88,9 @@ public class JdbcTemplate {
             }
             return collection;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            log.error("Cannot read object",e);
         }
+        return null;
     }
 
     public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects){
@@ -111,7 +111,6 @@ public class JdbcTemplate {
             }
         } catch (SQLException e) {
             log.error("Cannot insert objects", e);
-            return null;
         }
         return null;
     }
@@ -132,7 +131,6 @@ public class JdbcTemplate {
             }
         } catch (SQLException e) {
             log.error("Cannot read objects", e);
-            return null;
         }
         return null;
     }

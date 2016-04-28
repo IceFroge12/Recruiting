@@ -23,38 +23,36 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
+    private ResultSetExtractor<Status> extractor = resultSet -> {
+        Status status = new Status();
+        status.setId(resultSet.getLong("id"));
+        status.setTitle(resultSet.getString("title"));
+        return status;
+    };
+
     @Override
     public Status getById(Long id) {
-        if (log.isTraceEnabled()){
-            log.trace("Looking for user with id = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.id = ?;", new StatusExtractor(), id);
+        log.trace("Looking for user with id = ", id);
+        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.id = ?;",
+                extractor, id);
     }
 
     @Override
     public int insertStatus(Status status) {
+        log.trace("Insert status");
         return this.getJdbcTemplate().update("INSERT INTO public.status(status.title) VALUES(?);", status.getTitle());
     }
 
     @Override
     public int updateStatus(Status status) {
-        return this.getJdbcTemplate().update("UPDATE public.status SET status.title = ? WHERE status.id = ?;", status.getTitle(), status.getId());
+        log.trace("Update status with id = ", status.getId());
+        return this.getJdbcTemplate().update("UPDATE public.status SET status.title = ? WHERE status.id = ?;",
+                status.getTitle(), status.getId());
     }
 
     @Override
     public int deleteStatus(Status status) {
+        log.trace("Delete status with id = ", status.getId());
         return this.getJdbcTemplate().update("DELETE FROM public.status WHERE status.id = ?;", status.getId());
     }
-
-    private static final class StatusExtractor implements ResultSetExtractor<Status>{
-
-        @Override
-        public Status extractData(ResultSet resultSet) throws SQLException {
-            Status status = new Status();
-            status.setId(resultSet.getLong("id"));
-            status.setTitle(resultSet.getString("title"));
-            return status;
-        }
-    }
-
 }

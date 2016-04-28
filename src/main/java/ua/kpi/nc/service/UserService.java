@@ -4,6 +4,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,7 +19,7 @@ public interface UserService {
 
     boolean isExist(String username);
 
-    boolean insertUser(User user, Role role);
+    boolean insertUser(User user, List<Role> roles);
 
     int updateUser(User user);
 
