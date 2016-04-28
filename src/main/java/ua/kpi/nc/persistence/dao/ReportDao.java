@@ -3,7 +3,7 @@ package ua.kpi.nc.persistence.dao;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
-import ua.kpi.nc.reports.Report;
+import ua.kpi.nc.report.Report;
 
 import java.util.List;
 import java.util.Set;

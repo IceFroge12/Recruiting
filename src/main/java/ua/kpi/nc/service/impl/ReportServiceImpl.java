@@ -4,7 +4,7 @@ import ua.kpi.nc.persistence.dao.ReportDao;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
-import ua.kpi.nc.reports.Report;
+import ua.kpi.nc.report.Report;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ReportService;
 import ua.kpi.nc.service.ServiceFactory;

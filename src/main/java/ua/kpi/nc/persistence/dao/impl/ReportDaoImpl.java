@@ -17,8 +17,8 @@ import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
-import ua.kpi.nc.reports.Line;
-import ua.kpi.nc.reports.Report;
+import ua.kpi.nc.report.Line;
+import ua.kpi.nc.report.Report;
 
 /**
  * Created by Nikita on 24.04.2016.

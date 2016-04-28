@@ -1,4 +1,4 @@
-package ua.kpi.nc.reports;
+package ua.kpi.nc.report;
 
 import java.util.ArrayList;
 import java.util.Collection;

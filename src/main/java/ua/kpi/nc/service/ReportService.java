@@ -2,7 +2,7 @@ package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.ReportInfo;
-import ua.kpi.nc.reports.Report;
+import ua.kpi.nc.report.Report;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package ua.kpi.nc.reports.poi;
+package ua.kpi.nc.report.poi;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -7,8 +7,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.kpi.nc.reports.Line;
-import ua.kpi.nc.reports.Report;
+
+import ua.kpi.nc.report.Line;
+import ua.kpi.nc.report.Report;
 import ua.kpi.nc.service.ReportService;
 import ua.kpi.nc.service.ServiceFactory;
 

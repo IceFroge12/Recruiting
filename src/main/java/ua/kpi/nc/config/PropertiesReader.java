@@ -28,7 +28,7 @@ public class PropertiesReader {
 
         Properties p = new Properties();
 
-        try(FileInputStream fileInputStream = new FileInputStream("/home/dima/Documents/IdeaProj/Recruiting/src/main/resources/app.properties")) {
+        try(FileInputStream fileInputStream = new FileInputStream("D:\\app.properties")) {
             p.load(fileInputStream);
             prop = p.getProperty(property);
         } catch (IOException e) {
