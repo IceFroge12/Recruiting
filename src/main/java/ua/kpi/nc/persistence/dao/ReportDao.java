@@ -1,8 +1,11 @@
 package ua.kpi.nc.persistence.dao;
 
+import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
 import ua.kpi.nc.reports.Report;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,4 +27,6 @@ public interface ReportDao {
 	int deleteReport(ReportInfo report);
 
 	Report getReportOfApproved();
+
+	Report getReportOfAnswers(FormQuestion question, List<Recruitment> recruitments);
 }
