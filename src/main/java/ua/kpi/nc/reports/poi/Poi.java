@@ -40,7 +40,7 @@ public class Poi {
     public void init(String path) {
         try {
             bos = new BufferedOutputStream(new FileOutputStream(path));
-            log.error("open BufferedOutputStream");
+            log.trace("open BufferedOutputStream");
         } catch (FileNotFoundException e) {
             log.error("Cannot initialize OutputStream", e);
         }
@@ -49,7 +49,7 @@ public class Poi {
     void close() {
         try {
             bos.close();
-            log.error("close BufferedOutputStream");
+            log.trace("close BufferedOutputStream");
         } catch (IOException e) {
             log.error("Cannot close OutputStream", e);
         }
@@ -60,7 +60,7 @@ public class Poi {
 
         ArrayList<Object> rows = (ArrayList<Object>) objects;
         ArrayList<Line> cells = (ArrayList<Line>) lines;
-        log.error("rows and cells initialization was successful");
+        log.trace("rows and cells initialization was successful");
         Workbook wb = new SXSSFWorkbook();
         Sheet sheet = wb.createSheet();
         Row row = sheet.createRow(0);
@@ -77,6 +77,7 @@ public class Poi {
         }
         try {
             wb.write(bos);
+            log.trace("Write data into Workbook");
         } catch (IOException e) {
             log.error("Cannot write data into Workbook", e);
         }
