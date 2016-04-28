@@ -47,6 +47,7 @@ public abstract class AbsRender implements ReportRenderer{
         for (int i = 0; i < rows.size(); i++) {
             Cell cell = row.createCell(i);
             cell.setCellValue(rows.get(i) + "");
+            sheet.autoSizeColumn(i);
         }
         for (int i = 1; i <= cells.size(); i++) {
             Row roww = sheet.createRow(i);
@@ -61,7 +62,6 @@ public abstract class AbsRender implements ReportRenderer{
         } catch (IOException e) {
             log.error("Cannot write data into Workbook", e);
         }
-
         //close();
     }
 
