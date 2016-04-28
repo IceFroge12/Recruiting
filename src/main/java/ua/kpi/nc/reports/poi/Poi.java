@@ -23,16 +23,19 @@ public class Poi {
     private BufferedOutputStream bos;
     private Workbook wb;
     private ReportService rs;
+    private ArrayList<Object> rows;
+    private ArrayList<Line> cells;
 
     public void init(String path) {
         try {
             bos = new BufferedOutputStream(new FileOutputStream(path));
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         wb = new SXSSFWorkbook();
         rs = ServiceFactory.getReportService();
+        rows = (ArrayList) rs.getReportOfApproved().getHeader().getCells();
+        cells = (ArrayList) rs.getReportOfApproved().getLines();
     }
 
     void close() {
@@ -46,25 +49,22 @@ public class Poi {
 
     void write(List<Object> objects, List<Line> lines) {
 
-        ArrayList<Object> list1 = (ArrayList<Object>) objects;
-        ArrayList<Line> list2 = (ArrayList) lines;
-
-        //  ArrayList<Object> list1 = (ArrayList) rs.getReportOfApproved().getHeader().getCells();
-        //  ArrayList<Line> list2 = (ArrayList) rs.getReportOfApproved().getLines();
+        ArrayList<Object> rows = (ArrayList<Object>) objects;
+        ArrayList<Line> cells = (ArrayList) lines;
 
 
         Workbook wb = new SXSSFWorkbook();
         Sheet sheet = wb.createSheet();
         Row row = sheet.createRow(0);
-        for (int i = 0; i < list1.size(); i++) {
+        for (int i = 0; i < rows.size(); i++) {
             Cell cell = row.createCell(i);
-            cell.setCellValue(list1.get(i) + "");
+            cell.setCellValue(rows.get(i) + "");
         }
-        for (int i = 1; i <= list2.size(); i++) {
+        for (int i = 1; i <= cells.size(); i++) {
             Row roww = sheet.createRow(i);
-            for (int j = 0; j < list1.size(); j++) {
+            for (int j = 0; j < rows.size(); j++) {
                 Cell cell = roww.createCell(j);
-                cell.setCellValue(list2.get(i - 1).getCells().get(j) + "");
+                cell.setCellValue(cells.get(i - 1).getCells().get(j) + "");
             }
         }
         try {
@@ -73,5 +73,15 @@ public class Poi {
             e.printStackTrace();
         }
     }
+
+    public void writeXLSX(String path) {
+        init(path);
+        write(rows, cells);
+        close();
+    }
+
+
+
+
 }
 
