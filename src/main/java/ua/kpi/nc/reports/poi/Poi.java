@@ -51,10 +51,6 @@ public class Poi {
         }
     }
 
-public static void main(String [] args){
-    m1();
-}
-
 
     }
 
