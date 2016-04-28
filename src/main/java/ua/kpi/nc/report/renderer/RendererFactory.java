@@ -11,6 +11,6 @@ public class RendererFactory {
 	}
 
 	public static ReportRenderer getJSONRenderer() {
-		return new JSONRender();
+		return new JSONRenderer();
 	}
 }

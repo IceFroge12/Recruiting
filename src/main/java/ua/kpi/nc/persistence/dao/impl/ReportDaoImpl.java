@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.ReportDao;
-import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.persistence.model.enums.ReportTypeEnum;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import ua.kpi.nc.report.Line;
@@ -101,74 +101,65 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
 	}
 
 	@Override
-	public Report getReportById(Long id) {
-		return null;
-	}
-
-	@Override
 	public Report getReportOfApproved() {
-		ReportInfo reportInfo = getByID(1L);
-		Report report = getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), new ReportOfApprovedExtractor());
+		if (log.isTraceEnabled()) {
+			log.trace("Creating report about approved applicants.");
+		}
+		ReportInfo reportInfo = getByID((long) (ReportTypeEnum.APPROVED.ordinal() + 1));
+		Report report = getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportOfApprovedExtractor);
 		if (report != null) {
 			report.setTitle(reportInfo.getTitle());
 		}
 		return report;
 	}
 
-	private final class ReportOfApprovedExtractor implements ResultSetExtractor<Report> {
-
-		@Override
-		public Report extractData(ResultSet resultSet) throws SQLException {
-			Report report = new Report();
-			Line header = new Line();
-			ResultSetMetaData metaData = resultSet.getMetaData();
-			int columnCount = metaData.getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				header.addCell(metaData.getColumnName(i));
-			}
-			report.setHeader(header);
-			do {
-				Line line = new Line();
-				for (int i = 1; i <= columnCount; i++) {
-					line.addCell(resultSet.getObject(i));
-				}
-				report.addRow(line);
-			} while (resultSet.next());
-
-			return report;
+	private final ResultSetExtractor<Report> reportOfApprovedExtractor = resultSet -> {
+		Report report = new Report();
+		Line header = new Line();
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		int columnCount = metaData.getColumnCount();
+		for (int i = 1; i <= columnCount; i++) {
+			header.addCell(metaData.getColumnName(i));
 		}
+		report.setHeader(header);
+		do {
+			Line line = new Line();
+			for (int i = 1; i <= columnCount; i++) {
+				line.addCell(resultSet.getObject(i));
+			}
+			report.addRow(line);
+		} while (resultSet.next());
 
-	}
+		return report;
+	};
 
 	@Override
-	public Report getReportOfAnswers(FormQuestion question, List<Recruitment> recruitments) {
-		ReportInfo reportInfo = getByID(2L);
-
+	public Report getReportOfAnswers(Long questionId, List<Recruitment> recruitments) {
+		log.trace("Creating report about answers of question with id ", questionId);
+		ReportInfo reportInfo = getByID((long) (ReportTypeEnum.ANSWERS.ordinal() + 1));
 		if (recruitments.size() > 0) {
 			Recruitment firstRecruitment = recruitments.get(0);
-			Report report = getJdbcTemplate().queryWithParameters(reportInfo.getQuery(),
-					new ResultSetExtractor<Report>() {
+			Report report = getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), resultSet -> {
 
-						@Override
-						public Report extractData(ResultSet resultSet) throws SQLException {
-							Report report = new Report();
-							Line header = new Line();
-							header.addCell("Recruitment");
-							Line firstLine = new Line();
-							firstLine.addCell(firstRecruitment.getName());
-							do {
-								header.addCell(resultSet.getObject(1));
-								firstLine.addCell(resultSet.getObject(2));
-							} while (resultSet.next());
-							report.setHeader(header);
-							report.addRow(firstLine);
-							return report;
-						}
-					}, firstRecruitment.getId(), question.getId());
+				Report rep = new Report();
+				Line header = new Line();
+				header.addCell("Recruitment");
+				Line firstLine = new Line();
+				firstLine.addCell(firstRecruitment.getName());
+				do {
+					header.addCell(resultSet.getObject(1));
+					firstLine.addCell(resultSet.getObject(2));
+				} while (resultSet.next());
+				rep.setHeader(header);
+				rep.addRow(firstLine);
+				return rep;
+
+			}, firstRecruitment.getId(), questionId);
+
 			if (report != null) {
 				for (int i = 1; i < recruitments.size(); i++) {
-					Line line = (getJdbcTemplate().queryWithParameters(reportInfo.getQuery(),
-							new ReportOfAnswerVariantsExtractor(), recruitments.get(i).getId(), question.getId()));
+					Line line = (getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportOfAnswersExtractor,
+							recruitments.get(i).getId(), questionId));
 					line.addFirstCell(recruitments.get(i).getName());
 					report.addRow(line);
 				}
@@ -179,17 +170,12 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
 		return null;
 	}
 
-	private final class ReportOfAnswerVariantsExtractor implements ResultSetExtractor<Line> {
-
-		@Override
-		public Line extractData(ResultSet resultSet) throws SQLException {
-			Line line = new Line();
-			do {
-				line.addCell(resultSet.getObject(2));
-			} while (resultSet.next());
-			return line;
-		}
-
-	}
+	private final ResultSetExtractor<Line> reportOfAnswersExtractor = resultSet -> {
+		Line line = new Line();
+		do {
+			line.addCell(resultSet.getObject(2));
+		} while (resultSet.next());
+		return line;
+	};
 
 }

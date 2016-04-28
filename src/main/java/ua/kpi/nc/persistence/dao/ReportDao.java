@@ -1,6 +1,5 @@
 package ua.kpi.nc.persistence.dao;
 
-import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
 import ua.kpi.nc.report.Report;
@@ -20,13 +19,11 @@ public interface ReportDao {
 
 	Long insertReport(ReportInfo report);
 
-	Report getReportById(Long id);
-
 	int updateReport(ReportInfo report);
 
 	int deleteReport(ReportInfo report);
 
 	Report getReportOfApproved();
 
-	Report getReportOfAnswers(FormQuestion question, List<Recruitment> recruitments);
+	Report getReportOfAnswers(Long questionId, List<Recruitment> recruitments);
 }
