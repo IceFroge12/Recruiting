@@ -38,15 +38,6 @@ public abstract class AbsRender implements ReportRenderer{
         write(rows, cells, response);
     }
 
-    protected void close() {
-        try {
-            bos.close();
-            log.trace("Close BufferedOutputStream was successful");
-        } catch (IOException e) {
-            log.error("Cannot close OutputStream", e);
-        }
-    }
-
     protected void write(List<Object> objects, List<Line> lines, HttpServletResponse response) {
         ArrayList<Object> rows = (ArrayList<Object>) objects;
         ArrayList<Line> cells = (ArrayList<Line>) lines;
@@ -70,7 +61,8 @@ public abstract class AbsRender implements ReportRenderer{
         } catch (IOException e) {
             log.error("Cannot write data into Workbook", e);
         }
-        close();
+
+        //close();
     }
 
 
