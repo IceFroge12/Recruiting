@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
-import ua.kpi.nc.persistence.model.Report;
+import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.reports.Report;
 
 import java.util.Set;
 
@@ -8,16 +9,19 @@ import java.util.Set;
  * Created by Nikita on 24.04.2016.
  */
 public interface ReportDao {
-    Report getByID(Long id);
+	ReportInfo getByID(Long id);
 
-    Report getByTitle(String title);
+	ReportInfo getByTitle(String title);
 
-    Set<Report> getAll();
+	Set<ReportInfo> getAll();
 
-    Long insertReport(Report report);
+	Long insertReport(ReportInfo report);
 
+	Report getReportById(Long id);
 
-    int updateReport(Report report);
+	int updateReport(ReportInfo report);
 
-    int deleteReport(Report report);
+	int deleteReport(ReportInfo report);
+
+	Report getReportOfApproved();
 }

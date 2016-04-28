@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Nikita on 24.04.2016.
  */
-public class Report implements Serializable {
+public class ReportInfo implements Serializable {
     private Long id;
     private String query;
     private String title;
@@ -39,7 +39,7 @@ public class Report implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Report report = (Report) o;
+        ReportInfo report = (ReportInfo) o;
 
         if (id != null ? !id.equals(report.id) : report.id != null) return false;
         if (query != null ? !query.equals(report.query) : report.query != null) return false;

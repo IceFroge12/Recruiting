@@ -1,7 +1,8 @@
 package ua.kpi.nc.service.impl;
 
 import ua.kpi.nc.persistence.dao.ReportDao;
-import ua.kpi.nc.persistence.model.Report;
+import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.reports.Report;
 import ua.kpi.nc.service.ReportService;
 
 import java.util.Set;
@@ -17,32 +18,28 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Report getByID(Long id) {
+    public ReportInfo getByID(Long id) {
         return reportDao.getByID(id);
     }
 
     @Override
-    public Report getByTitle(String title) {
+    public ReportInfo getByTitle(String title) {
         return reportDao.getByTitle(title);
     }
 
     @Override
-    public Set<Report> getAll() {
+    public Set<ReportInfo> getAll() {
         return reportDao.getAll();
     }
 
-    @Override
-    public Long insertReport(Report report) {
-        return reportDao.insertReport(report);
-    }
+	@Override
+	public Report getReportById(Long id) {
+		return reportDao.getReportById(id);
+	}
 
-    @Override
-    public int updateReport(Report report) {
-        return reportDao.updateReport(report);
-    }
+	@Override
+	public Report getReportOfApproved() {
+		return reportDao.getReportOfApproved();
+	}
 
-    @Override
-    public int deleteReport(Report report) {
-        return reportDao.deleteReport(report);
-    }
 }

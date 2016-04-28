@@ -41,7 +41,7 @@ public class Reports {
         }
     }
     void readData(){
-        try (FileInputStream input = new FileInputStream(new File(filename))){
+        /*try (FileInputStream input = new FileInputStream(new File(filename))){
             workbook = new HSSFWorkbook(input);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class Reports {
                 }
             }
             dataset.addValue(chart_data.doubleValue(), chart_label, chart_year);
-        }
+        }*/
     }
 
     DefaultCategoryDataset getDataSet() {

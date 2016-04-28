@@ -1,6 +1,7 @@
 package ua.kpi.nc.service;
 
-import ua.kpi.nc.persistence.model.Report;
+import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.reports.Report;
 
 import java.util.Set;
 
@@ -9,16 +10,14 @@ import java.util.Set;
  */
 public interface ReportService {
 
-    Report getByID(Long id);
+    ReportInfo getByID(Long id);
+    
+    Report getReportById(Long id);
+    
+    Report getReportOfApproved();
 
-    Report getByTitle(String title);
+    ReportInfo getByTitle(String title);
 
-    Set<Report> getAll();
+    Set<ReportInfo> getAll();
 
-    Long insertReport(Report report);
-
-
-    int updateReport(Report report);
-
-    int deleteReport(Report report);
 }
