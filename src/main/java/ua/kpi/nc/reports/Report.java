@@ -1,6 +1,7 @@
 package ua.kpi.nc.reports;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Report {
@@ -46,6 +47,10 @@ public class Report {
 
 	public boolean addRow(Line e) {
 		return lines.add(e);
+	}
+
+	public boolean addLines(Collection<? extends Line> c) {
+		return lines.addAll(c);
 	}
 
 }

@@ -1,6 +1,7 @@
 package ua.kpi.nc.reports;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Line {
@@ -23,4 +24,11 @@ public class Line {
 		return cells.add(arg0);
 	}
 
+	public boolean addCells(Collection arg0) {
+		return cells.addAll(arg0);
+	}
+
+	public void addFirstCell(Object arg0) {
+		cells.add(0, arg0);
+	}
 }
