@@ -83,8 +83,8 @@ public class DaoFactory {
         return new QuestionTypeDaoImpl(DataSourceSingleton.getInstance());
     }
 
-    public static ResendMessageDao getResendMessageDao() {
-        return new ResendMessageDaoImpl(DataSourceSingleton.getInstance());
+    public static SendMessageDao getResendMessageDao() {
+        return new SendMessageDaoImpl(DataSourceSingleton.getInstance());
     }
 }
 

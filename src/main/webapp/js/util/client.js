@@ -1,18 +1,21 @@
-$(document).ready(function(){
-   $('#login').on('submit', function(e){
-       e.preventDefault();
-       $('#alert').slideDown(300);
-   }) ;
-
-    $('.close').on('click', function(){
-        $('#alert').slideUp(300);
-    });
-	
-	 $('#calendar').fullCalendar({
-        // put your options and callbacks here
-    });
-	
-	$(function () {
-    $('#datetimepicker1').datetimepicker();
-  });
+$(function () {
+    $('#calendar').fullCalendar({
+        height: 420
+    })
 });
+
+$(function () {
+    $('#students_table').DataTable({
+        "pagingType": "full_numbers"
+    })
+});
+
+$(document).ready(function () {
+    $('#staff_table').DataTable({
+        "pagingType": "full_numbers"
+    })
+});
+
+// $(function () {
+//     $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+// });

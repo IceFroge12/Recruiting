@@ -9,13 +9,11 @@ import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
-import ua.kpi.nc.service.EmailTemplateService;
-import ua.kpi.nc.service.RoleService;
-import ua.kpi.nc.service.ServiceFactory;
-import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.service.*;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -35,7 +33,10 @@ public class AdminManagementStaffController {
 
     private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
 
-    private SenderService senderService = new SenderServiceImpl();
+    private SenderService senderService = SenderServiceImpl.getInstance();
+
+    private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
+
 
     @RequestMapping(value = "staffmanagement", method = RequestMethod.GET)
     public ModelAndView adminPage() {
@@ -45,25 +46,25 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showAllEmployee", method = RequestMethod.POST)
     @ResponseBody
-    public Set<User> showAllEmployees(){
+    public Set<User> showAllEmployees() {
         Set<User> users = userService.getAllEmploees();
         return users;
     }
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     @ResponseBody
-    public void addEmployee(@RequestBody UserDto userDto) {
+    public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
 
         List<RoleImpl> roles = userDto.getRoleList();
         Date date = new Date();
-
+        String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), RandomStringUtils.randomAlphabetic(10), true, new Timestamp(date.getTime()));
+                userDto.getLastName(), password, true, new Timestamp(date.getTime()));
         //TODO add DAO method(Insert User with rolesList)
 
         EmailTemplate emailTemplate = emailTemplateService.getById(1L);
 
-//        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
+        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
 
     }
 
