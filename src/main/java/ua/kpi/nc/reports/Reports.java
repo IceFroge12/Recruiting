@@ -31,7 +31,7 @@ public class Reports {
     void writeData(Object... obj){
         workbook = new HSSFWorkbook();
         sheet = workbook.createSheet();
-        //....Row row = ..
+        //....Line row = ..
         try(FileOutputStream output = new FileOutputStream(filename)) {
             workbook.write(output);
         } catch (FileNotFoundException e) {
@@ -50,12 +50,12 @@ public class Reports {
         }
         sheet = workbook.getSheetAt(0);
         dataset = new DefaultCategoryDataset();
-        Iterator<Row> rowIterator = sheet.iterator();
+        Iterator<Line> rowIterator = sheet.iterator();
         String chart_label = "";
         Number chart_data = 0;
         String chart_year = "";
         while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
+            Line row = rowIterator.next();
             Iterator<Cell> cellIterator = row.cellIterator();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();

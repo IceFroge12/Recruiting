@@ -7,12 +7,12 @@ public class Report {
 
 	private String title;
 
-	private Row header;
+	private Line header;
 
-	private List<Row> rows;
+	private List<Line> lines;
 
 	public Report() {
-		rows = new ArrayList<>();
+		lines = new ArrayList<>();
 	}
 
 	public Report(String title) {
@@ -20,11 +20,11 @@ public class Report {
 		this.title = title;
 	}
 
-	public Row getHeader() {
+	public Line getHeader() {
 		return header;
 	}
 
-	public void setHeader(Row header) {
+	public void setHeader(Line header) {
 		this.header = header;
 	}
 
@@ -36,16 +36,16 @@ public class Report {
 		this.title = title;
 	}
 
-	public List<Row> getRows() {
-		return rows;
+	public List<Line> getLines() {
+		return lines;
 	}
 
-	public void setRows(List<Row> rows) {
-		this.rows = rows;
+	public void setLines(List<Line> lines) {
+		this.lines = lines;
 	}
 
-	public boolean addRow(Row e) {
-		return rows.add(e);
+	public boolean addRow(Line e) {
+		return lines.add(e);
 	}
 
 }

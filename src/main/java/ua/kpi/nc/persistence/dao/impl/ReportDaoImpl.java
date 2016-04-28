@@ -6,8 +6,8 @@ import ua.kpi.nc.persistence.dao.ReportDao;
 import ua.kpi.nc.persistence.model.ReportInfo;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
+import ua.kpi.nc.reports.Line;
 import ua.kpi.nc.reports.Report;
-import ua.kpi.nc.reports.Row;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -113,20 +113,20 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
 		@Override
 		public Report extractData(ResultSet resultSet) throws SQLException {
 			Report report = new Report();
-			Row header = new Row();
+			Line header = new Line();
 			ResultSetMetaData metaData = resultSet.getMetaData();
 			int columnCount = metaData.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {
 				header.addCell(metaData.getColumnName(i));
 			}
 			report.setHeader(header);
-			while (resultSet.next()) {
-				Row row = new Row();
+			do {
+				Line line = new Line();
 				for (int i = 1; i <= columnCount; i++) {
-					row.addCell(resultSet.getObject(i));
+					line.addCell(resultSet.getObject(i));
 				}
-				report.addRow(row);
-			}
+				report.addRow(line);
+			} while (resultSet.next());
 
 			return report;
 		}
