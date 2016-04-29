@@ -1,11 +1,11 @@
 package ua.kpi.nc.report.renderer;
 
-import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 
 import ua.kpi.nc.report.Report;
 
 public interface ReportRenderer {
 
-	void render(Report report, HttpServletResponse response);
-	
+	public void render(Report report, OutputStream out);
+
 }
