@@ -1,5 +1,9 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
@@ -15,16 +19,21 @@ import java.util.Set;
  */
 public class UserProxy implements User {
 
+    @JsonIgnore
     private Long id;
 
+    @JsonIgnore
     private UserImpl user;
 
+    @JsonIgnore
     private UserService userService;
 
     public UserProxy() {
+        userService = ServiceFactory.getUserService();
     }
 
     public UserProxy(Long id) {
+        this();
         this.id = id;
     }
 
@@ -163,7 +172,6 @@ public class UserProxy implements User {
 
     private void checkUserForExist() {
         if (user == null) {
-            userService = ServiceFactory.getUserService();
             user = downloadUser();
         }
     }

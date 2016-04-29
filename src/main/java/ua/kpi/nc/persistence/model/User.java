@@ -1,5 +1,8 @@
 package ua.kpi.nc.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -48,7 +51,7 @@ public interface User extends Serializable {
     String getPassword();
 
     void setPassword(String password);
-
+    @JsonIgnore
     Set<SocialInformation> getSocialInformations();
 
     void setSocialInformations(Set<SocialInformation> socialInformations);

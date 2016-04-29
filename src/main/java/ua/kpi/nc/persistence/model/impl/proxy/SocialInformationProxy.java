@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import ua.kpi.nc.persistence.model.SocialInformation;
@@ -13,6 +14,8 @@ import ua.kpi.nc.service.SocialInformationService;
  * Created by Chalienko on 15.04.2016.
  */
 public class SocialInformationProxy implements SocialInformation {
+
+
     private Long id;
 
     private SocialInformationImpl socialInformation;

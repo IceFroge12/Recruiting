@@ -88,7 +88,8 @@ public class JdbcTemplate {
             }
             return collection;
         } catch (SQLException e) {
-            log.error("Cannot read object",e);
+            //TODO logger
+            return null;
         }
         return null;
     }

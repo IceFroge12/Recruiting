@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean insertUser(User user, List<Role> roles) {
+    public boolean insertUser(User user, Role role) {
         try(Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
             Long generatedUserId = userDao.insertUser(user, connection);
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
             connection.commit();
         } catch (SQLException e) {
             if (log.isWarnEnabled()) {
-                log.warn("Cannot insert user",e);
+                log.error("Cannot insert user",e);
             }
             return false;
         }
@@ -93,8 +93,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<User> getUsersByToken(String token) {
-        return userDao.getUsersByToken(token);
+    public User getUserByToken(String token) {
+        return userDao.getUserByToken(token);
     }
 
     @Override

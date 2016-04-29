@@ -1,10 +1,12 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -13,6 +15,7 @@ import java.util.Set;
  * Created by Chalienko on 13.04.2016.
  */
 public class UserImpl implements User {
+
 
     private static final long serialVersionUID = -5190252598383342478L;
 
@@ -68,6 +71,32 @@ public class UserImpl implements User {
         this.socialInformations = socialInformations;
     }
 
+    public UserImpl(String email, String firstName, String secondName, String lastName, String password, boolean isActive,
+                    Timestamp registrationDate) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.password = password;
+        this.isActive = isActive;
+        this.registrationDate = registrationDate;
+    }
+
+    public UserImpl(String email, String firstName, String secondName, String lastName, Set<Role> roles) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.roles = roles;
+    }
+
+    public UserImpl(String email, String firstName, String secondName, String lastName) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -78,11 +107,13 @@ public class UserImpl implements User {
         this.id = id;
     }
 
+    @JsonIgnore
     @Override
     public Set<SocialInformation> getSocialInformations() {
         return socialInformations;
     }
 
+    @JsonIgnore
     @Override
     public void setSocialInformations(Set<SocialInformation> socialInformations) {
         this.socialInformations = socialInformations;

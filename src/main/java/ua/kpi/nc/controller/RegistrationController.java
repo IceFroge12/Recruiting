@@ -1,17 +1,26 @@
 package ua.kpi.nc.controller;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ua.kpi.nc.persistence.model.EmailTemplate;
+import ua.kpi.nc.persistence.model.Message;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
-import ua.kpi.nc.service.RoleService;
-import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.service.*;
 import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
+import ua.kpi.nc.service.util.SenderService;
+import ua.kpi.nc.service.util.SenderServiceImpl;
 
-import java.util.Random;
+import javax.mail.MessagingException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by dima on 12.04.16.
@@ -20,70 +29,69 @@ import java.util.Random;
 @RequestMapping(value = "/registration")
 public class RegistrationController {
 
-    private UserService userService;
+    private UserService userService = ServiceFactory.getUserService();
 
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService
             = PasswordEncoderGeneratorService.getInstance();
 
-//    private SenderService senderService;
+    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
 
-    private RoleService roleService;
+    private SenderService senderService = SenderServiceImpl.getInstance();
 
+    private RoleService roleService = ServiceFactory.getRoleService();
+
+    private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView registration() {
-        UserImpl user = new UserImpl();
+    public ModelAndView registrationModel() {
+        User user = new UserImpl();
         ModelAndView modelAndView = new ModelAndView("registration");
         modelAndView.addObject("user", user);
+        List<Message> list =  sendMessageService.getAll();
+        for (Message message1 : list){
+            System.out.println(message1);
+        }
         return modelAndView;
     }
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String addUser(UserImpl user) {
-        System.out.println("LOL"+user.toString());
+    public String addUser(UserImpl user) throws MessagingException {
 
-        Random rand = new Random();
+        if (userService.isExist(user.getEmail())) {
+            return "redirect:registration";
+        }
 
-        int randomNum = rand.nextInt((1000000 - 7) + 7);
+        String hashedPassword = passwordEncoderGeneratorService.encode(user.getPassword());
 
-        String token = "http://localhost:8084/registration/token=" +
-                passwordEncoderGeneratorService.encode(user.getFirstName()) + randomNum;
-
-
-        System.out.println("TOKEN"+token);
-
-        String text = "<html><body><h4>Chiki piki</h4><br><img src=\"cid:\"/><br><a href=" +
-                token + ">Confirm your account</a><br></body></html>";
-
-        String password = user.getPassword();
-        String hashedPassword = passwordEncoderGeneratorService.encode(password);
-
+        String token = RandomStringUtils.randomAlphabetic(50);
+        user.setConfirmToken(token);
         user.setPassword(hashedPassword);
 
-//        if (userService.isExist(user.getEmail())) {
-//            return "redirect:registration";
-//        }
-
-        Role role = roleService.getRoleById(2l);
-        System.out.println(role);
+        Role role = roleService.getRoleByTitle(String.valueOf(RoleEnum.STUDENT));
         userService.insertUser(user, role);
 
-//        senderService.send(user.getEmail(), "Please confirm your account NC KPI", text);
+        String url = "http://localhost:8084/registration/" + token;
+
+        EmailTemplate emailTemplate = emailTemplateService.getById(2L);
+
+        String text = emailTemplate.getTitle() +
+                url + emailTemplate.getText();
+        String subject = "Please confirm your account NC KPI";
+
+        senderService.send(user.getEmail(), subject, text);
 
         return "redirect:/login";
     }
 
 
-    @RequestMapping(value = "/{token}", method = RequestMethod.GET)
-    public String registrationConfirm(@PathVariable String token) {
-
-//        if (userService.confirmUser(token)) {
-//
-//        } else {
-//            userService.deleteUserByToken(token);
-//        }
-
+    @RequestMapping(value = "{token}", method = RequestMethod.GET)
+    public String registrationConfirm(@PathVariable("token") String token) {
+        User user = userService.getUserByToken(token);
+        user.setActive(true);
+        Date date = new Date();
+        user.setRegistrationDate(new Timestamp(date.getTime()));
+        userService.updateUser(user);
         return "login";
     }
 

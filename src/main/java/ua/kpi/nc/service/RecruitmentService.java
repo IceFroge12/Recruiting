@@ -8,6 +8,7 @@ import java.util.List;
  * @author Chalienko  22.04.2016.
  */
 public interface RecruitmentService {
+
     Recruitment getRecruitmentById(Long id);
 
     Recruitment getRecruitmentByName(String name);

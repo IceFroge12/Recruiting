@@ -1,6 +1,5 @@
 package ua.kpi.nc.service.impl;
 
-import org.springframework.stereotype.Repository;
 import ua.kpi.nc.persistence.dao.SocialInformationDao;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
@@ -33,7 +32,7 @@ public class SocialInformationServiceImpl implements SocialInformationService {
 
     @Override
     public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork) {
-        return socialInformationDao.insertSocialInformation(socialInformation, user,socialNetwork);
+        return socialInformationDao.insertSocialInformation(socialInformation, user, socialNetwork);
     }
 
     @Override

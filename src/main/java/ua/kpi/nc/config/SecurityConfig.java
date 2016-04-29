@@ -31,26 +31,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationSuccessHandler authenticationSuccessHandler = AuthenticationSuccessHandlerService.getInstance();
 
-    AuthenticationManagerBuilder a = AuthenticationManagerService.getAuthenticationManagerBuilder();
-
-    @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
-        auth.authenticationProvider(authenticationProvider());
-    }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-
         http.authorizeRequests()
                 .antMatchers("/account/change_password/**").authenticated()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/student/**").hasRole("STUDENT")
-                .antMatchers("/dev/**").hasRole("DEV")
-                .antMatchers("/hr/**").hasRole("HR")
-                .antMatchers("/ba/**").hasRole("BA")
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/student/**").hasRole("STUDENT")
+//                .antMatchers("/dev/**").hasRole("DEV")
+//                .antMatchers("/hr/**").hasRole("HR")
+//                .antMatchers("/ba/**").hasRole("BA")
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("email").passwordParameter("password")
@@ -63,9 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
     }
 
+
+
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
     private DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();

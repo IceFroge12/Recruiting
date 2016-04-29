@@ -3,8 +3,6 @@ package ua.kpi.nc.persistence.dao.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.dao.RoleDao;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
@@ -29,22 +27,6 @@ import java.util.Set;
 public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
-
-    private ResultSetExtractor<User> extractor = resultSet -> {
-        User user = new UserImpl();
-        user.setId(resultSet.getLong("id"));
-        user.setEmail(resultSet.getString("email"));
-        user.setFirstName(resultSet.getString("first_name"));
-        user.setLastName(resultSet.getString("last_name"));
-        user.setSecondName(resultSet.getString("second_name"));
-        user.setPassword(resultSet.getString("password"));
-        user.setConfirmToken(resultSet.getString("confirm_token"));
-        user.setActive(resultSet.getBoolean("is_active"));
-        user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
-        user.setRoles(getRoles(resultSet.getLong("id")));
-        user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
-        return user;
-    };
 
     public UserDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
@@ -92,12 +74,12 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "  JOIN \"user\" us on (us.id = i.id_interviewer) WHERE  us.id = ?;";
 
     private static final String SQL_GET_ALL_STUDENTS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
-            "u.password,u.confirm_token,u.is_active, u.registration_date, r.role\n" +
-            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "  INNER JOIN role r ON ur.id_role = r.id\n" +
+            "u.password,u.confirm_token,u.is_active, u.registration_date, r.role\n"+
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n"+
+            "  INNER JOIN role r ON ur.id_role = r.id\n"+
             "WHERE r.role = 'ROLE_STUDENT'\n";
 
-    private static final String SQL_GET_ALL_EMPLOYEES = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
+    private static final String SQL_GET_ALL_EMPLOYEES= "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
             "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "INNER JOIN role r ON ur.id_role = r.id\n" +
@@ -106,14 +88,18 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public User getByID(Long id) {
-        log.info("Looking for user with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        if (log.isInfoEnabled()){
+            log.info("Looking for user with id = ", id);
+        }
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new UserExtractor(), id);
     }
 
     @Override
     public User getByUsername(String email) {
-        log.info("Looking for user with email = ", email);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
+        if (log.isInfoEnabled()) {
+            log.info("Looking for user with email = " + email);
+        }
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, new UserExtractor(), email);
     }
 
     @Override
@@ -124,119 +110,155 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public Long insertUser(User user, Connection connection) {
-        log.info("Insert user with email = ", user.getEmail());
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
-                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
+        if (log.isInfoEnabled()) {
+            log.info("Insert user with email = " + user.getEmail());
+        }
+        return this.getJdbcTemplate().insert(SQL_INSERT,connection, user.getEmail(),user.getFirstName(),user.getSecondName(),
+                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate());
     }
-
     @Override
-    public int updateUser(User user) {
-        log.info("Update user with id = ", user.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
-                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
+    public int updateUser(User user){
+        if (log.isInfoEnabled()) {
+            log.info("Update user with id = " + user.getId());
+        }
+        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(),user.getFirstName(),user.getSecondName(),
+                user.getLastName(),user.getPassword(),user.getConfirmToken(),user.isActive(),user.getRegistrationDate(),
                 user.getId());
     }
 
     @Override
     public int deleteUser(User user) {
-        log.info("Delete user with id = ", user.getId());
+        if (log.isInfoEnabled()) {
+            log.info("Delete user with id = " + user.getId());
+        }
         return this.getJdbcTemplate().update(SQL_DELETE, user.getId());
     }
 
     @Override
     public boolean addRole(User user, Role role) {
-        if (user.getId() == null) {
-            log.warn(String.format("User: %s don`t have id", user.getEmail()));
+        if ((user.getId() == null) &&(log.isDebugEnabled())) {
+            log.warn("User: "+ user.getEmail() + " don`t have id");
             return false;
         }
         return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
-                user.getId(), role.getId()) > 0;
+                user.getId(),role.getId()) > 0;
     }
 
     @Override
     public boolean addRole(User user, Role role, Connection connection) {
-        if (user.getId() == null) {
-            log.warn("User: don`t have id", user.getEmail());
+        if ((user.getId() == null) &&(log.isDebugEnabled())) {
+            log.warn("User: "+ user.getEmail() + " don`t have id");
             return false;
         }
-        return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);", connection,
-                user.getId(), role.getId()) > 0;
+        return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);",connection,
+                user.getId(),role.getId()) > 0;
     }
 
     @Override
     public int deleteRole(User user, Role role) {
-        if (user.getId() == null) {
-            log.warn("User: don`t have id", user.getEmail());
+        if ((user.getId() == null) &&(log.isDebugEnabled())) {
+            log.warn("User: "+ user.getEmail() + " don`t have id");
             return 0;
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
-                "id_role = ?", user.getId(), role.getId());
+                "id_role = ?", user.getId(),role.getId());
     }
 
     @Override
     public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        log.info("Insert Final Time Point");
+        if (log.isInfoEnabled()) {
+            log.info("Insert Final Time Point");
+        }
         return this.getJdbcTemplate().insert(INSERT_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
     }
-
     @Override
     public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        log.info("Delete Final Time Point");
-        return this.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
+        if (log.isInfoEnabled()) {
+            log.info("Delete Final Time Point");
+        }
+        return this.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(),scheduleTimePoint.getId());
     }
 
     @Override
-    public Set<User> getUsersByToken(String token) {
-        log.info("Get users by token");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_USERS_BY_TOKEN, extractor, token);
+    public User getUserByToken(String token) {
+        if (log.isInfoEnabled()) {
+            log.info("Get user by token");
+        }
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_USERS_BY_TOKEN,new UserExtractor(),token);
     }
 
     @Override
     public Set<User> getAssignedStudents(Long id) {
-        log.info("Get Assigned Students");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, extractor, id);
+        if (log.isInfoEnabled()) {
+            log.info("Get Assigned Students");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, new UserExtractor(),id);
     }
 
     @Override
     public Set<User> getAllStudents() {
-        log.info("Get all Students");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
+        if (log.isInfoEnabled()) {
+            log.info("Get all Students");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, new UserExtractor());
     }
 
     @Override
     public Set<User> getAllEmploees() {
-        log.info("Get all Employees");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, extractor);
+        if (log.isInfoEnabled()) {
+            log.info("Get all Employees");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, new UserExtractor());
     }
 
     @Override
-    public Set<User> getAll() {
-        log.info("Get all Users");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
+    public Set<User> getAll(){
+        if (log.isInfoEnabled()) {
+            log.info("Get all Users");
+        }
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new UserExtractor());
     }
 
-    private Set<Role> getRoles(Long userID) {
+    private Set<Role> getRoles(Long userID){
         return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
                 "FROM \"user_role\" ur\n" +
                 "WHERE ur.id_user = ?;", resultSet -> {
-            Set<Role> roles = new HashSet<>();
-            do {
-                roles.add(new RoleProxy(resultSet.getLong("id_role")));
-            } while (resultSet.next());
-            return roles;
-        }, userID);
+                    Set<Role> roles = new HashSet<>();
+                    do {
+                        roles.add(new RoleProxy(resultSet.getLong("id_role")));
+                    }while (resultSet.next());
+                    return roles;
+                },userID);
     }
 
-    private Set<SocialInformation> getSocialInfomations(Long userID) {
+    private Set<SocialInformation> getSocialInfomations(Long userID){
         return this.getJdbcTemplate().queryWithParameters("SELECT si.id\n" +
                 "FROM \"social_information\" si\n" +
                 "WHERE si.id_user = ?;", resultSet -> {
             Set<SocialInformation> set = new HashSet<>();
             do {
                 set.add(new SocialInformationProxy(resultSet.getLong("id")));
-            } while (resultSet.next());
+            }while (resultSet.next());
             return set;
-        }, userID);
+        },userID);
     }
 
+    private final class UserExtractor implements ResultSetExtractor<User> {
+        @Override
+        public User extractData(ResultSet resultSet) throws SQLException {
+            User user = new UserImpl();
+            user.setId(resultSet.getLong("id"));
+            user.setEmail(resultSet.getString("email"));
+            user.setFirstName(resultSet.getString("first_name"));
+            user.setLastName(resultSet.getString("last_name"));
+            user.setSecondName(resultSet.getString("second_name"));
+            user.setPassword(resultSet.getString("password"));
+            user.setConfirmToken(resultSet.getString("confirm_token"));
+            user.setActive(resultSet.getBoolean("is_active"));
+            user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
+            user.setRoles(getRoles(resultSet.getLong("id")));
+            user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
+            return user;
+        }
+    }
 }
