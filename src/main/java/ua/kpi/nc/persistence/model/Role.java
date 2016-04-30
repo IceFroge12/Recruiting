@@ -1,12 +1,13 @@
 package ua.kpi.nc.persistence.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import ua.kpi.nc.persistence.model.User;
+
 import java.io.Serializable;
 import java.util.Set;
 
-/**
- * Created by Chalienko on 15.04.2016.
- */
-public interface Role extends Serializable {
+
+public interface Role extends Serializable, GrantedAuthority {
     Long getId();
 
     void setId(Long id);

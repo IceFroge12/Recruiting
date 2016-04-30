@@ -62,4 +62,6 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
         jsonObject.add("questions", jsonQuestions);
         return jsonObject;
     }
+
+
 }

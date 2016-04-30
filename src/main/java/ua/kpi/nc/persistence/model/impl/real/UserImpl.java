@@ -3,12 +3,16 @@ package ua.kpi.nc.persistence.model.impl.real;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import ua.kpi.nc.controller.auth.UserAuthority;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -40,6 +44,20 @@ public class UserImpl implements User {
     private String password;
 
     private Set<SocialInformation> socialInformations;
+
+    private Set<UserAuthority> userAuthorities;
+
+
+
+
+    /******************** UserDetails */
+    private Long expireDate;
+    private boolean accountNonExpired = true;
+    private boolean accountNonLocked = true;
+    private boolean credentialsNonExpired = true;
+    private boolean enabled = true;
+
+    /***********************************/
 
     public UserImpl(Long id, String email, String firstName, String secondName, String lastName, String password,
                     Set<Role> roles, Set<SocialInformation> socialInformations) {
@@ -95,6 +113,11 @@ public class UserImpl implements User {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
+    }
+
+    public UserImpl(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     @Override
@@ -210,6 +233,51 @@ public class UserImpl implements User {
     }
 
     @Override
+    public Long getExpireDate() {
+        return expireDate;
+    }
+
+
+    public void setExpireDate(Long expireDate) {
+        this.expireDate = expireDate;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "User:" +
                 "email= " + email +
@@ -244,4 +312,26 @@ public class UserImpl implements User {
                 .append(lastName)
                 .toHashCode();
     }
+
+
+    /** userAuth/
+     *
+     *
+     *
+     */
+    public void setUserAuthorities(Set<UserAuthority> userAuthorities) {
+        this.userAuthorities = userAuthorities;
+    }
+
+    public Set<UserAuthority> getUserAuthorities() {
+        return userAuthorities;
+    }
+
+    public void grantRole(RoleEnum role) {
+        if (userAuthorities == null) {
+            userAuthorities = new HashSet<UserAuthority>();
+        }
+        userAuthorities.add(role.asAuthorityFor(this));
+    }
+
 }

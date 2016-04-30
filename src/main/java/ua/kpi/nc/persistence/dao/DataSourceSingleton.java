@@ -12,8 +12,15 @@ import java.io.IOException;
  */
 public class DataSourceSingleton {
 
+    public static class DataSourceSingletonHolder{
+        static DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
+    }
+
+    public static DataSource getInstance() {
+        return DataSourceSingletonHolder.HOLDER_INSTANCE.getDataSource();
+    }
+
     private static PGPoolingDataSource dataSource;
-    private static DataSourceSingleton dataSourceSingleton;
 
     private static PropertiesReader propertiesReader = PropertiesReader.getInstance();
 
@@ -24,29 +31,19 @@ public class DataSourceSingleton {
 
     private static String databaseUsername = propertiesReader.propertiesReader("db.username");
 
-
     private static String databaseName = propertiesReader.propertiesReader("db.name");
-
 
     private static int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));
 
-
     private DataSourceSingleton() {
         try {
-            dataSource = getDataSource();
+            dataSource = setUpDataSource();
         } catch (NamingException e) {
             e.printStackTrace();
         }
     }
 
-    public static DataSource getInstance() {
-        if (dataSourceSingleton == null) {
-            dataSourceSingleton = new DataSourceSingleton();
-        }
-        return dataSource;
-    }
-
-    private PGPoolingDataSource getDataSource() throws NamingException {
+    private PGPoolingDataSource setUpDataSource() throws NamingException {
         dataSource = new PGPoolingDataSource();
         dataSource.setDataSourceName("dataSource");
         dataSource.setServerName(databaseServerName);
@@ -54,6 +51,10 @@ public class DataSourceSingleton {
         dataSource.setUser(databaseUsername);
         dataSource.setPassword(databasePassword);
         dataSource.setMaxConnections(maxConnections);
+        return dataSource;
+    }
+
+    public PGPoolingDataSource getDataSource(){
         return dataSource;
     }
 }

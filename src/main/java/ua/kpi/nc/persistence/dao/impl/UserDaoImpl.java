@@ -8,6 +8,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
@@ -99,6 +100,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         if (log.isInfoEnabled()) {
             log.info("Looking for user with email = " + email);
         }
+        //FOR AUTH need fix
+        User user =  this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, new UserExtractor(), email);
+//        UserImpl user1 = new UserImpl();
+//        user1.setEmail(user.getEmail());
+//        user1.setPassword(user.getPassword());
+//        user1.grantRole(RoleEnum.STUDENT);
+//        return user1;
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, new UserExtractor(), email);
     }
 
