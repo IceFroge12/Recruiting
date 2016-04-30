@@ -44,4 +44,8 @@ public interface ApplicationForm extends Serializable {
 	List<FormAnswer> getAnswers();
 
 	void setAnswers(List<FormAnswer> answers);
+
+	List<FormQuestion> getQuestions();
+
+	void setQuestions(List<FormQuestion> questions);
 }

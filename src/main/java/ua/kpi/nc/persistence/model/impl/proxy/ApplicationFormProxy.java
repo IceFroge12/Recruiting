@@ -3,12 +3,7 @@ package ua.kpi.nc.persistence.model.impl.proxy;
 import java.sql.Timestamp;
 import java.util.List;
 
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Recruitment;
-import ua.kpi.nc.persistence.model.Status;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -132,6 +127,18 @@ public class ApplicationFormProxy implements ApplicationForm {
 	public void setAnswers(List<FormAnswer> answers) {
 		checkApplicationForm();
 		applicationFormImpl.setAnswers(answers);
+	}
+
+	@Override
+	public List<FormQuestion> getQuestions() {
+		checkApplicationForm();
+		return applicationFormImpl.getQuestions();
+	}
+
+	@Override
+	public void setQuestions(List<FormQuestion> questions) {
+		checkApplicationForm();
+		applicationFormImpl.setQuestions(questions);
 	}
 
 	private void checkApplicationForm(){
