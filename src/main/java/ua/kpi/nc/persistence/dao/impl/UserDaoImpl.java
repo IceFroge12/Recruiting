@@ -12,6 +12,7 @@ import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
+import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
@@ -29,6 +30,8 @@ import java.util.Set;
 public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
+
+    private RoleDao roleDao = DaoFactory.getRoleDao();
 
     private ResultSetExtractor<User> extractor = resultSet -> {
         User user = new UserImpl();
@@ -216,12 +219,12 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     private Set<Role> getRoles(Long userID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
-                "FROM \"user_role\" ur\n" +
+        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role\n" +
+                "FROM \"user_role\" ur\n INNER JOIN \"role\" r ON ur.id_role = r.id" +
                 "WHERE ur.id_user = ?;", resultSet -> {
             Set<Role> roles = new HashSet<>();
             do {
-                roles.add(new RoleProxy(resultSet.getLong("id_role")));
+                roles.add(roleDao.getByID(resultSet.getLong("id_role")));
             } while (resultSet.next());
             return roles;
         }, userID);
