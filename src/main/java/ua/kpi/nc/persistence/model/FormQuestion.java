@@ -34,4 +34,9 @@ public interface FormQuestion extends Serializable {
     boolean isMandatory();
 
     void setMandatory(boolean mandatory);
+
+    List<FormAnswerVariant> getFormAnswerVariants();
+
+    void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants);
+
 }
