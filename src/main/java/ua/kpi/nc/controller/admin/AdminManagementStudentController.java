@@ -11,6 +11,9 @@ import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by dima on 23.04.16.
  */
@@ -20,23 +23,27 @@ public class AdminManagementStudentController {
 
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 
-    @RequestMapping(value = "studentmanagement", method = RequestMethod.GET)
-    public ModelAndView studentManagement() {
-        ModelAndView modelAndView = new ModelAndView("adminsudentmanagement");
-        return modelAndView;
-    }
+//    @RequestMapping(value = "studentmanagement", method = RequestMethod.GET)
+//    public ModelAndView studentManagement() {
+//        ModelAndView modelAndView = new ModelAndView("adminsudentmanagement");
+//        return modelAndView;
+//    }
 
     @RequestMapping(value = "getallstudent", method = RequestMethod.POST)
     @ResponseBody
-    public String getAllStudents() {
+    public List<String> getAllStudents() {
 
-        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(1L);
+        List<String> allAppFormList = new ArrayList<>();
 
-        Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-        String jsonResult = applicationFormGson.toJson(applicationForm);
-        System.out.println("JSONG" + jsonResult);
+        List<ApplicationForm> applicationForms = applicationFormService.getAll();
 
-        return jsonResult;
+        for (ApplicationForm applicationForm : applicationForms) {
+            Gson applicationFormGson = GsonFactory.getApplicationFormGson();
+            String jsonResult = applicationFormGson.toJson(applicationForm);
+            allAppFormList.add(jsonResult);
+            System.out.println(jsonResult);
+        }
+        return allAppFormList;
     }
 
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)

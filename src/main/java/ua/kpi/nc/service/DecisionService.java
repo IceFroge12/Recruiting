@@ -18,5 +18,7 @@ public interface DecisionService {
     int deleteDecision(Decision decision);
     
     List<Decision> getAll();
+
+    int truncateDecisionTable();
 	
 }

@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 /**
  @author Vova Korzh
  **/
-
 public class RecruitmentProxy implements Recruitment {
 
     private Long id;

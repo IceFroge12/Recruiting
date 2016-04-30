@@ -15,13 +15,16 @@ public class Decision implements Serializable {
 
 	private int finalMark;
 
+	private int scale;
+
 	public Decision() {
 	}
 
-	public Decision(int softMark, int techMark, int finalMark) {
-		this.softMark = softMark;
-		this.techMark = techMark;
+	public Decision(int scale, int finalMark, int techMark, int softMark) {
+		this.scale = scale;
 		this.finalMark = finalMark;
+		this.techMark = techMark;
+		this.softMark = softMark;
 	}
 
 	public int getSoftMark() {
@@ -48,9 +51,22 @@ public class Decision implements Serializable {
 		this.finalMark = finalMark;
 	}
 
+	public int getScale() {
+		return scale;
+	}
+
+	public void setScale(int scale) {
+		this.scale = scale;
+	}
+
 	@Override
 	public String toString() {
-		return "Decision [softMark=" + softMark + ", techMark=" + techMark + ", finalMark=" + finalMark + "]";
+		return "Decision{" +
+				"softMark=" + softMark +
+				", techMark=" + techMark +
+				", finalMark=" + finalMark +
+				", scale=" + scale +
+				'}';
 	}
 
 	@Override

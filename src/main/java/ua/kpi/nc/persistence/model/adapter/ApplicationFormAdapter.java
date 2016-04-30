@@ -23,22 +23,22 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
         jsonObject.addProperty("active", applicationForm.isActive());
         JsonObject jsonRecruitment = new JsonObject();
         Recruitment recruitment = applicationForm.getRecruitment();
-        jsonRecruitment.addProperty("name",recruitment.getName());
+        jsonRecruitment.addProperty("name", recruitment.getName());
         jsonObject.add("recruitment", jsonRecruitment);
         jsonObject.addProperty("photoScope", applicationForm.getPhotoScope());
         User user = applicationForm.getUser();
         JsonObject jsonUser = new JsonObject();
-        jsonUser.addProperty("firstName",user.getFirstName());
+        jsonUser.addProperty("firstName", user.getFirstName());
         jsonUser.addProperty("lastName", user.getLastName());
         jsonUser.addProperty("email", user.getEmail());
         jsonObject.add("user", jsonUser);
         JsonArray jsonAnswers = new JsonArray();
-        for(FormAnswer answer : applicationForm.getAnswers()){
-            JsonObject jsonAnswer= new JsonObject();
+        for (FormAnswer answer : applicationForm.getAnswers()) {
+            JsonObject jsonAnswer = new JsonObject();
             jsonAnswer.addProperty("question", answer.getFormQuestion().getTitle());
-            if (answer.getAnswer() != null){
+            if (answer.getAnswer() != null) {
                 jsonAnswer.addProperty("answer", answer.getAnswer());
-            }else {
+            } else {
                 jsonAnswer.addProperty("answer", answer.getFormAnswerVariant().getAnswer());
             }
             jsonAnswers.add(jsonAnswer);

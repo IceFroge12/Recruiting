@@ -4,14 +4,22 @@ $(document).ready(function () {
         url: 'getallstudent',
         type: 'POST',
         data: 'json',
+        async:false,
         success: function (data) {
-            var formAnswer = JSON.parse(data);
-            console.log(formAnswer.user);
-            $.each(formAnswer, function (i, item){
+        var appFormList = "["+data+"]";
+            var appFormJson = JSON.parse(appFormList);
+            console.log(appFormJson);
 
+            $.each(appFormJson,function (i, item) {
+                console.log(item.user.firstName);
+                var $tr = $('<tr>').append(
+                    $('<td>').text(item.user.firstName)
+                    // $('<td>').text(item.firstName + " " + item.lastName),
+                    // $('<td>').text(item.email),
+                    // $('<td>').text(roleName),
+                    // $('<td>').append(jQuery(delegate))
+                ).appendTo("#students_table");
             });
         }
     });
-
-
 });
