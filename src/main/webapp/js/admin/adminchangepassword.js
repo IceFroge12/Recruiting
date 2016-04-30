@@ -13,7 +13,6 @@ $(document).ready(function () {
             type: 'POST',
             data: userData,
             success: function (data) {
-                console.log(data);
 
             }
         });

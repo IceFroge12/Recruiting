@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -24,7 +25,13 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/slider/**").addResourceLocations("/slider/");
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
         registry.addResourceHandler("/photo/**").addResourceLocations("/photo/");
+        registry.addResourceHandler("/frontend/**").addResourceLocations("/frontend/");
     }
+
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/").setViewName("forward:/frontend/index.html");
+//    }
 
     @Bean
     public InternalResourceViewResolver setupViewResolver() {

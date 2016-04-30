@@ -20,10 +20,10 @@ import java.util.Set;
 @Controller
 public class HomeController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView("home");
-        return modelAndView;
-    }
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public ModelAndView home() {
+//        ModelAndView modelAndView = new ModelAndView("home");
+//        return modelAndView;
+//    }
 
 }

@@ -180,7 +180,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/js/util/client.js"></script>
+<%--<script type="text/javascript" src="/js/util/client.js"></script>--%>
 <script type="text/javascript" src="/js/util/bootstrap.js"></script>
 </body>
 </html>

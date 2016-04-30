@@ -39,4 +39,9 @@ public class DecisionServiceImpl implements DecisionService {
 		return decisionDao.getAll();
 	}
 
+	@Override
+	public int truncateDecisionTable() {
+		return decisionDao.truncateDecisionTable();
+	}
+
 }

@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/css/jquery.dataTables.min.css">
     <title>Student Management</title>
 </head>
-
+<body>
 <div id="includedHeader"></div>
 <div id="leftNav"></div>
 
@@ -41,7 +41,8 @@
                     Filter table
                 </button>
             </form>
-            <table id="students_table" class="display">
+            <%--class="display"--%>
+            <table id="students_table" >
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -53,7 +54,6 @@
                 </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>

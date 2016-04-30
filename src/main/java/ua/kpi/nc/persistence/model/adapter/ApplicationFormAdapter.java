@@ -1,12 +1,13 @@
 package ua.kpi.nc.persistence.model.adapter;
 
 import com.google.gson.*;
-import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
+import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -31,35 +32,18 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
         jsonUser.addProperty("lastName", user.getLastName());
         jsonUser.addProperty("email", user.getEmail());
         jsonObject.add("user", jsonUser);
-        JsonArray jsonQuestions = new JsonArray();
-        for (FormQuestion question : applicationForm.getQuestions()) {
-            JsonObject jsonQuestion = new JsonObject();
-            jsonQuestion.addProperty("questionTitle", question.getTitle());
-            jsonQuestion.addProperty("questionType", question.getQuestionType().getTypeTitle());
-            JsonArray jsonAnswerVariants = new JsonArray();
-            for (FormAnswerVariant variant : question.getFormAnswerVariants()) {
-                JsonObject jsonAnswerVariant = new JsonObject();
-                jsonAnswerVariant.addProperty("variant", variant.getAnswer());
-                jsonAnswerVariants.add(jsonAnswerVariant);
+        JsonArray jsonAnswers = new JsonArray();
+        for (FormAnswer answer : applicationForm.getAnswers()) {
+            JsonObject jsonAnswer = new JsonObject();
+            jsonAnswer.addProperty("question", answer.getFormQuestion().getTitle());
+            if (answer.getAnswer() != null) {
+                jsonAnswer.addProperty("answer", answer.getAnswer());
+            } else {
+                jsonAnswer.addProperty("answer", answer.getFormAnswerVariant().getAnswer());
             }
-            jsonQuestion.add("variants", jsonAnswerVariants);
-            JsonArray jsonAnswers = new JsonArray();
-            for (FormAnswer answer : question.getAnswers()) {
-                for (FormAnswer answerApplication : applicationForm.getAnswers())
-                    if (Objects.equals(answerApplication.getId(), answer.getId())) {
-                        JsonObject jsonAnswer = new JsonObject();
-                        if (answer.getAnswer() != null) {
-                            jsonAnswer.addProperty("answer", answer.getAnswer());
-                        } else {
-                            jsonAnswer.addProperty("answer", answer.getFormAnswerVariant().getAnswer());
-                        }
-                        jsonAnswers.add(jsonAnswer);
-                    }
-            }
-            jsonQuestion.add("answers", jsonAnswers);
-            jsonQuestions.add(jsonQuestion);
+            jsonAnswers.add(jsonAnswer);
         }
-        jsonObject.add("questions", jsonQuestions);
+        jsonObject.add("answers", jsonAnswers);
         return jsonObject;
     }
 }

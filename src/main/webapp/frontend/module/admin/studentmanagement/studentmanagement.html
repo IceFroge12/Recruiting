@@ -1,0 +1,43 @@
+<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <div>
+            <div class="row">
+                <div class="col-md-2"><h6><i>Approved to work:20</i></h6></div>
+                <div class="col-md-2"><h6><i>Approved to advanced:20</i></h6></div>
+                <div class="col-md-2"><h6><i>Approved to general:80</i></h6></div>
+            </div>
+            <div class="col-md-5">
+                <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
+                <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
+                <button type="button" class="btn btn-info btn-sm search-element" disabled>End of recruitment</button>
+            </div>
+            <form class="form-search inline-display col-md-2 col-md-offset-5">
+                <button class="btn btn-sm btn-info search-element" type="button" data-toggle="modal"
+                        data-target="#filtration">
+                    Filter table
+                </button>
+            </form>
+            <table id="students_table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>University</th>
+                    <th>Course</th>
+                </tr>
+                <tr ng-repeat="student in students">
+                    <td>{{student.ID}}</td>
+                    <td>{{student.photoScope}}</td>
+                    <td>{{student.user.firstName +" "+ student.user.lastName}}</td>
+                    <td>{{student.status}}</td>
+                    <td>{{student.kurs}}</td>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

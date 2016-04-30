@@ -1,0 +1,48 @@
+<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Type of report
+                        <select class="search-element">
+                            <option>type1</option>
+                            <option>type2</option>
+                            <option>type3</option>
+                        </select>
+                    </h4>
+                    <h4>Range
+                        <select id="year" name="year">
+                            <script>
+                                var myDate = new Date();
+                                var year = myDate.getFullYear();
+                                for (var i = 2007; i < year + 1; i++) {
+                                    document.write('<option value="' + i + '">' + i + '</option>');
+                                }
+                            </script>
+                        </select>
+                        to
+                        <select id="year" name="year">
+                            <script>
+                                var myDate = new Date();
+                                var year = myDate.getFullYear();
+                                for (var i = 2008; i < year + 1; i++) {
+                                    document.write('<option value="' + i + '">' + i + '</option>');
+                                }
+                            </script>
+                        </select>
+                    </h4>
+                    <button type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Generate</button>
+                    <button type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left" disabled>Export
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="menu-text top-marg">
+                    <h3>The number of students received a courses</h3>
+                    <div>Place for beautiful chart:)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
