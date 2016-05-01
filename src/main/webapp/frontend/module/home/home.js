@@ -1,5 +1,14 @@
 'use strict';
-angular.module('appHome', ['appHeader','appFooter','appMenuMain',"appSecondHeader"]);
+angular.module('appHome', ['appHeader','appFooter','appMenuMain',"appSecondHeader",'appAuthorization']);
+
+
+app.directive('appAuthorization', function () {
+    return {
+        templateUrl: 'module/home/authorization/authorization.html',
+        controller: 'authorizationController'
+    };
+});
+
 
 app.directive('appHeader', function () {
     return {
