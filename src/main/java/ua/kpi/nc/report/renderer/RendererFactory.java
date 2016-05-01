@@ -6,11 +6,11 @@ import ua.kpi.nc.report.poi.RenderXLSX;
 public class RendererFactory {
 
 	public static ReportRenderer getXLSRenderer() {
-		return new RenderXLS("121.xls");
+		return new RenderXLS();
 	}
 
 	public static ReportRenderer getXLSXRenderer() {
-		return new RenderXLSX("121.xlsx");
+		return new RenderXLSX();
 	}
 
 	public static ReportRenderer getJSONRenderer() {

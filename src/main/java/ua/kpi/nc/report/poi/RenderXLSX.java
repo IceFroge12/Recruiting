@@ -12,5 +12,7 @@ public class RenderXLSX extends AbsRender {
 		wb = new SXSSFWorkbook();
 	}
 
-
+	public RenderXLSX() {
+		wb = new SXSSFWorkbook();
+	}
 }

@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,22 +25,26 @@ public abstract class AbsRender implements ReportRenderer {
 	protected BufferedOutputStream bos;
 	protected Workbook wb;
 	protected String filename;
-	protected ArrayList<Object> rows;
-	protected ArrayList<Line> cells;
+	protected List<Object> rows;
+	protected List<Line> cells;
 	protected static Logger log = LoggerFactory.getLogger(AbsRender.class.getName());
 
 	@Override
 	public void render(Report report, OutputStream out) {
-		rows = (ArrayList<Object>) report.getHeader().getCells();
-		cells = (ArrayList<Line>) report.getLines();
+		rows =  report.getHeader().getCells();
+		cells =  report.getLines();
 		write(rows, cells, out);
 	}
 
 	protected void write(List<Object> objects, List<Line> lines, OutputStream out) {
-		ArrayList<Object> rows = (ArrayList<Object>) objects;
-		ArrayList<Line> cells = (ArrayList<Line>) lines;
+		List<Object> rows =  objects;
+		List<Line> cells =  lines;
 		log.trace("rows and cells initialization was successful");
 		Sheet sheet = wb.createSheet();
+		if (sheet instanceof SXSSFSheet) {//Хрень, без которой не работал автосайз для xlsx
+			SXSSFSheet sxSheet = (SXSSFSheet) sheet;//
+			sxSheet.trackAllColumnsForAutoSizing();//
+		}
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < rows.size(); i++) {
 			Cell cell = row.createCell(i);
@@ -60,5 +65,6 @@ public abstract class AbsRender implements ReportRenderer {
 			log.error("Cannot write data into Workbook", e);
 		}
 	}
+
 
 }
