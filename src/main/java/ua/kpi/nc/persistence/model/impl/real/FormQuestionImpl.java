@@ -1,9 +1,8 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
-import ua.kpi.nc.persistence.model.Role;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import ua.kpi.nc.persistence.model.*;
 
 import java.util.List;
 
@@ -20,22 +19,13 @@ public class FormQuestionImpl implements FormQuestion {
     private boolean mandatory;
     private List<FormAnswer> answers;
     private List<Role> roles;
+    private List<FormAnswerVariant> formAnswerVariants;
 
     public FormQuestionImpl() {
     }
 
-    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory,
-                            List<FormAnswer> answers, List<Role> roles) {
-        this.title = title;
-        this.questionType = questionType;
-        this.enable = enable;
-        this.mandatory = mandatory;
-        this.answers = answers;
-        this.roles = roles;
-    }
-
     public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory,
-                            List<FormAnswer> answers, List<Role> roles) {
+                            List<FormAnswer> answers, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
         this.id = id;
         this.title = title;
         this.questionType = questionType;
@@ -43,6 +33,17 @@ public class FormQuestionImpl implements FormQuestion {
         this.mandatory = mandatory;
         this.answers = answers;
         this.roles = roles;
+        this.formAnswerVariants = formAnswerVariants;
+    }
+
+    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory, List<FormAnswer> answers, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
+        this.title = title;
+        this.questionType = questionType;
+        this.enable = enable;
+        this.mandatory = mandatory;
+        this.answers = answers;
+        this.roles = roles;
+        this.formAnswerVariants = formAnswerVariants;
     }
 
     public Long getId() {
@@ -105,36 +106,48 @@ public class FormQuestionImpl implements FormQuestion {
         this.mandatory = mandatory;
     }
 
+    public List<FormAnswerVariant> getFormAnswerVariants() {
+        return formAnswerVariants;
+    }
+
+    public void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants) {
+        this.formAnswerVariants = formAnswerVariants;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
 
         FormQuestionImpl that = (FormQuestionImpl) o;
 
-        if (enable != that.enable) return false;
-        if (mandatory != that.mandatory) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (questionType != null ? !questionType.equals(that.questionType) : that.questionType != null)
-            return false;
-        if (answers != null ? !answers.equals(that.answers) : that.answers != null) return false;
-        return roles != null ? roles.equals(that.roles) : that.roles == null;
-
+        return new EqualsBuilder()
+                .append(enable, that.enable)
+                .append(mandatory, that.mandatory)
+                .append(id, that.id)
+                .append(title, that.title)
+                .append(questionType, that.questionType)
+                .append(answers, that.answers)
+                .append(roles, that.roles)
+                .append(formAnswerVariants, that.formAnswerVariants)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (questionType != null ? questionType.hashCode() : 0);
-        result = 31 * result + (enable ? 1 : 0);
-        result = 31 * result + (mandatory ? 1 : 0);
-        result = 31 * result + (answers != null ? answers.hashCode() : 0);
-        result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(title)
+                .append(questionType)
+                .append(enable)
+                .append(mandatory)
+                .append(answers)
+                .append(roles)
+                .append(formAnswerVariants)
+                .toHashCode();
     }
+
     @Override
     public String toString() {
         return "FormQuestionImpl{" +
@@ -145,7 +158,7 @@ public class FormQuestionImpl implements FormQuestion {
                 ", mandatory=" + mandatory +
                 ", answers=" + answers +
                 ", roles=" + roles +
+                ", formAnswerVariants=" + formAnswerVariants +
                 '}';
     }
-
 }

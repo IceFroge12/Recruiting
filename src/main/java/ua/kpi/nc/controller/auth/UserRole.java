@@ -1,14 +1,9 @@
-package ua.kpi.nc.persistence.model.enums;
+package ua.kpi.nc.controller.auth;
 
-import ua.kpi.nc.controller.auth.UserAuthority;
 import ua.kpi.nc.persistence.model.User;
 
-/**
- * Created by dima on 26.04.16.
- */
-public enum RoleEnum {
-    ADMIN, STUDENT, SOFT, TECH;
-
+public enum UserRole {
+    USER, ADMIN, STUDENT;
 
     public UserAuthority asAuthorityFor(final User user) {
         final UserAuthority authority = new UserAuthority();
@@ -17,13 +12,15 @@ public enum RoleEnum {
         return authority;
     }
 
-    public static RoleEnum valueOf(final UserAuthority authority) {
+    public static UserRole valueOf(final UserAuthority authority) {
         switch (authority.getAuthority()) {
+            case "ROLE_USER":
+                return USER;
             case "ROLE_ADMIN":
                 return ADMIN;
             case "ROLE_STUDENT":
                 return STUDENT;
         }
-        throw new IllegalArgumentException("No role defined for user: " + authority.getAuthority());
+        throw new IllegalArgumentException("No role defined for authority: " + authority.getAuthority());
     }
 }

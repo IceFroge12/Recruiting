@@ -1,27 +1,20 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ua.kpi.nc.persistence.dao.ApplicationFormDao;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Status;
-import ua.kpi.nc.persistence.model.impl.proxy.FormAnswerProxy;
-import ua.kpi.nc.persistence.model.impl.proxy.InterviewProxy;
-import ua.kpi.nc.persistence.model.impl.proxy.RecruitmentProxy;
-import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
+import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.impl.proxy.*;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationFormDaoImpl extends JdbcDaoSupport implements ApplicationFormDao {
 
@@ -161,10 +154,19 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 				return formAnswerProxy;
 			}
 		}, applicationFormId);
-		
-		
 	}
 
+	private List<FormQuestion> getQuestions(Long applicationFormId) {
+		return this.getJdbcTemplate().queryWithParameters("SELECT distinct q.id from form_question q join form_answer " +
+				"a on (q.id= a.id_question) where a.id_application_form = ?;",
+				resultSet -> {
+					List<FormQuestion> questions = new ArrayList<>();
+					do {
+						questions.add(new FormQuestionProxy(resultSet.getLong(FormQuestionDaoImpl.ID_COL)));
+					} while (resultSet.next());
+					return questions;
+				}, applicationFormId);
+	}
 	private final class ApplicationFormExtractor implements ResultSetExtractor<ApplicationForm> {
 
 		@Override
@@ -180,6 +182,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 			applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
 			applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
 			applicationForm.setUser(new UserProxy(resultSet.getLong(ID_USER_COL)));
+			applicationForm.setQuestions(getQuestions(id));
 			return applicationForm;
 		}
 

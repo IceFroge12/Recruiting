@@ -13,50 +13,45 @@ import ua.kpi.nc.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dima on 13.04.16.
- */
-public class UserAuthServiceImpl implements UserDetailsService {
 
-    private static UserDetailsService userDetailsService;
+public class UserAuthService implements UserDetailsService {
 
-    private UserAuthServiceImpl() {
-        userService = ServiceFactory.getUserService();
+    private static class UserAuthServiceHolder{
+        static UserAuthService HOLDER_INSTANCE = new UserAuthService();
     }
 
-    public static UserDetailsService getInstance(){
-        if(userDetailsService==null){
-            userDetailsService = new UserAuthServiceImpl();
-        }
-        return userDetailsService;
+    public static UserAuthService getInstance(){
+        return UserAuthServiceHolder.HOLDER_INSTANCE;
+    }
+
+    private UserAuthService() {
+        userService = ServiceFactory.getUserService();
     }
 
     private UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userName) throws UsernameNotFoundException {
 
         System.out.println("USERNAMEE"+userName);
 
         User user = userService.getUserByUsername(userName);
-        for (Role role : user.getRoles()) {
-            System.out.println(role);
-        }
+//        for (Role role : user.getRoles()) {
+//            System.out.println(role);
+//        }
         if (user == null) {
             throw new UsernameNotFoundException("Username not found");
         }
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                true, true, true, true, getGrantedAuthorities(user));
+        return user;
 
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            System.out.println(role.getRoleName());
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
+//        for (Role role : user.getRoles()) {
+//            System.out.println(role.getRoleName());
+//            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+//        }
         return authorities;
     }
 

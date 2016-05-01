@@ -1,9 +1,6 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
-import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -11,9 +8,9 @@ import ua.kpi.nc.service.ServiceFactory;
 import java.util.List;
 
 /**
- @author Korzh
+ * @author Korzh
  */
-public class FormQuestionProxy implements FormQuestion{
+public class FormQuestionProxy implements FormQuestion {
 
     private Long id;
     private FormQuestionImpl formQuestion;
@@ -106,12 +103,26 @@ public class FormQuestionProxy implements FormQuestion{
         checkFormQuestion();
         formQuestion.setMandatory(mandatory);
     }
-    private void checkFormQuestion(){
+
+    @Override
+    public List<FormAnswerVariant> getFormAnswerVariants() {
+        checkFormQuestion();
+        return formQuestion.getFormAnswerVariants();
+    }
+
+    @Override
+    public void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants) {
+        checkFormQuestion();
+        formQuestion.setFormAnswerVariants(formAnswerVariants);
+    }
+
+    private void checkFormQuestion() {
         if (formQuestion == null) {
             formQuestionService = ServiceFactory.getFormQuestionService();
             formQuestion = downloadQuestion();
         }
     }
+
     private FormQuestionImpl downloadQuestion() {
         return (FormQuestionImpl) formQuestionService.getById(id);
     }

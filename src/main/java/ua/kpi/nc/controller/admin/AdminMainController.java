@@ -37,5 +37,4 @@ public class AdminMainController {
         Recruitment recruitment1 = recruitmentService.getRecruitmentById(1L);//TODO change method
         return recruitment1;
     }
-
 }
