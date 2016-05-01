@@ -13,6 +13,7 @@ public class Report {
 	private List<Line> lines;
 
 	public Report() {
+		header = new Line();
 		lines = new ArrayList<>();
 	}
 

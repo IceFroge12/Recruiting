@@ -3,6 +3,7 @@ package ua.kpi.nc.persistence.dao.impl;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,13 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.ReportDao;
-import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.ReportInfo;
-import ua.kpi.nc.persistence.model.enums.ReportTypeEnum;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import ua.kpi.nc.report.Line;
-import ua.kpi.nc.report.Report;
 
 /**
  * Created by Nikita on 24.04.2016.
@@ -101,81 +101,41 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
 	}
 
 	@Override
-	public Report getReportOfApproved() {
-		if (log.isTraceEnabled()) {
-			log.trace("Creating report about approved applicants.");
-		}
-		ReportInfo reportInfo = getByID((long) (ReportTypeEnum.APPROVED.ordinal() + 1));
-		Report report = getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportOfApprovedExtractor);
-		if (report != null) {
-			report.setTitle(reportInfo.getTitle());
-		}
-		return report;
+	public List<Line> extractWithMetaData(ReportInfo reportInfo) {
+		return this.getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportWithMetaDataExtractor);
 	}
 
-	private final ResultSetExtractor<Report> reportOfApprovedExtractor = resultSet -> {
-		Report report = new Report();
-		Line header = new Line();
+	private final ResultSetExtractor<List<Line>> reportWithMetaDataExtractor = resultSet -> {
+		List<Line> lines = new ArrayList<Line>();
+		Line line = new Line();
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		int columnCount = metaData.getColumnCount();
 		for (int i = 1; i <= columnCount; i++) {
-			header.addCell(metaData.getColumnName(i));
+			line.addCell(metaData.getColumnName(i));
 		}
-		report.setHeader(header);
+		lines.add(line);
 		do {
-			Line line = new Line();
+			line = new Line();
 			for (int i = 1; i <= columnCount; i++) {
 				line.addCell(resultSet.getObject(i));
 			}
-			report.addRow(line);
+			lines.add(line);
 		} while (resultSet.next());
-
-		return report;
+		return lines;
 	};
+
+	private static final String AMOUNT_COL = "amount";
 
 	@Override
-	public Report getReportOfAnswers(Long questionId, List<Recruitment> recruitments) {
-		log.trace("Creating report about answers of question with id ", questionId);
-		ReportInfo reportInfo = getByID((long) (ReportTypeEnum.ANSWERS.ordinal() + 1));
-		if (recruitments.size() > 0) {
-			Recruitment firstRecruitment = recruitments.get(0);
-			Report report = getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), resultSet -> {
-
-				Report rep = new Report();
-				Line header = new Line();
-				header.addCell("Recruitment");
-				Line firstLine = new Line();
-				firstLine.addCell(firstRecruitment.getName());
-				do {
-					header.addCell(resultSet.getObject(1));
-					firstLine.addCell(resultSet.getObject(2));
-				} while (resultSet.next());
-				rep.setHeader(header);
-				rep.addRow(firstLine);
-				return rep;
-
-			}, firstRecruitment.getId(), questionId);
-
-			if (report != null) {
-				for (int i = 1; i < recruitments.size(); i++) {
-					Line line = (getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportOfAnswersExtractor,
-							recruitments.get(i).getId(), questionId));
-					line.addFirstCell(recruitments.get(i).getName());
-					report.addRow(line);
-				}
-				report.setTitle(reportInfo.getTitle());
-				return report;
-			}
-		}
-		return null;
+	public Line getAnswerVariantLine(ReportInfo reportInfo, FormQuestion question,
+			FormAnswerVariant formAnswerVariant) {
+		return this.getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), resultSet -> {
+			Line line = new Line();
+			do {
+				line.addCell(resultSet.getObject(AMOUNT_COL));
+			} while (resultSet.next());
+			return line;
+		}, question.getId(), formAnswerVariant.getId());
 	}
-
-	private final ResultSetExtractor<Line> reportOfAnswersExtractor = resultSet -> {
-		Line line = new Line();
-		do {
-			line.addCell(resultSet.getObject(2));
-		} while (resultSet.next());
-		return line;
-	};
 
 }
