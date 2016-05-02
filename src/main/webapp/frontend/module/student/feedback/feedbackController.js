@@ -2,5 +2,5 @@ function feedbackController($scope, feedBackService) {
 
 }
 
-angular.module('feedback')
+angular.module('appFeedback')
     .controller('feedbackController', ['$scope','feedbackService', feedbackController]);

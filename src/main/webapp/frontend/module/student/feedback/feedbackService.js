@@ -4,5 +4,5 @@ function feedbackService(http) {
     return service;
 }
 
-angular.module('feedback')
+angular.module('appFeedback')
     .service('feedbackService', ['$http', feedbackService]);
