@@ -9,7 +9,11 @@ angular.module('app', [
     'appAdmin',
     'appMain',
     'appForm',
-    'appFeedback'
+    'appFeedback',
+    'appStaffMain',
+    'appStaffPersonal',
+    'appStaffScheduling',
+    'appStaffStudentManagement'
 ]).config(function ($routeProvider) {
 
     $routeProvider
@@ -58,7 +62,28 @@ angular.module('app', [
         //     templateUrl: 'module/admin/admin.html',
         //     controller: 'adminController'
         // })
-        
+
+        //STAFF
+        .when('/staff/main', {
+            templateUrl: 'module/staff/main/staffMain.html',
+            controller: 'staffMainController'
+        })
+
+        .when('/staff/studentManagement', {
+            templateUrl: 'module/staff/studentmanagement/staffStudentManagement.html',
+            controller: 'staffStudentManagementController'
+        })
+
+        .when('/staff/scheduling', {
+            templateUrl: 'module/staff/scheduling/staffScheduling.html',
+            controller: 'staffSchedulingController'
+        })
+
+        .when('/staff/personal', {
+            templateUrl: 'module/staff/personal/staffPersonal.html',
+            controller: 'staffPersonalController'
+        })
+
         // STUDENT
         .when('/student/appform', {
             templateUrl: 'module/student/appform/appForm.html',
@@ -68,7 +93,7 @@ angular.module('app', [
             templateUrl: 'module/student/feedback/feedback.html',
             controller: 'feedbackController'
         })
-        
+
 
         .otherwise({
             redirectTo: '/'
