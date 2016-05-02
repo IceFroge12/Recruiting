@@ -13,19 +13,22 @@ import ua.kpi.nc.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Created by dima on 13.04.16.
+ */
 public class UserAuthService implements UserDetailsService {
 
-    private static class UserAuthServiceHolder{
-        static UserAuthService HOLDER_INSTANCE = new UserAuthService();
-    }
-
-    public static UserAuthService getInstance(){
-        return UserAuthServiceHolder.HOLDER_INSTANCE;
-    }
+    private static UserAuthService userAuthService;
 
     private UserAuthService() {
         userService = ServiceFactory.getUserService();
+    }
+
+    public static UserAuthService getInstance(){
+        if(userAuthService==null){
+            userAuthService = new UserAuthService();
+        }
+        return userAuthService;
     }
 
     private UserService userService;

@@ -18,7 +18,7 @@ public class TokenAuthenticationService {
 
     private final TokenHandler tokenHandler;
 
-//    private static TokenAuthenticationService tokenAuthenticationService;
+    private static TokenAuthenticationService tokenAuthenticationService;
 
     public TokenAuthenticationService(String secret, UserAuthService userAuthService) {
         tokenHandler = new TokenHandler(secret, userAuthService);

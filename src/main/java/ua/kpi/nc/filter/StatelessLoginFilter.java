@@ -1,5 +1,7 @@
 package ua.kpi.nc.filter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +14,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
 import ua.kpi.nc.controller.auth.UserAuthentication;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.adapter.GsonFactory;
+import ua.kpi.nc.persistence.model.adapter.UserAdapter;
+import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.util.AuthenticationSuccessHandlerService;
 import ua.kpi.nc.service.util.UserAuthService;
 
@@ -22,6 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Created by IO on 23.04.2016.
@@ -32,7 +38,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     private final UserAuthService userAuthService;
 
     public StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService,
-                                UserAuthService userAuthService, AuthenticationManager authManager) {
+                                   UserAuthService userAuthService, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(urlMapping));
         this.userAuthService = userAuthService;
         this.tokenAuthenticationService = tokenAuthenticationService;

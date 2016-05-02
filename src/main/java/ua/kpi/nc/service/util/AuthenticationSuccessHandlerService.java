@@ -23,16 +23,17 @@ import java.util.Set;
  */
 public class AuthenticationSuccessHandlerService implements AuthenticationSuccessHandler {
 
-    private static class AuthenticationSuccessHandlerServiceHolder{
-        static AuthenticationSuccessHandlerService HOLDER_INSTANCE = new AuthenticationSuccessHandlerService();
-    }
+    private static AuthenticationSuccessHandlerService customAuthenticationSuccessHandler;
 
     private AuthenticationSuccessHandlerService() {
 
     }
 
     public static AuthenticationSuccessHandlerService getInstance() {
-        return AuthenticationSuccessHandlerServiceHolder.HOLDER_INSTANCE;
+        if (customAuthenticationSuccessHandler == null) {
+            customAuthenticationSuccessHandler = new AuthenticationSuccessHandlerService();
+        }
+        return customAuthenticationSuccessHandler;
     }
 
 

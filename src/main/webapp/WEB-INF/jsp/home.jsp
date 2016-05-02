@@ -6,5 +6,6 @@
 <body>
 <a href="/registration">Registration</a>
 <a href="/login">Login</a>
+
 </body>
 </html>
