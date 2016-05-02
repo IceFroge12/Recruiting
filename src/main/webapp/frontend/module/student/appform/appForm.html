@@ -1,0 +1,267 @@
+<div app-header></div>
+<div app-student-menu></div>
+<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <form data-toggle="validator" role="form">
+            <button type="button" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
+            <table class="table table-hover table-condensed">
+                <tr class="text-success">
+                    <td>Status</td>
+                    <td>registered</td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory">
+                        <label for="file" class="control-label">Photo</label>
+                    </td>
+                    <td><img src="img/hohol.png" width=100px>
+                        <label class="file">
+                            <input type="file" id="file">
+                            <span class="file-custom"></span>
+                        </label>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputFirst" class="control-label">First name</label></td>
+                    <td><input type="text" class="form-control" id="inputFirst"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required/>
+
+                        <div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputLast" class="control-label">Last Name</label></td>
+                    <td><input type="text" class="form-control" id="inputLast"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required value="Gogol"/>
+
+                        <div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputPhone" class="control-label">Phone</label></td>
+                    <td><input type="text" class="form-control" id="inputPhone"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required
+                               value="123456789"/>
+
+                        <div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td><label for="inputPhone2" class="control-label">Phone 2</label></td>
+                    <td><input type="text" class="form-control" id="inputPhone2" value="987654321000"/></td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputEmail" class="control-label">Email</label></td>
+                    <td><span type="text" class="input-xlarge uneditable-input" id="inputEmail">nikolai@me.net</span></td>
+                </tr>
+                <tr class="form-group">
+                    <td><label for="inputEmail2" class="control-label">Additional email</label></td>
+                    <td><input type="email" class="form-control" id="inputEmail2"
+                               data-error="That email address is invalid"/>
+
+                        <div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputUniversity" class="control-label">University</label></td>
+                    <td>
+                        <select class="form-control" id="inputUniversity">
+                            <option>KPI</option>
+                            <option>KNU</option>
+                            <option>NAU</option>
+                            <option>other</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputCourse" class="control-label">Course</label></td>
+                    <td>
+                        <select class="form-control" id="inputCourse">
+                            <option>3</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>4</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td><label for="inputFaculty" class="control-label">Faculty</label></td>
+                    <td>
+                        <input type="text" class="form-control" id="inputFaculty" value="FICT"/>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td><label for="inputDepartment" class="control-label">Department</label></td>
+                    <td>
+                        <input type="text" class="form-control" id="inputDepartment" value="TK"/>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputSpecaializ" class="control-label">Specialization</label></td>
+                    <td><input type="text" class="form-control" id="inputSpecaializ"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required
+                               value="Systems Engineering"/>
+
+                        <div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td colspan="2" class="theme-appl">Interests</td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputWhy" class="control-label">Why exactly are You interested in
+                        studying there?</label></td>
+                    <td id="inputWhy" data-validation-minchecked-message="Choose at least one"
+                        minchecked="1">
+                        <input type="checkbox" name="why" value="1"/> New knowledge<br>
+                        <input type="checkbox" name="why" value="2"/> Internships/practise<br>
+                        <input type="checkbox" name="why" value="3" checked/> Job in company<br>
+                        <input type="checkbox" name="why" value="4"/> Scientific work<br>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputFields" class="control-label">You are interested in such
+                        professionals skills:</label></td>
+                    <td id="inputFields">
+                        <input type="checkbox" name="fields" value="1" checked/> Development<br>
+                        <input type="checkbox" name="fields" value="2"/> Telecommunication<br>
+                        <input type="checkbox" name="fields" value="3" checked/> Support<br>
+                        <input type="checkbox" name="fields" value="4"/> Testing<br>
+                        <input type="checkbox" name="fields" value="5"/> Marketing<br>
+                        <input type="checkbox" name="fields" value="6"/> Sale<br>
+                        <input type="checkbox" name="fields" value="7" checked/> Business analyst<br>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory">When can You start work?</td>
+                    <td>
+                        <input type="radio" name="when" value="1" checked/> Now <br>
+                        <input type="radio" name="when" value="2"/> After finishing courses <br>
+                        <input type="radio" name="when" value="3"/> After finishing university <br>
+                        <input type="radio" name="when" value="4"/> When I imporove knowledge <br>
+                        <input type="radio" name="when" value="5"/> I do not plan to work <br>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>How many hours per week can You work?</td>
+                    <td>
+                        <input type="radio" name="hours" value="1" checked/> less than 10<br>
+                        <input type="radio" name="hours" value="2"/> less than 15<br>
+                        <input type="radio" name="hours" value="3"/> less than 20<br>
+                        <input type="radio" name="hours" value="4"/> 20-30<br>
+                        <input type="radio" name="hours" value="5"/> 40 / full time<br>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>Your hobby and interests</td>
+                    <td>
+                        <p>Olympiads</p>
+
+                        <p>Studying</p>
+
+                        <p>Sport</p>
+
+                        <p>Travels <span class="glyphicon glyphicon-ok"></span></p>
+
+                        <p>Programing <span class="glyphicon glyphicon-ok"></span></p>
+
+                        <p>Music <span class="glyphicon glyphicon-ok"></span></p>
+
+                        <p>Other: <i> Photo</i></p>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td colspan="2" class="theme-appl">Qualification</td>
+                </tr>
+                <tr class="form-group">
+                    <td>Average mark in university</td>
+                    <td>
+                        <p>Average mark: <i>5.0</i></p>
+
+                        <p>Scale: <i>5</i></p>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory">Level of knowledge programing language</td>
+                    <td>
+                        <p>Java: <i>advanced</i></p>
+
+                        <p>C++: <i>advanced</i></p>
+
+                        <p>C#: <i>advanced</i></p>
+
+                        <p>Others: <i>Assembler - advanced</i></p>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory">Level of knowledge</td>
+                    <td>
+                        <p>OOP: <i>advanced</i></p>
+
+                        <p>Web: <i>basic</i></p>
+
+                        <p>Network technologies: <i>advanced</i></p>
+
+                        <p>Network programing: <i>average</i></p>
+
+                        <p>Efficient algorithms: <i>high</i></p>
+
+                        <p>Databases: <i>advanced</i></p>
+
+                        <p>GUI(not Web): <i>advanced</i></p>
+
+                        <p>Software design: <i>advanced</i></p>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>Portfolio</td>
+                    <td>
+                        <p>The novel Taras Bulba (1835) and the play Marriage (1842), along with the short stories
+                            "Diary of a Madman", "The Tale of How Ivan Ivanovich Quarreled with Ivan Nikiforovich", "The
+                            Portrait" and "The Carriage"</p>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory">English level</td>
+                    <td>
+                        <p>Reading: <i>advanced</i></p>
+
+                        <p>Writing: <i>advanced</i></p>
+
+                        <p>Speaking: <i>advanced</i></p>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>Why should we take You?(motivation list)</td>
+                    <td>
+                        <i>Mind is much higher capacity, but it is purchased not only as a victory over the
+                            passions.</i>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>Do You take part in any student’s program or foreign internships?</td>
+                    <td>
+                        <i></i>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>How did You find courses?</td>
+                    <td>
+                        <i>University ads</i>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>Write a funny story about yourself.</td>
+                    <td>
+                        <i>Chichikov arrives in a small town and turns on the charm to woo key local officials and
+                            landowners. He reveals little about his past, or his purpose, as he sets about carrying out
+                            his bizarre and mysterious plan to acquire "dead souls."...</i>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-info search-element">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div app-footer></div>
