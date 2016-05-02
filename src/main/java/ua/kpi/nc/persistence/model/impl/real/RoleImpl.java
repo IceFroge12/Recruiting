@@ -69,6 +69,11 @@ public class RoleImpl implements Role{
     }
 
     @Override
+    public String getAuthority() {
+        return roleName;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 

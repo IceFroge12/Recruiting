@@ -16,25 +16,25 @@ import java.util.List;
 /**
  * Created by dima on 13.04.16.
  */
-public class UserAuthServiceImpl implements UserDetailsService {
+public class UserAuthService implements UserDetailsService {
 
-    private static UserDetailsService userDetailsService;
+    private static UserAuthService userAuthService;
 
-    private UserAuthServiceImpl() {
+    private UserAuthService() {
         userService = ServiceFactory.getUserService();
     }
 
-    public static UserDetailsService getInstance(){
-        if(userDetailsService==null){
-            userDetailsService = new UserAuthServiceImpl();
+    public static UserAuthService getInstance(){
+        if(userAuthService==null){
+            userAuthService = new UserAuthService();
         }
-        return userDetailsService;
+        return userAuthService;
     }
 
     private UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userName) throws UsernameNotFoundException {
 
         System.out.println("USERNAMEE"+userName);
 
@@ -45,9 +45,7 @@ public class UserAuthServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Username not found");
         }
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                true, true, true, true, getGrantedAuthorities(user));
+        return user;
 
     }
 

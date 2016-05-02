@@ -1,12 +1,22 @@
 package ua.kpi.nc.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+
+import javax.swing.text.html.HTML;
 
 @Configuration
 @EnableWebMvc
@@ -26,13 +36,13 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/photo/**").addResourceLocations("/photo/");
     }
 
+
     @Bean
-    public InternalResourceViewResolver setupViewResolver() {
+    public InternalResourceViewResolver setupViewResolver1() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setSuffix(".jsp");
+
         return resolver;
     }
-
-
 }

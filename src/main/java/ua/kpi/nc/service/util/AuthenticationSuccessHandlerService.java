@@ -3,11 +3,14 @@ package ua.kpi.nc.service.util;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import ua.kpi.nc.persistence.model.User;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,17 +25,16 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
 
     private static AuthenticationSuccessHandlerService customAuthenticationSuccessHandler;
 
-    private AuthenticationSuccessHandlerService(){
+    private AuthenticationSuccessHandlerService() {
 
     }
 
-    public static AuthenticationSuccessHandlerService getInstance(){
-        if(customAuthenticationSuccessHandler==null){
+    public static AuthenticationSuccessHandlerService getInstance() {
+        if (customAuthenticationSuccessHandler == null) {
             customAuthenticationSuccessHandler = new AuthenticationSuccessHandlerService();
         }
         return customAuthenticationSuccessHandler;
     }
-
 
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -51,16 +53,18 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(Authentication authentication) {
+
+    private String determineTargetUrl(Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (authorities.contains("ROLE_ADMIN")) {
+        if (authorities.contains("ADMIN")) {
             return "/admin";
-        } else if (authorities.contains("ROLE_USER")) {
-            return "/user";
+        } else if (authorities.contains("STUDENT")) {
+            return "/student";
         } else {
             throw new IllegalStateException();
         }
     }
+
 
 }
 

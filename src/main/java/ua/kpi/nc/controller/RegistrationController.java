@@ -43,9 +43,15 @@ public class RegistrationController {
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
     @RequestMapping(method = RequestMethod.GET)
+<<<<<<< HEAD
     public ModelAndView registrationModel() {
         User user = new UserImpl();
         ModelAndView modelAndView = new ModelAndView("registration");
+=======
+    public ModelAndView registration() {
+        UserImpl user = new UserImpl();
+        ModelAndView modelAndView = new ModelAndView("/WEB-INF/registration.jsp");
+>>>>>>> origin/#Security
         modelAndView.addObject("user", user);
         List<Message> list =  sendMessageService.getAll();
         for (Message message1 : list){
@@ -83,7 +89,6 @@ public class RegistrationController {
 
         return "redirect:/login";
     }
-
 
     @RequestMapping(value = "{token}", method = RequestMethod.GET)
     public String registrationConfirm(@PathVariable("token") String token) {

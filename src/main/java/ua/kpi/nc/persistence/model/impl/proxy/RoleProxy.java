@@ -59,12 +59,20 @@ public class RoleProxy implements Role {
         role.setUsers(users);
     }
 
+    @Override
+    public String getAuthority() {
+        checkRoleForExist();
+        return role.getAuthority();
+    }
+
     private void checkRoleForExist(){
         if (role == null) {
             roleService = ServiceFactory.getRoleService();
             role = downloadRole();
         }
     }
+
+
 
     private RoleImpl downloadRole() {
         return (RoleImpl) roleService.getRoleById(id);

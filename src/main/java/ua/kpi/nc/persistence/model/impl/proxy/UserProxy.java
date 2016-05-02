@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.security.core.GrantedAuthority;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
@@ -12,6 +13,7 @@ import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
 
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -170,11 +172,52 @@ public class UserProxy implements User {
         user.setSocialInformations(socialInformations);
     }
 
+    @Override
+    public Long getExpireDate() {
+        checkUserForExist();
+        return user.getExpireDate();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        checkUserForExist();
+        return user.getRoles();
+    }
+
+    //TODO
+    @Override
+    public String getUsername() {
+        checkUserForExist();
+        return user.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
     private void checkUserForExist() {
         if (user == null) {
             user = downloadUser();
         }
     }
+
+
 
     private UserImpl downloadUser() {
         return (UserImpl) userService.getUserByID(id);
