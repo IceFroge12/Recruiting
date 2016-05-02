@@ -48,6 +48,9 @@ public class AdminManagementStaffController {
     @ResponseBody
     public Set<User> showAllEmployees() {
         Set<User> users = userService.getAllEmploees();
+        for (User user :users){
+            System.out.println(user);
+        }
         return users;
     }
 

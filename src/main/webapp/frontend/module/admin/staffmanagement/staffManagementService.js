@@ -4,16 +4,18 @@
 'use strict';
 
 function staffManagementService(http) {
+
     var service = {};
     
-    // service.loadStudents = function () {
-    //     return http.post('/admin/getallstudent').then(function (response) {
-    //         return JSON.parse("["+response.data+"]");
-    //     });
-    // };
-
+    service.showAllEmployees = function () {
+        return http.post('/admin/showAllEmployee').then(function (response) {
+            console.log(response.data);
+            return response.data;
+        });
+    };
+    
     return service;
 }
 
 angular.module('appStaffManagement')
-    .service('staffManagementService', ['$http', staffManagementService])
+    .service('staffManagementService', ['$http', staffManagementService]);

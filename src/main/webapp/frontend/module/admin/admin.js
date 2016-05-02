@@ -4,7 +4,7 @@
 
 'use strict';
 
-var app = angular.module('appAdmin', ['ui.router', 'appMain', 'appStaffManagement',
+var app = angular.module('appAdmin', ['ui.router', 'appStaffManagement',
     'appStudentManagement', 'appScheduling', 'appReport', 'appHeader', 'appMenu', 'appFooter']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
@@ -12,31 +12,23 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/admin");
 
     $stateProvider
-        .state('main', {
-            url: "/main",
-            templateUrl: "module/admin/main/main.html",
-            controller: "mainController"
-        })
         .state('staffmanagement', {
             url: "/staffmanagement",
             templateUrl: "module/admin/staffmanagement/staffmanagement.html",
+            resolve: {
+                allEmployees: function (staffManagementService) {
+                    return  staffManagementService.showAllEmployees();
+                }
+            },
             controller: "staffManagementController"
         })
         .state('studentmanagement', {
             url: "/studentmanagement",
             templateUrl: "module/admin/studentmanagement/studentmanagement.html",
             controller: "studentManagementController",
-            // resolve: {
-            //     students: function ($http) {
-            //         return $http.post('/admin/getallstudent').then(function (response) {
-            //             console.log(response);
-            //             return  response;
-            //         });
-            //     }
-            // }
             resolve: {
                 students: function (studentManagementService) {
-                   return  studentManagementService.loadStudents();
+                    return studentManagementService.loadStudents();
                 }
             }
         })
