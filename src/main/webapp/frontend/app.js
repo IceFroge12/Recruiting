@@ -7,7 +7,8 @@ angular.module('app', [
     'ngRoute',
     'appHome',
     'appAdmin',
-    'appMain'
+    'appMain',
+    'appForm'
 ]).config(function ($routeProvider) {
 
     $routeProvider
@@ -56,6 +57,12 @@ angular.module('app', [
         //     templateUrl: 'module/admin/admin.html',
         //     controller: 'adminController'
         // })
+        
+        // STUDENT
+        .when('/student/appform', {
+            templateUrl: 'module/student/appform/appForm.html',
+            controller: 'appFormController'
+        })
 
         .otherwise({
             redirectTo: '/'
