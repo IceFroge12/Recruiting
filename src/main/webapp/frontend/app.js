@@ -8,7 +8,8 @@ angular.module('app', [
     'appHome',
     'appAdmin',
     'appMain',
-    'appForm'
+    'appForm',
+    'appFeedback'
 ]).config(function ($routeProvider) {
 
     $routeProvider
