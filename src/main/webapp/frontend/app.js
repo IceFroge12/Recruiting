@@ -93,7 +93,10 @@ angular.module('app', [
             templateUrl: 'module/student/feedback/feedback.html',
             controller: 'feedbackController'
         })
-
+        .when('/student/scheduling', {
+            templateUrl: 'module/student/scheduling/studentScheduling.html',
+            controller: 'studentSchedulingController'
+        })
 
         .otherwise({
             redirectTo: '/'
