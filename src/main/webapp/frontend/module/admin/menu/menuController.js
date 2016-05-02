@@ -3,7 +3,7 @@
  */
 
 function menuController($scope) {
-
+    console.log("menu");
 }
 
 angular.module('appMenu')

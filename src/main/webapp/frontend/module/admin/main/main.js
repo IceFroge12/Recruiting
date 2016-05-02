@@ -4,4 +4,4 @@
 
 'use strict';
 
-var app = angular.module('appMenu', []);
+var app = angular.module('appMain', ['appMenu','appHeader','appFooter']);

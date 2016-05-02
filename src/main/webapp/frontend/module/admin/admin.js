@@ -4,46 +4,60 @@
 
 'use strict';
 
-var app = angular.module('appAdmin', ['appHeader', 'appStudentManagement','appMenu','appFooter']);
-    // .config(function ($routeProvider) {
-    //
-    //     $routeProvider
-    //         .when('/staffmanagement', {
-    //             templateUrl: 'module/admin/staffmanagement/staffmanagement.html',
-    //             controller: 'staffManagementController'
-    //         })
-    //         .otherwise({
-    //             redirectTo: '/'
-    //         });
-    // });
+var app = angular.module('appAdmin', ['ui.router', 'appStaffManagement',
+    'appStudentManagement', 'appScheduling', 'appReport', 'appHeader', 'appMenu', 'appFooter']);
 
-app.directive('appHeader', function () {
-    return {
-        templateUrl: 'module/header/header.html',
-        controller: 'headerController'
-    };
+app.config(function ($stateProvider, $urlRouterProvider) {
+
+    $urlRouterProvider.otherwise("/admin");
+
+    $stateProvider
+        .state('staffmanagement', {
+            url: "/staffmanagement",
+            templateUrl: "module/admin/staffmanagement/staffmanagement.html",
+            resolve: {
+                allEmployees: function (staffManagementService) {
+                    return  staffManagementService.showAllEmployees();
+                }
+            },
+            controller: "staffManagementController"
+        })
+        .state('studentmanagement', {
+            url: "/studentmanagement",
+            templateUrl: "module/admin/studentmanagement/studentmanagement.html",
+            controller: "studentManagementController",
+            resolve: {
+                students: function (studentManagementService) {
+                    return studentManagementService.loadStudents();
+                }
+            }
+        })
+        .state('scheduling', {
+            url: "/scheduling",
+            templateUrl: "module/admin/scheduling/scheduling.html",
+            controller: "schedulingController"
+        })
+        .state('report', {
+            url: "/report",
+            templateUrl: "module/admin/report/report.html",
+            controller: "reportController"
+        });
 });
 
-app.directive('appStudentManagement', function () {
-    return {
-        templateUrl: 'module/admin/studentmanagement/studentmanagement.html',
-        controller: 'studentManagementController'
-    };
-});
-
-app.directive('appMenu',function () {
+app.directive('appMenu', function () {
     return {
         templateUrl: 'module/admin/menu/menu.html',
         controller: 'menuController'
     };
 });
 
-app.directive('appFooter',function () {
-    return {
-        templateUrl: 'module/footer/footer.html',
-        controller: 'footerController'
-    };
-});
+// app.directive('appStudentManagement', function () {
+//     return {
+//         templateUrl: 'module/admin/studentmanagement/studentmanagement.html',
+//         controller: 'studentManagementController'
+//     };
+// });
+
 
 
 
