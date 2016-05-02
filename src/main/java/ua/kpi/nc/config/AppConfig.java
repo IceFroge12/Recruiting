@@ -3,9 +3,11 @@ package ua.kpi.nc.config;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -28,6 +30,9 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
         servlet.addMapping("/");
         servlet.setLoadOnStartup(1);
+
+        FilterRegistration.Dynamic securityFilter = servletContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class);
+        securityFilter.addMappingForUrlPatterns(null, false, "/*");
 
     }
 
