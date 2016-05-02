@@ -10,13 +10,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by uakruk on 5/2/16.
+ * Staff main page controller
  */
 @Controller
 @RequestMapping("/staff")
 public class StaffMainController {
 
     // TODO make ajax js for Staff
-    // TODO move it to seperate package
+    // TODO move it to a seperate package
     @ModelAttribute("showAdminMenu")
     public boolean getShhowAdminMenu() {
         for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
@@ -26,6 +27,10 @@ public class StaffMainController {
         return false;
     }
 
+    /**
+     * main page
+     * @return main page
+     */
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView staffPage() {
         ModelAndView response = new ModelAndView("staff_main");
