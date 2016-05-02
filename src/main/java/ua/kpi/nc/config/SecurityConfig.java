@@ -54,8 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/student/**").hasRole("STUDENT")
                 .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/student.html").hasRole("STUDENT")
+//                .antMatchers("/admin.html").hasRole("STUDENT")
                 .and()
-
                 .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().and()

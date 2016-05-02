@@ -34,6 +34,8 @@ public class TokenAuthenticationService {
 
     public Authentication getAuthentication(HttpServletRequest request) {
         String token = (String) request.getSession().getAttribute(AUTH_HEADER_NAME);
+        String token1 = request.getHeader(AUTH_HEADER_NAME);
+        System.out.println(token1);
         if (token != null) {
             final ua.kpi.nc.persistence.model.User user = tokenHandler.parseUserFromToken(token);
             if (user != null) {
