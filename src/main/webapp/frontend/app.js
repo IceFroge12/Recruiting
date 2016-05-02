@@ -21,6 +21,14 @@ angular.module('app', [
             templateUrl: 'module/home/home.html',
             controller: 'homeController'
         })
+        .when('/getToCourses', {
+            templateUrl: 'module/home/gettocourses/getToCourses.html',
+            controller: 'getToCoursesController'
+        })
+        .when('/educationNC', {
+            templateUrl: 'module/home/educationnc/educationNC.html',
+            controller: 'educationNCController'
+        })
         .when('/admin/main', {
             templateUrl: 'module/admin/main/main.html',
             controller: 'mainController'
