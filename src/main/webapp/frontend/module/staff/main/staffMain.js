@@ -6,7 +6,6 @@
 
 var app = angular.module('appStaffMain', ['appStaffMenu','appHeader','appFooter']);
 
-
 app.directive('appStaffMenu',function () {
     return {
         templateUrl: 'module/staff/menu/staffMenu.html',
