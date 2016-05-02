@@ -12,11 +12,15 @@
 </head>
 <body ng-app="app">
 
-<div ng-view></div>
 
+<div ng-view></div>
+<script type="text/javascript" src="/js/util/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="/js/util/bootstrap.js"></script>
 <script src="angular-1.5.5/angular.js"></script>
 <script src="angular-1.5.5/angular-route.js"></script>
 <script src="angular-1.5.5/angular-resource.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+
 <script src="app.js"></script>
 
 <!--ADMIN /admin-->
@@ -29,10 +33,14 @@
 <script src="module/footer/footer.js"></script>
 <script src="module/footer/footerController.js"></script>
 
+<script src="module/admin/main/main.js"></script>
+<script src="module/admin/main/mainController.js"></script>
+<script src="module/admin/main/mainService.js"></script>
+
 <!--studentManagement-->
 <script src="module/admin/studentmanagement/studentManagement.js"></script>
 <script src="module/admin/studentmanagement/studentManagementController.js"></script>
-<script src="module/admin/studentmanagement/managementService.js"></script>
+<script src="module/admin/studentmanagement/studentManagementService.js"></script>
 
 <!--staffManagement-->
 <script src="module/admin/staffmanagement/staffmanagement.js"></script>
@@ -75,7 +83,6 @@
 <!--admin main-->
 <script src="module/admin/admin.js"></script>
 <script src="module/admin/adminController.js"></script>
-
 
 
 <!--HOME /home-->

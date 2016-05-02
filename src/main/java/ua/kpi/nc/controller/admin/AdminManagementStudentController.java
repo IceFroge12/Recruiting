@@ -34,11 +34,12 @@ public class AdminManagementStudentController {
     public List<String> getAllStudents() {
 
         List<String> allAppFormList = new ArrayList<>();
-
+        System.out.println("lol");
         List<ApplicationForm> applicationForms = applicationFormService.getAll();
 
         for (ApplicationForm applicationForm : applicationForms) {
             Gson applicationFormGson = GsonFactory.getApplicationFormGson();
+
             String jsonResult = applicationFormGson.toJson(applicationForm);
             allAppFormList.add(jsonResult);
             System.out.println(jsonResult);
