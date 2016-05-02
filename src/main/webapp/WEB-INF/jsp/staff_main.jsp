@@ -28,11 +28,19 @@
                 <div class="info">
                     <h4>Deadlines for current recruitment:</h4>
                     <br>
-                    <p>Registration deadline: </p>
+                    <p>Registration deadline: <span id="registration-deadline"></span></p>
+                    <br>
+                    <p>Schedule time deadline: <span id="schedule-deadline"></span></p>
                 </div>
             </div>
         </div>
     </div>
+
+    <%@ include file="staff_footer.jsp" %>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/client.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/jasny-bootstrap.min.js"></script>
 
 </body>
 </html>
