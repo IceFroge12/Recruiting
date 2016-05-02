@@ -32,5 +32,4 @@ public class AdminMainController {
         System.out.println(recruitment.toString());
         return recruitment;
     }
-
 }

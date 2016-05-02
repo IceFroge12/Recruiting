@@ -3,11 +3,14 @@ package ua.kpi.nc.service.util;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import ua.kpi.nc.persistence.model.User;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,19 +23,17 @@ import java.util.Set;
  */
 public class AuthenticationSuccessHandlerService implements AuthenticationSuccessHandler {
 
-    private static AuthenticationSuccessHandlerService customAuthenticationSuccessHandler;
+    private static class AuthenticationSuccessHandlerServiceHolder{
+        static AuthenticationSuccessHandlerService HOLDER_INSTANCE = new AuthenticationSuccessHandlerService();
+    }
 
-    private AuthenticationSuccessHandlerService(){
+    private AuthenticationSuccessHandlerService() {
 
     }
 
-    public static AuthenticationSuccessHandlerService getInstance(){
-        if(customAuthenticationSuccessHandler==null){
-            customAuthenticationSuccessHandler = new AuthenticationSuccessHandlerService();
-        }
-        return customAuthenticationSuccessHandler;
+    public static AuthenticationSuccessHandlerService getInstance() {
+        return AuthenticationSuccessHandlerServiceHolder.HOLDER_INSTANCE;
     }
-
 
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -40,27 +41,30 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException,
-            ServletException{
-        HttpSession session = request.getSession();
+            ServletException, IOException {
+//        HttpSession session = request.getSession();
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        session.setAttribute("uname", user.getUsername());
+//        session.setAttribute("authorities", user.getAuthorities());
 
-        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        session.setAttribute("uname", authUser.getUsername());
-        session.setAttribute("authorities", authentication.getAuthorities());
-
-        String targetUrl = determineTargetUrl(authentication);
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        String redirectURL = determineTargetUrl(authentication);
+        //response.addHeader("redirectURL", redirectURL);
+        redirectStrategy.sendRedirect(request,response, redirectURL);
     }
 
-    protected String determineTargetUrl(Authentication authentication) {
+
+    private String determineTargetUrl(Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (authorities.contains("ROLE_ADMIN")) {
-            return "/admin";
-        } else if (authorities.contains("ROLE_USER")) {
-            return "/user";
+            return "/admin/";
+        } else if (authorities.contains("ROLE_STUDENT")) {
+            return "/student/";
         } else {
             throw new IllegalStateException();
         }
     }
+
 
 }
 

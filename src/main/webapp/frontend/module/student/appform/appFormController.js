@@ -6,5 +6,5 @@ function appFormController($scope, appFormService) {
 
 }
 
-angular.module('appForm')
+angular.module('appStudentForm')
     .controller('appFormController', ['$scope','appFormService', appFormController]);

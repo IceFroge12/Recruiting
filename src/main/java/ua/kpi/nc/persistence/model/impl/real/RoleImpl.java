@@ -95,4 +95,9 @@ public class RoleImpl implements Role{
         return "Role: " +
                 "roleName= " + roleName + "\n";
     }
+
+    @Override
+    public String getAuthority() {
+        return getRoleName();
+    }
 }

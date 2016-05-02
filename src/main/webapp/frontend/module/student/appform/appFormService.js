@@ -9,5 +9,5 @@ function appFormService(http) {
     return service;
 }
 
-angular.module('appForm')
+angular.module('appStudentForm')
     .service('appFormService', ['$http', appFormService]);

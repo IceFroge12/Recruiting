@@ -14,8 +14,8 @@ public class PropertiesReader {
 
     private static Logger log = LoggerFactory.getLogger(PropertiesReader.class.getName());
 
-    public static class SingletonHolder {
-        public static final PropertiesReader HOLDER_INSTANCE = new PropertiesReader();
+    private static class SingletonHolder {
+        static final PropertiesReader HOLDER_INSTANCE = new PropertiesReader();
     }
 
     public static PropertiesReader getInstance() {
@@ -28,13 +28,12 @@ public class PropertiesReader {
 
         Properties p = new Properties();
 
-        try(FileInputStream fileInputStream = new FileInputStream("/home/dima/Documents/IdeaProj/Recruiting/src/main/resources/app.properties")) {
+        try(FileInputStream fileInputStream = new FileInputStream("C:\\Users\\IO\\Recruiting\\Recruiting\\src\\main\\resources\\app.properties")) {
             p.load(fileInputStream);
             prop = p.getProperty(property);
         } catch (IOException e) {
-            log.error("File not found",e);
+            log.error("File not found", e);
         }
-
         return prop;
     }
 

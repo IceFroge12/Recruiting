@@ -66,7 +66,14 @@ public class RoleProxy implements Role {
         }
     }
 
+    @Override
+    public String getAuthority() {
+        return this.getRoleName();
+    }
+
     private RoleImpl downloadRole() {
         return (RoleImpl) roleService.getRoleById(id);
     }
+
+
 }
