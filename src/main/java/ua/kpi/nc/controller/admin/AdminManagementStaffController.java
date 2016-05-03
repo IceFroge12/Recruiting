@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
@@ -57,17 +58,16 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     @ResponseBody
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
-
-        List<RoleImpl> roles = userDto.getRoleList();
+        System.out.println(userDto.toString());
+        List<Role> roles = userDto.getRoleList();
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
                 userDto.getLastName(), password, true, new Timestamp(date.getTime()));
-        //TODO add DAO method(Insert User with rolesList)
+        userService.insertUser(user,roles);
+//        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
 
-        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
-
-        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
+//        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
 
     }
 
