@@ -4,7 +4,7 @@
 
 'use strict';
 
-var app = angular.module('appStaffMain', ['appStaffMenu','appHeader','appFooter']);
+angular.module('appStaffMain', ['appStaffMenu','appHeader','appFooter']);
 
 app.directive('appStaffMenu',function () {
     return {
