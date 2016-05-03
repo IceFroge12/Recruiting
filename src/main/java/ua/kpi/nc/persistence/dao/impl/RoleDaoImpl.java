@@ -33,7 +33,7 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 
     private static Logger log = LoggerFactory.getLogger(RoleDaoImpl.class.getName());
 
-    private static final String SQL_GET_BY_ID = "SELECT r.id, r.role\n FROM \"role\" r\n WHERE r.id = ?";
+    private static final String SQL_GET_BY_ID = "SELECT id, role FROM role WHERE id = ?;";
 
     private static final String SQL_GET_BY_TITLE = "SELECT r.id, r.role\n FROM \"role\" r\n WHERE r.role = ?";
 

@@ -102,7 +102,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_GET_ALL_EMPLOYEES = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
             "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
-            "FROM \"user\" u  INNER JOIN \"user_role\" ur ON u.id = ur.id_user\n" +
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "INNER JOIN role r ON ur.id_role = r.id\n" +
             "WHERE r.role <> 'ROLE_STUDENT';";
 
@@ -221,7 +221,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private Set<Role> getRoles(Long userID) {
         return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role\n" +
-                "FROM user_role ur INNER JOIN role r ON ur.id_role = r.id" +
+                "FROM user_role ur \n INNER JOIN \"role\" r ON ur.id_role = r.id\n" +
                 "WHERE ur.id_user = ?;", resultSet -> {
             Set<Role> roles = new HashSet<>();
             do {

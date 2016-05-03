@@ -16,6 +16,7 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
     @Override
     public JsonElement serialize(FormQuestion formQuestion, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", formQuestion.getId());
         jsonObject.addProperty("title", formQuestion.getTitle());
         jsonObject.addProperty("type", formQuestion.getQuestionType().getTypeTitle());
         return jsonObject;
