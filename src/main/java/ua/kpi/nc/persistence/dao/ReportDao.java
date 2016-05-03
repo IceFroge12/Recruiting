@@ -1,23 +1,30 @@
 package ua.kpi.nc.persistence.dao;
 
-import ua.kpi.nc.persistence.model.Report;
-
+import java.util.List;
 import java.util.Set;
+
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.report.Line;
 
 /**
  * Created by Nikita on 24.04.2016.
  */
 public interface ReportDao {
-    Report getByID(Long id);
+	ReportInfo getByID(Long id);
 
-    Report getByTitle(String title);
+	ReportInfo getByTitle(String title);
 
-    Set<Report> getAll();
+	Set<ReportInfo> getAll();
 
-    Long insertReport(Report report);
+	Long insertReport(ReportInfo report);
 
+	int updateReport(ReportInfo report);
 
-    int updateReport(Report report);
+	int deleteReport(ReportInfo report);
 
-    int deleteReport(Report report);
+	List<Line> extractWithMetaData(ReportInfo reportInfo);
+
+	Line getAnswerVariantLine(ReportInfo reportInfo, FormQuestion question, FormAnswerVariant formAnswerVariant);
 }

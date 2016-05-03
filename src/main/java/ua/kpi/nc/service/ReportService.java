@@ -1,24 +1,24 @@
 package ua.kpi.nc.service;
 
-import ua.kpi.nc.persistence.model.Report;
-
 import java.util.Set;
+
+import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.report.Report;
 
 /**
  * Created by Nikita on 24.04.2016.
  */
 public interface ReportService {
 
-    Report getByID(Long id);
+    ReportInfo getByID(Long id);
+    
+    Report getReportOfApproved();
+    
+    Report getReportOfAnswers(FormQuestion question);
 
-    Report getByTitle(String title);
+    ReportInfo getByTitle(String title);
 
-    Set<Report> getAll();
+    Set<ReportInfo> getAll();
 
-    Long insertReport(Report report);
-
-
-    int updateReport(Report report);
-
-    int deleteReport(Report report);
 }
