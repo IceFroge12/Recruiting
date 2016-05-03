@@ -1,10 +1,8 @@
 package ua.kpi.nc.persistence.model.adapter;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 
 import java.lang.reflect.Type;
@@ -20,6 +18,15 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
         jsonObject.addProperty("title", formQuestion.getTitle());
         jsonObject.addProperty("type", formQuestion.getQuestionType().getTypeTitle());
         jsonObject.addProperty("enable", formQuestion.isEnable());
+        JsonArray jsonAnswerVariants = new JsonArray();
+        if (formQuestion.getFormAnswerVariants() != null) {
+            for (FormAnswerVariant variant : formQuestion.getFormAnswerVariants()) {
+                JsonObject jsonAnswerVariant = new JsonObject();
+                jsonAnswerVariant.addProperty("variant", variant.getAnswer());
+                jsonAnswerVariants.add(jsonAnswerVariant);
+            }
+            jsonObject.addProperty("variants", String.valueOf(jsonAnswerVariants));
+        }
         return jsonObject;
     }
 

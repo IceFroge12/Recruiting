@@ -17,10 +17,7 @@ import ua.kpi.nc.service.util.SenderServiceImpl;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by dima on 23.04.16.
@@ -51,30 +48,34 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
-    @ResponseBody
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
+
         System.out.println(userDto.toString());
-        List<Role> roles = userDto.getRoleList();
+        List<RoleImpl> roles = userDto.getRoleList();
+        List<Role> userRoles = new ArrayList<>();
+        for (Role role:roles){
+            userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
+        }
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
                 userDto.getLastName(), password, true, new Timestamp(date.getTime()));
-        userService.insertUser(user,roles);
+        userService.insertUser(user,userRoles);
 //        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
 
 //        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
-
     }
 
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
-    @ResponseBody
     public void editEmployeeParams(@RequestBody UserDto userDto) throws IOException {
 
         System.out.println(userDto.toString());
-        User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(),
-                userDto.getSecondName(), userDto.getLastName());
-
+        User user =  userService.getUserByUsername(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+//        (userDto.getEmail(), userDto.getFirstName(),
+//                userDto.getSecondName(), userDto.getLastName());
+//
         userService.updateUser(user);
 
     }

@@ -3,6 +3,7 @@ package ua.kpi.nc.persistence.dto;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,12 +15,13 @@ public class UserDto {
     private String firstName;
     private String secondName;
     private String lastName;
-    private List<Role> roleList;
+    private List<RoleImpl> roleList;
 
     public UserDto() {
+
     }
 
-    public UserDto(String email, String firstName, String secondName, String lastName, List<Role> roleList) {
+    public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -59,11 +61,12 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public List<Role> getRoleList() {
+    public List<RoleImpl> getRoleList() {
+
         return roleList;
     }
 
-    public void setRoleList(List<Role> roleList) {
+    public void setRoleList(List<RoleImpl> roleList) {
         this.roleList = roleList;
     }
 

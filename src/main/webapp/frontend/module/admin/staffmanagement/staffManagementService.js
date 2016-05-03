@@ -18,13 +18,13 @@ function staffManagementService(http) {
             method : 'POST',
             url : '/admin/addEmployee',
             contentType: 'application/json',
-            data : {
+            data : JSON.stringify({
                 firstName: firstName,
                 secondName: secondName,
                 lastName: lastName,
                 email: email,
                 roleList: roles
-            }
+            })
         })
     };
 

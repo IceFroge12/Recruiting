@@ -39,7 +39,6 @@ public class AdminFormSettingsController {
         for (Decision decision : decisionList) {
             decisionService.insertDecision(decision);
         }
-
     }
 
     @RequestMapping(value = "getapplicationquestions",method = RequestMethod.POST)
@@ -59,6 +58,7 @@ public class AdminFormSettingsController {
             adapterFormQuestionList.add(jsonResult);
         }
         return adapterFormQuestionList;
+
     }
 
     @RequestMapping(value = "addappformquestion")

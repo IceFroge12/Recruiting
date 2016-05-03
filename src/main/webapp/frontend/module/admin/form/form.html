@@ -18,80 +18,19 @@
                                 <th>Edit</th>
                             </tr>
                             <tr ng-repeat="question in questions">
-                                <td>First name</td>
-                                <td>text</td>
+                                <td>{{question.title}}</td>
+                                <td>{{question.type}}</td>
+                                <td>{{question.enable}}</td>
                                 <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Last name</td>
-                                <td>text</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Phone</td>
-                                <td>text</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>text</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>University</td>
-                                <td>dropdown-list</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Course</td>
-                                <td>dropdown-list</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Why exactly are You interested in studying there?</td>
-                                <td>checkbox</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>How many hours per week can You work?</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
+                                    <button class="btn btn-link" type="button" data-toggle="modal"
+                                            data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
                                 </td>
                             </tr>
                         </table>
                         <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                data-target="#addEmployee">Add
+                                data-target="#addQuestion">Add
                             question
                         </button>
                     </form>
@@ -354,5 +293,53 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+
+<div id="editQuestion" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span></button>
+
+                <h4 class="modal-title">Edit employee</h4>
+                <div>
+                    <table class="table">
+                        <tr>
+                            <td> Text</td>
+                            <td><input type="text" ng-model="firstNameEdit" id="firstNameEdit"></td>
+                        </tr>
+                        <tr>
+                            <td> Type</td>
+                            <td><input type="text" ng-model="secondNameEdit" id="secondNameEdit"></td>
+                        </tr>
+                        <tr>
+                            <td> Last Name</td>
+                            <td><input type="text" ng-model="lastNameEdit" id="lastNameEdit"></td>
+                        </tr>
+                        <tr>
+                            <td> Email</td>
+                            <td><input type="text" ng-model="emailEdit" id="emailEdit"></td>
+                        </tr>
+                        <tr>
+                            <td> Role</td>
+                            <td>
+                                <input type="checkbox" id="techEdit" ng-model="techEdit" value="option1"> Tech </input>
+                                <input type="checkbox" id="softEdit" ng-model="softEdit" value="option2"> Soft </input>
+                                <input type="checkbox" id="adminEdit" ng-model="adminEdit" value="option3">
+                                Administrator </input>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges" data-dismiss="modal">Save changes
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>

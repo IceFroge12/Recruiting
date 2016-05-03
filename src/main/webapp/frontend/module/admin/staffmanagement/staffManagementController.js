@@ -36,7 +36,7 @@ function staffManagementController($scope, staffManagementService) {
         console.log($scope.selection);
 
     };
-
+    
     $scope.addEmployee = function () {
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
             $scope.lastName, $scope.email, $scope.selection);

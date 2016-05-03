@@ -31,13 +31,13 @@
                         <button ng-click="changeEmployeeStatus(employee)" class="btn btn-link" type="button"></button>
                     </td>
                     <td ng-click="getAssignedStudents(employee)">
-                        <button class="btn btn-info" ng-click="editEmployee(employee)" type="button" data-toggle="modal"
+                        <button class="btn btn-info"  type="button" data-toggle="modal"
                                 data-target="#assignedList">Show
                             list
                         </button>
                     </td>
                     <td>
-                        <button ng-click="editEmployee(employee)" class="btn btn-link" type="button" data-toggle="modal"
+                        <button  class="btn btn-link" type="button" data-toggle="modal"
                                 data-target="#editEmployee">
                             <span class="glyphicon glyphicon-edit"></span>
                         </button>
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" type="button" id="saveChanges" data-dismiss="modal">Save changes
+                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges" data-dismiss="modal">Save changes
                 </button>
             </div>
         </div>
