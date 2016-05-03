@@ -1,5 +1,7 @@
 package ua.kpi.nc.service.impl;
 
+import java.util.List;
+
 import ua.kpi.nc.persistence.dao.TimePriorityTypeDao;
 import ua.kpi.nc.persistence.model.TimePriorityType;
 import ua.kpi.nc.service.TimePriorityTypeService;
@@ -28,4 +30,9 @@ public class TimePriorityTypeServiceImpl implements TimePriorityTypeService {
     public TimePriorityType getByPriority(String priority) {
         return timePriorityTypeDao.getByPriority(priority);
     }
+
+	@Override
+	public List<TimePriorityType> getAll() {
+		return timePriorityTypeDao.getAll();
+	}
 }
