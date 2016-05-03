@@ -3,7 +3,6 @@
  */
 
 function appFormController($scope, appFormService) {
-
 }
 
 angular.module('appStudentForm')
