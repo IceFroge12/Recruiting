@@ -14,36 +14,39 @@ angular.module('app', [
     'appStaffPersonal',
     'appStaffScheduling',
     'appStaffStudentManagement'
-]).factory('TokenStorage', function () {
-    var storageToken = 'auth_token';
-    return {
-        store: function (token) {
-            return localStorage.setItem(storageToken, token);
-        },
-        retrieve: function () {
-            return localStorage.getItem(storageToken);
-        },
-        clear: function () {
-            return localStorage.removeItem(storageToken);
-        }
-    };
-}).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
-    return {
-        request: function (config) {
-            var authToken = TokenStorage.retrieve();
-            if (authToken) {
-                config.headers['X-AUTH-TOKEN'] = authToken;
-            }
-            return config;
-        },
-        responseError: function (error) {
-            if (error.status === 401 || error.status === 403) {
-                TokenStorage.clear();
-            }
-            return $q.reject(error);
-        }
-    };
-}).config(function ($routeProvider, $httpProvider) {
+])
+//     .factory('TokenStorage', function () {
+//     var storageToken = 'auth_token';
+//     return {
+//         store: function (token) {
+//             return localStorage.setItem(storageToken, token);
+//         },
+//         retrieve: function () {
+//             return localStorage.getItem(storageToken);
+//         },
+//         clear: function () {
+//             return localStorage.removeItem(storageToken);
+//         }
+//     };
+// }).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
+//     return {
+//         request: function (config) {
+//             var authToken = TokenStorage.retrieve();
+//             if (authToken) {
+//                 config.headers['X-AUTH-TOKEN'] = authToken;
+//             }
+//             return config;
+//         },
+//         responseError: function (error) {
+//             if (error.status === 401 || error.status === 403) {
+//                 TokenStorage.clear();
+//             }
+//             return $q.reject(error);
+//         }
+//     };
+// })
+//    
+    .config(function ($routeProvider, $httpProvider) {
 
     $httpProvider.interceptors.push('TokenAuthInterceptor');
 
@@ -135,6 +138,15 @@ angular.module('app', [
         .when('/student/scheduling', {
             templateUrl: 'module/student/scheduling/studentScheduling.html',
             controller: 'studentSchedulingController'
+        })
+
+
+
+        //Auth
+        .when('/authorization', {
+            templateUrl: 'module/home/authorization/authorization.html',
+            controller: 'authorizationController'
+
         })
 
         .otherwise({

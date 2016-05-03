@@ -4,9 +4,15 @@
 
 'use strict';
 
-function authorizationController($scope) {
+function authorizationController($scope, $rootScope, authorizationService) {
+    $rootScope.authenticated = false;
 
+
+    $scope.login = function () {
+        authorizationService.loginIn($scope.email, $scope.password);
+    }
+    
 }
 
 angular.module('appAuthorization')
-    .controller('authorizationController', ['$scope', authorizationController]);
+    .controller('authorizationController', ['$scope', 'authorizationService', authorizationController]);
