@@ -53,9 +53,9 @@
             <div class="info">
                 <h4>Deadlines for current recruitment:</h4>
                 <br>
-                <p>Registration deadline: <span id="registration-deadline"><span></p>
+                <p>Registration deadline: <span id="registration-deadline"></span></p>
                 <br>
-                <p>Choosing schedule time deadline: <span id="schedule-deadline"><span></p>
+                <p>Choosing schedule time deadline: <span id="schedule-deadline"></span></p>
             </div>
         </div>
     </div>
