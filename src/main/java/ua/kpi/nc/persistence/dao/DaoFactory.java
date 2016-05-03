@@ -18,7 +18,7 @@ public class DaoFactory {
     private static QuestionTypeDao questionTypeDao;
     private static RecruitmentDAO recruitmentDAO;
     private static ReportDao reportDao;
-    private static ResendMessageDao resendMessageDao;
+    private static SendMessageDao sendMessageDao;
     private static RoleDao roleDao;
     private static ScheduleTimePointDao scheduleTimePointDao;
     private static SocialInformationDao socialInformationDao;
@@ -161,11 +161,14 @@ public class DaoFactory {
         return questionTypeDao;
     }
 
-    public static ResendMessageDao getResendMessageDao() {
-        if (resendMessageDao == null) {
-            resendMessageDao = new ResendMessageDaoImpl(DataSourceSingleton.getInstance());
+    public static SendMessageDao getResendMessageDao() {
+        if (sendMessageDao == null) {
+            sendMessageDao = new SendMessageDaoImpl(DataSourceSingleton.getInstance());
         }
-        return resendMessageDao;
+        return new SendMessageDaoImpl(DataSourceSingleton.getInstance());
     }
+
+
+
 }
 

@@ -9,8 +9,6 @@ import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Korzh

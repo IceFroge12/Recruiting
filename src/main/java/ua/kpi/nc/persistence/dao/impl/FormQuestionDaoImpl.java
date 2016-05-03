@@ -3,11 +3,9 @@ package ua.kpi.nc.persistence.dao.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.FormQuestionDao;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
-import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.proxy.FormAnswerProxy;
+import ua.kpi.nc.persistence.model.impl.proxy.FormAnswerVariantProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -34,7 +32,8 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
         formQuestion.setTitle(resultSet.getString(TITLE_COL));
         formQuestion.setAnswers(getAnswers(resultSet.getLong(ID_COL)));
         formQuestion.setQuestionType(new QuestionType(resultSet.getLong(ID_QUESTION_TYPE_COL),
-                resultSet.getString(QuestionTypeDaoImpl.ID_COL)));
+                resultSet.getString(QuestionTypeDaoImpl.TYPE_TITLE_COL)));
+        formQuestion.setFormAnswerVariants(getAnswerVariants(resultSet.getLong(ID_COL)));
         return formQuestion;
     };
 
@@ -163,6 +162,16 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
                 }, formQuestionID);
     }
 
+    private List<FormAnswerVariant> getAnswerVariants(Long formQuestionID) {
+        return this.getJdbcTemplate().queryWithParameters("SELECT fav.id FROM form_answer_variant fav WHERE fav.id_question = ?;",
+                resultSet -> {
+                    List<FormAnswerVariant> answersVariants = new ArrayList<>();
+                    do {
+                        answersVariants.add(new FormAnswerVariantProxy(resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL)));
+                    } while (resultSet.next());
+                    return answersVariants;
+                }, formQuestionID);
+    }
 
     @Override
     public int updateFormQuestion(FormQuestion formQuestion) {

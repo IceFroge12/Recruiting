@@ -189,10 +189,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public Set<User> getUsersByToken(String token) {
+    public User getUserByToken(String token) {
         log.info("Get users by token");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_USERS_BY_TOKEN, extractor, token);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_USERS_BY_TOKEN, extractor, token);
     }
+
 
     @Override
     public Set<User> getAssignedStudents(Long id) {
