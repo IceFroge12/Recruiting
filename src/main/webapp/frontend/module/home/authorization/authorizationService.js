@@ -13,12 +13,13 @@ function authorizationService($http) {
             url : '/loginIn',
             contentType: 'application/json',
             data: {email: email, password : password}
-        }).then(function successCallback(response) {
-            console.log(response);
-            TokenStorage.store(headers('X-AUTH-TOKEN'));
-            $rootScope.authenticated = true;
-        }, function errorCallback(response) {
-            console.log(response);
+        // })
+        //     .then(function successCallback(response) {
+        //     console.log(response);
+        //     TokenStorage.store(headers('X-AUTH-TOKEN'));
+        //     $rootScope.authenticated = true;
+        // }, function errorCallback(response) {
+        //     console.log(response);
         });
     };
     
