@@ -219,13 +219,24 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
     }
 
+    //    private Set<Role> getRoles(Long userID) {
+//        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role\n" +
+//                "FROM user_role ur \n INNER JOIN \"role\" r ON ur.id_role = r.id\n" +
+//                "WHERE ur.id_user = ?;", resultSet -> {
+//            Set<Role> roles = new HashSet<>();
+//            do {
+//                roles.add(roleDao.getByID(resultSet.getLong("id_role")));
+//            } while (resultSet.next());
+//            return roles;
+//        }, userID);
+//    }
     private Set<Role> getRoles(Long userID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role\n" +
-                "FROM user_role ur \n INNER JOIN \"role\" r ON ur.id_role = r.id\n" +
+        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
+                "FROM user_role ur " +
                 "WHERE ur.id_user = ?;", resultSet -> {
             Set<Role> roles = new HashSet<>();
             do {
-                roles.add(roleDao.getByID(resultSet.getLong("id_role")));
+                roles.add(new RoleProxy(resultSet.getLong("id_role")));
             } while (resultSet.next());
             return roles;
         }, userID);

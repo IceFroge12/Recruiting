@@ -27,11 +27,9 @@ public class UserProxy implements User {
     @JsonIgnore
     private UserImpl user;
 
-    @JsonIgnore
     private UserService userService;
 
     public UserProxy() {
-        userService = ServiceFactory.getUserService();
     }
 
     public UserProxy(Long id) {
@@ -213,6 +211,7 @@ public class UserProxy implements User {
 
     private void checkUserForExist() {
         if (user == null) {
+            userService = ServiceFactory.getUserService();
             user = downloadUser();
         }
     }

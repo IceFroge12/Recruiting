@@ -38,7 +38,6 @@ public class GsonFactory {
             formQuestionGson = new GsonBuilder().registerTypeAdapter(FormQuestionImpl.class, new FormQuestionAdapter())
                     .setPrettyPrinting()
                     .create();
-
         }
         return formQuestionGson;
     }
