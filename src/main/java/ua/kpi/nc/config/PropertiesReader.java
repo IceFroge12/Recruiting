@@ -28,7 +28,7 @@ public class PropertiesReader {
 
         Properties p = new Properties();
 
-        try(FileInputStream fileInputStream = new FileInputStream("C:\\Users\\IO\\Recruiting\\src\\main\\resources\\app.properties")) {
+        try(FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Vova\\IdeaProjects\\Recruting13\\src\\main\\resources\\app.properties")) {
             p.load(fileInputStream);
             prop = p.getProperty(property);
         } catch (IOException e) {
