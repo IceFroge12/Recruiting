@@ -157,7 +157,6 @@ public class FormQuestionImpl implements FormQuestion {
                 ", enable=" + enable +
                 ", mandatory=" + mandatory +
                 ", answers=" + answers +
-                ", roles=" + roles +
                 ", formAnswerVariants=" + formAnswerVariants +
                 '}';
     }

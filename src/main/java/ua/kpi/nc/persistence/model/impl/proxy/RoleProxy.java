@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import ua.kpi.nc.persistence.model.Role;
@@ -21,7 +22,7 @@ public class RoleProxy implements Role {
 
     private RoleService roleService;
 
-    public RoleProxy(Long id) {
+    public  RoleProxy(Long id) {
         this.id = id;
     }
 
@@ -46,7 +47,7 @@ public class RoleProxy implements Role {
         checkRoleForExist();
         role.setRoleName(roleName);
     }
-
+    @JsonIgnore
     @Override
     public Set<User> getUsers() {
         checkRoleForExist();
