@@ -7,7 +7,7 @@ angular.module('app', [
         'ngRoute',
         'appHome',
         'appMain',
-        'appForm',
+        'appAdminForm',
         'appFeedback',
         'appStaffMain',
         'appStaffPersonal',
@@ -76,6 +76,10 @@ angular.module('app', [
             .when('/admin/studentmanagement', {
                 templateUrl: 'module/admin/studentmanagement/studentmanagement.html',
                 controller: 'studentManagementController'
+            })
+            .when('/admin/adminformsettings', {
+                templateUrl: 'module/admin/form/form.html',
+                controller: 'formAppController'
             })
 
 

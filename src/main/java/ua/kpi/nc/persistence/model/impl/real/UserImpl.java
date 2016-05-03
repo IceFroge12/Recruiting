@@ -279,12 +279,25 @@ public class UserImpl implements User {
 
     @Override
     public String toString() {
-        return "User:" +
-                "email= " + email +
-                ", firstName= " + firstName +
-                ", lastName= " + lastName  +
-                ", registrationDate= " + registrationDate +
-                ", isActive= " + isActive;
+        return "UserImpl{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", roles=" + roles +
+                ", confirmToken='" + confirmToken + '\'' +
+                ", isActive=" + isActive +
+                ", registrationDate=" + registrationDate +
+                ", password='" + password + '\'' +
+                ", socialInformations=" + socialInformations +
+                ", userAuthorities=" + userAuthorities +
+                ", expireDate=" + expireDate +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", enabled=" + enabled +
+                '}';
     }
 
     @Override

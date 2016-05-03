@@ -80,7 +80,7 @@ public class AdminManagementStaffController {
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(),
                 userDto.getSecondName(), userDto.getLastName());
 
-//        userService.updateUser(user);
+        userService.updateUser(user);
 
     }
 

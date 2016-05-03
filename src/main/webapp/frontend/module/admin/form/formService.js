@@ -4,13 +4,19 @@
 
 'use strict';
 
-function formService(http) {
+function formAppService(http) {
 
     var service = {};
-    
 
+    service.getAllQuestion= function () {
+        return http.post('/admin/getapplicationquestions').then(function (response) {
+            console.log("["+response+"]");
+            return response.data;
+        });
+    };
+    
     return service;
 }
 
-angular.module('appForm')
-    .service('formService', ['$http', formService])
+angular.module('appAdminForm')
+    .service('formAppService', ['$http', formAppService])

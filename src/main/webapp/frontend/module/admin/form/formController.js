@@ -2,9 +2,9 @@
  * Created by dima on 30.04.16.
  */
 
-function formController($scope) {
-
+function formAppController($scope, formAppService) {
+        console.log("lol")
 }
 
-angular.module('appForm')
-    .controller('formController', ['$scope', formController]);
+angular.module('appAdminForm')
+    .controller('formAppController', ['$scope', 'formAppService', formAppController]);

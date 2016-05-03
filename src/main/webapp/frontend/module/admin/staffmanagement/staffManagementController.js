@@ -40,7 +40,7 @@ function staffManagementController($scope, staffManagementService) {
     $scope.addEmployee = function () {
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
             $scope.lastName, $scope.email, $scope.selection);
-    }
+    };
 
 
     var editRoles = [];
@@ -66,12 +66,15 @@ function staffManagementController($scope, staffManagementService) {
             }
             //TODO change logic
         });
+
+
         
 
         staffManagementService.editEmployee($scope.firstNameEdit, $scope.secondNameEdit,
             $scope.lastNameEdit, $scope.emailEdit, editRoles);
 
     }
+
 
     $scope.changeEmployeeStatus = function (employee) {
         console.log(employee.email)

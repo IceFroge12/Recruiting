@@ -221,7 +221,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private Set<Role> getRoles(Long userID) {
         return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role\n" +
-                "FROM user_role ur INNER JOIN role r ON ur.id_role = r.id" +
+                "FROM user_role ur INNER JOIN role r ON ur.id_role = r.id\n" +
                 "WHERE ur.id_user = ?;", resultSet -> {
             Set<Role> roles = new HashSet<>();
             do {

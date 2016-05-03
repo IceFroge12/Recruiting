@@ -1,17 +1,18 @@
 package ua.kpi.nc.controller.admin;
 
+import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.persistence.model.Decision;
 import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.QuestionType;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.DecisionService;
 import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.ServiceFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,11 +28,6 @@ public class AdminFormSettingsController {
 
     private RoleService roleService = ServiceFactory.getRoleService();
 
-    @RequestMapping(value = "adminformsettings", method = RequestMethod.GET)
-    public ModelAndView studentManagement() {
-        ModelAndView modelAndView = new ModelAndView("adminformsettings");
-        return modelAndView;
-    }
 
     @RequestMapping(value = "addmatrix")
     public void addDecisionMatrix(@RequestParam List<Decision> decisionList) {
@@ -46,16 +42,22 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "getapplicationquestions")
     @ResponseBody
-    public List<FormQuestion> getAppFormQuestions() {
+    public List<String> getAppFormQuestions() {
 
         Role roleAdmin = roleService.getRoleByTitle(String.valueOf(RoleEnum.ADMIN));
 
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleAdmin);
 
+        List<String> adapterFormQuestionList = new ArrayList<>();
+
         for (FormQuestion formQuestion : formQuestionList) {
             System.out.println(formQuestion);
+            Gson questionGson = GsonFactory.getFormQuestionGson();
+            String jsonResult = questionGson.toJson(questionGson);
+            adapterFormQuestionList.add(jsonResult);
         }
-        return formQuestionList;
+        return adapterFormQuestionList;
+
     }
 
     @RequestMapping(value = "addappformquestion")
@@ -71,8 +73,6 @@ public class AdminFormSettingsController {
     public void updateAppFormQuestions(@RequestBody FormQuestion formQuestion) {
         formQuestionService.updateFormQuestion(formQuestion);
     }
-
-
 
 
 }

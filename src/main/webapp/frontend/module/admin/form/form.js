@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appForm', []);
+angular.module('appAdminForm', []);
