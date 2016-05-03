@@ -16,7 +16,6 @@ public class TokenHandler {
     private final String secret;
     private final UserAuthService userService;
 
-    //TODO need replace in property file
     private final long epriretime = 60 * 1000 * 5;
 
     public TokenHandler(String secret, UserAuthService userAuthService) {

@@ -6,11 +6,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.util.UserAuthService;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by IO on 24.04.2016.

@@ -18,30 +18,25 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
  */
 public class SocialNetworkDaoImpl extends JdbcDaoSupport implements SocialNetworkDao {
 
-	private static Logger log = LoggerFactory.getLogger(SocialNetworkDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SocialNetworkDaoImpl.class.getName());
 
-	private static final String SQL_GET_BY_ID = "SELECT s.id, s.title" + "FROM \"social_network\" s\n"
-			+ "WHERE s.id = ?";
+    private ResultSetExtractor<SocialNetwork> extractor = resultSet -> {
+        SocialNetwork socialNetwork;
+        socialNetwork = new SocialNetwork(resultSet.getLong("id"), resultSet.getString("title"));
+        return socialNetwork;
+    };
 
-	public SocialNetworkDaoImpl(DataSource dataSource) {
-		this.setJdbcTemplate(new JdbcTemplate(dataSource));
-	}
+    private static final String SQL_GET_BY_ID = "SELECT s.id, s.title" + "FROM \"social_network\" s\n"
+            + "WHERE s.id = ?";
 
-	@Override
-	public SocialNetwork getByID(Long id) {
-		if (log.isTraceEnabled()) {
-			log.trace("Looking for social network with id = " + id);
-		}
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new SocialNetworkExtractor(), id);
-	}
+    public SocialNetworkDaoImpl(DataSource dataSource) {
+        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+    }
 
-	private final class SocialNetworkExtractor implements ResultSetExtractor<SocialNetwork> {
+    @Override
+    public SocialNetwork getByID(Long id) {
+        log.trace("Looking for social network with id = ", id);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+    }
 
-		@Override
-		public SocialNetwork extractData(ResultSet resultSet) throws SQLException {
-			SocialNetwork socialNetwork = new SocialNetwork(resultSet.getLong("id"), resultSet.getString("title"));
-			return socialNetwork;
-		}
-
-	}
 }
