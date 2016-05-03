@@ -3,6 +3,8 @@ package ua.kpi.nc.persistence.model.impl.proxy;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.service.ApplicationFormService;
@@ -152,4 +154,23 @@ public class ApplicationFormProxy implements ApplicationForm {
 		return applicationFormImpl = (ApplicationFormImpl) service.getApplicationFormById(id);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ApplicationFormProxy that = (ApplicationFormProxy) o;
+
+		return new EqualsBuilder()
+				.append(id, that.id)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37)
+				.append(id)
+				.toHashCode();
+	}
 }
