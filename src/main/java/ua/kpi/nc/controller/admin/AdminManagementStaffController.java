@@ -72,25 +72,15 @@ public class AdminManagementStaffController {
     }
 
 
-    @RequestMapping(value = "getEmployeeParams", method = RequestMethod.POST)
-    @ResponseBody
-    public User getEmployeeParams(@RequestParam String email) {
-        User user = userService.getUserByUsername(email);
-
-        User employee = new UserImpl(user.getEmail(), user.getFirstName(),
-                user.getSecondName(), user.getLastName(), user.getRoles());
-
-        return employee;
-    }
-
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     @ResponseBody
     public void editEmployeeParams(@RequestBody UserDto userDto) throws IOException {
 
+        System.out.println(userDto.toString());
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(),
-                userDto.getSecondName(), userDto.getLastName());        //TODO add roles !!!
+                userDto.getSecondName(), userDto.getLastName());
 
-        userService.updateUser(user);
+//        userService.updateUser(user);
 
     }
 

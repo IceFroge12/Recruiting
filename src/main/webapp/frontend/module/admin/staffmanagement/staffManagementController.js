@@ -66,9 +66,10 @@ function staffManagementController($scope, staffManagementService) {
             }
             //TODO change logic
         });
+        
 
-        staffManagementService.editEmployee($scope.firstName, $scope.secondName,
-            $scope.lastName, $scope.email, editRoles);
+        staffManagementService.editEmployee($scope.firstNameEdit, $scope.secondNameEdit,
+            $scope.lastNameEdit, $scope.emailEdit, editRoles);
 
     }
 
