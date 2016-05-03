@@ -9,13 +9,55 @@ function staffManagementService(http) {
     
     service.showAllEmployees = function () {
         return http.post('/admin/showAllEmployee').then(function (response) {
-            console.log(response.data);
             return response.data;
         });
     };
-    
+
+    service.addEmployee = function (firstName, secondName, lastName, email, roles) {
+        http({
+            method : 'POST',
+            url : '/admin/addEmployee',
+            contentType: 'application/json',
+            data : {
+                firstName: firstName,
+                secondName: secondName,
+                lastName: lastName,
+                email: email,
+                roleList: roles
+            }
+        })
+    };
+
+
+    service.editEmployee = function (firstName, secondName, lastName, email, roles) {
+        http({
+            method : 'POST',
+            url : '/admin/editEmployee',
+            contentType: 'application/json',
+            data : {
+                firstName: firstName,
+                secondName: secondName,
+                lastName: lastName,
+                email: email,
+                roleList: roles
+            }
+        });
+    };
+
+    service.changeEmployeeStatus = function (email) {
+        console.log(email)
+        http({
+            method : 'GET',
+            url : '/admin/changeEmployeeStatus',
+            data : { email: email }
+        });
+    };
+
+
     return service;
 }
+
+
 
 angular.module('appStaffManagement')
     .service('staffManagementService', ['$http', staffManagementService]);

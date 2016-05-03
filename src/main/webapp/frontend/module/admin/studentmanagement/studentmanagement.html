@@ -1,10 +1,15 @@
+<div app-header></div>
+<div app-admin-menu></div>
+
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
             <div class="row">
-                <div class="col-md-2"><h6><i>Approved to work:20</i></h6></div>
-                <div class="col-md-2"><h6><i>Approved to advanced:20</i></h6></div>
-                <div class="col-md-2"><h6><i>Approved to general:80</i></h6></div>
+                <div class="col-md-2"><h6><i>Approved to work: {{approvedToWork}}</i></h6></div>
+                <div class="col-md-2"><h6><i>Approved to advanced: {{approvedToAdvanced}}</i></h6></div>
+                <div class="col-md-2"><h6><i>Approved to general: {{approvedToGeneral}}</i></h6></div>
+                <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
+                <label>Search:<input ng-model="searchText"></label>
             </div>
             <div class="col-md-5">
                 <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
@@ -17,7 +22,7 @@
                     Filter table
                 </button>
             </form>
-            <table id="students_table">
+            <table class="table table-hover" id="students_table">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -27,11 +32,15 @@
                     <th>University</th>
                     <th>Course</th>
                 </tr>
-                <tr ng-repeat="student in students">
+                <tr ng-repeat="student in students | filter:searchText ">
                     <td>{{student.ID}}</td>
                     <td>{{student.photoScope}}</td>
                     <td>{{student.user.firstName +" "+ student.user.lastName}}</td>
-                    <td>{{student.status}}</td>
+                    <td><select>
+                        <option selected>{{student.status}}</option>
+                        <option ng-repeat="status in statuses">{{status}}</option>
+                    </select>
+                    </td>
                     <td>{{student.kurs}}</td>
                 </tr>
                 </thead>
@@ -41,3 +50,74 @@
         </div>
     </div>
 </div>
+
+<div id="filtration" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Filtration parameters</h4>
+
+                <div>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Application form field
+                            </th>
+                            <th>
+                                Restrictions
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                Status
+                            </td>
+                            <td>
+                                <input type="checkbox" name="status" value="1">to job
+                                <input type="checkbox" name="status" value="2">to general course
+                                <input type="checkbox" name="status" value="3">to advanced course
+                                <input type="checkbox" name="status" value="4">rejected
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                University
+                            </td>
+                            <td>
+                                <input type="checkbox" name="iniv" value="1">KPI
+                                <input type="checkbox" name="iniv" value="2">KNU
+                                <input type="checkbox" name="iniv" value="3">NAU
+                                <input type="checkbox" name="iniv" value="4">other
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Course
+                            </td>
+                            <td>
+                                <input type="checkbox" name="course" value="1">1
+                                <input type="checkbox" name="course" value="2">2
+                                <input type="checkbox" name="course" value="3">3
+                                <input type="checkbox" name="course" value="4">4
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                etc
+                            </td>
+                            <td>
+                                etc
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" type="button" data-dismiss="modal">Filter</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div app-footer></div>
