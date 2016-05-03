@@ -4,4 +4,4 @@
 
 'use strict'
 
-angular.module('studentScheduling', ['addHeader', 'appFooter']);
+angular.module('studentScheduling', ['appHeader', 'appFooter']);
