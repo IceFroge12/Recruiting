@@ -11,6 +11,7 @@ import ua.kpi.nc.service.UserService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,16 +44,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean insertUser(User user, Role role) {
+    public boolean insertUser(User user, List<Role> roles) {
         try(Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
             Long generatedUserId = userDao.insertUser(user, connection);
             user.setId(generatedUserId);
-            userDao.addRole(user,role,connection);
+            for (Role role : roles){
+                userDao.addRole(user,role,connection);
+            }
             connection.commit();
         } catch (SQLException e) {
             if (log.isWarnEnabled()) {
-                log.error("Cannot insert user",e);
+                log.warn("Cannot insert user",e);
             }
             return false;
         }

@@ -26,6 +26,15 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
     private static Logger log = LoggerFactory.getLogger(ScheduleTimePointDaoImpl.class.getName());
 
+    private ResultSetExtractor<ScheduleTimePoint> extractor = resultSet -> {
+        ScheduleTimePoint scheduleTimePoint = new ScheduleTimePointImpl();
+        scheduleTimePoint.setId(resultSet.getLong("id"));
+        scheduleTimePoint.setTimePoint(resultSet.getTimestamp("tp"));
+        scheduleTimePoint.setUserTimePriorities(getUserTimePriority(resultSet.getLong("id"), scheduleTimePoint));
+        scheduleTimePoint.setUsers(getUsersFinalInTimePoint(resultSet.getLong("id")));
+        return scheduleTimePoint;
+    };
+
     public ScheduleTimePointDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
@@ -52,41 +61,31 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
     @Override
     public ScheduleTimePoint getFinalTimePointById(Long id) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for Schedule time Point with id = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, new ScheduleTimePointExtractor(), id);
+        log.trace("Looking for Schedule time Point with id = ", id);
+        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
     }
 
     @Override
     public Set<ScheduleTimePoint> getFinalTimePointByUserId(Long id) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for Schedule time Point with User_id = " + id);
-        }
-        return this.getJdbcTemplate().queryForSet(FINAL_TIME_POINT_BY_USER_ID, new ScheduleTimePointExtractor(), id);
+        log.trace("Looking for Schedule time Point with User_id = ", id);
+        return this.getJdbcTemplate().queryForSet(FINAL_TIME_POINT_BY_USER_ID, extractor, id);
     }
 
     @Override
     public Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        if (log.isTraceEnabled()) {
-            log.trace("Inserting Schedule time Point with id = " + scheduleTimePoint.getId());
-        }
+        log.trace("Inserting Schedule time Point with id = ", scheduleTimePoint.getId());
         return this.getJdbcTemplate().insert(INSERT_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint());
     }
 
     @Override
     public int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        if (log.isTraceEnabled()) {
-            log.trace("Updating Schedule time Point with id = " + scheduleTimePoint.getId());
-        }
+        log.trace("Updating Schedule time Point with id = ", scheduleTimePoint.getId());
         return this.getJdbcTemplate().update(UPDATE_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint(), scheduleTimePoint.getId());
     }
 
     @Override
     public int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        if (log.isTraceEnabled()) {
-            log.trace("Deleting Schedule time Point with id = " + scheduleTimePoint.getId());
-        }
+        log.trace("Deleting Schedule time Point with id = ", scheduleTimePoint.getId());
         return this.getJdbcTemplate().update(DELETE_SCHEDULE_TIME_POINT, scheduleTimePoint.getId());
     }
 
@@ -112,18 +111,4 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
             return set;
         }, timeID);
     }
-
-    private class ScheduleTimePointExtractor implements ResultSetExtractor<ScheduleTimePoint> {
-        @Override
-        public ScheduleTimePoint extractData(ResultSet resultSet) throws SQLException {
-            ScheduleTimePoint scheduleTimePoint = new ScheduleTimePointImpl();
-            scheduleTimePoint.setId(resultSet.getLong("id"));
-            scheduleTimePoint.setTimePoint(resultSet.getTimestamp("tp"));
-            scheduleTimePoint.setUserTimePriorities(getUserTimePriority(resultSet.getLong("id"), scheduleTimePoint));
-            scheduleTimePoint.setUsers(getUsersFinalInTimePoint(resultSet.getLong("id")));
-            return scheduleTimePoint;
-        }
-    }
-
-
 }

@@ -7,84 +7,165 @@ import ua.kpi.nc.persistence.dao.impl.*;
  * Created by Chalienko on 20.04.2016.
  */
 public class DaoFactory {
-    public static UserDao getUserDao() {
-        return new UserDaoImpl(DataSourceSingleton.getInstance());
-    }
+    private static ApplicationFormDao applicationFormDao;
+    private static DecisionDao decisionDao;
+    private static EmailTemplateDao emailTemplateDao;
+    private static FormAnswerVariantDao formAnswerVariantDao;
+    private static FormAnswerDao formAnswerDao;
+    private static FormQuestionDao formQuestionDao;
+    private static InterviewDao interviewDao;
+    private static NotificationTypeDao notificationTypeDao;
+    private static QuestionTypeDao questionTypeDao;
+    private static RecruitmentDAO recruitmentDAO;
+    private static ReportDao reportDao;
+    private static ResendMessageDao resendMessageDao;
+    private static RoleDao roleDao;
+    private static ScheduleTimePointDao scheduleTimePointDao;
+    private static SocialInformationDao socialInformationDao;
+    private static SocialNetworkDao socialNetworkDao;
+    private static StatusDao statusDao;
+    private static TimePriorityTypeDao timePriorityTypeDao;
+    private static UserDao userDao;
+    private static UserTimePriorityDao userTimePriorityDao;
 
     public static RecruitmentDAO getRecruitmentDao() {
-        return new RecruitmentDaoImpl(DataSourceSingleton.getInstance());
+        if (recruitmentDAO == null) {
+            recruitmentDAO = new RecruitmentDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return recruitmentDAO;
+    }
+
+    public static UserDao getUserDao() {
+        if (userDao == null) {
+            userDao = new UserDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return userDao;
     }
 
     public static ReportDao getReportDao() {
-        return new ReportDaoImpl(DataSourceSingleton.getInstance());
+        if (reportDao == null) {
+            reportDao = new ReportDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return reportDao;
     }
 
     public static EmailTemplateDao getEmailTemplateDao() {
-        return new EmailTemplateDaoImpl(DataSourceSingleton.getInstance());
+        if (emailTemplateDao == null) {
+            emailTemplateDao = new EmailTemplateDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return emailTemplateDao;
     }
 
     public static ApplicationFormDao getApplicationFormDao() {
-        return new ApplicationFormDaoImpl(DataSourceSingleton.getInstance());
+        if (applicationFormDao == null) {
+            applicationFormDao = new ApplicationFormDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return applicationFormDao;
     }
 
     public static DecisionDao getDecisionDao() {
-        return new DecisionDaoImpl(DataSourceSingleton.getInstance());
+        if (decisionDao == null) {
+            decisionDao = new DecisionDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return decisionDao;
     }
-    
+
     public static FormAnswerVariantDao getFormAnswerVariantDao() {
-        return new FormAnswerVariantDaoImpl(DataSourceSingleton.getInstance());
+        if (formAnswerVariantDao == null) {
+            formAnswerVariantDao = new FormAnswerVariantDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return formAnswerVariantDao;
     }
 
     public static InterviewDao getInterviewDao() {
-        return new InterviewDaoImpl(DataSourceSingleton.getInstance());
+        if (interviewDao == null) {
+            interviewDao = new InterviewDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return interviewDao;
     }
 
     public static FormQuestionDao getFormQuestionDao() {
-        return new FormQuestionDaoImpl(DataSourceSingleton.getInstance());
+        if (formQuestionDao == null) {
+            formQuestionDao = new FormQuestionDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return formQuestionDao;
     }
 
     public static FormAnswerDao getFormAnswerDao() {
-        return new FormAnswerDaoImpl(DataSourceSingleton.getInstance());
+        if (formAnswerDao == null) {
+            formAnswerDao = new FormAnswerDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return formAnswerDao;
     }
 
     public static StatusDao getStatusDao() {
-        return new StatusDaoImpl(DataSourceSingleton.getInstance());
+        if (statusDao == null) {
+            statusDao = new StatusDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return statusDao;
     }
 
     public static ScheduleTimePointDao getScheduleTimePointDao() {
-        return new ScheduleTimePointDaoImpl(DataSourceSingleton.getInstance());
+        if (scheduleTimePointDao == null) {
+            scheduleTimePointDao = new ScheduleTimePointDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return scheduleTimePointDao;
     }
 
     public static NotificationTypeDao getNotificationTypeDao() {
-        return new NotificationTypeDaoImpl(DataSourceSingleton.getInstance());
+        if (notificationTypeDao == null) {
+            notificationTypeDao = new NotificationTypeDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return notificationTypeDao;
     }
 
     public static TimePriorityTypeDao getTimePriorityDao() {
-        return new TimePriorityTypeDaoImpl(DataSourceSingleton.getInstance());
+        if (timePriorityTypeDao == null) {
+            timePriorityTypeDao = new TimePriorityTypeDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return timePriorityTypeDao;
     }
 
     public static RoleDao getRoleDao() {
-        return new RoleDaoImpl(DataSourceSingleton.getInstance());
+        if (roleDao == null) {
+            roleDao = new RoleDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return roleDao;
     }
 
     public static SocialNetworkDao getSocialNetworkDao() {
-        return new SocialNetworkDaoImpl(DataSourceSingleton.getInstance());
+        if (socialNetworkDao == null) {
+            socialNetworkDao = new SocialNetworkDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return socialNetworkDao;
     }
 
     public static SocialInformationDao getSocialInformationDao() {
-        return new SocialInformationDaoImpl(DataSourceSingleton.getInstance());
+        if (socialInformationDao == null) {
+            socialInformationDao = new SocialInformationDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return socialInformationDao;
     }
 
     public static UserTimePriorityDao getUserTimePriorityDao() {
-        return new UserTimePriorityDaoImpl(DataSourceSingleton.getInstance());
+        if (userTimePriorityDao == null) {
+            userTimePriorityDao = new UserTimePriorityDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return userTimePriorityDao;
     }
 
     public static QuestionTypeDao getQuestionTypeDao() {
-        return new QuestionTypeDaoImpl(DataSourceSingleton.getInstance());
+        if (questionTypeDao == null) {
+            questionTypeDao = new QuestionTypeDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return questionTypeDao;
     }
 
-    public static SendMessageDao getResendMessageDao() {
-        return new SendMessageDaoImpl(DataSourceSingleton.getInstance());
+    public static ResendMessageDao getResendMessageDao() {
+        if (resendMessageDao == null) {
+            resendMessageDao = new ResendMessageDaoImpl(DataSourceSingleton.getInstance());
+        }
+        return resendMessageDao;
     }
 }
 
