@@ -45,7 +45,7 @@ app.controller('AuthCtrl', function ($scope, $http, $window) {
 	$scope.login = function () {
 		// $http.post('/loginIn', { email: $scope.email, password: $scope.password }).success(function () {
          //    //$window.location.href = headers('redirectURL');
-		// });
+		// });	
 		
 		$http({
 			method : 'POST',
