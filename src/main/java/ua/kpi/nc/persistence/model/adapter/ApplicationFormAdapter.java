@@ -1,13 +1,11 @@
 package ua.kpi.nc.persistence.model.adapter;
 
 import com.google.gson.*;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Recruitment;
-import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
+import ua.kpi.nc.persistence.model.*;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -32,10 +30,30 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
         jsonUser.addProperty("lastName", user.getLastName());
         jsonUser.addProperty("email", user.getEmail());
         jsonObject.add("user", jsonUser);
-        JsonArray jsonAnswers = new JsonArray();
+        JsonArray jsonQuestions = new JsonArray();
+        Map<FormQuestion, JsonObject> questionsMap = new HashMap<>();
         for (FormAnswer answer : applicationForm.getAnswers()) {
+            FormQuestion question = answer.getFormQuestion();
+            JsonObject jsonQuestion = questionsMap.get(question);
+            if (jsonQuestion == null) {
+                jsonQuestion = new JsonObject();
+                jsonQuestion.addProperty("questionTitle", question.getTitle());
+                jsonQuestion.addProperty("questionType", question.getQuestionType().getTypeTitle());
+                JsonArray jsonAnswers = new JsonArray();
+                jsonQuestion.add("answers", jsonAnswers);
+                if (question.getFormAnswerVariants() != null) {
+                    JsonArray jsonAnswerVariants = new JsonArray();
+                    for (FormAnswerVariant variant : question.getFormAnswerVariants()) {
+                        JsonObject jsonAnswerVariant = new JsonObject();
+                        jsonAnswerVariant.addProperty("variant", variant.getAnswer());
+                        jsonAnswerVariants.add(jsonAnswerVariant);
+                    }
+                    jsonQuestion.add("variants", jsonAnswerVariants);
+                }
+                questionsMap.put(question, jsonQuestion);
+            }
+            JsonArray jsonAnswers = jsonQuestion.getAsJsonArray("answers");
             JsonObject jsonAnswer = new JsonObject();
-            jsonAnswer.addProperty("question", answer.getFormQuestion().getTitle());
             if (answer.getAnswer() != null) {
                 jsonAnswer.addProperty("answer", answer.getAnswer());
             } else {
@@ -43,7 +61,10 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
             }
             jsonAnswers.add(jsonAnswer);
         }
-        jsonObject.add("answers", jsonAnswers);
+        for (FormQuestion question : questionsMap.keySet()) {
+            jsonQuestions.add(questionsMap.get(question));
+        }
+        jsonObject.add("questions", jsonQuestions);
         return jsonObject;
     }
 }
