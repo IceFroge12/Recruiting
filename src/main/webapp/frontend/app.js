@@ -16,7 +16,8 @@ angular.module('app', [
         'appStaffManagement',
         'appStudentManagement',
         'appReport',
-        'appStudentForm'
+        'appStudentForm',
+        'studentScheduling'
     ])
 
     //     .factory('TokenStorage', function () {
