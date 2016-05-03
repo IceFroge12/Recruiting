@@ -137,6 +137,15 @@ angular.module('app', [
             controller: 'studentSchedulingController'
         })
 
+
+
+        //Auth
+        .when('/authorization', {
+            templateUrl: 'module/home/authorization/authorization.html',
+            controller: 'authorizationController'
+
+        })
+
         .otherwise({
             redirectTo: '/'
         });

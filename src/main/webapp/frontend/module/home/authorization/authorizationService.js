@@ -3,9 +3,18 @@
  */
 'use strict';
 
-function authorizationService(http) {
+function authorizationService($http) {
 
     var service = {};
+    
+    service.loginIn = function (email, password) {
+        $http({
+            method : 'POST',
+            url : '/loginIn',
+            contentType: 'application/json',
+            data: {email: email, password : password}
+        })
+    };
     
     return service;
 }

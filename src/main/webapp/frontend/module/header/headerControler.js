@@ -4,11 +4,15 @@
 
 'use strict';
 
-function headerController($scope) {
+function headerController($scope, $location) {
+
+    $scope.loginPage = function () {
+        $location.path("/authorization");
+    }
     
 }
 
 angular.module('appHeader')
-    .controller('headerController', ['$scope', headerController]);
+    .controller('headerController', ['$scope', '$location', headerController]);
 
 
