@@ -7,7 +7,6 @@ angular.module('app', [
         'ngRoute',
         'appHome',
         'appMain',
-        'appForm',
         'appFeedback',
         'appStaffMain',
         'appStaffPersonal',
@@ -17,7 +16,8 @@ angular.module('app', [
         'appStudentManagement',
         'appReport',
         'appStudentForm',
-        'studentScheduling'
+        'studentScheduling',
+        'appAdminForm'
     ])
 
     //     .factory('TokenStorage', function () {
@@ -79,6 +79,10 @@ angular.module('app', [
             .when('/admin/studentmanagement', {
                 templateUrl: 'module/admin/studentmanagement/studentmanagement.html',
                 controller: 'studentManagementController'
+            })
+            .when('/admin/adminformsettings', {
+                templateUrl: 'module/admin/form/form.html',
+                controller: 'formAppController'
             })
             .when('/admin/report', {
                 templateUrl: 'module/admin/report/report.html',

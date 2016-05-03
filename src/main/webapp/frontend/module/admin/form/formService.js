@@ -10,8 +10,7 @@ function formAppService(http) {
 
     service.getAllQuestion= function () {
         return http.post('/admin/getapplicationquestions').then(function (response) {
-            console.log("["+response+"]");
-            return response.data;
+            return JSON.parse("["+response.data+"]");
         });
     };
     

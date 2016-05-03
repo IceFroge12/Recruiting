@@ -4,7 +4,7 @@
 function staffManagementController($scope, staffManagementService) {
 
     staffManagementService.showAllEmployees().then(function success(data) {
-
+        console.log(data);
         var roleName = new String();
         $scope.allEmployee = data;
         console.log(data);

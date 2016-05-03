@@ -1,6 +1,7 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.model.Decision;
 import ua.kpi.nc.persistence.model.FormQuestion;
@@ -18,6 +19,7 @@ import java.util.List;
 /**
  * Created by dima on 23.04.16.
  */
+@Controller
 @RequestMapping("/admin")
 public class AdminFormSettingsController {
 
@@ -40,7 +42,7 @@ public class AdminFormSettingsController {
 
     }
 
-    @RequestMapping(value = "getapplicationquestions")
+    @RequestMapping(value = "getapplicationquestions",method = RequestMethod.POST)
     @ResponseBody
     public List<String> getAppFormQuestions() {
 
@@ -53,11 +55,10 @@ public class AdminFormSettingsController {
         for (FormQuestion formQuestion : formQuestionList) {
             System.out.println(formQuestion);
             Gson questionGson = GsonFactory.getFormQuestionGson();
-            String jsonResult = questionGson.toJson(questionGson);
+            String jsonResult = questionGson.toJson(formQuestion);
             adapterFormQuestionList.add(jsonResult);
         }
         return adapterFormQuestionList;
-
     }
 
     @RequestMapping(value = "addappformquestion")

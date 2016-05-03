@@ -18,6 +18,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,12 +39,6 @@ public class AdminManagementStaffController {
 
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
-
-    @RequestMapping(value = "staffmanagement", method = RequestMethod.GET)
-    public ModelAndView adminPage() {
-        ModelAndView modelAndView = new ModelAndView("adminstaffmanagement");
-        return modelAndView;
-    }
 
     @RequestMapping(value = "showAllEmployee", method = RequestMethod.POST)
     @ResponseBody

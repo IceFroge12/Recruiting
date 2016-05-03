@@ -3,7 +3,9 @@
  */
 
 function formAppController($scope, formAppService) {
-        console.log("lol")
+    formAppService.getAllQuestion().then(function success(data) {
+        console.log(data);
+    });
 }
 
 angular.module('appAdminForm')
