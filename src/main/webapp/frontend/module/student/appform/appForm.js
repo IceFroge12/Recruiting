@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appStudentForm', ['appHeader','appFooter']);
+angular.module('appStudentForm',[]);

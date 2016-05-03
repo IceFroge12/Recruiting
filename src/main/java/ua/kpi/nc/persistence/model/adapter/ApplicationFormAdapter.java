@@ -39,6 +39,7 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
                 jsonQuestion = new JsonObject();
                 jsonQuestion.addProperty("questionTitle", question.getTitle());
                 jsonQuestion.addProperty("questionType", question.getQuestionType().getTypeTitle());
+                jsonQuestion.addProperty("isMandatory", question.isMandatory());
                 JsonArray jsonAnswers = new JsonArray();
                 jsonQuestion.add("answers", jsonAnswers);
                 if (question.getFormAnswerVariants() != null) {

@@ -1,12 +1,12 @@
 <div app-header></div>
-<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+<div  ng-app="questions" id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <form data-toggle="validator" role="form">
             <button type="button" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
             <table class="table table-hover table-condensed">
                 <tr class="text-success">
                     <td>Status</td>
-                    <td>registered</td>
+                    <td>{{status}}</td>
                 </tr>
                 <tr class="form-group">
                     <td class="mandatory">
@@ -21,12 +21,37 @@
                 </tr>
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputFirst" class="control-label">First name</label></td>
-                    <td><input type="text" class="form-control" id="inputFirst"
+                    <td><input ng-model="user.firstName" type="text" class="form-control" id="inputFirst"
                                oninvalid="this.setCustomValidity('Please fill out this field')" required/>
-
                         <div class="help-block with-errors"></div>
                     </td>
                 </tr>
+                <tr ng-repeat="question in questions">
+                    <td ng-if="question.isMandatory == true" class="mandatory" > {{question.questionTitle}}</td>
+                    <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
+                    <td ng-if="question.questionType == 'select'">
+                        <select>
+                            <option ng-repeat="variant in question.variants">{{variant.variant}}</option>
+                        </select>
+                    </td>
+                    <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
+                        <input type="text" value="{{answer.answer}}">
+                    </td>
+                    <td ng-if="question.questionType == 'checkbox'">
+                       <span ng-repeat="variant in question.variants">
+                           <p>
+                               <input type="checkbox" value="{{variant.variant}}"> {{variant.variant}}
+                           </p>
+                       </span>
+                    </td>
+                    <td ng-if="question.questionType == 'radio'">
+                       <span ng-repeat="variant in question.variants">
+                           <p>
+                               <input type="radio" value="{{variant.variant}}"> {{variant.variant}}
+                           </p>
+                       </span>
+                    </td>
+
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputLast" class="control-label">Last Name</label></td>
                     <td><input type="text" class="form-control" id="inputLast"
@@ -258,7 +283,7 @@
                 </tr>
             </table>
             <div class="form-group">
-                <button type="submit" class="btn btn-sm btn-info search-element">Submit</button>
+                <button  ng-click="changeUserName()" type="submit" class="btn btn-sm btn-info search-element">Submit</button>
             </div>
         </form>
     </div>
