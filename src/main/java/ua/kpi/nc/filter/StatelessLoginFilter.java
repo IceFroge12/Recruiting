@@ -44,7 +44,6 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
         this.tokenAuthenticationService = tokenAuthenticationService;
          setAuthenticationManager(authManager);
         setAuthenticationSuccessHandler(AuthenticationSuccessHandlerService.getInstance());
-
     }
 
     @Override
@@ -60,13 +59,10 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        final User authenticatedUser = userAuthService.loadUserByUsername(authentication.getName());
-
-        final UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
-        tokenAuthenticationService.addAuthentication(response, request, userAuthentication);
+        tokenAuthenticationService.addAuthentication(response, request, authentication);
         //response.addHeader("redirectURL", determineTargetUrl(userAuthentication));
 //        super.successfulAuthentication(request, response, chain, authentication);
-        SecurityContextHolder.getContext().setAuthentication(userAuthentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess(request,response,authentication);
 
     }

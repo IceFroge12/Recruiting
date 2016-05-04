@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('appAuthorization', [])
-    .factory('TokenStorage', function () {
+    .factory('TokenStorage', function ($rootScope) {
         var storageToken = 'auth_token';
         return {
             store: function (token) {
