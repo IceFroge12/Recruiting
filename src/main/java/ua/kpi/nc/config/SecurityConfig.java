@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //                .antMatchers(HttpMethod.GET, "/login").permitAll()
 //
-//                .antMatchers("/student/**").hasRole("STUDENT")
+                .antMatchers("/student/**").hasRole("STUDENT")
 //                .antMatchers("/admin/**").hasRole("ADMIN")
 //                .antMatchers("/student.html").hasRole("STUDENT")
 //                .antMatchers("/admin.html").hasRole("STUDENT")

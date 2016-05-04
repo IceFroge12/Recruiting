@@ -41,9 +41,7 @@ public class DataBaseAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Password wrong");
         }
 
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-
-        return new UsernamePasswordAuthenticationToken(user, password, authorities);
+        return new UserAuthentication(user);
     }
 
     @Override
