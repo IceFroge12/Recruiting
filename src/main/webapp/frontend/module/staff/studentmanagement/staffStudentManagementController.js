@@ -20,13 +20,10 @@ function staffStudentManagementController($scope, $http,  staffStudentManagement
 		$http.get('../../staff/assign/' + student.id).success(function(data) {
 			$scope.resultMessage = data;
 			if($scope.resultMessage.type == 'SUCCESS') {
-				//$scope.resultMessage.type = 'success';
 				$scope.assignedStudents.push(student);
 				$scope.newFormId = null;
 				$scope.foundStudent = null;
 				$('#assignNew').modal('hide');
-			} else if($scope.resultMessage.type == 'ERROR') {
-				//$scope.resultMessage.type = 'danger';
 			}
 			console.log($scope.resultMessage);
 		});
@@ -39,9 +36,7 @@ function staffStudentManagementController($scope, $http,  staffStudentManagement
 			if($scope.resultMessage.type == 'SUCCESS') {
 				var index = $scope.assignedStudents.indexOf(student);
 				$scope.assignedStudents.splice(index, 1);
-			} else if($scope.resultMessage.type == 'ERROR') {
-				//$scope.resultMessage.type = 'danger';
-			}
+			} 
 			console.log($scope.resultMessage);
 		});
 	}

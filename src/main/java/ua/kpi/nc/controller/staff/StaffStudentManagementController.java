@@ -173,7 +173,6 @@ public class StaffStudentManagementController {
 	private User getAuthorizedUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String name = auth.getName();
-		System.out.println("!!!!!!!" + name);
 		return userService.getUserByUsername(name);
 	}
 }
