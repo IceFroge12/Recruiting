@@ -6,6 +6,8 @@
 			<button class="btn btn-sm btn-info search-element col-md-2"
 				type="button" data-toggle="modal" data-target="#assignNew">
 				Assign new student</button>
+			<p
+				ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS'}">{{resultMessage.message}}</p>
 			<table id="students_table" class="table table-hover">
 				<thead>
 					<tr>
@@ -25,8 +27,7 @@
 						<td>{{student.firstName}}</td>
 						<td>{{student.secondName}}</td>
 						<td><button class="btn btn-sm btn-info"
-								ng-click="deassignApplicationForm(student.id)"
-								type="button">Deassign</button></td>
+								ng-click="deassignApplicationForm(student)" type="button">Deassign</button></td>
 					</tr>
 				</tbody>
 			</table>
@@ -44,7 +45,6 @@
 					<span class="glyphicon glyphicon-remove"></span>
 				</button>
 				<h4 class="modal-title">Assign new student</h4>
-
 				<div>
 					<form class="navbar-form navbar-left" role="search">
 						<p>Enter application's form id:</p>
@@ -72,7 +72,7 @@
 								<td>{{$parent.foundStudent.secondName}}</td>
 								<td>
 									<button class="btn btn-sm btn-info"
-										ng-click="assignApplicationForm($parent.foundStudent.id)"
+										ng-click="assignApplicationForm($parent.foundStudent)"
 										type="button">Assign</button>
 								</td>
 							</tr>
