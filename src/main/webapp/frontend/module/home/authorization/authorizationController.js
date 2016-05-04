@@ -23,6 +23,11 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
         }).error(function (data, status, headers) {
             console.log(data);
         });
+    };
+    
+    $scope.registration = function () {
+        console.log("registation");
+        $location.path('/registration');
     }
 }
 

@@ -15,17 +15,27 @@ public class UserDto {
     private String firstName;
     private String secondName;
     private String lastName;
+    private String password;
     private List<RoleImpl> roleList;
 
     public UserDto() {
 
     }
 
-    public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
+    public UserDto(String email, String firstName, String secondName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
+        this.password = password;
+    }
+
+    public UserDto(String email, String firstName, String secondName, String lastName, String password, List<RoleImpl> roleList) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.password = password;
         this.roleList = roleList;
     }
 
@@ -66,6 +76,14 @@ public class UserDto {
         return roleList;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setRoleList(List<RoleImpl> roleList) {
         this.roleList = roleList;
     }
@@ -73,11 +91,12 @@ public class UserDto {
     @Override
     public String toString() {
         return "UserDto{" +
-                "roleList=" + roleList +
-                ", lastName='" + lastName + '\'' +
-                ", secondName='" + secondName + '\'' +
+                "email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", email='" + email + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", roleList=" + roleList +
                 '}';
     }
 }

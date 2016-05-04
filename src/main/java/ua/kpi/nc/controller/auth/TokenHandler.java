@@ -23,7 +23,7 @@ public class TokenHandler {
 
     private static Logger log = LoggerFactory.getLogger(TokenHandler.class);
 
-    private final long epriretime = 60 * 1000 * 5;
+    private final long epriretime = 60 * 1000 * 60;
 
     public TokenHandler(String secret, UserAuthService userAuthService) {
         this.secret = StringConditions.checkNotBlank(secret);
