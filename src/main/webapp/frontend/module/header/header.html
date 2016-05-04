@@ -4,10 +4,13 @@
             <a id="navbar-text" class="navbar-brand middle-align" href="/">NetCracker</a>
         </div>
         <ul class="nav navbar-nav navbar-right right-align small-menu">
-            <li class="visible-lg col-md-4 no-padding"><span id="hello" class="glyphicon glyphicon-user"></span>
+            <li ng-show="!authenticated" class  ="visible-lg col-md-4 no-padding"><span class="glyphicon glyphicon-user"></span>
                 Hi,Friend!
             </li>
-            <li class="col-md-4 no-padding">
+            <li ng-show="authenticated" class="visible-lg col-md-4 no-padding"><span  class="glyphicon glyphicon-user"></span>
+                Hi,{{username}}
+            </li>
+            <li ng-show="authenticated" class="col-md-4 no-padding">
                 <button class="btn btn-primary top-button menu-btn"><span
                         class="glyphicon glyphicon-envelope visible-lg"> Notification</span>
                     <span

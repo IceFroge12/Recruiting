@@ -52,7 +52,7 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
             ServletException, IOException {
         HashMap<String, String> map = new HashMap<>();
         map.put("redirectURL", determineTargetUrl(authentication));
-        map.put("username", authentication.getName());
+        map.put("username", ((User) authentication.getDetails()).getFirstName());
         map.put("id", ((User) authentication.getDetails()).getId().toString());
         response.setContentType("application/json");
         response.getWriter().write(new Gson().toJson(map));
