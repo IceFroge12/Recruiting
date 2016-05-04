@@ -21,4 +21,6 @@ public interface RecruitmentDAO  {
 
     List<Recruitment> getAll();
 
+	Recruitment getCurrentRecruitmnet();
+
 }
