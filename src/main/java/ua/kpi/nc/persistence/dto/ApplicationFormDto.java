@@ -11,7 +11,7 @@ public class ApplicationFormDto {
     private Long ID;
     private String status;
     private UserDto user;
-    private List<StudentAppFormQuestionDto> questions = new ArrayList<StudentAppFormQuestionDto>();
+    private List<StudentAppFormQuestionDto> questions = new ArrayList<>();
 
     public ApplicationFormDto() {
     }
