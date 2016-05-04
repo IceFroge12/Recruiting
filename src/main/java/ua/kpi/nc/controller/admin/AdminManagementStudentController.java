@@ -23,18 +23,11 @@ public class AdminManagementStudentController {
 
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 
-//    @RequestMapping(value = "studentmanagement", method = RequestMethod.GET)
-//    public ModelAndView studentManagement() {
-//        ModelAndView modelAndView = new ModelAndView("adminsudentmanagement");
-//        return modelAndView;
-//    }
-
     @RequestMapping(value = "getallstudent", method = RequestMethod.POST)
     @ResponseBody
     public List<String> getAllStudents() {
 
         List<String> allAppFormList = new ArrayList<>();
-        System.out.println("lol");
         List<ApplicationForm> applicationForms = applicationFormService.getAll();
 
         for (ApplicationForm applicationForm : applicationForms) {

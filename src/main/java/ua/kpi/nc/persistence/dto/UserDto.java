@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class UserDto {
 
+    private Long id;
     private String email;
     private String firstName;
     private String secondName;
@@ -21,12 +22,21 @@ public class UserDto {
 
     }
 
-    public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
+    public UserDto(Long id, String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
         this.roleList = roleList;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {

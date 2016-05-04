@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
+import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
@@ -30,6 +31,8 @@ public class AdminManagementStaffController {
 
     private RoleService roleService = ServiceFactory.getRoleService();
 
+    private InterviewService interviewService = ServiceFactory.getInterviewService();
+
     private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
 
     private SenderService senderService = SenderServiceImpl.getInstance();
@@ -41,7 +44,7 @@ public class AdminManagementStaffController {
     @ResponseBody
     public Set<User> showAllEmployees() {
         Set<User> users = userService.getAllEmploees();
-        for (User user :users){
+        for (User user : users) {
             System.out.println(user);
         }
         return users;
@@ -53,14 +56,14 @@ public class AdminManagementStaffController {
         System.out.println(userDto.toString());
         List<RoleImpl> roles = userDto.getRoleList();
         List<Role> userRoles = new ArrayList<>();
-        for (Role role:roles){
+        for (Role role : roles) {
             userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
         }
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
                 userDto.getLastName(), password, true, new Timestamp(date.getTime()));
-        userService.insertUser(user,userRoles);
+        userService.insertUser(user, userRoles);
 //        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
 
 //        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
@@ -71,39 +74,40 @@ public class AdminManagementStaffController {
     public void editEmployeeParams(@RequestBody UserDto userDto) throws IOException {
 
         System.out.println(userDto.toString());
-        User user =  userService.getUserByUsername(userDto.getEmail());
+        User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
-//        (userDto.getEmail(), userDto.getFirstName(),
-//                userDto.getSecondName(), userDto.getLastName());
-//
-        userService.updateUser(user);
+        user.setSecondName(userDto.getSecondName());
+        user.setEmail(userDto.getEmail());
+        Set<Role> userRoles = new HashSet<>();
+        for (Role role : userDto.getRoleList()) {
+            userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
+        }
+        user.setRoles(userRoles);
 
+        userService.updateUser(user);
     }
 
     @RequestMapping(value = "changeEmployeeStatus", method = RequestMethod.GET)
     @ResponseBody
     public Boolean changeEmployeeStatus(@RequestParam String email) {
         User user = userService.getUserByUsername(email);
-        Boolean status;
-        if (user.isActive()) {
-            user.setActive(false);
-            status = false;
-            userService.updateUser(user);
-        } else {
-            user.setActive(true);
-            status = true;
-            userService.updateUser(user);
-        }
-        return status;
+        user.setActive(!user.isActive());
+        userService.updateUser(user);
+        return user.isActive();
     }
 
-    @RequestMapping(value = "showAssignedStudent", method = RequestMethod.GET)
+    @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
     @ResponseBody
-    public Set<User> showAssignedStudent(String email) {
-        //TODO change from getAll to getAssignedStudents
-        Set<User> assignedStudentList = userService.getAll();
+    public Set<User> showAssignedStudent(@RequestParam String email) {
 
-        return assignedStudentList;
+        User user = userService.getUserByUsername(email);
+
+        Set<Interview> interviewList = interviewService.getByInterviewer(user);
+
+
+        Set<User> assignedStudent = userService.getAssignedStudents(user.getId());
+
+        return assignedStudent;
     }
 
 

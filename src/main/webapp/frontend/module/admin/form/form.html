@@ -1,3 +1,4 @@
+<div app-header></div>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
@@ -15,12 +16,18 @@
                                 <th>Question</th>
                                 <th>Type</th>
                                 <th>Active</th>
+                                <th>Answer Variant</th>
                                 <th>Edit</th>
                             </tr>
                             <tr ng-repeat="question in questions">
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>{{question.enable}}</td>
+                                <td>
+                                    <!--<ul ng-repeat="v in variants">-->
+                                    <!--<li>{{v}}</li>-->
+                                    <!--</ul>-->
+                                </td>
                                 <td>
                                     <button class="btn btn-link" type="button" data-toggle="modal"
                                             data-target="#editQuestion">
@@ -108,7 +115,7 @@
                             </tr>
                         </table>
                         <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                data-target="#addEmployee">Add
+                                data-target="#addQuestion">Add
                             question
                         </button>
                     </form>
@@ -197,9 +204,9 @@
                             <h4>Scale (max mark)
                                 <select id="scale" name="scale">
                                     <!--<script>-->
-                                        <!--for (var i = 0; i < 1000; i++) {-->
-                                            <!--document.write('<option value="' + i + '">' + i + '</option>');-->
-                                        <!--}-->
+                                    <!--for (var i = 0; i < 1000; i++) {-->
+                                    <!--document.write('<option value="' + i + '">' + i + '</option>');-->
+                                    <!--}-->
                                     <!--</script>-->
                                 </select>
                             </h4>
@@ -297,6 +304,62 @@
 </div>
 
 
+<div id="addQuestion" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span></button>
+
+                <h4 class="modal-title">Add Question</h4>
+                <div>
+                    <table class="table">
+                        <tr>
+                            <td> Text Question</td>
+                            <td><input type="text" ng-model="addText"></td>
+                        </tr>
+                        <tr>
+                            <td> Type</td>
+                            <td>
+                                <select ng-model="mySelect" ng-change="showSelectValue(mySelect)">
+                                    <option ng-repeat="type in types">{{type}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> ROLE</td>
+                            <td>
+                                <select ng-model="myRoleSelect" ng-change="showSelectRoleValue(myRoleSelect)">
+                                    <option ng-repeat="role in roles">{{role}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Active</td>
+                            <td>
+                                <select  ng-model="myActiveSelect" ng-change="showSelectActiveValue(myActiveSelect)">
+                                    <option selected>true</option>
+                                    <option>false</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Answer variants</td>
+                            <td><textarea ng-model="addVariant"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="saveForm()" type="button"
+                        data-dismiss="modal">Save changes
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <div id="editQuestion" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -328,18 +391,19 @@
                             <td>
                                 <input type="checkbox" id="techEdit" ng-model="techEdit" value="option1"> Tech </input>
                                 <input type="checkbox" id="softEdit" ng-model="softEdit" value="option2"> Soft </input>
-                                <input type="checkbox" id="adminEdit" ng-model="adminEdit" value="option3">
-                                Administrator </input>
+                                <input type="checkbox" id="adminEdit" ng-model="adminEdit" value="option3"> Administrator </input>
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges" data-dismiss="modal">Save changes
+                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges"
+                        data-dismiss="modal">Save changes
                 </button>
             </div>
         </div>
 
     </div>
 </div>
+<div app-footer></div>

@@ -13,6 +13,21 @@ function formAppService(http) {
             return JSON.parse("["+response.data+"]");
         });
     };
+
+    service.addQuestion = function (question, type, enable, formAnswerVariants,role) {
+        http({
+            method : 'POST',
+            url : '/admin/addappformquestion',
+            contentType: 'application/json',
+            data : JSON.stringify({
+                question: question,
+                type: type,
+                enable: enable,
+                formAnswerVariants: formAnswerVariants,
+                role: role
+            })
+        });
+    };
     
     return service;
 }

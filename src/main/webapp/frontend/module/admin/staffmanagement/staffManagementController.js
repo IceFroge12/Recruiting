@@ -4,7 +4,6 @@
 function staffManagementController($scope, staffManagementService) {
 
     staffManagementService.showAllEmployees().then(function success(data) {
-        console.log(data);
         var roleName = new String();
         $scope.allEmployee = data;
         console.log(data);
@@ -19,9 +18,10 @@ function staffManagementController($scope, staffManagementService) {
         console.log("error");
     });
 
-    $scope.employees = [{roleName: 'ADMIN'},
-        {roleName: 'SOFT'},
-        {roleName: 'TECH'}];
+    $scope.employees =
+        [{roleName: 'ADMIN'},
+            {roleName: 'SOFT'},
+            {roleName: 'TECH'}];
     $scope.selection = [];
 
     $scope.toggleSelection = function toggleSelection(employeeName) {
@@ -36,7 +36,7 @@ function staffManagementController($scope, staffManagementService) {
         console.log($scope.selection);
 
     };
-    
+
     $scope.addEmployee = function () {
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
             $scope.lastName, $scope.email, $scope.selection);
@@ -45,40 +45,43 @@ function staffManagementController($scope, staffManagementService) {
 
     var editRoles = [];
 
-    $scope.editEmployee = function (employee) {
+    $scope.showUserData = function (employee) {
+        $scope.id = employee.id;
         $scope.emailEdit = employee.email;
         $scope.firstNameEdit = employee.firstName;
         $scope.secondNameEdit = employee.secondName;
         $scope.lastNameEdit = employee.lastName;
+        console.log(employee.roles);
+        // angular.forEach(employee.roles, function (item, i) {
+        //     // if(item.roleName=="ADMIN"){
+        //     //     $scope.adminEdit = true;
+        //     //     editRoles.push({roleName: item.roleName});
+        //     // }
+        //     // if(item.roleName=="SOFT"){
+        //     //     $scope.softEdit = true
+        //     //     editRoles.push({roleName: item.roleName});
+        //     // }
+        //     // if(item.roleName=="TECH"){
+        //     //     $scope.techEdit = true
+        //     //     editRoles.push({roleName: item.roleName});
+        //     // }
+        //     //TODO change logic
+        // });
+        editRoles.push({roleName: "ADMIN"});
+    };
 
-        angular.forEach(employee.roles, function (item, i) {
-            if(item.roleName=="ADMIN"){
-                $scope.adminEdit = true;
-                editRoles.push({roleName: item.roleName});
-            }
-            if(item.roleName=="SOFT"){
-                $scope.softEdit = true
-                editRoles.push({roleName: item.roleName});
-            }
-            if(item.roleName=="TECH"){
-                $scope.techEdit = true
-                editRoles.push({roleName: item.roleName});
-            }
-            //TODO change logic
-        });
-
-
-        
-
-        staffManagementService.editEmployee($scope.firstNameEdit, $scope.secondNameEdit,
+    $scope.editEmployee = function () {
+        staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
             $scope.lastNameEdit, $scope.emailEdit, editRoles);
-
-    }
+    };
 
 
     $scope.changeEmployeeStatus = function (employee) {
-        console.log(employee.email)
         staffManagementService.changeEmployeeStatus(employee.email);
+    };
+
+    $scope.showAssigned = function (employee) {
+        staffManagementService.showAssigned(employee.email);
     }
 
 

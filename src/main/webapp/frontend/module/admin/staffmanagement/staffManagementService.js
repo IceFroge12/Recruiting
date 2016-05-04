@@ -29,12 +29,13 @@ function staffManagementService(http) {
     };
 
 
-    service.editEmployee = function (firstName, secondName, lastName, email, roles) {
+    service.editEmployee = function (id,firstName, secondName, lastName, email, roles) {
         http({
             method : 'POST',
             url : '/admin/editEmployee',
             contentType: 'application/json',
             data : {
+                id:id,
                 firstName: firstName,
                 secondName: secondName,
                 lastName: lastName,
@@ -49,11 +50,31 @@ function staffManagementService(http) {
         http({
             method : 'GET',
             url : '/admin/changeEmployeeStatus',
-            data : { email: email }
+            params : {email:email}
+        }).success(function (data, status, headers) {
+
+            console.log(data);
+            if (status === 409){
+                // TODO show message user already exist!!!
+            }
+        }).error(function (data, status, headers) {
+            console.log(status);
         });
     };
 
 
+    service.showAssigned = function (email) {
+        http({
+            method : 'POST',
+            url : '/admin/showAssignedStudent',
+            params : {email:email}
+        }).success(function (data, status, headers) {
+            console.log(data);
+        }).error(function (data, status, headers) {
+            console.log(status);
+        });
+    };
+    
     return service;
 }
 
