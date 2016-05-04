@@ -7,18 +7,21 @@ function appFormService(http) {
     var service = {};
     service.loadAppFormData = function () {
         return http.post('/student/appform').then(function (response) {
-            return response;
+            return response.data;
         });
     };
 
-    service.changeUserName = function (questions) {
+    service.changeUserName = function (data) {
         console.log("MMMMMMMMM");
         http({
             method : 'POST',
-            url : '/student/changeUsername',
+            url : '/student/saveApplicationForm',
             contentType: 'application/json',
             data : {
-                question: questions
+                ID : data.ID,
+                status : data.status,
+                user : data.user,
+                questions : data.questions
             }
         })
     };

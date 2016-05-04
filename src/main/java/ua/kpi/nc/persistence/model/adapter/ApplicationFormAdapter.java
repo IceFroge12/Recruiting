@@ -29,6 +29,7 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
         jsonUser.addProperty("firstName", user.getFirstName());
         jsonUser.addProperty("lastName", user.getLastName());
         jsonUser.addProperty("email", user.getEmail());
+        jsonUser.addProperty("secondName",user.getSecondName());
         jsonObject.add("user", jsonUser);
         JsonArray jsonQuestions = new JsonArray();
         Map<FormQuestion, JsonObject> questionsMap = new HashMap<>();
