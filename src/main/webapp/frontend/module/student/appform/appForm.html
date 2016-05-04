@@ -55,7 +55,7 @@
                     <td ng-if="question.questionType == 'checkbox'">
                        <span ng-repeat="variant in question.variants"  >
                            <p>
-                               <input  type="checkbox"  value="{{variant.variant}}" ng-checked="answer.answer == variant.variant" > {{variant.variant}}
+                               <input  type="checkbox" ng-checked="exists(variant.variant, question.answers)" ng-click="toggle(variant.variant, question.answers)"> {{variant.variant}}
                            </p>
                        </span>
                     </td>

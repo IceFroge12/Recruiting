@@ -20,4 +20,6 @@ public interface RecruitmentService {
     int deleteRecruitment(Recruitment recruitment);
 
     List<Recruitment> getAll();
+    
+    Recruitment getCurrentRecruitmnet();
 }

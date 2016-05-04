@@ -16,7 +16,30 @@ function appFormController($scope, appFormService) {
     $scope.changeUserName = function () {
         console.log("MDDDDDDDD");
         appFormService.changeUserName($scope.data);
-    }
+    };
+
+    $scope.toggle = function (item, list){
+        var idx=-1;
+        for(var i=0; i<list.length; i++){
+            if(list[i].answer==item)
+                idx=i;
+        }
+        if (idx >-1){
+            list.splice(idx,1);
+        }
+        else {
+            list.push({answer: item});
+        }
+        console.log(list);
+    };
+
+    $scope.exists = function (item, list){
+        for(var i=0; i<list.length; i++){
+            if(list[i].answer==item)
+                return true;
+        }
+        return false;
+    };
 }
 
 angular.module('appStudentForm')
