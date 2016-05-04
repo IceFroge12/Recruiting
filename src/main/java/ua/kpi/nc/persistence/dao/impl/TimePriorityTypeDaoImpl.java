@@ -15,9 +15,16 @@ import java.sql.SQLException;
  * @author Korzh
  */
 public class TimePriorityTypeDaoImpl extends JdbcDaoSupport implements TimePriorityTypeDao {
-    private static Logger log = LoggerFactory.getLogger( TimePriorityTypeDaoImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(TimePriorityTypeDaoImpl.class.getName());
     private static final String GET_BY_ID = "SELECT t.id, t.choice FROM public.time_priority_type t WHERE t.id = ?;";
     private static final String GET_BY_PRIORITY = "SELECT t.id, t.choice FROM public.time_priority_type t WHERE t.choice = ?;";
+
+    private ResultSetExtractor<TimePriorityType> extractor = resultSet -> {
+        TimePriorityType timePriorityType = new TimePriorityType();
+        timePriorityType.setId(resultSet.getLong("id"));
+        timePriorityType.setPriority(resultSet.getString("choice"));
+        return timePriorityType;
+    };
 
     public TimePriorityTypeDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
@@ -25,28 +32,13 @@ public class TimePriorityTypeDaoImpl extends JdbcDaoSupport implements TimePrior
 
     @Override
     public TimePriorityType getByID(Long id) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for form Time Priority type with id  = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, new TimePriorityTypeExtractor(), id);
+        log.trace("Looking for form Time Priority type with id  = ", id);
+        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
     }
 
     @Override
     public TimePriorityType getByPriority(String choice) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for form Time Priority type with priority  = " + choice);
-        }
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_PRIORITY, new TimePriorityTypeExtractor(), choice);
+        log.trace("Looking for form Time Priority type with priority  = ", choice);
+        return this.getJdbcTemplate().queryWithParameters(GET_BY_PRIORITY, extractor, choice);
     }
-
-    private static final class TimePriorityTypeExtractor implements ResultSetExtractor<TimePriorityType> {
-        @Override
-        public TimePriorityType extractData(ResultSet resultSet) throws SQLException {
-            TimePriorityType timePriorityType = new TimePriorityType();
-            timePriorityType.setId(resultSet.getLong("id"));
-            timePriorityType.setPriority(resultSet.getString("choice"));
-            return timePriorityType;
-        }
-    }
-
 }

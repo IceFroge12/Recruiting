@@ -30,6 +30,15 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
     static final String FINAL_MARK_COL = "final_mark";
     static final String SCALE_COL = "scale";
 
+    private ResultSetExtractor<Decision> extractor = resultSet -> {
+        Decision decision = new Decision();
+        decision.setSoftMark(resultSet.getInt(SOFT_MARK_COL));
+        decision.setTechMark(resultSet.getInt(TECH_MARK_COL));
+        decision.setFinalMark(resultSet.getInt(FINAL_MARK_COL));
+        decision.setFinalMark(resultSet.getInt(SCALE_COL));
+        return decision;
+    };
+
     private static final String SQL_GET_ALL = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL + ", " +
         SCALE_COL + " FROM decision_matrix";
 
@@ -52,7 +61,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
         if (log.isInfoEnabled()) {
             log.info("Looking for decision with soft_mark = " + softMark + " and tech_mark = " + techMark);
         }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_IDS, new DecisionExtractor(), softMark, techMark);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_IDS, extractor, softMark, techMark);
     }
 
     @Override
@@ -94,24 +103,13 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
     }
 
 
-    private final class DecisionExtractor implements ResultSetExtractor<Decision> {
-        @Override
-        public Decision extractData(ResultSet resultSet) throws SQLException {
-            Decision decision = new Decision();
-            decision.setSoftMark(resultSet.getInt(SOFT_MARK_COL));
-            decision.setTechMark(resultSet.getInt(TECH_MARK_COL));
-            decision.setFinalMark(resultSet.getInt(FINAL_MARK_COL));
-            decision.setFinalMark(resultSet.getInt(SCALE_COL));
-            return decision;
-        }
-    }
 
     @Override
     public List<Decision> getAll() {
         if (log.isInfoEnabled()) {
             log.info("Getting all decisions");
         }
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, new DecisionExtractor());
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
 

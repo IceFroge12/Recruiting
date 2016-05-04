@@ -87,5 +87,4 @@ public class ServiceFactory {
     public static SendMessageService getResendMessageService() {
         return new SendMessageServiceImpl(DaoFactory.getResendMessageDao());
     }
-
 }

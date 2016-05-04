@@ -69,7 +69,7 @@ public class RegistrationController {
         user.setPassword(hashedPassword);
 
         Role role = roleService.getRoleByTitle(String.valueOf(RoleEnum.STUDENT));
-        userService.insertUser(user, role);
+     //   userService.insertUser(user, role);
 
         String url = "http://localhost:8084/registration/" + token;
 

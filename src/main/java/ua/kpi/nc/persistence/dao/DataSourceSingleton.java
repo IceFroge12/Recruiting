@@ -1,19 +1,32 @@
 package ua.kpi.nc.persistence.dao;
 
 import org.postgresql.ds.PGPoolingDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import ua.kpi.nc.config.PropertiesReader;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.io.IOException;
 
 /**
  * Created by Chalienko on 20.04.2016.
  */
 public class DataSourceSingleton {
 
+    private static Logger log = LoggerFactory.getLogger(DataSourceSingleton.class.getName());
+
+    private DataSourceSingleton() {
+        try {
+            dataSource = setUpDataSource();
+        } catch (NamingException e) {
+            log.error("Cannot set up data source", e);
+        }
+    }
+
     public static class DataSourceSingletonHolder{
         static DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
+        private DataSourceSingletonHolder() {}
     }
 
     public static DataSource getInstance() {
@@ -23,7 +36,6 @@ public class DataSourceSingleton {
     private static PGPoolingDataSource dataSource;
 
     private static PropertiesReader propertiesReader = PropertiesReader.getInstance();
-
 
     private static String databasePassword = propertiesReader.propertiesReader("db.password");
 
@@ -35,13 +47,6 @@ public class DataSourceSingleton {
 
     private static int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));
 
-    private DataSourceSingleton() {
-        try {
-            dataSource = setUpDataSource();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-    }
 
     private PGPoolingDataSource setUpDataSource() throws NamingException {
         dataSource = new PGPoolingDataSource();
@@ -54,7 +59,7 @@ public class DataSourceSingleton {
         return dataSource;
     }
 
-    public PGPoolingDataSource getDataSource(){
+    private PGPoolingDataSource getDataSource(){
         return dataSource;
     }
 }
