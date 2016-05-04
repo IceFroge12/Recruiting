@@ -4,9 +4,10 @@
 
 function appFormController($scope, appFormService) {
     appFormService.loadAppFormData().then(function success(data) {
-        $scope.questions = data.data.questions;
-        $scope.user = data.data.user;
-        $scope.status = data.data.status;
+        $scope.questions = data.questions;
+        $scope.user = data.user;
+        $scope.status = data.status;
+        $scope.data = data;
 
     }, function error() {
         console.log("error");
@@ -14,7 +15,7 @@ function appFormController($scope, appFormService) {
 
     $scope.changeUserName = function () {
         console.log("MDDDDDDDD");
-        appFormService.changeUserName($scope.questions);
+        appFormService.changeUserName($scope.data);
     }
 }
 

@@ -5,11 +5,11 @@
             <div class="info">
                 <h4>Deadlines for current recruitment:</h4>
                 <br>
-                <p>Registration deadline: 7.09.2016</p>
+                <p>Registration deadline: {{reqruitment.registrationDeadline  | date : format : timezone}}</p>
                 <br>
-                <p>Choosing schedule time deadline: 14.09.2016</p>
+                <p>Choosing schedule time deadline: {{reqruitment.scheduleChoicesDeadline  | date : format : timezone}}</p>
             </div>
         </div>
     </div>
 </div>
-<div app-footer></div>
+<div  app-footer></div>

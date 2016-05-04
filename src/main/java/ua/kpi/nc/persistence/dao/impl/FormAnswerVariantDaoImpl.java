@@ -59,40 +59,40 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
 
     @Override
     public FormAnswerVariant getById(Long id) {
-        log.info("Looking for FormAnswerVarian with id = ", id);
+        log.info("Looking for FormAnswerVarian with id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<FormAnswerVariant> getByQuestionId(Long id) {
-        log.info("Looking for FormAnswerVarian with QuestionId = ", id);
+        log.info("Looking for FormAnswerVarian with QuestionId = {}", id);
         return this.getJdbcTemplate().queryForList(SQL_GET_BY_QUESTION_ID, extractor, id);
     }
 
     @Override
     public Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection) {
-        log.info("Insert FormAnswerVariant with answer = ", formatVariant.getAnswer());
+        log.info("Insert FormAnswerVariant with answer = {}", formatVariant.getAnswer());
         return this.getJdbcTemplate().insert(SQL_INSERT, connection, formatVariant.getAnswer(),
                 formatVariant.getFormQuestion().getId());
     }
 
     @Override
     public Long insertFormAnswerVariant(FormAnswerVariant formatVariant) {
-        log.info("Insert FormAnswerVariant with answer = ", formatVariant.getAnswer());
+        log.info("Insert FormAnswerVariant with answer = {}", formatVariant.getAnswer());
         return this.getJdbcTemplate().insert(SQL_INSERT, formatVariant.getAnswer(),
                 formatVariant.getFormQuestion().getId());
     }
 
     @Override
     public int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant) {
-        log.info("Update FormAnswerVariant with answer = ", formAnswerVariant.getAnswer());
+        log.info("Update FormAnswerVariant with answer = {}", formAnswerVariant.getAnswer());
         return this.getJdbcTemplate().update(SQL_UPDATE, formAnswerVariant.getAnswer(),
                 formAnswerVariant.getFormQuestion().getId(), formAnswerVariant.getId());
     }
 
     @Override
     public int deleteFormAnswerVariant(FormAnswerVariant formVariant) {
-        log.info("Delete formVariant with id = ", formVariant.getId());
+        log.info("Delete formVariant with id = {}", formVariant.getId());
         return this.getJdbcTemplate().update(SQL_DELETE, formVariant.getId());
     }
 

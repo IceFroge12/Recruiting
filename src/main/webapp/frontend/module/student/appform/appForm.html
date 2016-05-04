@@ -20,11 +20,26 @@
                     </td>
                 </tr>
                 <tr class="form-group">
-                    <td class="mandatory"><label for="inputFirst" class="control-label">First name</label></td>
-                    <td><input ng-model="user.firstName" type="text" class="form-control" id="inputFirst"
-                               oninvalid="this.setCustomValidity('Please fill out this field')" required/>
-                        <div class="help-block with-errors"></div>
+                    <td class="mandatory"><label for="inputFirst" class="control-label">Last name</label></td>
+                    <td><input ng-model="user.lastName" type="text" id="inputLast"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required/><div class="help-block with-errors"></div>
                     </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputFirst" class="control-label">First name</label></td>
+                    <td><input ng-model="user.firstName" type="text" id="inputFirst"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required/><div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputFirst" class="control-label">Second name</label></td>
+                    <td><input ng-model="user.secondName" type="text" id="inputSecond"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" required/><div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputEmail" class="control-label">Email</label></td>
+                    <td><span type="text"  id="inputEmail1">{{user.email}}</span></td>
                 </tr>
                 <tr ng-repeat="question in questions">
                     <td ng-if="question.isMandatory == true" class="mandatory" > {{question.questionTitle}}</td>
@@ -35,26 +50,36 @@
                         </select>
                     </td>
                     <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
-                        <input type="text" value="{{answer.answer}}">
+                        <input ng-model="answer.answer" type="text" value="{{answer.answer}}">
                     </td>
                     <td ng-if="question.questionType == 'checkbox'">
-                       <span ng-repeat="variant in question.variants">
+                       <span ng-repeat="variant in question.variants"  >
                            <p>
-                               <input type="checkbox" value="{{variant.variant}}"> {{variant.variant}}
+                               <input  type="checkbox"  value="{{variant.variant}}" ng-checked="answer.answer == variant.variant" > {{variant.variant}}
                            </p>
                        </span>
                     </td>
                     <td ng-if="question.questionType == 'radio'">
                        <span ng-repeat="variant in question.variants">
                            <p>
-                               <input type="radio" value="{{variant.variant}}"> {{variant.variant}}
+                               <input type="radio"ng-model="timePoint.priority" value="{{variant.variant}}"> {{variant.variant}}
                            </p>
                        </span>
                     </td>
-
+                    <td ng-if="question.questionType == 'radio'">
+                       <span ng-repeat="variant in question.variants">
+                           <p>
+                               <input type="radio"ng-model="timePoint.priority" value="{{variant.variant}}"> {{variant.variant}}
+                           </p>
+                       </span>
+                    </td>
+                    <!--<td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">-->
+                        <!--<textarea ng-model="answer.answer" type="text" value="{{answer.answer}}"></textarea>-->
+                        <!--<input ng-model="answer.answer" type="text" value="{{answer.answer}}">-->
+                    <!--</td>-->
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputLast" class="control-label">Last Name</label></td>
-                    <td><input type="text" class="form-control" id="inputLast"
+                    <td><input type="text" class="form-control" id="inputLastN"
                                oninvalid="this.setCustomValidity('Please fill out this field')" required value="Gogol"/>
 
                         <div class="help-block with-errors"></div>
