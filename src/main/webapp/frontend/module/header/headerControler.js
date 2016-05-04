@@ -9,7 +9,7 @@ function headerController($scope, $location) {
     $scope.loginPage = function () {
         $location.path("/authorization");
     }
-    
+
 }
 
 angular.module('appHeader')
