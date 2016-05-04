@@ -11,7 +11,7 @@ import ua.kpi.nc.service.InterviewService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Desparete Housewives
@@ -27,7 +27,7 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public Set<Interview> getAll() {
+    public List<Interview> getAll() {
         return interviewDao.getAll();
     }
 
@@ -37,12 +37,12 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public Set<Interview> getByInterviewer(User user) {
+    public List<Interview> getByInterviewer(User user) {
         return interviewDao.getByInterviewer(user);
     }
 
     @Override
-    public Set<Interview> getByApplicationForm(ApplicationForm applicationForm) {
+    public List<Interview> getByApplicationForm(ApplicationForm applicationForm) {
         return interviewDao.getByApplicationForm(applicationForm);
     }
 
@@ -52,10 +52,10 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public boolean insertInterviewWithAnswers(Interview interview, ApplicationForm applicationForm, User interviewer, Role role, Set<FormAnswer> formAnswers) {
+    public boolean insertInterviewWithAnswers(Interview interview, List<FormAnswer> formAnswers) {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
-            Long generatedId = interviewDao.insertInterview(interview,applicationForm,interviewer,role, connection);
+            Long generatedId = interviewDao.insertInterview(interview, connection);
             interview.setId(generatedId);
             FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
             for (FormAnswer formAnswer : formAnswers) {

@@ -17,98 +17,93 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Nikita on 23.04.2016.
  */
 public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
-    private static final String SQL_GET_BY_ID =
-            "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n" +
-                    "FROM interview i \n" +
-                    "WHERE i.id = ?;";
-    private static final String SQL_GET_BY_INTERVIEWER =
-            "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n" +
-                    "FROM interview i \n" +
-                    "WHERE i.id_interviewer = ?;";
-    private static final String SQL_GET_BY_APPLICATION_FORM =
-            "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n" +
-                    "FROM interview i \n" +
-                    "WHERE i.id_application_form = ?;";
-    private static final String SQL_INSERT = "INSERT INTO interview( mark, date, id_interviewer, " +
-            " interviewer_role, adequate_mark, id_application_form) " +
-            "VALUES (?, ?, ?, ?, ?, ?);";
-    private static final String SQL_DELETE = "DELETE FROM interview WHERE interview.id = ?;";
-    private static final String SQL_UPDATE = "UPDATE interview SET mark = ?, date= ?,"
-            + " id_interviewer = ?, interviewer_role= ?, adequate_mark= ?, id_application_form= ? WHERE id = ?";
+	private static final String SQL_GET_BY_ID = "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n"
+			+ "FROM interview i \n" + "WHERE i.id = ?;";
+	private static final String SQL_GET_ALL = "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n"
+			+ "FROM interview i";
+	private static final String SQL_GET_BY_INTERVIEWER = "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n"
+			+ "FROM interview i \n" + "WHERE i.id_interviewer = ?;";
+	private static final String SQL_GET_BY_APPLICATION_FORM = "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n"
+			+ "FROM interview i \n" + "WHERE i.id_application_form = ?;";
+	private static final String SQL_INSERT = "INSERT INTO interview( mark, date, id_interviewer, "
+			+ " interviewer_role, adequate_mark, id_application_form) " + "VALUES (?, ?, ?, ?, ?, ?);";
+	private static final String SQL_DELETE = "DELETE FROM interview WHERE interview.id = ?;";
+	private static final String SQL_UPDATE = "UPDATE interview SET mark = ?, date= ?,"
+			+ " id_interviewer = ?, interviewer_role= ?, adequate_mark= ?, id_application_form= ? WHERE id = ?";
 
-    private static Logger log = LoggerFactory.getLogger(InterviewDaoImpl.class.getName());
+	private static Logger log = LoggerFactory.getLogger(InterviewDaoImpl.class.getName());
 
-    public InterviewDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }
+	public InterviewDaoImpl(DataSource dataSource) {
+		this.setJdbcTemplate(new JdbcTemplate(dataSource));
+	}
 
-    private ResultSetExtractor<Interview> extractor = resultSet -> {
-        Interview interview = new InterviewImpl();
-        interview.setId(resultSet.getLong("id"));
-        interview.setAdequateMark(resultSet.getBoolean("adequate_mark"));
-        interview.setDate(resultSet.getTimestamp("date"));
-        interview.setMark(resultSet.getInt("mark"));
-        interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
-        interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));
-        return interview;
-    };
+	private ResultSetExtractor<Interview> extractor = resultSet -> {
+		Interview interview = new InterviewImpl();
+		interview.setId(resultSet.getLong("id"));
+		interview.setAdequateMark(resultSet.getBoolean("adequate_mark"));
+		interview.setDate(resultSet.getTimestamp("date"));
+		interview.setMark(resultSet.getInt("mark"));
+		interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
+		interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));
+		return interview;
+	};
 
-    @Override
-    public Interview getById(Long id) {
-        log.info("Looking for interview with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
-    }
+	@Override
+	public Interview getById(Long id) {
+		log.info("Looking for interview with id = ", id);
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+	}
 
-    @Override
-    public Set<Interview> getByInterviewer(User user) {
-        log.info("Looking for interview with interviewer = ", user.getFirstName(), user.getLastName());
-        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_INTERVIEWER, extractor, user.getId());
-    }
+	@Override
+	public List<Interview> getByInterviewer(User user) {
+		log.info("Looking for interview with interviewer = {} {}", user.getFirstName(), user.getLastName());
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEWER, extractor, user.getId());
+	}
 
-    @Override
-    public Set<Interview> getByApplicationForm(ApplicationForm applicationForm) {
-        log.info("Looking for interview with application form id = ", applicationForm.getId());
-        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
+	@Override
+	public List<Interview> getByApplicationForm(ApplicationForm applicationForm) {
+		log.info("Looking for interview with application form id = ", applicationForm.getId());
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
 
-    }
+	}
 
-    @Override
-    public Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role) {
-        log.info("Insert interview with id = ", interview.getId());
-        return this.getJdbcTemplate().insert(SQL_INSERT, interview.getMark(), interview.getDate(), interview.getId(),
-                role.getId(), interview.isAdequateMark(), applicationForm.getId());
-    }
+	@Override
+	public Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role) {
+		log.info("Insert interview with id = ", interview.getId());
+		return this.getJdbcTemplate().insert(SQL_INSERT, interview.getMark(), interview.getDate(), interview.getId(),
+				role.getId(), interview.isAdequateMark(), applicationForm.getId());
+	}
 
-    @Override
-    public Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role, Connection connection) {
-        log.info("Insert interview with id = ", interview.getId());
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, interview.getMark(), interview.getDate(), interview.getId(),
-                role.getId(), interview.isAdequateMark(), applicationForm.getId());
-    }
+	@Override
+	public Long insertInterview(Interview interview, Connection connection) {
+		log.info("Insert interview with id = ", interview.getId());
+		return this.getJdbcTemplate().insert(SQL_INSERT, connection, interview.getMark(), interview.getDate(),
+				interview.getInterviewer().getId(), interview.getRole().getId(), interview.isAdequateMark(),
+				interview.getApplicationForm().getId());
+	}
 
-    @Override
-    public int updateInterview(Interview interview) {
-        log.info("Update interview with id = ", interview.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, interview.getId());
-    }
+	@Override
+	public int updateInterview(Interview interview) {
+		log.info("Update interview with id = ", interview.getId());
+		return this.getJdbcTemplate().update(SQL_UPDATE, interview.getId());
+	}
 
-    @Override
-    public int deleteInterview(Interview interview) {
-        log.info("Delete interview with id = " + interview.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, interview.getId());
-    }
+	@Override
+	public int deleteInterview(Interview interview) {
+		log.info("Delete interview with id = " + interview.getId());
+		return this.getJdbcTemplate().update(SQL_DELETE, interview.getId());
+	}
 
-
-    //TODO
-    @Override
-    public Set<Interview> getAll() {
-        return null;
-    }
+	@Override
+	public List<Interview> getAll() {
+		log.info("Getting all interviews");
+		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+	}
 
 }

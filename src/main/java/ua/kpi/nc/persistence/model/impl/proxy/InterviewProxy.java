@@ -6,7 +6,7 @@ import ua.kpi.nc.service.InterviewService;
 import ua.kpi.nc.service.ServiceFactory;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
 public class InterviewProxy implements Interview {
 
@@ -17,7 +17,7 @@ public class InterviewProxy implements Interview {
 	private InterviewImpl interview;
 
 	private InterviewService interviewService;
-	private Set<FormAnswer> answers;
+	private List<FormAnswer> answers;
 
 	public InterviewProxy() {
 	}
@@ -28,12 +28,12 @@ public class InterviewProxy implements Interview {
 	}
 
 	@Override
-	public Set<FormAnswer> getAnswers() {
+	public List<FormAnswer> getAnswers() {
 		return answers;
 	}
 
 	@Override
-	public void setAnswers(Set<FormAnswer> answers) {
+	public void setAnswers(List<FormAnswer> answers) {
 		this.answers = answers;
 	}
 
@@ -45,12 +45,12 @@ public class InterviewProxy implements Interview {
 		this.id = id;
 	}
 
-	public int getMark() {
+	public Integer getMark() {
 		checkInterview();
 		return interview.getMark();
 	}
 
-	public void setMark(int mark) {
+	public void setMark(Integer mark) {
 		checkInterview();
 		interview.setMark(mark);
 	}
@@ -85,12 +85,12 @@ public class InterviewProxy implements Interview {
 		interview.setRole(role);
 	}
 
-	public boolean isAdequateMark() {
+	public Boolean isAdequateMark() {
 		checkInterview();
 		return interview.isAdequateMark();
 	}
 
-	public void setAdequateMark(boolean adequateMark) {
+	public void setAdequateMark(Boolean adequateMark) {
 		checkInterview();
 		interview.setAdequateMark(adequateMark);
 	}
