@@ -12,7 +12,6 @@ import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
-import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
@@ -63,7 +62,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "FROM \"user\" u\n" +
             " WHERE u.email = ?;";
 
-    private static final String SQL_EXIST = "select exists(SELECT email from \"user\" where email =?);";
+    private static final String SQL_EXIST = "select exists(SELECT email from \"user\" where email =?) " +
+            " AS \"exist\";";
 
     private static final String SQL_INSERT = "INSERT INTO \"user\"(email, first_name," +
             " second_name, last_name, password, confirm_token, is_active, registration_date) " +
@@ -121,8 +121,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public boolean isExist(String email) {
-        int cnt = this.getJdbcTemplate().update(SQL_EXIST, email);
-        return cnt > 0;
+        return this.getJdbcTemplate().queryWithParameters(SQL_EXIST,resultSet -> resultSet.getBoolean(1),email);
+
     }
 
     @Override
