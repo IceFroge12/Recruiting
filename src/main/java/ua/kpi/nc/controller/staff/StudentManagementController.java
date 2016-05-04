@@ -1,5 +1,6 @@
 package ua.kpi.nc.controller.staff;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,12 +15,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
+import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.FormQuestionService;
@@ -84,12 +87,38 @@ public class StudentManagementController {
 		}
 		FormQuestionService questionService = ServiceFactory.getFormQuestionService();
 		List<FormQuestion> questions = questionService.getByRole(interview.getRole());
+		List<FormAnswer> answers = new ArrayList<>();
 		for (FormQuestion formQuestion : questions) {
-			
+			if (formQuestion.isEnable()) {
+				FormAnswer formAnswer = new FormAnswerImpl();
+				formAnswer.setFormQuestion(formQuestion);
+				formAnswer.setInterview(interview);
+				answers.add(formAnswer);
+			}
+		}
+		interviewService.insertInterviewWithAnswers(interview, answers);
+		return "Student assigned";
+	}
+
+	@RequestMapping(value = "assign/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public String deassignStudent(@PathVariable Long id) {
+		User interviewer = ServiceFactory.getUserService().getUserByID(33L);//GET CURRENT USER
+		ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
+		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
+		if (!isApplicaionFormActual(applicationForm)) {
+			return null;
+		}
+		InterviewService interviewService = ServiceFactory.getInterviewService();
+		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
+		for (Interview interview : interviews) {
+			if (Objects.equals(interview.getInterviewer().getId(), interviewer.getId())) {
+				interviewService.deleteInterview(interview);
+			}
 		}
 		return null;
 	}
-
+	
 	private JsonObject applicationFormToJson(ApplicationForm applicationForm) {
 		User student = applicationForm.getUser();
 		JsonObject jsonObject = new JsonObject();
