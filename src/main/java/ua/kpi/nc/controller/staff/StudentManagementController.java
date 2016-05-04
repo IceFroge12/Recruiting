@@ -100,7 +100,7 @@ public class StudentManagementController {
 		return "Student assigned";
 	}
 
-	@RequestMapping(value = "assign/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "deassign/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String deassignStudent(@PathVariable Long id) {
 		User interviewer = ServiceFactory.getUserService().getUserByID(33L);//GET CURRENT USER
