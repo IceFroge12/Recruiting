@@ -91,7 +91,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public List<ApplicationForm> getByUserId(Long id) {
-		log.info("Looking for application forms of user with id = " ,id);
+		log.info("Looking for application forms of user with id = {}" ,id);
 		return this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_ID, extractor, id);
 	}
 

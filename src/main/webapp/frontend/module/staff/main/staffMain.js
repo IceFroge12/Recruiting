@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appStaffMain', ['appStaffMenu','appHeader','appFooter']);
+angular.module('appStaffMain', []);
