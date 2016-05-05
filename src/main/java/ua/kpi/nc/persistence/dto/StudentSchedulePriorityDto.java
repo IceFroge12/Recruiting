@@ -1,15 +1,15 @@
 package ua.kpi.nc.persistence.dto;
 
-public class StudentSchedulePriorities {
+public class StudentSchedulePriorityDto {
 
 	private String timePoint;
 
 	private String priority;
 
-	public StudentSchedulePriorities() {
+	public StudentSchedulePriorityDto() {
 	}
 
-	public StudentSchedulePriorities(String timePoint, String priority) {
+	public StudentSchedulePriorityDto(String timePoint, String priority) {
 		this.timePoint = timePoint;
 		this.priority = priority;
 	}

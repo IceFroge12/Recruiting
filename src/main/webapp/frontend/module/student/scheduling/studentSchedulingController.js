@@ -7,14 +7,17 @@ function studentSchedulingController($scope, $http) {
 	$http.get('../../student/schedule').success(function(data) {
 		$scope.schedule = data;
 		console.log($scope.schedule);
+		if ($scope.schedule.message != null) {
+			$scope.resultMessage = data;
+		}
+		console.log($scope.schedule);
 	});
 
 	$scope.update = function() {
 		var jsonData = angular.toJson($scope.schedule.timePoints);
-		var req = $http.post('../../student/updateSchedule',
-				$scope.schedule.timePoints);
-		req.success(function() {
-			$scope.infoMessage = 'Your priorities were updated.';
+		var req= $http.post('../../student/updateSchedule', $scope.schedule.timePoints);
+		req.success(function(data) {
+			$scope.resultMessage = data;
 		});
 	}
 }
