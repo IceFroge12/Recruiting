@@ -73,10 +73,6 @@ public class StudentApplicationFormController {
             ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormDto.getId());
 
             for (StudentAnswerDto answerDto : questionDto.getAnswers()) {
-
-
-
-
                 if(answerDto.getID()==0L){
                     System.out.println(answerDto.toString());
                     FormAnswer formAnswer = new FormAnswerImpl();
