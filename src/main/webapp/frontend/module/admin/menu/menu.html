@@ -1,15 +1,15 @@
 <div class="col-md-2">
     <div id="my_menu" class="collapse navbar-collapse dropdown-menu-left col-md-2 navmenu-fixed-left">
         <div id="left-menu" class="btn-group btn-group-vertical">
-            <a href="#/admin/main" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
+            <a ng-click="mainAdmin()" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-home"></i> Main</a>
-            <a ui-sref="admin/staffmanagement" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
+            <a ng-click="staffManAdmin()" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-user"></i> Staff management</a>
-            <a ui-sref="studentmanagement" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
+            <a ng-click="studManAdmin()" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-eye-open"></i> Student management</a>
-            <a ui-sref="scheduling" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
+            <a ng-click="shedulAdmin()" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-calendar"></i> Scheduling</a>
-            <a ui-sref="report" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
+            <a ng-click="reportsAdmin()" class="btn btn-primary menu-btn left-menu-btn menu-text"><i
                     class="glyphicon glyphicon-list-alt"></i> Reports</a>
 
             <div id="firstDropdown" class="dropdown width-all ">

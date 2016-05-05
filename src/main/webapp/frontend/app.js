@@ -103,6 +103,10 @@ angular.module('app', [
                 templateUrl: 'module/admin/form/form.html',
                 controller: 'formAppController'
             })
+            .when('/admin/scheduling', {
+                templateUrl: 'module/admin/scheduling/scheduling.html',
+                controller: 'schedulingController'
+            })
             .when('/admin/report', {
                 templateUrl: 'module/admin/report/report.html',
                 controller: 'reportController'
