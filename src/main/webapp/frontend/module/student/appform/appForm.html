@@ -8,6 +8,10 @@
                     <td>Status</td>
                     <td>{{status}}</td>
                 </tr>
+                <tr class="text-success">
+                    <td>ID</td>
+                    <td ng-model="id">{{id}}</td>
+                </tr>
                 <tr class="form-group">
                     <td class="mandatory">
                         <label for="file" class="control-label">Photo</label>
@@ -50,7 +54,7 @@
                         </select>
                     </td>
                     <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
-                        <input ng-model="answer.answer" type="text" value="{{answer.answer}}">
+                        <input ng-model="answer.answer" ng-model="answer.ID" type="text" value="{{answer.answer}}">
                     </td>
                     <td ng-if="question.questionType == 'checkbox'">
                        <span ng-repeat="variant in question.variants"  >
@@ -62,21 +66,16 @@
                     <td ng-if="question.questionType == 'radio'">
                        <span ng-repeat="variant in question.variants">
                            <p>
-                               <input type="radio"ng-model="timePoint.priority" value="{{variant.variant}}"> {{variant.variant}}
+                               <input type="radio" value="{{variant.variant}}"> {{variant.variant}}
                            </p>
                        </span>
                     </td>
-                    <td ng-if="question.questionType == 'radio'">
-                       <span ng-repeat="variant in question.variants">
+                    <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                            <p>
-                               <input type="radio"ng-model="timePoint.priority" value="{{variant.variant}}"> {{variant.variant}}
+                               <input ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text" value="{{answer.answer}}"> {{variant.variant}}
                            </p>
-                       </span>
+
                     </td>
-                    <!--<td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">-->
-                        <!--<textarea ng-model="answer.answer" type="text" value="{{answer.answer}}"></textarea>-->
-                        <!--<input ng-model="answer.answer" type="text" value="{{answer.answer}}">-->
-                    <!--</td>-->
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputLast" class="control-label">Last Name</label></td>
                     <td><input type="text" class="form-control" id="inputLastN"

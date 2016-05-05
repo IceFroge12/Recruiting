@@ -1,9 +1,7 @@
 package ua.kpi.nc.service.impl;
 
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.Interview;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.service.FormAnswerService;
 
 import java.util.List;
@@ -41,5 +39,10 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     @Override
     public int updateFormAnswer(FormAnswer formAnswer) {
         return formAnswerDao.updateFormAnswer(formAnswer);
+    }
+
+    @Override
+    public Long insertFormAnswerForApplicationForm(FormAnswer formAnswer) {
+        return formAnswerDao.insertFormAnswerForApplicationForm(formAnswer);
     }
 }

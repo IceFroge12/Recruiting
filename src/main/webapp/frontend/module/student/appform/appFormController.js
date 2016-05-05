@@ -4,6 +4,7 @@
 
 function appFormController($scope, appFormService) {
     appFormService.loadAppFormData().then(function success(data) {
+        $scope.id =data.id;
         $scope.questions = data.questions;
         $scope.user = data.user;
         $scope.status = data.status;
@@ -40,7 +41,36 @@ function appFormController($scope, appFormService) {
         }
         return false;
     };
+
+
+    var _URL = window.URL || window.webkitURL;
+
+    $("#file").change(function() {
+
+        var image, file;
+        console.log(this.files[0]);
+
+        if ((file = this.files[0])) {
+
+            file.type.match("/.png/");
+            image = new Image();
+
+            image.onload = function() {
+
+               if(this.width !=300 && this.height !=400){
+                alert("Wrong size");
+
+               }
+                else {
+                   image.src = _URL.createObjectURL(file);
+               }
+            }}
+        //image.src = _URL.createObjectURL(file);
+    });
+
 }
+
+
 
 angular.module('appStudentForm')
     .controller('appFormController', ['$scope','appFormService', appFormController]);
