@@ -59,7 +59,7 @@ public class AdminManagementStaffController {
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), password, true, new Timestamp(date.getTime()));
+                userDto.getLastName(), password, true, new Timestamp(date.getTime()), null);
         userService.insertUser(user,userRoles);
 //        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
 

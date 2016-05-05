@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class ApplicationFormDto {
 
-    private Long ID;
+    private long id;
     private String status;
     private UserDto user;
     private List<StudentAppFormQuestionDto> questions = new ArrayList<>();
@@ -16,14 +16,13 @@ public class ApplicationFormDto {
     public ApplicationFormDto() {
     }
 
-    public Long getID() {
-        return ID;
+    public long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(long id) {
+        this.id = id;
     }
-
     public String getStatus() {
         return status;
     }

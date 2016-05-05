@@ -5,12 +5,14 @@ package ua.kpi.nc.persistence.dto;
  */
 public class StudentAnswerDto {
     private String answer;
+    private long id;
 
     public StudentAnswerDto() {
     }
 
-    public StudentAnswerDto(String answer) {
+    public StudentAnswerDto(String answer, long id) {
         this.answer = answer;
+        this.id = id;
     }
 
     public String getAnswer() {
@@ -21,10 +23,19 @@ public class StudentAnswerDto {
         this.answer = answer;
     }
 
+    public long getID() {
+        return id;
+    }
+
+    public void setID(long ID) {
+        this.id = ID;
+    }
+
     @Override
     public String toString() {
-        return "Answer{" +
-                "answer='" + answer + '\'' +
+        return "StudentAnswerDto{" +
+                "ID=" + id +
+                ", answer='" + answer + '\'' +
                 '}';
     }
 }
