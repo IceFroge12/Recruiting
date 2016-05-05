@@ -15,11 +15,15 @@ angular.module('app', [
         'appStaffManagement',
         'appStudentManagement',
         'appReport',
+        'appScheduling',
+        'appAdminForm',
+        'appRecruitment',
+        'appNotification',
+        'appPersonal',
         'appStudentForm',
         'appStudentMenu',
         'studentScheduling',
-        'appFeedback',
-        'appAdminForm',
+        'appStudentSettings',
         'appAuthorization',
         'appRegistration',
         'appMenuMain',
@@ -100,8 +104,8 @@ angular.module('app', [
                 controller: 'studentManagementController'
             })
             .when('/admin/adminformsettings', {
-                templateUrl: 'module/admin/form/form.html',
-                controller: 'formAppController'
+                templateUrl: 'module/admin/form/formSettings.html',
+                controller: 'formSettingsController'
             })
             .when('/admin/scheduling', {
                 templateUrl: 'module/admin/scheduling/scheduling.html',
@@ -110,6 +114,18 @@ angular.module('app', [
             .when('/admin/report', {
                 templateUrl: 'module/admin/report/report.html',
                 controller: 'reportController'
+            })
+            .when('/admin/recruitment', {
+                templateUrl: 'module/admin/recruitment/recruitment.html',
+                controller: 'recruitmentController'
+            })
+            .when('/admin/notification', {
+                templateUrl: 'module/admin/notification/notification.html',
+                controller: 'notificationController'
+            })
+            .when('/admin/personal', {
+                templateUrl: 'module/admin/personal/personal.html',
+                controller: 'personalController'
             })
 
             //STAFF
@@ -147,7 +163,10 @@ angular.module('app', [
                 controller: 'studentSchedulingController'
             })
 
-
+            .when('/student/settings', {
+                templateUrl: 'module/student/settings/studentSettings.html',
+                controller: 'studentSettingsController'
+            })
 
             //Auth
             .when('/authorization', {

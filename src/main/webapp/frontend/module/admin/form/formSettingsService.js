@@ -4,7 +4,7 @@
 
 'use strict';
 
-function formAppService(http) {
+function formSettingsService(http) {
 
     var service = {};
 
@@ -33,4 +33,4 @@ function formAppService(http) {
 }
 
 angular.module('appAdminForm')
-    .service('formAppService', ['$http', formAppService])
+    .service('formSettingsService', ['$http', formSettingsService]);
