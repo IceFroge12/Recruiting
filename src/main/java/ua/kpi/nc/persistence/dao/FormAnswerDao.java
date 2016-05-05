@@ -20,6 +20,8 @@ public interface FormAnswerDao {
 	Long insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
 											FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
 
+	Long insertFormAnswerForApplicationForm(FormAnswer formAnswer);
+
 	Long insertFormAnswerForInterview(FormAnswer formAnswer, FormQuestion question, FormAnswerVariant answerVariant,
 									  Interview interview, Connection connection);
 

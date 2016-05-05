@@ -108,6 +108,18 @@ public class ApplicationFormProxy implements ApplicationForm {
 	}
 
 	@Override
+	public String getFeedback() {
+		checkApplicationForm();
+		return applicationFormImpl.getFeedback();
+	}
+
+	@Override
+	public void setFeedback(String feedback) {
+		checkApplicationForm();
+		applicationFormImpl.setFeedback(feedback);
+	}
+
+	@Override
 	public List<Interview> getInterviews() {
 		checkApplicationForm();
 		return applicationFormImpl.getInterviews();

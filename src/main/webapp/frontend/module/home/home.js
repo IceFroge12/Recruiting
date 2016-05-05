@@ -19,7 +19,7 @@ app.directive('appSecondHeader', function () {
 app.directive('appMenuMain', function () {
     return {
         templateUrl: 'module/home/menu/mainMenu.html',
-        controller: 'menuController'
+        controller: 'mainMenuController'
     };
 });
 

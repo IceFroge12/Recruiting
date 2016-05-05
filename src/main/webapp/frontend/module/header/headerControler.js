@@ -4,15 +4,19 @@
 
 'use strict';
 
-function headerController($scope, $location) {
-
+function headerController($scope, $location, TokenStorage) {
+    
     $scope.loginPage = function () {
         $location.path("/authorization");
-    }
-    
+    };
+
+    $scope.logOut = function () {
+        TokenStorage.clear();
+        $location.path('/home');
+    };
 }
 
 angular.module('appHeader')
-    .controller('headerController', ['$scope', '$location', headerController]);
+    .controller('headerController', ['$scope', '$location', 'TokenStorage', headerController]);
 
 

@@ -5,8 +5,8 @@
 function staffMainController($scope, staffMainService) {
     staffMainService.loadRecruitmentData().then(function success(data) {
         $scope.reqruitment = data.data;
-        var endDayRegistration = new Date(parseInt($scope.reqruitment.registrationDeadline)).toDateString();
-        var scheduleDeadline = new Date(parseInt( $scope.reqruitment.scheduleChoicesDeadline)).toDateString();
+        $scope.endDayRegistration = new Date(parseInt($scope.reqruitment.registrationDeadline)).toDateString();
+        $scope.scheduleDeadline = new Date(parseInt( $scope.reqruitment.scheduleChoicesDeadline)).toDateString();
     }, function error() {
         console.log("error");
     });

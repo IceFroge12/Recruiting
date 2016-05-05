@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="css/client.css">
     <link rel="stylesheet" type="text/css" href="css/jasny-bootstrap.min.css">
 </head>
-<body ng-app="app">
+<body ng-app="app" ng-controller="appController" ng-init="init()">
 
 <div ng-view></div>
 <script type="text/javascript" src="/js/util/jquery-1.12.3.min.js"></script>
@@ -85,7 +85,7 @@
 
 <!--HOME /home-->
 <script src="module/home/menu/mainMenu.js" type="text/javascript"></script>
-<script src="module/home/menu/menuController.js" type="text/javascript"></script>
+<script src="module/home/menu/mainMenuController.js" type="text/javascript"></script>
 
 <!--registration-->
 <script src="module/home/registration/registration.js" type="text/javascript"></script>

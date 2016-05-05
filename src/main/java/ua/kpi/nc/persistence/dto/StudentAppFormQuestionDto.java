@@ -7,6 +7,7 @@ import java.util.List;
  * @author Korzh
  */
 public class StudentAppFormQuestionDto {
+    private long id;
     private String questionTitle;
     private String questionType;
     private boolean isMandatory;
@@ -16,7 +17,8 @@ public class StudentAppFormQuestionDto {
     public StudentAppFormQuestionDto() {
     }
 
-    public StudentAppFormQuestionDto(String questionTitle, String questionType, boolean isMandatory, List<StudentAnswerDto> answers, List<QuestionVariantDto> variants) {
+    public StudentAppFormQuestionDto(long id, String questionTitle, String questionType, boolean isMandatory, List<StudentAnswerDto> answers, List<QuestionVariantDto> variants) {
+        this.id = id;
         this.questionTitle = questionTitle;
         this.questionType = questionType;
         this.isMandatory = isMandatory;
@@ -64,10 +66,19 @@ public class StudentAppFormQuestionDto {
         this.variants = variants;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Question{" +
-                "questionTitle='" + questionTitle + '\'' +
+        return "StudentAppFormQuestionDto{" +
+                "id=" + id +
+                ", questionTitle='" + questionTitle + '\'' +
                 ", questionType='" + questionType + '\'' +
                 ", isMandatory=" + isMandatory +
                 ", answers=" + answers +

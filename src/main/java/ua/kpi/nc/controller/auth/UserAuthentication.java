@@ -54,4 +54,5 @@ public class UserAuthentication implements Authentication {
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
     }
+
 }

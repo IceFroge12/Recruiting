@@ -27,6 +27,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	static final String PHOTO_SCOPE_COL = "photo_scope";
 	static final String ID_USER_COL = "id_user";
 	static final String DATE_CREATE_COL = "date_create";
+	static final String FEEDBACK = "feedback";
 
 
 	static final String TABLE_NAME = "application_form";
@@ -37,6 +38,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
         applicationForm.setAnswers(getAnswers(id));
         applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
+		applicationForm.setFeedback(resultSet.getString(FEEDBACK));
         applicationForm.setId(id);
         applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
         applicationForm.setInterviews(getInterviews(id));
@@ -49,30 +51,30 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	private static final String SQL_GET_BY_ID = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
 			+ ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", s.title \n"
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n"
 			+ "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id = ?;";
 	private static final String SQL_GET_BY_USER_ID = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
 			+ ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
-			+ ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a."
+			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a."
 			+ ID_USER_COL + " = ?;";
 	private static final String SQL_GET_BY_STATUS = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
 			+ IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
 			+ ID_STATUS_COL + "\n" + "WHERE s.title = ?;";
 	private static final String SQL_GET_BY_STATE = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
 			+ IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
 			+ ID_STATUS_COL + "\n" + "WHERE a.is_active = ?;";
 	private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " a WHERE a." + ID_COL + " = ?;";
 	private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + ID_STATUS_COL + ", " + IS_ACTIVE_COL
 			+ ", " + ID_RECRUITMENT_COL + ", " + PHOTO_SCOPE_COL + ", " + "" + ID_USER_COL + ", " + DATE_CREATE_COL
-			+ ") VALUES (?, ?, ?, ?, ?, ?);";
+			+ ", " + FEEDBACK + ") VALUES (?, ?, ?, ?, ?, ?, ?);";
 	private static final String SQL_GET_ALL = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
 			+ ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
 			+ ID_STATUS_COL + " \n;";
 	private static final String SQL_UPDATE = "UPDATE \"" + TABLE_NAME + "\" SET " + ID_STATUS_COL + " = ?, "
-			+ IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ? " + "WHERE " + ID_COL
+			+ IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ?, " + FEEDBACK + " = ?" + "WHERE " + ID_COL
 			+ " = ?";
 	private static final String SQL_GET_INTERVIEWS = "SELECT i.id\n" + "FROM \"interview\" i\n"
 			+ "WHERE i.id_application_form = ?";
@@ -118,7 +120,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 		log.info("Inserting application forms with user_id = " + applicationForm.getUser().getId());
 		return this.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
 				applicationForm.isActive(), applicationForm.getRecruitment().getId(), applicationForm.getPhotoScope(),
-				applicationForm.getUser().getId(), applicationForm.getDateCreate());
+				applicationForm.getUser().getId(), applicationForm.getDateCreate(), applicationForm.getFeedback());
 	}
 
 	@Override
@@ -126,7 +128,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 		log.info("Updating application forms with id = " + applicationForm.getId());
 		return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
 				applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
-				applicationForm.getId());
+				applicationForm.getFeedback(),applicationForm.getId());
 	}
 
 	@Override
@@ -164,4 +166,5 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 					return questions;
 				}, applicationFormId);
 	}
+
 }

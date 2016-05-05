@@ -37,6 +37,10 @@ public interface ApplicationForm extends Serializable {
 
 	void setDateCreate(Timestamp dateCreate);
 
+	String getFeedback();
+
+	void setFeedback(String feedback);
+
 	List<Interview> getInterviews();
 
 	void setInterviews(List<Interview> interviews);
