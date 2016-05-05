@@ -9,9 +9,7 @@ import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
 
-/**
- * Created by Алексей.
- */
+
 @Controller
 @RequestMapping("/student")
 public class StudentFeedbackController {
