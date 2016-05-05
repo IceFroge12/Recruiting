@@ -20,7 +20,6 @@ import java.util.Set;
  */
 public class UserImpl implements User {
 
-
     private static final long serialVersionUID = -5190252598383342478L;
 
     private Long id;
