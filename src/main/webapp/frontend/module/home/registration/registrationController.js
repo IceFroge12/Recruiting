@@ -6,6 +6,7 @@ function registrationController($scope, $http) {
 
 
     $scope.registerStudent = function () {
+        $scope.emailSend = false;
         
         var test = {firstName: $scope.firstName, secondName: $scope.secondName, lastName: $scope.lastName, email: $scope.email, password: $scope.password};
         console.log(test);

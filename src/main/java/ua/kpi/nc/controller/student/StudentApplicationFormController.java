@@ -32,7 +32,6 @@ public class StudentApplicationFormController {
     private UserService userService;
     private FormQuestionService formQuestionService;
     private FormAnswerVariantService formAnswerVariantService;
-    private User currentUser;
 
     public StudentApplicationFormController() {
         formAnswerService = ServiceFactory.getFormAnswerService();
@@ -40,7 +39,6 @@ public class StudentApplicationFormController {
         userService = ServiceFactory.getUserService();
         formQuestionService =ServiceFactory.getFormQuestionService();
         formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-        currentUser = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails();
     }
 
     @RequestMapping(value ="appform", method = RequestMethod.GET)
