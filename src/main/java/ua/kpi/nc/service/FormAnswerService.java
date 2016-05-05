@@ -12,6 +12,8 @@ public interface FormAnswerService {
 
     List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
 
+    Long insertFormAnswerForApplicationForm(FormAnswer formAnswer);
+
     int updateFormAnswer(FormAnswer formAnswer);
 
     int deleteFormAnswer(FormAnswer formAnswer);

@@ -4,12 +4,15 @@ package ua.kpi.nc.persistence.dto;
  * @author Korzh
  */
 public class QuestionVariantDto {
+
+    private  long id;
     private String variant;
 
     public QuestionVariantDto() {
     }
 
-    public QuestionVariantDto(String variant) {
+    public QuestionVariantDto(long id, String variant) {
+        this.id = id;
         this.variant = variant;
     }
 
@@ -21,10 +24,21 @@ public class QuestionVariantDto {
         this.variant = variant;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Variant{" +
-                "variant='" + variant + '\'' +
+        return "QuestionVariantDto{" +
+                "id=" + id +
+                ", variant='" + variant + '\'' +
                 '}';
     }
+
+
 }

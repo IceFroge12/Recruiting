@@ -16,7 +16,7 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
     @Override
     public JsonElement serialize(ApplicationForm applicationForm, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("ID", applicationForm.getId());
+        jsonObject.addProperty("id", applicationForm.getId());
         jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
         jsonObject.addProperty("active", applicationForm.isActive());
         JsonObject jsonRecruitment = new JsonObject();
@@ -38,6 +38,7 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
             JsonObject jsonQuestion = questionsMap.get(question);
             if (jsonQuestion == null) {
                 jsonQuestion = new JsonObject();
+                jsonQuestion.addProperty("id",question.getId());
                 jsonQuestion.addProperty("questionTitle", question.getTitle());
                 jsonQuestion.addProperty("questionType", question.getQuestionType().getTypeTitle());
                 jsonQuestion.addProperty("isMandatory", question.isMandatory());
@@ -47,6 +48,7 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
                     JsonArray jsonAnswerVariants = new JsonArray();
                     for (FormAnswerVariant variant : question.getFormAnswerVariants()) {
                         JsonObject jsonAnswerVariant = new JsonObject();
+                        jsonAnswerVariant.addProperty("id",variant.getId());
                         jsonAnswerVariant.addProperty("variant", variant.getAnswer());
                         jsonAnswerVariants.add(jsonAnswerVariant);
                     }
@@ -58,8 +60,10 @@ public class ApplicationFormAdapter implements JsonSerializer<ApplicationForm> {
             JsonObject jsonAnswer = new JsonObject();
             if (answer.getAnswer() != null) {
                 jsonAnswer.addProperty("answer", answer.getAnswer());
+                jsonAnswer.addProperty("id", answer.getId());
             } else {
                 jsonAnswer.addProperty("answer", answer.getFormAnswerVariant().getAnswer());
+                jsonAnswer.addProperty("id", answer.getId());
             }
             jsonAnswers.add(jsonAnswer);
         }
