@@ -2,7 +2,7 @@ package ua.kpi.nc.persistence.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -16,13 +16,13 @@ public interface Interview extends Serializable {
 
     public void setRole(Role role);
 
-    public Set<FormAnswer> getAnswers();
+    public List<FormAnswer> getAnswers();
 
-    public void setAnswers(Set<FormAnswer> answers);
+    public void setAnswers(List<FormAnswer> answers);
 
-    public int getMark();
+    public Integer getMark();
 
-    public void setMark(int mark);
+    public void setMark(Integer mark);
 
     public Timestamp getDate();
 
@@ -32,9 +32,9 @@ public interface Interview extends Serializable {
 
     public void setInterviewer(User user);
 
-    public boolean isAdequateMark();
+    public Boolean isAdequateMark();
 
-    public void setAdequateMark(boolean adequateMark);
+    public void setAdequateMark(Boolean adequateMark);
 
     public ApplicationForm getApplicationForm();
 

@@ -3,7 +3,7 @@ package ua.kpi.nc.persistence.model.impl.real;
 import ua.kpi.nc.persistence.model.*;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -12,18 +12,18 @@ public class InterviewImpl implements Interview {
 
 	private static final long serialVersionUID = 7837728826371592710L;
 	private Long id;
-	private int mark;
+	private Integer mark;
 	private Timestamp date;
 	private User user;
 	private Role role;
-	private boolean adequateMark;
+	private Boolean adequateMark;
 	private ApplicationForm applicationForm;
-	private Set<FormAnswer> answers;
+	private List<FormAnswer> answers;
 
 	public InterviewImpl() {
 	}
 
-	public InterviewImpl(int mark, Timestamp date, User user, Role role, boolean adequateMark, ApplicationForm applicationForm, Set<FormAnswer> answers) {
+	public InterviewImpl(int mark, Timestamp date, User user, Role role, boolean adequateMark, ApplicationForm applicationForm, List<FormAnswer> answers) {
 		this.mark = mark;
 		this.date = date;
 		this.user = user;
@@ -45,12 +45,12 @@ public class InterviewImpl implements Interview {
 	}
 
 	@Override
-	public Set<FormAnswer> getAnswers() {
+	public List<FormAnswer> getAnswers() {
 		return answers;
 	}
 
 	@Override
-	public void setAnswers(Set<FormAnswer> answers) {
+	public void setAnswers(List<FormAnswer> answers) {
 		this.answers = answers;
 	}
 
@@ -62,11 +62,11 @@ public class InterviewImpl implements Interview {
 		this.id = id;
 	}
 
-	public int getMark() {
+	public Integer getMark() {
 		return mark;
 	}
 
-	public void setMark(int mark) {
+	public void setMark(Integer mark) {
 		this.mark = mark;
 	}
 
@@ -94,11 +94,11 @@ public class InterviewImpl implements Interview {
 		this.role = role;
 	}
 
-	public boolean isAdequateMark() {
+	public Boolean isAdequateMark() {
 		return adequateMark;
 	}
 
-	public void setAdequateMark(boolean adequateMark) {
+	public void setAdequateMark(Boolean adequateMark) {
 		this.adequateMark = adequateMark;
 	}
 

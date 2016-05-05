@@ -26,4 +26,16 @@ public enum RoleEnum {
         }
         throw new IllegalArgumentException("No role defined for user: " + authority.getAuthority());
     }
+
+    public static String valueOf(RoleEnum role){
+        switch (role) {
+            case ADMIN:
+                return "ROLE_ADMIN";
+            case STUDENT:
+                return "ROLE_STUDENT";
+        }
+        throw new IllegalArgumentException("No role defined for");
+    }
+
+
 }

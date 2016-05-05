@@ -16,18 +16,27 @@ public class UserDto {
     private String firstName;
     private String secondName;
     private String lastName;
+    private String password;
     private List<RoleImpl> roleList;
 
     public UserDto() {
 
     }
 
-    public UserDto(Long id, String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
-        this.id = id;
+    public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
+        this.password = password;
+    }
+
+    public UserDto(String email, String firstName, String secondName, String lastName, String password, List<RoleImpl> roleList) {
+        this.email = email;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.password = password;
         this.roleList = roleList;
     }
 
@@ -74,6 +83,14 @@ public class UserDto {
     public List<RoleImpl> getRoleList() {
 
         return roleList;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setRoleList(List<RoleImpl> roleList) {

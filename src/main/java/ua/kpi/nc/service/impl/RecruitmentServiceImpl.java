@@ -47,4 +47,9 @@ public class RecruitmentServiceImpl implements RecruitmentService {
         return recruitmentDAO.getAll();
     }
 
+	@Override
+	public Recruitment getCurrentRecruitmnet() {
+		return recruitmentDAO.getCurrentRecruitmnet();
+	}
+
 }

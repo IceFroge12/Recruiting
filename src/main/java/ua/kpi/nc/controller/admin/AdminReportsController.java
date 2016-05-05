@@ -68,11 +68,13 @@ public class AdminReportsController {
 			mimeType = "application/vnd.ms-excel";
 			response.setHeader("Content-Disposition",
 					String.format("inline; filename=\"" + report.getTitle() + ".xls\""));
+			break;
 		case "xlsx":
 			renderer = RendererFactory.getXLSXRenderer();
 			mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 			response.setHeader("Content-Disposition",
 					String.format("inline; filename=\"" + report.getTitle() + ".xlsx\""));
+			break;
 		}
 		if (mimeType != null) {
 			response.setContentType(mimeType);

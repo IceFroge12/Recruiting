@@ -38,6 +38,7 @@ public class StatelessAuthenticationFilter extends GenericFilterBean {
 //            redirect(req, res, authentication);
 //        }
         chain.doFilter(req, res);
+
     }
 
 //    public void redirect(ServletRequest request, ServletResponse response, Authentication authentication) throws IOException, ServletException {

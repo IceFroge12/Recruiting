@@ -25,74 +25,73 @@ import java.util.List;
 /**
  * Created by dima on 12.04.16.
  */
-@Controller
-@RequestMapping(value = "/registration")
-public class RegistrationController {
-
-    private UserService userService = ServiceFactory.getUserService();
-
-    private PasswordEncoderGeneratorService passwordEncoderGeneratorService
-            = PasswordEncoderGeneratorService.getInstance();
-
-    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
-
-    private SenderService senderService = SenderServiceImpl.getInstance();
-
-    private RoleService roleService = ServiceFactory.getRoleService();
-
-    private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
-
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView registrationModel() {
-        User user = new UserImpl();
-        ModelAndView modelAndView = new ModelAndView("registration");
-        modelAndView.addObject("user", user);
-        List<Message> list =  sendMessageService.getAll();
-        for (Message message1 : list){
-            System.out.println(message1);
-        }
-        return modelAndView;
-    }
-
-
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String addUser(UserImpl user) throws MessagingException {
-
-        if (userService.isExist(user.getEmail())) {
-            return "redirect:registration";
-        }
-
-        String hashedPassword = passwordEncoderGeneratorService.encode(user.getPassword());
-
-        String token = RandomStringUtils.randomAlphabetic(50);
-        user.setConfirmToken(token);
-        user.setPassword(hashedPassword);
-
-        Role role = roleService.getRoleByTitle(String.valueOf(RoleEnum.STUDENT));
-     //   userService.insertUser(user, role);
-
-        String url = "http://localhost:8084/registration/" + token;
-
-        EmailTemplate emailTemplate = emailTemplateService.getById(2L);
-
-        String text = emailTemplate.getTitle() +
-                url + emailTemplate.getText();
-        String subject = "Please confirm your account NC KPI";
-
-        senderService.send(user.getEmail(), subject, text);
-
-        return "redirect:/login";
-    }
-
-
-    @RequestMapping(value = "{token}", method = RequestMethod.GET)
-    public String registrationConfirm(@PathVariable("token") String token) {
-        User user = userService.getUserByToken(token);
-        user.setActive(true);
-        Date date = new Date();
-        user.setRegistrationDate(new Timestamp(date.getTime()));
-        userService.updateUser(user);
-        return "login";
-    }
-
-}
+//@Controller
+//@RequestMapping(value = "/registration")
+//public class RegistrationController {
+//
+//    private UserService userService = ServiceFactory.getUserService();
+//
+//    private PasswordEncoderGeneratorService passwordEncoderGeneratorService
+//            = PasswordEncoderGeneratorService.getInstance();
+//
+//    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
+//
+//    private SenderService senderService = SenderServiceImpl.getInstance();
+//
+//    private RoleService roleService = ServiceFactory.getRoleService();
+//
+//    private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
+//
+//    @RequestMapping(method = RequestMethod.GET)
+//    public ModelAndView registrationModel() {
+//        User user = new UserImpl();
+//        ModelAndView modelAndView = new ModelAndView("registration");
+//        modelAndView.addObject("user", user);
+//        List<Message> list =  sendMessageService.getAll();
+//        for (Message message1 : list){
+//            System.out.println(message1);
+//        }
+//        return modelAndView;
+//    }
+//
+//
+//    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+//    public String addUser(UserImpl user) throws MessagingException {
+//
+//        if (userService.isExist(user.getEmail())) {
+//            return "redirect:registration";
+//        }
+//
+//        String hashedPassword = passwordEncoderGeneratorService.encode(user.getPassword());
+//
+//        String token = RandomStringUtils.randomAlphabetic(50);
+//        user.setConfirmToken(token);
+//        user.setPassword(hashedPassword);
+//
+//        Role role = roleService.getRoleByTitle(String.valueOf(RoleEnum.STUDENT));
+//     //   userService.insertUser(user, role);
+//
+//        String url = "http://localhost:8084/registration/" + token;
+//
+//        EmailTemplate emailTemplate = emailTemplateService.getById(2L);
+//
+//        String text = emailTemplate.getTitle() +
+//                url + emailTemplate.getText();
+//        String subject = "Please confirm your account NC KPI";
+//
+//        senderService.send(user.getEmail(), subject, text);
+//
+//        return "redirect:/login";
+//    }
+//
+//
+//    @RequestMapping(value = "{token}", method = RequestMethod.GET)
+//    public String registrationConfirm(@PathVariable("token") String token) {
+//        User user = userService.getUserByToken(token);
+//        user.setActive(true);
+//        Date date = new Date();
+//        user.setRegistrationDate(new Timestamp(date.getTime()));
+//        userService.updateUser(user);
+//        return "login";
+//    }
+//}

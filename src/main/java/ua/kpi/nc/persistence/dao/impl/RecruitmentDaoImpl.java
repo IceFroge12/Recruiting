@@ -78,21 +78,28 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     private static final String SQL_DELETE = "DELETE FROM \"recruitment\" WHERE \"recruitment\".id = ?;";
 
+    private static final String SQL_GET_CURRENT = "SELECT r.id, r.name,r.start_date,r.end_date," +
+            "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
+            " r.schedule_choices_deadline, r.students_on_interview  ,r.time_interview_soft, r.time_interview_tech," +
+            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
+            "FROM \"recruitment\" r\n" +
+            "WHERE r.end_date > CURRENT_DATE;";
+    
     @Override
     public Recruitment getRecruitmentById(Long id) {
-        log.info("Looking for recruitment with id = ", id);
+        log.info("Looking for recruitment with id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_ID, extractor, id);
     }
 
     @Override
     public Recruitment getRecruitmentByName(String name) {
-        log.info("Looking for recruitment with name = ", name);
+        log.info("Looking for recruitment with name = {}", name);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_NAME, extractor, name);
     }
 
     @Override
     public int updateRecruitment(Recruitment recruitment) {
-        log.info("Update recruitment with name = ", recruitment.getName());
+        log.info("Update recruitment with name = {}", recruitment.getName());
         return this.getJdbcTemplate().update(SQL_UPDATE, recruitment.getName(), recruitment.getStartDate(),
                 recruitment.getEndDate(), recruitment.getMaxGeneralGroup(), recruitment.getMaxAdvancedGroup(),
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
@@ -103,7 +110,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     @Override
     public boolean addRecruitment(Recruitment recruitment) {
-        log.info("Insert recruitment with name = ", recruitment.getName());
+        log.info("Insert recruitment with name = {}", recruitment.getName());
         return this.getJdbcTemplate().insert(SQL_INSERT, recruitment.getName(), recruitment.getStartDate(),
                 recruitment.getEndDate(), recruitment.getMaxGeneralGroup(), recruitment.getMaxAdvancedGroup(),
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
@@ -114,7 +121,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     @Override
     public int deleteRecruitment(Recruitment recruitment) {
-        log.info("Delete Recruitment with id = ", recruitment.getId());
+        log.info("Delete Recruitment with id = {}", recruitment.getId());
         return this.getJdbcTemplate().update(SQL_DELETE, recruitment.getId());
     }
 
@@ -123,4 +130,10 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         log.info("Get all recruitment");
         return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
+
+	@Override
+	public Recruitment getCurrentRecruitmnet() {
+		log.trace("Getting current recruitment");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor);
+	}
 }

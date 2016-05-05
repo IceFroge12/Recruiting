@@ -17,7 +17,9 @@ angular.module('app', [
         'appReport',
         'appStudentForm',
         'studentScheduling',
-        'appAdminForm'
+        'appAdminForm',
+        'appAuthorization',
+        'appRegistration'
     ])
 
     //     .factory('TokenStorage', function () {
@@ -131,6 +133,11 @@ angular.module('app', [
                 templateUrl: 'module/home/authorization/authorization.html',
                 controller: 'authorizationController'
 
+            })
+            
+            .when('/registration',{
+                templateUrl: 'module/home/registration/registration.html',
+                controller: 'registrationController'
             })
 
             .otherwise({

@@ -5,9 +5,19 @@
             <div class="info">
                 <h4>Deadlines for current recruitment:</h4>
                 <br>
-                <p>Registration deadline: 7.09.2016</p>
+                <div ng-show="endDayRegistration != null">
+                    <p >Registration deadline:  {{endDayRegistration  | date : format : timezone}}</p>
+                </div>
+                <div ng-show="endDayRegistration == null">
+                    <p >Registration deadline:  The reqruitment is not started yet</p>
+                </div>
                 <br>
-                <p>Choosing schedule time deadline: 14.09.2016</p>
+                <div ng-show="scheduleDeadline != null">
+                    <p>Choosing schedule time deadline: {{scheduleDeadline  | date : format : timezone}}</p>
+                </div>
+                <div ng-show="scheduleDeadline == null">
+                    <p>Choosing schedule time deadline: The reqruitment is not started yet</p>
+                </div>
             </div>
         </div>
     </div>

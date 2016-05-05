@@ -14,25 +14,31 @@
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input type="text" class="form-control" placeholder="Firt name" required
+                                        <input ng-model="firstName" type="text" class="form-control" placeholder="Firt name" required
                                                autofocus/>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input type="text" class="form-control" placeholder="Last name" required
+                                        <input ng-model="secondName" type="text" class="form-control" placeholder="Second name" required
                                                autofocus/>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input type="text" class="form-control" placeholder="Email" required
+                                        <input ng-model="lastName" type="text" class="form-control" placeholder="Last name" required
+                                               autofocus/>
+                                    </div>
+                                    <div class="input-group">
+                                                <span class="input-group-addon"><span
+                                                        class="glyphicon glyphicon-user"></span></span>
+                                        <input ng-model="email" type="text" class="form-control" placeholder="Email" required
                                                autofocus/>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-lock"></span></span>
-                                        <input type="password" class="form-control" placeholder="Password"
+                                        <input ng-model="password" type="password" class="form-control" placeholder="Password"
                                                required/>
                                     </div>
                                     <p>
@@ -44,7 +50,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <button type="button" class="btn btn-labeled btn-info" value="go"
-                                        onclick='location.href="adminMain.html"'>
+                                        ng-click="registerStudent()">
                                     <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Register
                                 </button>
                             </div>

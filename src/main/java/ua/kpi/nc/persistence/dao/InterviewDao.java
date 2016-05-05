@@ -6,7 +6,7 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Алексей on 21.04.2016.
@@ -14,17 +14,17 @@ import java.util.Set;
 public interface InterviewDao {
     Interview getById(Long id);
 
-    Set<Interview> getByInterviewer(User user);
+    List<Interview> getByInterviewer(User user);
 
-    Set<Interview> getByApplicationForm(ApplicationForm applicationForm);
+    List<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
     Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
 
-    Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role, Connection connection);
+    Long insertInterview(Interview interview, Connection connection);
 
     int updateInterview(Interview interview);
 
     int deleteInterview(Interview interview);
 
-    Set<Interview> getAll();
+    List<Interview> getAll();
 }

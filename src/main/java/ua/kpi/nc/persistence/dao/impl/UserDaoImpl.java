@@ -12,7 +12,6 @@ import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
-import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
@@ -63,7 +62,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "FROM \"user\" u\n" +
             " WHERE u.email = ?;";
 
-    private static final String SQL_EXIST = "select exists(SELECT email from \"user\" where email =?);";
+    private static final String SQL_EXIST = "select exists(SELECT email from \"user\" where email =?) " +
+            " AS \"exist\";";
 
     private static final String SQL_INSERT = "INSERT INTO \"user\"(email, first_name," +
             " second_name, last_name, password, confirm_token, is_active, registration_date) " +
@@ -109,32 +109,32 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public User getByID(Long id) {
-        log.info("Looking for user with id = ", id);
+        log.info("Looking for user with id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public User getByUsername(String email) {
-        log.info("Looking for user with email = ", email);
+        log.info("Looking for user with email = {}", email);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
     }
 
     @Override
     public boolean isExist(String email) {
-        int cnt = this.getJdbcTemplate().update(SQL_EXIST, email);
-        return cnt > 0;
+        return this.getJdbcTemplate().queryWithParameters(SQL_EXIST,resultSet -> resultSet.getBoolean(1),email);
+
     }
 
     @Override
     public Long insertUser(User user, Connection connection) {
-        log.info("Insert user with email = ", user.getEmail());
+        log.info("Insert user with email = {}", user.getEmail());
         return this.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
     }
 
     @Override
     public int updateUser(User user) {
-        log.info("Update user with id = ", user.getId());
+        log.info("Update user with id = {}", user.getId());
         return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
@@ -169,7 +169,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public int deleteRole(User user, Role role) {
         if (user.getId() == null) {
-            log.warn("User: don`t have id", user.getEmail());
+            log.warn("User: don`t have id, {}", user.getEmail());
             return 0;
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
@@ -219,17 +219,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
     }
 
-    //    private Set<Role> getRoles(Long userID) {
-//        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role\n" +
-//                "FROM user_role ur \n INNER JOIN \"role\" r ON ur.id_role = r.id\n" +
-//                "WHERE ur.id_user = ?;", resultSet -> {
-//            Set<Role> roles = new HashSet<>();
-//            do {
-//                roles.add(roleDao.getByID(resultSet.getLong("id_role")));
-//            } while (resultSet.next());
-//            return roles;
-//        }, userID);
-//    }
     private Set<Role> getRoles(Long userID) {
         return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
                 "FROM user_role ur " +

@@ -46,8 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-//
+                .antMatchers("**/**").permitAll()
+//                .anyRequest().authenticated()
+
 //                .antMatchers(HttpMethod.POST, "/loginIn").permitAll()
 //
 //                .antMatchers(HttpMethod.GET, "/login").permitAll()
@@ -56,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/admin/**").hasRole("ADMIN")
 //                .antMatchers("/student.html").hasRole("STUDENT")
 //                .antMatchers("/admin.html").hasRole("STUDENT")
+//                .antMatchers("appForm.html").hasRole("STUDENT")
                 .and()
                 .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)

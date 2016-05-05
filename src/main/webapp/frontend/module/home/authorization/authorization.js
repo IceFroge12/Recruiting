@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('appAuthorization', [])
-    .factory('TokenStorage', function () {
+    .factory('TokenStorage', function ($rootScope) {
         var storageToken = 'auth_token';
         return {
             store: function (token) {
@@ -31,8 +31,8 @@ angular.module('appAuthorization', [])
         responseError: function (error) {
             if (error.status === 401 || error.status === 403) {
                 TokenStorage.clear();
-
             }
+            //TODO error page
             return $q.reject(error);
         }
     };

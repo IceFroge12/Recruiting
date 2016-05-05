@@ -4,9 +4,10 @@
 
 function appFormController($scope, appFormService) {
     appFormService.loadAppFormData().then(function success(data) {
-        $scope.questions = data.data.questions;
-        $scope.user = data.data.user;
-        $scope.status = data.data.status;
+        $scope.questions = data.questions;
+        $scope.user = data.user;
+        $scope.status = data.status;
+        $scope.data = data;
 
     }, function error() {
         console.log("error");
@@ -14,8 +15,31 @@ function appFormController($scope, appFormService) {
 
     $scope.changeUserName = function () {
         console.log("MDDDDDDDD");
-        appFormService.changeUserName($scope.questions);
-    }
+        appFormService.changeUserName($scope.data);
+    };
+
+    $scope.toggle = function (item, list){
+        var idx=-1;
+        for(var i=0; i<list.length; i++){
+            if(list[i].answer==item)
+                idx=i;
+        }
+        if (idx >-1){
+            list.splice(idx,1);
+        }
+        else {
+            list.push({answer: item});
+        }
+        console.log(list);
+    };
+
+    $scope.exists = function (item, list){
+        for(var i=0; i<list.length; i++){
+            if(list[i].answer==item)
+                return true;
+        }
+        return false;
+    };
 }
 
 angular.module('appStudentForm')

@@ -8,6 +8,7 @@ import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ReportInfo;
+import ua.kpi.nc.persistence.model.enums.ReportTypeEnum;
 import ua.kpi.nc.report.Line;
 import ua.kpi.nc.report.Report;
 import ua.kpi.nc.service.FormAnswerVariantService;
@@ -42,7 +43,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public Report getReportOfApproved() {
-		ReportInfo reportInfo = getByID(1L);
+		ReportInfo reportInfo = getByID(ReportTypeEnum.APPROVED.getId());
 		Report report = new Report(reportInfo.getTitle());
 		List<Line> lines = reportDao.extractWithMetaData(reportInfo);
 		if (lines.size() > 0) {
@@ -55,7 +56,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public Report getReportOfAnswers(FormQuestion question) {
 		RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
-		ReportInfo reportInfo = getByID(2L);
+		ReportInfo reportInfo = getByID(ReportTypeEnum.ANSWERS.getId());
 		Report report = new Report(reportInfo.getTitle());
 		FormAnswerVariantService variantService = ServiceFactory.getFormAnswerVariantService();
 		List<Recruitment> recruitments = recruitmentService.getAll();
