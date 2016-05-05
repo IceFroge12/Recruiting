@@ -55,7 +55,19 @@ angular.module('app', [
     //         }
     //     };
     // })
-    //    
+    //
+
+
+    .controller('appController', function ($scope, $http, $rootScope) {
+        $scope.init = function () {
+            $http.get('/currentUser')
+                .success(function (user) {
+                    $rootScope.authenticated = true;
+                    $rootScope.id = user.id;
+                    $rootScope.username = user.firstName;
+                });
+        }
+    })
     .config(function ($routeProvider, $httpProvider) {
 
         $httpProvider.interceptors.push('TokenAuthInterceptor');
@@ -93,7 +105,7 @@ angular.module('app', [
                 templateUrl: 'module/admin/report/report.html',
                 controller: 'reportController'
             })
-            
+
             //STAFF
             .when('/staff/main', {
                 templateUrl: 'module/staff/main/staffMain.html',
@@ -137,8 +149,8 @@ angular.module('app', [
                 controller: 'authorizationController'
 
             })
-            
-            .when('/registration',{
+
+            .when('/registration', {
                 templateUrl: 'module/home/registration/registration.html',
                 controller: 'registrationController'
             })

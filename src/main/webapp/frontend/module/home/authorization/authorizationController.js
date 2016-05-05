@@ -16,7 +16,6 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             data: {email: $scope.email, password: $scope.password}
         }).success(function (data, status, headers) {
             TokenStorage.store(headers('X-AUTH-TOKEN'));
-            $rootScope.authenticated = true;
             $rootScope.username = data.username;
             $rootScope.id = data.id;
             $location.path(data.redirectURL);

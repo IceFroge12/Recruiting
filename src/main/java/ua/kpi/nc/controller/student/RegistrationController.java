@@ -1,5 +1,6 @@
-package ua.kpi.nc.controller.registration;
+package ua.kpi.nc.controller.student;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
@@ -20,9 +22,6 @@ import javax.mail.MessagingException;
 import java.sql.Timestamp;
 import java.util.*;
 
-/**
- * Created by IO on 04.05.2016.
- */
 @Controller
 @RequestMapping(value = "/registrationStudent")
 public class RegistrationController {
@@ -31,7 +30,6 @@ public class RegistrationController {
     private RoleService roleService;
     private EmailTemplateService emailTemplateService;
     private SenderService senderService;
-    private SendMessageService sendMessageService;
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 
 
@@ -40,7 +38,6 @@ public class RegistrationController {
         roleService = ServiceFactory.getRoleService();
         emailTemplateService = ServiceFactory.getEmailTemplateService();
         senderService = SenderServiceImpl.getInstance();
-        sendMessageService = ServiceFactory.getResendMessageService();
         passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
 
     }
@@ -63,7 +60,8 @@ public class RegistrationController {
                             user.getLastName(),
                             passwordEncoderGeneratorService.encode(user.getPassword()),
                             false,
-                            new Timestamp(System.currentTimeMillis())
+                            new Timestamp(System.currentTimeMillis()),
+                            token
                     ),
                     new ArrayList<>(roles));
             String url = "http://localhost:8084/registration/" + token;
@@ -71,7 +69,7 @@ public class RegistrationController {
             EmailTemplate emailTemplate = emailTemplateService.getById(2L);
 
             String text = emailTemplate.getTitle() +
-                    url + emailTemplate.getText();
+                    url + " " + emailTemplate.getText();
             String subject = "Please confirm your account NC KPI";
 
             senderService.send(user.getEmail(), subject, text);
@@ -79,4 +77,15 @@ public class RegistrationController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping(value = "{token}", method = RequestMethod.GET)
+    public ResponseEntity<String> registrationConfirm(@PathVariable("token") String token) {
+        User user = userService.getUserByToken(token);
+        if (null == user){
+            return ResponseEntity.status(410).body("URL expired");
+        }
+        user.setActive(true);
+        userService.updateUser(user);
+        return ResponseEntity.ok("jiwefjwefijwef");
+    }
 }

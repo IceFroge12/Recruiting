@@ -72,25 +72,11 @@ public class UserImpl implements User {
     }
 
     public UserImpl() {
-    }
 
-    public UserImpl(String email, String firstName, String secondName, String lastName, Set<Role> roles,
-                    String confirmToken, boolean isActive, Timestamp registrationDate, String password,
-                    Set<SocialInformation> socialInformations) {
-        this.email = email;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lastName = lastName;
-        this.roles = roles;
-        this.confirmToken = confirmToken;
-        this.isActive = isActive;
-        this.registrationDate = registrationDate;
-        this.password = password;
-        this.socialInformations = socialInformations;
     }
 
     public UserImpl(String email, String firstName, String secondName, String lastName, String password, boolean isActive,
-                    Timestamp registrationDate) {
+                    Timestamp registrationDate, String confirmToken) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -98,6 +84,8 @@ public class UserImpl implements User {
         this.password = password;
         this.isActive = isActive;
         this.registrationDate = registrationDate;
+        this.confirmToken = confirmToken;
+
     }
 
     public UserImpl(String email, String firstName, String secondName, String lastName, Set<Role> roles) {

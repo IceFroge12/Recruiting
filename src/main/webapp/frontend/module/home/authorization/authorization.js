@@ -16,6 +16,8 @@ angular.module('appAuthorization', [])
             },
             clear: function () {
                 $rootScope.authenticated = false;
+                $rootScope.username = null;
+                $rootScope.id = null;
                 return localStorage.removeItem(storageToken);
             }
         };

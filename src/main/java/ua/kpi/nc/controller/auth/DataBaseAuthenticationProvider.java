@@ -7,8 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.UserAuthService;
 
 import java.util.Collection;
@@ -21,9 +23,11 @@ import java.util.List;
 public class DataBaseAuthenticationProvider implements AuthenticationProvider {
 
     private UserAuthService userAuthService;
+    private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 
     public DataBaseAuthenticationProvider() {
         this.userAuthService = UserAuthService.getInstance();
+        this.passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
     }
 
     @Override
@@ -37,7 +41,7 @@ public class DataBaseAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Username not found");
         }
 
-        if (!password.equals(user.getPassword())){
+        if (passwordEncoderGeneratorService.matches(user.getPassword(), password )){
             throw new BadCredentialsException("Password wrong");
         }
 
