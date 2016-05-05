@@ -28,7 +28,7 @@
                     <td>{{employee.email}}</td>
                     <td>{{roleName}}</td>
                     <td>
-                        <button ng-click="changeEmployeeStatus(employee)"  class="btn btn-info" type="button">btn-danger</button>
+                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass"  class="btn btn-info" type="button">btn-danger</button>
                     </td>
                     <td >
                         <button  class="btn btn-info" ng-click="showAssigned(employee)"  type="button" data-toggle="modal"

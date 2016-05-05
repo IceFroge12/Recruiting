@@ -45,6 +45,7 @@ function staffManagementService(http) {
         });
     };
 
+
     service.changeEmployeeStatus = function (email) {
         console.log(email)
         http({
@@ -52,13 +53,8 @@ function staffManagementService(http) {
             url : '/admin/changeEmployeeStatus',
             params : {email:email}
         }).success(function (data, status, headers) {
-
             console.log(data);
-            if (status === 409){
-                // TODO show message user already exist!!!
-            }
-        }).error(function (data, status, headers) {
-            console.log(status);
+                return data;
         });
     };
 
@@ -69,7 +65,7 @@ function staffManagementService(http) {
             url : '/admin/showAssignedStudent',
             params : {email:email}
         }).success(function (data, status, headers) {
-            console.log(data);
+            return data;
         }).error(function (data, status, headers) {
             console.log(status);
         });

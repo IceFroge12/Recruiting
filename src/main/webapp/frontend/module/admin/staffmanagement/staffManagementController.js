@@ -77,11 +77,22 @@ function staffManagementController($scope, staffManagementService) {
 
 
     $scope.changeEmployeeStatus = function (employee) {
-        staffManagementService.changeEmployeeStatus(employee.email);
+     staffManagementService.changeEmployeeStatus(employee.email).success(function(data) {
+         console.log(data);
+     });
+
+
+
+        console.log($scope.dat);
+        if ($scope.myClass === "btn-danger")
+            $scope.myClass = "btn btn-info";
+        else
+            $scope.myClass = "btn-danger";
     };
 
     $scope.showAssigned = function (employee) {
         staffManagementService.showAssigned(employee.email);
+
     }
 
 

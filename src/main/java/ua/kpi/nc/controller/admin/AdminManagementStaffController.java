@@ -62,7 +62,7 @@ public class AdminManagementStaffController {
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), password, true, new Timestamp(date.getTime()));
+                userDto.getLastName(), password, true, new Timestamp(date.getTime()),null);
         userService.insertUser(user, userRoles);
 //        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
 
@@ -98,16 +98,20 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
     @ResponseBody
-    public Set<User> showAssignedStudent(@RequestParam String email) {
+    public List<Interview> showAssignedStudent(@RequestParam String email) {
 
         User user = userService.getUserByUsername(email);
 
-        Set<Interview> interviewList = interviewService.getByInterviewer(user);
+        List<Interview> interviewList = interviewService.getByInterviewer(user);
 
+        interviewList.get(0).getApplicationForm().getUser().getFirstName();
+        for (Interview interview: interviewList){
+            System.out.println(interview.toString());
+        }
 
         Set<User> assignedStudent = userService.getAssignedStudents(user.getId());
 
-        return assignedStudent;
+        return interviewList;
     }
 
 
