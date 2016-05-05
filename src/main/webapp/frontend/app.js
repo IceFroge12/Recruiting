@@ -19,7 +19,10 @@ angular.module('app', [
         'studentScheduling',
         'appAdminForm',
         'appAuthorization',
-        'appRegistration'
+        'appRegistration',
+        'appMenuMain',
+        'appEducationNC',
+        'appGetToCourses'
     ])
 
     //     .factory('TokenStorage', function () {

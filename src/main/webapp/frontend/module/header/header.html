@@ -4,20 +4,26 @@
             <a id="navbar-text" class="navbar-brand middle-align" href="/">NetCracker</a>
         </div>
         <ul class="nav navbar-nav navbar-right right-align small-menu">
-            <li ng-show="!authenticated" class  ="visible-lg col-md-4 no-padding"><span class="glyphicon glyphicon-user"></span>
-                Hi,Friend!
+            <li ng-show="!authenticated" class="col-md-6 no-padding"><span class="glyphicon glyphicon-user top-button hello visible-lg "> Hi,Friend!</span></li>
+            <li ng-show="!authenticated" class="col-md-4 no-padding">
+                <button class="btn btn-primary top-button menu-btn" value="go"
+                        ng-click="loginPage()"><span
+                        class="glyphicon glyphicon-log-in visible-lg"> Log In</span>
+                        <span
+                                class="glyphicon glyphicon-log-in hidden-lg small-menu-btn"></span>
+                </button>
             </li>
-            <li ng-show="authenticated" class="visible-lg col-md-4 no-padding"><span  class="glyphicon glyphicon-user"></span>
-                Hi,{{username}}
+            <li ng-show="authenticated" class="col-md-5 no-padding"><span class="glyphicon glyphicon-user top-button hello visible-lg">
+                Hi,{{username}}</span>
             </li>
             <li ng-show="authenticated" class="col-md-4 no-padding">
                 <button class="btn btn-primary top-button menu-btn"><span
-                        class="glyphicon glyphicon-envelope visible-lg"> Notification</span>
+                        class="glyphicon glyphicon-envelope visible-lg"> Homepage</span>
                     <span
                             class="glyphicon glyphicon-envelope hidden-lg small-menu-btn"></span>
                 </button>
             </li>
-            <li class="col-md-3 no-padding">
+            <li ng-show="authenticated" class="col-md-3 no-padding">
                 <button ng-click="loginPage()" class="btn btn-primary top-button menu-btn"
                         value="go"
                         ><span

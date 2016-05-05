@@ -1,9 +1,12 @@
 package ua.kpi.nc.controller.staff;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +17,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import ua.kpi.nc.persistence.dto.MessageDto;
+import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormQuestion;
@@ -28,20 +33,21 @@ import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.InterviewService;
 import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.service.UserService;
 
 @Controller
 @RequestMapping("/staff")
-public class StudentManagementController {
+public class StaffStudentManagementController {
 
 	private Gson gson = new Gson();
 	private InterviewService interviewService = ServiceFactory.getInterviewService();
 	private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
-	
+	private UserService userService = ServiceFactory.getUserService();
+
 	@RequestMapping(value = "assigned", method = RequestMethod.GET)
 	@ResponseBody
 	public String getAssignedStudents() {
-		User interviewer = ServiceFactory.getUserService().getUserByID(33L);//GET CURRENT USER
-		InterviewService interviewService = ServiceFactory.getInterviewService();
+		User interviewer = getAuthorizedUser();
 		List<Interview> interviews = interviewService.getByInterviewer(interviewer);
 		JsonArray jsonStudents = new JsonArray();
 		for (Interview interview : interviews) {
@@ -56,7 +62,7 @@ public class StudentManagementController {
 	@RequestMapping(value = "getById/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getStudentById(@PathVariable Long id) {
-		User interviewer = ServiceFactory.getUserService().getUserByID(33L);//GET CURRENT USER
+		User interviewer = getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
 		if (applicationForm == null || !isApplicaionFormActual(applicationForm)
 				|| isFormAssigned(applicationForm, interviewer)) {
@@ -64,27 +70,36 @@ public class StudentManagementController {
 		}
 		return gson.toJson(applicationFormToJson(applicationForm));
 	}
-	
+
 	@RequestMapping(value = "assign/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String assignStudent(@PathVariable Long id) {
-		User interviewer = ServiceFactory.getUserService().getUserByID(33L);//GET CURRENT USER
+		User interviewer = getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
 		if (!isApplicaionFormActual(applicationForm)) {
-			return null;
+			return gson.toJson(new MessageDto("Cannot assign this student.", MessageDtoType.ERROR));
 		}
-		InterviewService interviewService = ServiceFactory.getInterviewService();
 		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
 		for (Interview interview : interviews) {
 			for (Role interviewRole : interviewer.getRoles()) {
 				if (Objects.equals(interview.getRole(), interviewRole)) {
-					return "This student was already assigned to this type of interviewer";
+					return gson.toJson(new MessageDto("This student was already assigned to this type of interviewer",
+							MessageDtoType.ERROR));
 				}
 			}
 		}
+		if (createInterview(applicationForm, interviewer)) {
+			return gson.toJson(new MessageDto("This student was assigned to you.", MessageDtoType.SUCCESS));
+		} else {
+			return gson.toJson(new MessageDto("Cannot assign this student.", MessageDtoType.ERROR));
+		}
+	}
+
+	private boolean createInterview(ApplicationForm applicationForm, User interviewer) {
 		Interview interview = new InterviewImpl();
 		interview.setInterviewer(interviewer);
 		interview.setApplicationForm(applicationForm);
+		interview.setDate(new Timestamp(System.currentTimeMillis()));
 		for (Role role : interviewer.getRoles()) {
 			if (role.getRoleName().equals(RoleEnum.SOFT.name()) || role.getRoleName().equals(RoleEnum.TECH.name())) {
 				interview.setRole(role);
@@ -101,30 +116,30 @@ public class StudentManagementController {
 				answers.add(formAnswer);
 			}
 		}
-		interviewService.insertInterviewWithAnswers(interview, answers);
-		return "Student assigned";
+		return interviewService.insertInterviewWithAnswers(interview, answers);
 	}
 
 	@RequestMapping(value = "deassign/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String deassignStudent(@PathVariable Long id) {
-		User interviewer = ServiceFactory.getUserService().getUserByID(33L);//GET CURRENT USER
+		User interviewer = getAuthorizedUser();
 		ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
 		if (!isApplicaionFormActual(applicationForm)) {
-			return null;
+			return gson.toJson(new MessageDto("Cannot deassign this application form.", MessageDtoType.ERROR));
 		}
 		InterviewService interviewService = ServiceFactory.getInterviewService();
 		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
-		if(isFormAssigned(applicationForm, interviewer))
-		for (Interview interview : interviews) {
-			if (Objects.equals(interview.getInterviewer().getId(), interviewer.getId())) {
-				interviewService.deleteInterview(interview);
+		if (isFormAssigned(applicationForm, interviewer))
+			for (Interview interview : interviews) {
+				if (Objects.equals(interview.getInterviewer().getId(), interviewer.getId())) {
+					interviewService.deleteInterview(interview);
+					return gson.toJson(new MessageDto("Student was deassigned.", MessageDtoType.SUCCESS));
+				}
 			}
-		}
-		return null;
+		return gson.toJson(new MessageDto("This student is not assigned to you.", MessageDtoType.ERROR));
 	}
-	
+
 	private JsonObject applicationFormToJson(ApplicationForm applicationForm) {
 		User student = applicationForm.getUser();
 		JsonObject jsonObject = new JsonObject();
@@ -147,11 +162,17 @@ public class StudentManagementController {
 	}
 
 	private boolean isFormAssigned(ApplicationForm applicationForm, User interviewer) {
-		for(Interview interview : interviewService.getByApplicationForm(applicationForm)) {
-			if(Objects.equals(interview.getInterviewer().getId(), interviewer.getId())) {
+		for (Interview interview : interviewService.getByApplicationForm(applicationForm)) {
+			if (Objects.equals(interview.getInterviewer().getId(), interviewer.getId())) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private User getAuthorizedUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+		return userService.getUserByUsername(name);
 	}
 }
