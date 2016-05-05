@@ -29,6 +29,8 @@ public class ApplicationFormImpl implements ApplicationForm {
 
     private Timestamp dateCreate;
 
+    private String feedback;
+
     private List<Interview> interviews;
 
     private List<FormAnswer> answers;
@@ -172,6 +174,16 @@ public class ApplicationFormImpl implements ApplicationForm {
     }
 
     @Override
+    public String getFeedback() {
+        return feedback;
+    }
+
+    @Override
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    @Override
     public String toString() {
         return "ApplicationFormImpl{" +
                 "id=" + id +
@@ -181,8 +193,10 @@ public class ApplicationFormImpl implements ApplicationForm {
                 ", photoScope='" + photoScope + '\'' +
                 ", user=" + user +
                 ", dateCreate=" + dateCreate +
+                ", feedback='" + feedback + '\'' +
                 ", interviews=" + interviews +
                 ", answers=" + answers +
+                ", questions=" + questions +
                 '}';
     }
 
