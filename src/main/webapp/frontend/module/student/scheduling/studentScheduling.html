@@ -1,18 +1,5 @@
 <div app-header></div>
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Main page</title>
-
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/jasny-bootstrap.min.css">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700&subset=latin,cyrillic'
-          rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="css/client.css">
-</head>
-
-<div id="includedHeader"></div>
-<div id="leftNavStudent"></div>
+<div app-menu-student></div>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
     <p ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS', 'text-info' : resultMessage.type == 'INFO'}">{{resultMessage.message}}</p>

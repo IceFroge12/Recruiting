@@ -3,7 +3,17 @@
  */
 
 function menuController($scope) {
-    console.log("menu");
+    $scope.main = function () {
+        $location.path("/admin/main");
+    };
+
+    $scope.gettocoursesnc = function () {
+        $location.path("/getToCourses");
+    };
+
+    $scope.home = function () {
+        $location.path("/home");
+    };
 }
 
 angular.module('appMenu')
