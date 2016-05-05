@@ -64,7 +64,7 @@ public class RegistrationController {
                             token
                     ),
                     new ArrayList<>(roles));
-            String url = "http://localhost:8084/registration/" + token;
+            String url = "http://localhost:8082/registrationStudent/" + token;
 
             EmailTemplate emailTemplate = emailTemplateService.getById(2L);
 
@@ -82,10 +82,12 @@ public class RegistrationController {
     public ResponseEntity<String> registrationConfirm(@PathVariable("token") String token) {
         User user = userService.getUserByToken(token);
         if (null == user){
+            //TODO error page. URL has been expired
             return ResponseEntity.status(410).body("URL expired");
         }
         user.setActive(true);
         userService.updateUser(user);
+        //TODO redirect on some URL
         return ResponseEntity.ok("jiwefjwefijwef");
     }
 }
