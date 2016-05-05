@@ -15,10 +15,10 @@
 <div id="leftNavStudent"></div>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
-        <div ng-if="schedule.finalTimePoint == null">
+    <p ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS', 'text-info' : resultMessage.type == 'INFO'}">{{resultMessage.message}}</p>
+        <div ng-if="schedule.priorityTypes != null">
             <h4>Choose appropriate variant for each date.</h4>
-<span ng-bound="infoMessage"></span>
-{{infoMessage}}
+
             <form>
                 <div class="row" ng-repeat="timePoint in schedule.timePoints">
                     <div class="col-md-3 day-point">
@@ -35,7 +35,6 @@
             <h4>Congratulations!</h4>
             <h4>You are invited to interviews with specialists of the company.</h4>
             <h4>Your interviews date: <b>{{schedule.finalTimePoint}}</b></h4>
-            <h4>We will be waiting for you at 18 Corps KPI (Street Polytechnic, 41), audience - 420,521.</h4>
             <h4><b>Do not forget your id specified in the Application Form, you will need to show it your
                 interviewers.</b></h4>
             <h4>See you there!</h4>
