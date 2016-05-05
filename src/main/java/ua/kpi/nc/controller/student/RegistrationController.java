@@ -64,7 +64,7 @@ public class RegistrationController {
                             token
                     ),
                     new ArrayList<>(roles));
-            String url = "http://localhost:8082/registrationStudent/" + token;
+            String url = "http://91.207.104.206:8020/registrationStudent/" + token;
 
             EmailTemplate emailTemplate = emailTemplateService.getById(2L);
 
