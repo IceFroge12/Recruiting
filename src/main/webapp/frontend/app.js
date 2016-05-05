@@ -16,7 +16,9 @@ angular.module('app', [
         'appStudentManagement',
         'appReport',
         'appStudentForm',
+        'appStudentMenu',
         'studentScheduling',
+        'appFeedback',
         'appAdminForm',
         'appAuthorization',
         'appRegistration',
@@ -100,6 +102,10 @@ angular.module('app', [
             .when('/admin/adminformsettings', {
                 templateUrl: 'module/admin/form/form.html',
                 controller: 'formAppController'
+            })
+            .when('/admin/scheduling', {
+                templateUrl: 'module/admin/scheduling/scheduling.html',
+                controller: 'schedulingController'
             })
             .when('/admin/report', {
                 templateUrl: 'module/admin/report/report.html',

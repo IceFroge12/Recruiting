@@ -3,7 +3,10 @@
 <div app-menu-main></div>
 <div id="main-blockAuth" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
-        <div>
+        <div class="info-text" ng-show="emailSend">
+            <p>Email has been sent</p>
+        </div>
+        <div ng-show="!emailSend">
             <div class="col-xs-12 col-sm-12 col-lg-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">

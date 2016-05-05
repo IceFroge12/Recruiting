@@ -1,12 +1,14 @@
 package ua.kpi.nc.controller.student;
 
 import com.google.gson.Gson;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import ua.kpi.nc.controller.auth.UserAuthentication;
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.QuestionVariantDto;
 import ua.kpi.nc.persistence.dto.StudentAnswerDto;
@@ -25,11 +27,19 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/student")
 public class StudentApplicationFormController {
-    private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
-    private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
-    private UserService userService = ServiceFactory.getUserService();
-    private FormQuestionService formQuestionService =ServiceFactory.getFormQuestionService();
-    private FormAnswerVariantService formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
+    private FormAnswerService formAnswerService;
+    private ApplicationFormService applicationFormService;
+    private UserService userService;
+    private FormQuestionService formQuestionService;
+    private FormAnswerVariantService formAnswerVariantService;
+
+    public StudentApplicationFormController() {
+        formAnswerService = ServiceFactory.getFormAnswerService();
+        applicationFormService = ServiceFactory.getApplicationFormService();
+        userService = ServiceFactory.getUserService();
+        formQuestionService =ServiceFactory.getFormQuestionService();
+        formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
+    }
 
     @RequestMapping(value ="appform", method = RequestMethod.GET)
     public ModelAndView adminPage() {

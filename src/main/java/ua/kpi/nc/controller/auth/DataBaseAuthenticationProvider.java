@@ -37,11 +37,15 @@ public class DataBaseAuthenticationProvider implements AuthenticationProvider {
 
         User user = userAuthService.loadUserByUsername(username);
 
-        if (null == user || !user.getUsername().equalsIgnoreCase(username)){
+        if (!user.isActive()){
+            throw new BadCredentialsException("User are not active");
+        }
+
+        if (!user.getUsername().equalsIgnoreCase(username)){
             throw new BadCredentialsException("Username not found");
         }
 
-        if (passwordEncoderGeneratorService.matches(user.getPassword(), password )){
+        if (!passwordEncoderGeneratorService.matches(user.getPassword(), password )){
             throw new BadCredentialsException("Password wrong");
         }
 
