@@ -16,11 +16,14 @@ import ua.kpi.nc.persistence.dto.StudentAppFormQuestionDto;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
+import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.service.*;
 
 import javax.mail.MessagingException;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +42,9 @@ public class StudentApplicationFormController {
     private RoleService roleService;
     //private User currentUser;
 
+    private StatusService statusService = ServiceFactory.getStatusService();
+    private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+    
     public StudentApplicationFormController() {
         formAnswerService = ServiceFactory.getFormAnswerService();
         applicationFormService = ServiceFactory.getApplicationFormService();
@@ -59,12 +65,19 @@ public class StudentApplicationFormController {
     @RequestMapping(value = "appform", method = RequestMethod.POST)
     @ResponseBody
     public String getApplicationForm() {
-        if(applicationFormService.getByUserId(135L).isEmpty()){
-            User user = userService.getUserByID(135L);
+    	List<ApplicationForm> applicationForms = applicationFormService.getByUserId(155L);
+        if(applicationForms.isEmpty()){
+            User user = userService.getUserByID(155L);
             ApplicationForm applicationForm = new ApplicationFormImpl();
             List<FormQuestion>  formQuestions = formQuestionService.getByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.STUDENT)));
             applicationForm.setUser(user);
-            applicationForm.setQuestions(formQuestions);
+            Status status = statusService.getStatusById(StatusEnum.REGISTERED.getId());
+            Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+            applicationForm.setStatus(status);
+            applicationForm.setActive(true);
+            applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
+            applicationForm.setRecruitment(recruitment);
+            
             List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
             System.out.println(applicationForm);
             for(FormQuestion formQuestion :formQuestions){
@@ -72,17 +85,12 @@ public class StudentApplicationFormController {
                 formAnswer.setFormQuestion(formQuestion);
                 formAnswer.setApplicationForm(applicationForm);
                 formAnswers.add(formAnswer);
-                //formAnswerService.insertBlankFormAnswerForApplicationForm(formAnswer);
-                System.out.println(formAnswer.toString());
             }
             applicationForm.setAnswers(formAnswers);
-            System.out.println(applicationForm);
-            System.out.println("!!!!!!");
             applicationFormService.insertApplicationForm(applicationForm);
-            System.out.println(applicationForm);
         }
 
-        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(135L);
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(155L);
         Gson applicationFormGson = GsonFactory.getApplicationFormGson();
         String jsonResult = applicationFormGson.toJson(applicationForm);
         System.out.println(jsonResult);
