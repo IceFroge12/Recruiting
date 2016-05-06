@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, staffManagementService) {
+function staffManagementController($scope, staffManagementService ) {
 
     staffManagementService.showAllEmployees().then(function success(data) {
         var roleName = new String();
@@ -34,7 +34,6 @@ function staffManagementController($scope, staffManagementService) {
             $scope.selection.push({roleName: employeeName});
         }
         console.log($scope.selection);
-
     };
 
     $scope.addEmployee = function () {
@@ -77,11 +76,9 @@ function staffManagementController($scope, staffManagementService) {
 
 
     $scope.changeEmployeeStatus = function (employee) {
-     staffManagementService.changeEmployeeStatus(employee.email).success(function(data) {
-         console.log(data);
-     });
-
-
+        staffManagementService.changeEmployeeStatus(employee.email).success(function (data) {
+            console.log(data);
+        });
 
         console.log($scope.dat);
         if ($scope.myClass === "btn-danger")
@@ -92,11 +89,18 @@ function staffManagementController($scope, staffManagementService) {
 
     $scope.showAssigned = function (employee) {
         staffManagementService.showAssigned(employee.email);
+    };
+    var currentEmployee;
+    $scope.getEmployee = function (employee) {
+        currentEmployee = employee;
+    };
 
-    }
-
+    $scope.deleteEmployee = function () {
+        console.log(currentEmployee)
+        staffManagementService.deleteEmployee(currentEmployee.email);
+    };
 
 }
 
-angular.module('appStaffManagement')
-    .controller('staffManagementController', ['$scope', 'staffManagementService', staffManagementController]);
+    angular.module('appStaffManagement')
+        .controller('staffManagementController', ['$scope', 'staffManagementService', staffManagementController]);

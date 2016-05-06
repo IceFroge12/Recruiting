@@ -70,7 +70,19 @@ function staffManagementService(http) {
             console.log(status);
         });
     };
-    
+
+
+    service.deleteEmployee = function (email) {
+        console.log(email);
+        http({
+            method : 'GET',
+            url:'/admin/deleteEmployee',
+            params:{email:email}
+        }).error(function (data, status, headers) {
+            console.log(status);
+        });
+    };
+
     return service;
 }
 

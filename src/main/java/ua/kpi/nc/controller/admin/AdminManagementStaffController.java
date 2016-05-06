@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Created by dima on 23.04.16.
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminManagementStaffController {
 
@@ -41,7 +41,6 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "showAllEmployee", method = RequestMethod.POST)
-    @ResponseBody
     public Set<User> showAllEmployees() {
         Set<User> users = userService.getAllEmploees();
         for (User user : users) {
@@ -71,7 +70,7 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
-    public void editEmployeeParams(@RequestBody UserDto userDto) throws IOException {
+    public void editEmployeeParams(@RequestBody UserDto userDto) {
 
         System.out.println(userDto.toString());
         User user = userService.getUserByID(userDto.getId());
@@ -88,7 +87,6 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "changeEmployeeStatus", method = RequestMethod.GET)
-    @ResponseBody
     public Boolean changeEmployeeStatus(@RequestParam String email) {
         User user = userService.getUserByUsername(email);
         user.setActive(!user.isActive());
@@ -97,7 +95,6 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
-    @ResponseBody
     public List<Interview> showAssignedStudent(@RequestParam String email) {
 
         User user = userService.getUserByUsername(email);
@@ -112,6 +109,14 @@ public class AdminManagementStaffController {
         Set<User> assignedStudent = userService.getAssignedStudents(user.getId());
 
         return interviewList;
+    }
+
+    @RequestMapping(value = "deleteEmployee", method = RequestMethod.GET)
+    public void deleteEmployee(@RequestParam String email){
+        System.out.println(email);
+        User user = userService.getUserByUsername(email);
+        System.out.println(user);
+        userService.deleteUser(user);
     }
 
 
