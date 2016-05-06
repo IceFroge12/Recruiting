@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Nikita on 23.04.2016.
@@ -121,13 +122,13 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
     @Override
     public FormQuestion getById(Long id) {
-        log.info("Looking for form question with id = ", id);
+        log.info("Looking for form question with id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<FormQuestion> getByRole(Role role) {
-        log.info("Looking for form question by role = ", role.getRoleName());
+        log.info("Looking for form question by role = {}", role.getRoleName());
         return this.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE, extractor, role.getId());
     }
 
@@ -169,5 +170,11 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
         return this.getJdbcTemplate().update(SQL_UPDATE, formQuestion.getTitle(), formQuestion.isEnable(),
                 formQuestion.isMandatory(), formQuestion.getId());
     }
+
+	@Override
+	public Set<FormQuestion> getByRoleAsSet(Role role) {
+		log.info("Looking for set of form questions by role = {}", role.getRoleName());
+        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_ROLE, extractor, role.getId());
+	}
 
 }

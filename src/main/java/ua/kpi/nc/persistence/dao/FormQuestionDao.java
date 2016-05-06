@@ -5,6 +5,7 @@ import ua.kpi.nc.persistence.model.Role;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by IO on 21.04.2016.
@@ -28,6 +29,8 @@ public interface FormQuestionDao {
     List<FormQuestion> getAll();
 
 	int updateFormQuestion(FormQuestion formQuestion);
+
+	Set<FormQuestion> getByRoleAsSet(Role role);
 
 
 }

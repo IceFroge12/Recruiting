@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.impl.proxy.FormQuestionProxy;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -46,6 +47,8 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
             + TABLE_NAME + "\"";
 
     private static final String SQL_GET_BY_ID = SQL_GET + " WHERE " + ID_COL + " = ?;";
+    
+    private static final String SQL_GET_BY_TITLE_QUESTION = SQL_GET + " WHERE " + ANSWER_COL + " = ? AND " + ID_QUESTION_COL + " = ?";
 
     private static final String SQL_GET_BY_QUESTION_ID = SQL_GET + " WHERE " + ID_QUESTION_COL + " = ?;";
 
@@ -101,4 +104,10 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
         log.info("Get all FormAnswerVariant");
         return this.getJdbcTemplate().queryForList(SQL_GET, extractor);
     }
+
+	@Override
+	public FormAnswerVariant getAnswerVariantByTitleAndQuestion(String title, FormQuestion question) {
+		log.trace("Looking for answer variant with title = {} and questionId = {})", title, question.getId());
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE_QUESTION, extractor, title, question.getId());
+	}
 }

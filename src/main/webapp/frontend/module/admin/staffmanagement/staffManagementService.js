@@ -13,6 +13,12 @@ function staffManagementService(http) {
         });
     };
 
+    // service.getEmployeeRoles = function(employee){
+    //     http.get('admin/getroles').success(function(data) {
+    //         return data;
+    //     });
+    // };
+    
     service.addEmployee = function (firstName, secondName, lastName, email, roles) {
         http({
             method : 'POST',

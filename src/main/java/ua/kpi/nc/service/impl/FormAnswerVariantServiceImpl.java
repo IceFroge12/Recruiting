@@ -56,4 +56,9 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
 	public FormAnswerVariant getAnswerVariantById(Long id) {
 		return formAnswerVariantDao.getById(id);
 	}
+
+	@Override
+	public FormAnswerVariant getAnswerVariantByTitleAndQuestion(String title, FormQuestion question) {
+		return formAnswerVariantDao.getAnswerVariantByTitleAndQuestion(title, question);
+	}
 }

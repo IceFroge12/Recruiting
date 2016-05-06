@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, staffManagementService ) {
+function staffManagementController($scope, staffManagementService) {
 
     staffManagementService.showAllEmployees().then(function success(data) {
         var roleName = new String();
@@ -17,6 +17,12 @@ function staffManagementController($scope, staffManagementService ) {
     }, function error() {
         console.log("error");
     });
+
+   // staffManagementService.getEmployeeRoles(employee).then(function success(data){
+   //     $scope.roles=data;
+   // })
+
+
 
     $scope.employees =
         [{roleName: 'ADMIN'},
