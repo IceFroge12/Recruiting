@@ -11,10 +11,6 @@ public interface FormQuestion extends Serializable {
 
     void setId(Long id);
 
-    List<FormAnswer> getAnswers();
-
-    void setAnswers(List<FormAnswer> answers);
-
     List<Role> getRoles();
 
     void setRoles(List<Role> roles);

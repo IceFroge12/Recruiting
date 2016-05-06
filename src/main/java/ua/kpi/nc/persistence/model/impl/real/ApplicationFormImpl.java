@@ -160,7 +160,6 @@ public class ApplicationFormImpl implements ApplicationForm {
 
     @Override
     public void setAnswers(List<FormAnswer> answers) {
-        System.out.println("try to???");
         this.answers = answers;
     }
 
@@ -195,9 +194,6 @@ public class ApplicationFormImpl implements ApplicationForm {
                 ", user=" + user +
                 ", dateCreate=" + dateCreate +
                 ", feedback='" + feedback + '\'' +
-                ", interviews=" + interviews +
-                ", answers=" + answers +
-                ", questions=" + questions +
                 '}';
     }
 
