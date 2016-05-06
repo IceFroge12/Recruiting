@@ -29,55 +29,64 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	static final String DATE_CREATE_COL = "date_create";
 	static final String FEEDBACK = "feedback";
 
-
 	static final String TABLE_NAME = "application_form";
 
 	private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
-        ApplicationForm applicationForm = new ApplicationFormImpl();
-        long id = resultSet.getLong(ID_COL);
-        applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
-        applicationForm.setAnswers(getAnswers(id));
-        applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
+		ApplicationForm applicationForm = new ApplicationFormImpl();
+		long id = resultSet.getLong(ID_COL);
+		applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
+		applicationForm.setAnswers(getAnswers(id));
+		applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
 		applicationForm.setFeedback(resultSet.getString(FEEDBACK));
-        applicationForm.setId(id);
-        applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
-        applicationForm.setInterviews(getInterviews(id));
-        applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
-        applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
-        applicationForm.setUser(new UserProxy(resultSet.getLong(ID_USER_COL)));
+		applicationForm.setId(id);
+		applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
+		applicationForm.setInterviews(getInterviews(id));
+		applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
+		applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
+		applicationForm.setUser(new UserProxy(resultSet.getLong(ID_USER_COL)));
 		applicationForm.setQuestions(getQuestions(id));
-        return applicationForm;
-    };
+		return applicationForm;
+	};
 
 	private static final String SQL_GET_BY_ID = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
 			+ ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n"
-			+ "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id = ?;";
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id = ?;";
 	private static final String SQL_GET_BY_USER_ID = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
 			+ ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
-			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a."
-			+ ID_USER_COL + " = ?;";
+			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a." + ID_USER_COL + " = ?;";
 	private static final String SQL_GET_BY_STATUS = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
 			+ IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
-			+ ID_STATUS_COL + "\n" + "WHERE s.title = ?;";
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE s.title = ?;";
 	private static final String SQL_GET_BY_STATE = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
 			+ IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
-			+ ID_STATUS_COL + "\n" + "WHERE a.is_active = ?;";
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a.is_active = ?;";
 	private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " a WHERE a." + ID_COL + " = ?;";
 	private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + ID_STATUS_COL + ", " + IS_ACTIVE_COL
 			+ ", " + ID_RECRUITMENT_COL + ", " + PHOTO_SCOPE_COL + ", " + "" + ID_USER_COL + ", " + DATE_CREATE_COL
 			+ ", " + FEEDBACK + ") VALUES (?, ?, ?, ?, ?, ?, ?);";
 	private static final String SQL_GET_ALL = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
 			+ ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
-			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a."
-			+ ID_STATUS_COL + " \n;";
+			+ DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + " \n;";
 	private static final String SQL_UPDATE = "UPDATE \"" + TABLE_NAME + "\" SET " + ID_STATUS_COL + " = ?, "
-			+ IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ?, " + FEEDBACK + " = ?" + "WHERE " + ID_COL
-			+ " = ?";
+			+ IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ?, " + FEEDBACK + " = ?"
+			+ "WHERE " + ID_COL + " = ?";
 	private static final String SQL_GET_INTERVIEWS = "SELECT i.id\n" + "FROM \"interview\" i\n"
 			+ "WHERE i.id_application_form = ?";
+	private static final String SQL_GET_CURRENT = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
+			+ ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
+			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a.id_status \n"
+			+ "WHERE a.id_user = ? AND a.id_recruitment = (SELECT r.id FROM recruitment r WHERE r.end_date > CURRENT_DATE)";
+	private static final String SQL_GET_LAST = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
+			+ ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
+			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a.id_status \n"
+			+ "WHERE a.id_user = ? AND a.date_create = (SELECT MAX(a_in.date_create) from application_form a_in where a_in.id_user = ?)";
 
 	private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
@@ -93,7 +102,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public List<ApplicationForm> getByUserId(Long id) {
-		log.info("Looking for application forms of user with id = {}" ,id);
+		log.info("Looking for application forms of user with id = {}", id);
 		return this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_ID, extractor, id);
 	}
 
@@ -111,7 +120,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public int deleteApplicationForm(ApplicationForm applicationForm) {
-		log.info("Deleting application form with id = " , applicationForm.getId());
+		log.info("Deleting application form with id = ", applicationForm.getId());
 		return this.getJdbcTemplate().update(SQL_DELETE, applicationForm.getId());
 	}
 
@@ -128,7 +137,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 		log.info("Updating application forms with id = " + applicationForm.getId());
 		return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
 				applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
-				applicationForm.getFeedback(),applicationForm.getId());
+				applicationForm.getFeedback(), applicationForm.getId());
 	}
 
 	@Override
@@ -141,30 +150,41 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	private List<Interview> getInterviews(Long applicationFormId) {
 		return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, (ResultSetExtractor<Interview>) resultSet -> {
-            InterviewProxy interviewProxy = new InterviewProxy(resultSet.getLong("id"));
-            return interviewProxy;
-        }, applicationFormId);
+			InterviewProxy interviewProxy = new InterviewProxy(resultSet.getLong("id"));
+			return interviewProxy;
+		}, applicationFormId);
 	}
 
 	private static final String SQL_GET_ANSWERS = "SELECT fa.id\n FROM \"form_answer\" fa\n WHERE fa.id_application_form = ?;";
 
 	private List<FormAnswer> getAnswers(Long applicationFormId) {
 		return this.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
-            FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
-            return formAnswerProxy;
-        }, applicationFormId);
+			FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
+			return formAnswerProxy;
+		}, applicationFormId);
 	}
 
 	private List<FormQuestion> getQuestions(Long applicationFormId) {
-		return this.getJdbcTemplate().queryWithParameters("SELECT distinct q.id from form_question q join form_answer " +
-						"a on (q.id= a.id_question) where a.id_application_form = ?;",
-				resultSet -> {
+		return this.getJdbcTemplate().queryWithParameters("SELECT distinct q.id from form_question q join form_answer "
+				+ "a on (q.id= a.id_question) where a.id_application_form = ?;", resultSet -> {
 					List<FormQuestion> questions = new ArrayList<>();
 					do {
 						questions.add(new FormQuestionProxy(resultSet.getLong(FormQuestionDaoImpl.ID_COL)));
 					} while (resultSet.next());
 					return questions;
 				}, applicationFormId);
+	}
+
+	@Override
+	public ApplicationForm getCurrentApplicationFormByUserId(Long id) {
+		log.trace("Looking for current application form with user id = {}", id);
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor, id);
+	}
+
+	@Override
+	public ApplicationForm getLastApplicationFormByUserId(Long id) {
+		log.trace("Looking for last application form with user id = {}", id);
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST, extractor, id);
 	}
 
 }

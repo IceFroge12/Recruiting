@@ -23,4 +23,8 @@ public interface ApplicationFormDao {
     int updateApplicationForm(ApplicationForm applicationForm);
 
     List<ApplicationForm> getAll();
+
+	ApplicationForm getCurrentApplicationFormByUserId(Long id);
+
+	ApplicationForm getLastApplicationFormByUserId(Long id);
 }
