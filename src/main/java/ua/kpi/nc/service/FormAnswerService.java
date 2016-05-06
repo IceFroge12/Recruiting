@@ -15,6 +15,8 @@ public interface FormAnswerService {
     Long insertFormAnswerForApplicationForm(FormAnswer formAnswer);
 
     Long insertBlankFormAnswerForApplicationForm(FormAnswer formAnswer);
+    
+    List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question);
 
     int updateFormAnswer(FormAnswer formAnswer);
 

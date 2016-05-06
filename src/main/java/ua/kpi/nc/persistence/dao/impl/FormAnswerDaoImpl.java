@@ -53,6 +53,8 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
 	private static final String SQL_GET_BY_ID = SQL_GET + " WHERE fa." + ID_COL + " = ?;";
 	private static final String SQL_GET_BY_INTERVIEW_AND_QUESTION = SQL_GET + " WHERE fa." + ID_INTERVIEW_COL
 			+ "= ? and  fa." + ID_QUESTION_COL + " = ?;";
+	private static final String SQL_GET_BY_APPLICATION_FORM_AND_QUESTION = SQL_GET + " WHERE fa." + ID_APPLICATION_FORM_COL
+			+ "= ? and  fa." + ID_QUESTION_COL + " = ?;";
 	private static final String SQL_INSERT_FOR_INTERVIEW = "INSERT INTO " + TABLE_NAME + " (" + ANSWER_COL + ", "
 			+ ID_QUESTION_COL + ", " + ID_VARIANT_COL + ", " + ID_INTERVIEW_COL + ") \n" + "VALUES (?,?,?,?);";
 	private static final String SQL_INSERT_FOR_APPLICATION_FORM = "INSERT INTO " + TABLE_NAME + " (" + ANSWER_COL + ", "
@@ -139,5 +141,10 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
 				question.getTitle(), answerVariant != null ? answerVariant.getId() : null);
 		return this.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, connection, formAnswer.getAnswer(),
 				question.getId(), answerVariant != null ? answerVariant.getId() : null, interview.getId());
+	}
+
+	@Override
+	public List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question) {
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_APPLICATION_FORM_AND_QUESTION, extractor, applicationForm.getId(), question.getId());
 	}
 }

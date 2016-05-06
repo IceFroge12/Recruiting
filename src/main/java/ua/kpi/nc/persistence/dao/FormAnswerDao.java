@@ -31,4 +31,6 @@ public interface FormAnswerDao {
 
 	int deleteFormAnswer(FormAnswer formAnswer);
 
+	List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question);
+
 }

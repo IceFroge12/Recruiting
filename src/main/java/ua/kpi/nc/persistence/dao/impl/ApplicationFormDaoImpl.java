@@ -184,7 +184,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	@Override
 	public ApplicationForm getLastApplicationFormByUserId(Long id) {
 		log.trace("Looking for last application form with user id = {}", id);
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST, extractor, id);
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST, extractor, id, id);
 	}
 
 }
