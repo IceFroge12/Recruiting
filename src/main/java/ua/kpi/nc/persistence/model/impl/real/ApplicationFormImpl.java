@@ -194,9 +194,6 @@ public class ApplicationFormImpl implements ApplicationForm {
                 ", user=" + user +
                 ", dateCreate=" + dateCreate +
                 ", feedback='" + feedback + '\'' +
-                ", interviews=" + interviews +
-                ", answers=" + answers +
-                ", questions=" + questions +
                 '}';
     }
 

@@ -176,6 +176,8 @@ public class ApplicationFormProxy implements ApplicationForm {
 
 		return new EqualsBuilder()
 				.append(id, that.id)
+				.append(applicationFormImpl, that.applicationFormImpl)
+				.append(service, that.service)
 				.isEquals();
 	}
 
@@ -183,6 +185,8 @@ public class ApplicationFormProxy implements ApplicationForm {
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
 				.append(id)
+				.append(applicationFormImpl)
+				.append(service)
 				.toHashCode();
 	}
 }

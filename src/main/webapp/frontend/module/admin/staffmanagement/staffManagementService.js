@@ -7,12 +7,28 @@ function staffManagementService(http) {
 
     var service = {};
     
-    service.showAllEmployees = function () {
-        return http.post('/admin/showAllEmployee').then(function (response) {
-            return response.data;
-        });
+    service.showAllEmployees = function (pageNum) {
+        return http({
+            method : 'GET',
+            url : '/admin/showAllEmployees',
+            params : {pageNum:pageNum}
+        })
+
     };
 
+    service.getCountOfEmployee = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getCountOfEmployee',
+        })
+    };
+
+    // service.getEmployeeRoles = function(employee){
+    //     http.get('admin/getroles').success(function(data) {
+    //         return data;
+    //     });
+    // };
+    
     service.addEmployee = function (firstName, secondName, lastName, email, roles) {
         http({
             method : 'POST',
@@ -70,7 +86,19 @@ function staffManagementService(http) {
             console.log(status);
         });
     };
-    
+
+
+    service.deleteEmployee = function (email) {
+        console.log(email);
+        http({
+            method : 'GET',
+            url:'/admin/deleteEmployee',
+            params:{email:email}
+        }).error(function (data, status, headers) {
+            console.log(status);
+        });
+    };
+
     return service;
 }
 

@@ -59,7 +59,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 			FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
 			for (FormAnswer formAnswer : applicationForm.getAnswers()) {
 				formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
-						formAnswer.getFormAnswerVariant(), applicationForm, connection);
+						 applicationForm, connection);
 			}
 			connection.commit();
 		} catch (SQLException e) {
@@ -79,6 +79,16 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	@Override
 	public int updateApplicationForm(ApplicationForm applicationForm) {
 		return applicationFormDao.updateApplicationForm(applicationForm);
+	}
+
+	@Override
+	public ApplicationForm getCurrentApplicationFormByUserId(Long id) {
+		return applicationFormDao.getCurrentApplicationFormByUserId(id);
+	}
+
+	@Override
+	public ApplicationForm getLastApplicationFormByUserId(Long id) {
+		return applicationFormDao.getLastApplicationFormByUserId(id);
 	}
 
 }

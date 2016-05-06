@@ -37,6 +37,11 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     }
 
     @Override
+    public Long insertBlankFormAnswerForApplicationForm(FormAnswer formAnswer) {
+        return formAnswerDao.insertBlankFormAnswerForApplicationForm(formAnswer);
+    }
+
+    @Override
     public int updateFormAnswer(FormAnswer formAnswer) {
         return formAnswerDao.updateFormAnswer(formAnswer);
     }
@@ -45,4 +50,9 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     public Long insertFormAnswerForApplicationForm(FormAnswer formAnswer) {
         return formAnswerDao.insertFormAnswerForApplicationForm(formAnswer);
     }
+
+	@Override
+	public List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question) {
+		return formAnswerDao.getByApplicationFormAndQuestion(applicationForm, question);
+	}
 }

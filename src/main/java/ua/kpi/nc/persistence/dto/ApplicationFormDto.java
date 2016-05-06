@@ -46,4 +46,10 @@ public class ApplicationFormDto {
     public void setUser(UserDto user) {
         this.user = user;
     }
+
+	@Override
+	public String toString() {
+		return "ApplicationFormDto [id=" + id + ", status=" + status + ", user=" + user + ", questions=" + questions
+				+ "]";
+	}
 }

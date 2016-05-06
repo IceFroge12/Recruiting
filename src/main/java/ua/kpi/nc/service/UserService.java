@@ -39,8 +39,18 @@ public interface UserService {
 
     Set<User> getAllStudents();
 
+    List<User> getStudentsFromToRows(Long fromRow);
+
+    List<User> getEmployeesFromToRows(Long fromRow);
+
     Set<User> getAllEmploees();
 
     Set<User> getAll();
 
+    User getAuthorizedUser();
+
+    Long getAllStudentCount();
+
+    Long getAllEmployeeCount();
+    
 }

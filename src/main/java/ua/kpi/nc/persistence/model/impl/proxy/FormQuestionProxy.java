@@ -37,18 +37,6 @@ public class FormQuestionProxy implements FormQuestion {
     }
 
     @Override
-    public List<FormAnswer> getAnswers() {
-        checkFormQuestion();
-        return formQuestion.getAnswers();
-    }
-
-    @Override
-    public void setAnswers(List<FormAnswer> answers) {
-        checkFormQuestion();
-        formQuestion.setAnswers(answers);
-    }
-
-    @Override
     public List<Role> getRoles() {
         checkFormQuestion();
         return formQuestion.getRoles();

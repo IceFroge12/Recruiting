@@ -27,6 +27,12 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
     $scope.registration = function () {
         console.log("registation");
         $location.path('/registration');
+    };
+
+    
+    $scope.recoverPassword = function () {
+        console.log("recoverPassword");
+        $location.path('/recoverPasswordRequest');
     }
 }
 

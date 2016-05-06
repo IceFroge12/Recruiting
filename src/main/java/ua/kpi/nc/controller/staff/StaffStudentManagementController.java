@@ -82,7 +82,7 @@ public class StaffStudentManagementController {
 		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
 		for (Interview interview : interviews) {
 			for (Role interviewRole : interviewer.getRoles()) {
-				if (Objects.equals(interview.getRole(), interviewRole)) {
+				if (Objects.equals(interview.getRole(), interviewRole)) { //TODO use class eq
 					return gson.toJson(new MessageDto("This student was already assigned to this type of interviewer",
 							MessageDtoType.ERROR));
 				}
@@ -101,7 +101,7 @@ public class StaffStudentManagementController {
 		interview.setApplicationForm(applicationForm);
 		interview.setDate(new Timestamp(System.currentTimeMillis()));
 		for (Role role : interviewer.getRoles()) {
-			if (role.getRoleName().equals(RoleEnum.SOFT.name()) || role.getRoleName().equals(RoleEnum.TECH.name())) {
+			if (role.getRoleName().equals(RoleEnum.ROLE_SOFT.name()) || role.getRoleName().equals(RoleEnum.ROLE_TECH.name())) {
 				interview.setRole(role);
 			}
 		}

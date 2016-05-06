@@ -46,8 +46,9 @@ public class AdminFormSettingsController {
     @ResponseBody
     public List<String> getAppFormQuestions() {
 
-        Role roleAdmin = roleService.getRoleByTitle(String.valueOf(RoleEnum.ADMIN));
+        Role roleAdmin = roleService.getRoleByTitle(String.valueOf(RoleEnum.ROLE_ADMIN));
 
+        System.out.println(roleAdmin);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleAdmin);
 
         List<String> adapterFormQuestionList = new ArrayList<>();
@@ -67,7 +68,7 @@ public class AdminFormSettingsController {
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         System.out.println(role.getRoleName());
         FormQuestion formQuestion = new FormQuestionImpl();
-        
+
 
 //        formQuestionService.addRole(formQuestion, role);
 

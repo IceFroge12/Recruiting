@@ -4,7 +4,7 @@
 
 function appFormController($scope, appFormService) {
     appFormService.loadAppFormData().then(function success(data) {
-        $scope.id =data.id;
+       // $scope.id =data.id;
         $scope.questions = data.questions;
         $scope.user = data.user;
         $scope.status = data.status;

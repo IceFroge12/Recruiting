@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Created by dima on 23.04.16.
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminManagementStaffController {
 
@@ -40,15 +40,19 @@ public class AdminManagementStaffController {
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
 
-    @RequestMapping(value = "showAllEmployee", method = RequestMethod.POST)
-    @ResponseBody
-    public Set<User> showAllEmployees() {
-        Set<User> users = userService.getAllEmploees();
-        for (User user : users) {
-            System.out.println(user);
-        }
+    @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
+    public List<User> showEmployees(@RequestParam int pageNum) {
+        Long itemsByPage = 9L;
+        Long fromRow = (pageNum - 1) * itemsByPage;
+        List<User> users = userService.getEmployeesFromToRows(fromRow);
         return users;
     }
+
+    @RequestMapping(value = "getCountOfEmployee", method = RequestMethod.GET)
+    public Long getCountOfEmployee() {
+        return userService.getAllEmployeeCount();
+    }
+
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
@@ -71,7 +75,7 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
-    public void editEmployeeParams(@RequestBody UserDto userDto) throws IOException {
+    public void editEmployeeParams(@RequestBody UserDto userDto) {
 
         System.out.println(userDto.toString());
         User user = userService.getUserByID(userDto.getId());
@@ -88,7 +92,6 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "changeEmployeeStatus", method = RequestMethod.GET)
-    @ResponseBody
     public Boolean changeEmployeeStatus(@RequestParam String email) {
         User user = userService.getUserByUsername(email);
         user.setActive(!user.isActive());
@@ -97,7 +100,6 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
-    @ResponseBody
     public List<Interview> showAssignedStudent(@RequestParam String email) {
 
         User user = userService.getUserByUsername(email);
@@ -112,6 +114,23 @@ public class AdminManagementStaffController {
         Set<User> assignedStudent = userService.getAssignedStudents(user.getId());
 
         return interviewList;
+    }
+
+    @RequestMapping(value = "deleteEmployee", method = RequestMethod.GET)
+    public void deleteEmployee(@RequestParam String email){
+        System.out.println(email);
+        User user = userService.getUserByUsername(email);
+        System.out.println(user);
+        userService.deleteUser(user);
+    }
+
+    @RequestMapping(value="/getroles", method = RequestMethod.GET)
+    public String getUserRoles(@RequestBody User user){
+        User emp =userService.getUserByID(user.getId());
+        String roles="";
+        for(Role role:emp.getRoles())roles.concat(role.getRoleName()+" ");
+        System.out.println(roles);
+        return roles;
     }
 
 

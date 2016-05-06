@@ -22,6 +22,7 @@ public class StaffMainController {
     @ResponseBody
     public Recruitment getRecruitmentData() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        System.out.println(recruitment);
         return recruitment;
     }
 }

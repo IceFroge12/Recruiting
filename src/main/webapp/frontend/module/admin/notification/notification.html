@@ -9,10 +9,9 @@
                         <h4>Type of notification</h4>
                     </div>
                     <div class="col-md-1 marks-cell">
-                        <select class="search-element">
-                            <option>type1</option>
-                            <option>type2</option>
-                            <option>type3</option>
+                        <select ng-model="selectedType" ng-change="showSelectValue(selectedType)">
+                            <option selected></option>
+                            <option  ng-repeat="type in types">{{type.title}}</option>
                         </select>
                     </div>
                 </div>
@@ -21,17 +20,17 @@
                         <h4>Topic of notification</h4>
                     </div>
                     <div class="col-md-1 marks-cell">
-                        <input type="text">
+                        <input ng-model="topic" type="text">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea rows="7" class="wide-not"></textarea>
+                        <textarea ng-model="textNotification" rows="7" class="wide-not"></textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-info search-element col-md-3 btn-left">Save</button>
+                        <button type="submit" ng-click="save()" class="btn btn-info search-element col-md-3 btn-left">Save</button>
                     </div>
                 </div>
             </form>

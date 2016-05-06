@@ -13,6 +13,10 @@ public interface ApplicationFormService {
 
 	ApplicationForm getApplicationFormById(Long id);
 
+	ApplicationForm getCurrentApplicationFormByUserId(Long id);
+
+	ApplicationForm getLastApplicationFormByUserId(Long id);
+
 	List<ApplicationForm> getByUserId(Long id);
 
 	List<ApplicationForm> getByStatus(String status);

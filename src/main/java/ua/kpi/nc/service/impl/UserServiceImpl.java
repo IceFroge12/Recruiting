@@ -2,6 +2,9 @@ package ua.kpi.nc.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
@@ -108,10 +111,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getStudentsFromToRows(Long fromRow) {
+        return userDao.getStudentsFromToRows(fromRow);
+    }
+
+    @Override
+    public List<User> getEmployeesFromToRows(Long fromRow){
+        return userDao.getEmployeesFromToRows(fromRow);
+    }
+    @Override
     public Set<User> getAllEmploees() {
         return userDao.getAllEmploees();
     }
 
     @Override
     public Set<User> getAll(){ return userDao.getAll();}
+
+	@Override
+	public User getAuthorizedUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+		return getUserByUsername(name);
+	}
+
+    @Override
+    public Long getAllStudentCount() {
+        return userDao.getStudentCount();
+    }
+
+    @Override
+    public Long getAllEmployeeCount() {
+        return userDao.getEmployeeCount();
+    }
 }

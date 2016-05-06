@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Nikita on 23.04.2016.
@@ -30,7 +31,6 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
         formQuestion.setMandatory(resultSet.getBoolean(MANDATORY_COL));
         formQuestion.setRoles(getRoles(resultSet.getLong(ID_COL)));
         formQuestion.setTitle(resultSet.getString(TITLE_COL));
-        formQuestion.setAnswers(getAnswers(resultSet.getLong(ID_COL)));
         formQuestion.setQuestionType(new QuestionType(resultSet.getLong(ID_QUESTION_TYPE_COL),
                 resultSet.getString(QuestionTypeDaoImpl.TYPE_TITLE_COL)));
         formQuestion.setFormAnswerVariants(getAnswerVariants(resultSet.getLong(ID_COL)));
@@ -122,13 +122,13 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
     @Override
     public FormQuestion getById(Long id) {
-        log.info("Looking for form question with id = ", id);
+        log.info("Looking for form question with id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<FormQuestion> getByRole(Role role) {
-        log.info("Looking for form question by role = ", role.getRoleName());
+        log.info("Looking for form question by role = {}", role.getRoleName());
         return this.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE, extractor, role.getId());
     }
 
@@ -147,18 +147,6 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
                         roles.add(new RoleProxy(resultSet.getLong(ROLE_MAP_TABLE_ROLE_ID)));
                     } while (resultSet.next());
                     return roles;
-                }, formQuestionID);
-    }
-
-    private List<FormAnswer> getAnswers(Long formQuestionID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT fa." + FormAnswerDaoImpl.ID_COL + " FROM "
-                        + FormAnswerDaoImpl.TABLE_NAME + " fa\n" + "WHERE fa." + FormAnswerDaoImpl.ID_QUESTION_COL + " = ?;",
-                resultSet -> {
-                    List<FormAnswer> answers = new ArrayList<>();
-                    do {
-                        answers.add(new FormAnswerProxy(resultSet.getLong(FormAnswerDaoImpl.ID_COL)));
-                    } while (resultSet.next());
-                    return answers;
                 }, formQuestionID);
     }
 
@@ -182,5 +170,11 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
         return this.getJdbcTemplate().update(SQL_UPDATE, formQuestion.getTitle(), formQuestion.isEnable(),
                 formQuestion.isMandatory(), formQuestion.getId());
     }
+
+	@Override
+	public Set<FormQuestion> getByRoleAsSet(Role role) {
+		log.info("Looking for set of form questions by role = {}", role.getRoleName());
+        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_ROLE, extractor, role.getId());
+	}
 
 }

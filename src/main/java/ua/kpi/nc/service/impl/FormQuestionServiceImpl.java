@@ -3,6 +3,7 @@ package ua.kpi.nc.service.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,5 +102,10 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 	@Override
 	public int updateFormQuestion(FormQuestion formQuestion) {
 		return formQuestionDao.updateFormQuestion(formQuestion);
+	}
+
+	@Override
+	public Set<FormQuestion> getByRoleAsSet(Role role) {
+		return formQuestionDao.getByRoleAsSet(role);
 	}
 }

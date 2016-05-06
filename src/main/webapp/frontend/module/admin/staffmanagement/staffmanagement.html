@@ -19,6 +19,7 @@
                     <th>Status</th>
                     <th>Assigned students</th>
                     <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,10 +29,12 @@
                     <td>{{employee.email}}</td>
                     <td>{{roleName}}</td>
                     <td>
-                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass"  class="btn btn-info" type="button">btn-danger</button>
+                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-info"
+                                type="button">btn-danger
+                        </button>
                     </td>
-                    <td >
-                        <button  class="btn btn-info" ng-click="showAssigned(employee)"  type="button" data-toggle="modal"
+                    <td>
+                        <button class="btn btn-info" ng-click="showAssigned(employee)" type="button" data-toggle="modal"
                                 data-target="#assignedList">Show list
                         </button>
                     </td>
@@ -41,13 +44,45 @@
                             <span class="glyphicon glyphicon-edit"></span>
                         </button>
                     </td>
+                    <td>
+                        <button data-toggle="modal"
+                                data-target="#deleteEmployee" ng-click="getEmployee(employee)" class="btn btn-danger"
+                                type="button">Delete
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <ul class="list-inline">
+                            <li ng-repeat="item in range">
+                                <button ng-click="showAllEmployees(item.index)"
+                                        class="btn btn-primary" type="button">{{item.index}}
+                                </button>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
 </div>
 
+<div id="deleteEmployee" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button ng-click="deleteEmployee(employee)" data-dismiss="modal" class="btn btn-link">Yes</button>
+                <button class="btn btn-link" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- modal dialog -->
 <div id="editEmployee" class="modal fade">
@@ -79,8 +114,10 @@
                         <tr>
                             <td> Role</td>
                             <td>
-                                <input type="checkbox" id="techEdit" ng-model="techEdit" value="option1"> Tech </input>
-                                <input type="checkbox" id="softEdit" ng-model="softEdit" value="option2"> Soft </input>
+                                <input type="checkbox" id="techEdit" ng-model="techEdit" value="option1">
+                                Tech </input>
+                                <input type="checkbox" id="softEdit" ng-model="softEdit" value="option2">
+                                Soft </input>
                                 <input type="checkbox" id="adminEdit" ng-model="adminEdit" value="option3">
                                 Administrator </input>
                             </td>
@@ -89,7 +126,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges" data-dismiss="modal">Save changes
+                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges"
+                        data-dismiss="modal">Save changes
                 </button>
             </div>
         </div>
@@ -125,11 +163,12 @@
                         <tr>
                             <td> Role</td>
                             <td>
-                                 
                                 <div ng-repeat="employee in employees">
-                                       <input id="{{employee.roleName}}" type="checkbox" value="{{employee.roleName}}"
+                                       <input id="{{employee.roleName}}" type="checkbox"
+                                              value="{{employee.roleName}}"
+                                              ng-click="toggleSelection(employee.roleName)"
                                               ng-checked="selection.indexOf(employee.roleName) > -1"
-                                              ng-click="toggleSelection(employee.roleName)"/>
+                                />
                                        {{employee.roleName}}
                                 </div>
                             </td>

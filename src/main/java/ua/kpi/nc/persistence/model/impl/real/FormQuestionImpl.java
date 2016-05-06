@@ -17,31 +17,27 @@ public class FormQuestionImpl implements FormQuestion {
     private QuestionType questionType;
     private boolean enable;
     private boolean mandatory;
-    private List<FormAnswer> answers;
     private List<Role> roles;
     private List<FormAnswerVariant> formAnswerVariants;
 
     public FormQuestionImpl() {
     }
 
-    public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory,
-                            List<FormAnswer> answers, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
+    public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
         this.id = id;
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
-        this.answers = answers;
         this.roles = roles;
         this.formAnswerVariants = formAnswerVariants;
     }
 
-    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory, List<FormAnswer> answers, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
+    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
-        this.answers = answers;
         this.roles = roles;
         this.formAnswerVariants = formAnswerVariants;
     }
@@ -53,16 +49,6 @@ public class FormQuestionImpl implements FormQuestion {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public List<FormAnswer> getAnswers() {
-        return answers;
-    }
-
-    @Override
-    public void setAnswers(List<FormAnswer> answers) {
-        this.answers = answers;
     }
 
     @Override
@@ -129,9 +115,6 @@ public class FormQuestionImpl implements FormQuestion {
                 .append(id, that.id)
                 .append(title, that.title)
                 .append(questionType, that.questionType)
-                .append(answers, that.answers)
-                .append(roles, that.roles)
-                .append(formAnswerVariants, that.formAnswerVariants)
                 .isEquals();
     }
 
@@ -143,9 +126,6 @@ public class FormQuestionImpl implements FormQuestion {
                 .append(questionType)
                 .append(enable)
                 .append(mandatory)
-                .append(answers)
-                .append(roles)
-                .append(formAnswerVariants)
                 .toHashCode();
     }
 
@@ -157,7 +137,6 @@ public class FormQuestionImpl implements FormQuestion {
                 ", questionType=" + questionType +
                 ", enable=" + enable +
                 ", mandatory=" + mandatory +
-                ", answers=" + answers +
                 ", formAnswerVariants=" + formAnswerVariants +
                 '}';
     }

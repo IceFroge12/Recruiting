@@ -17,8 +17,10 @@ public interface FormAnswerDao {
 	Long insertFormAnswer(FormAnswer formAnswer, Interview interview, FormQuestion question,
 						  FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
 
+	Long insertBlankFormAnswerForApplicationForm(FormAnswer formAnswer);
+
 	Long insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
-											FormAnswerVariant answerVariant, ApplicationForm applicationForm, Connection connection);
+											 ApplicationForm applicationForm, Connection connection);
 
 	Long insertFormAnswerForApplicationForm(FormAnswer formAnswer);
 
@@ -28,5 +30,7 @@ public interface FormAnswerDao {
 	int updateFormAnswer(FormAnswer formAnswer);
 
 	int deleteFormAnswer(FormAnswer formAnswer);
+
+	List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question);
 
 }

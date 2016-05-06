@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,7 +31,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
-    private RoleDao roleDao = DaoFactory.getRoleDao();
+    private static final int ROLE_STUDENT = 3;
 
     private ResultSetExtractor<User> extractor = resultSet -> {
         User user = new UserImpl();
@@ -95,17 +96,24 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "  JOIN \"user\" us on (us.id = i.id_interviewer) WHERE  us.id = ?;";
 
     private static final String SQL_GET_ALL_STUDENTS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
-            "u.password,u.confirm_token,u.is_active, u.registration_date, r.role\n" +
+            "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "  INNER JOIN role r ON ur.id_role = r.id\n" +
-            "WHERE r.role = 'ROLE_STUDENT'\n";
+            "WHERE ur.id_role = " + ROLE_STUDENT;
 
     private static final String SQL_GET_ALL_EMPLOYEES = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
             "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "INNER JOIN role r ON ur.id_role = r.id\n" +
-            "WHERE r.role <> 'ROLE_STUDENT';";
+            "WHERE ur.id_role <>" + ROLE_STUDENT;
 
+    private static final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
+            "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role <> " + ROLE_STUDENT + " ORDER BY u.email OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY";
+
+    private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
+            "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY u.email OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY";
 
     @Override
     public User getByID(Long id) {
@@ -206,6 +214,19 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         log.info("Get all Students");
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
     }
+    @Override
+    public List<User> getStudentsFromToRows(Long fromRows) {
+        log.info("Get Students From To Rows");
+        Long offsetRows = fromRows;
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_STUDENTS_FOR_ROWS, extractor,offsetRows);
+    }
+
+    @Override
+    public List<User> getEmployeesFromToRows(Long fromRows) {
+        log.info("Get Employees From To Rows");
+        Long offsetRows = fromRows;
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_EMPLOYEES_FOR_ROWS, extractor,offsetRows);
+    }
 
     @Override
     public Set<User> getAllEmploees() {
@@ -243,4 +264,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }, userID);
     }
 
+    @Override
+    public Long getEmployeeCount() {
+        return new Long(String.valueOf(getAllEmploees().size()));
+    }
+
+    @Override
+    public Long getStudentCount() {
+        return new Long(String.valueOf(getAllStudents().size()));
+    }
 }

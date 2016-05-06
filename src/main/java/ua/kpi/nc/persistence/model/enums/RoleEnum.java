@@ -7,7 +7,7 @@ import ua.kpi.nc.persistence.model.User;
  * Created by dima on 26.04.16.
  */
 public enum RoleEnum {
-    ADMIN, STUDENT, SOFT, TECH;
+    ROLE_ADMIN, ROLE_STUDENT, ROLE_SOFT, ROLE_TECH;
 
 
     public UserAuthority asAuthorityFor(final User user) {
@@ -20,18 +20,18 @@ public enum RoleEnum {
     public static RoleEnum valueOf(final UserAuthority authority) {
         switch (authority.getAuthority()) {
             case "ROLE_ADMIN":
-                return ADMIN;
+                return ROLE_ADMIN;
             case "ROLE_STUDENT":
-                return STUDENT;
+                return ROLE_STUDENT;
         }
         throw new IllegalArgumentException("No role defined for user: " + authority.getAuthority());
     }
 
     public static String valueOf(RoleEnum role){
         switch (role) {
-            case ADMIN:
+            case ROLE_ADMIN:
                 return "ROLE_ADMIN";
-            case STUDENT:
+            case ROLE_STUDENT:
                 return "ROLE_STUDENT";
         }
         throw new IllegalArgumentException("No role defined for");

@@ -3,20 +3,30 @@
  */
 function staffManagementController($scope, staffManagementService) {
 
-    staffManagementService.showAllEmployees().then(function success(data) {
-        var roleName = new String();
+    staffManagementService.showAllEmployees(1).success(function (data) {
         $scope.allEmployee = data;
-        console.log(data);
-        angular.forEach(data, function (value, key) {
-            angular.forEach(value.roles, function (item, i) {
-                roleName += " " + item.roleName + " ";
-                $scope.roleName = roleName;
-            });
-            roleName = new String();
-        });
     }, function error() {
         console.log("error");
     });
+
+    staffManagementService.getCountOfEmployee().success(function (data){
+        var itemsByPage = 9;
+        var pages = Math.ceil(data / itemsByPage);
+
+        $scope.range = [];
+        for (var i = 1; i <= pages; i++) {
+            $scope.range.push({index:i});
+        };
+        console.log($scope.range);
+    })
+
+    $scope.showAllEmployees = function showAllEmployees(pageNum){
+        staffManagementService.showAllEmployees(pageNum).success(function (data) {
+            $scope.allEmployee = data;
+        }, function error() {
+            console.log("error");
+        });
+    }
 
     $scope.employees =
         [{roleName: 'ADMIN'},
@@ -34,7 +44,6 @@ function staffManagementController($scope, staffManagementService) {
             $scope.selection.push({roleName: employeeName});
         }
         console.log($scope.selection);
-
     };
 
     $scope.addEmployee = function () {
@@ -52,22 +61,22 @@ function staffManagementController($scope, staffManagementService) {
         $scope.secondNameEdit = employee.secondName;
         $scope.lastNameEdit = employee.lastName;
         console.log(employee.roles);
-        // angular.forEach(employee.roles, function (item, i) {
-        //     // if(item.roleName=="ADMIN"){
-        //     //     $scope.adminEdit = true;
-        //     //     editRoles.push({roleName: item.roleName});
-        //     // }
-        //     // if(item.roleName=="SOFT"){
-        //     //     $scope.softEdit = true
-        //     //     editRoles.push({roleName: item.roleName});
-        //     // }
-        //     // if(item.roleName=="TECH"){
-        //     //     $scope.techEdit = true
-        //     //     editRoles.push({roleName: item.roleName});
-        //     // }
-        //     //TODO change logic
-        // });
-        editRoles.push({roleName: "ADMIN"});
+        angular.forEach(employee.roles, function (item, i) {
+            if(item.roleName=="ADMIN"){
+                $scope.adminEdit = true;
+                editRoles.push({roleName: item.roleName});
+            }
+            if(item.roleName=="SOFT"){
+                $scope.softEdit = true;
+                editRoles.push({roleName: item.roleName});
+            }
+            if(item.roleName=="TECH"){
+                $scope.techEdit = true;
+                editRoles.push({roleName: item.roleName});
+            }
+            //TODO change logic
+        });
+        // editRoles.push({roleName: "ADMIN"});
     };
 
     $scope.editEmployee = function () {
@@ -77,11 +86,9 @@ function staffManagementController($scope, staffManagementService) {
 
 
     $scope.changeEmployeeStatus = function (employee) {
-     staffManagementService.changeEmployeeStatus(employee.email).success(function(data) {
-         console.log(data);
-     });
-
-
+        staffManagementService.changeEmployeeStatus(employee.email).success(function (data) {
+            console.log(data);
+        });
 
         console.log($scope.dat);
         if ($scope.myClass === "btn-danger")
@@ -92,11 +99,18 @@ function staffManagementController($scope, staffManagementService) {
 
     $scope.showAssigned = function (employee) {
         staffManagementService.showAssigned(employee.email);
+    };
+    var currentEmployee;
+    $scope.getEmployee = function (employee) {
+        currentEmployee = employee;
+    };
 
-    }
-
+    $scope.deleteEmployee = function () {
+        console.log(currentEmployee)
+        staffManagementService.deleteEmployee(currentEmployee.email);
+    };
 
 }
 
-angular.module('appStaffManagement')
-    .controller('staffManagementController', ['$scope', 'staffManagementService', staffManagementController]);
+    angular.module('appStaffManagement')
+        .controller('staffManagementController', ['$scope', 'staffManagementService', staffManagementController]);

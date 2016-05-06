@@ -53,4 +53,6 @@ public interface FormAnswerVariantService {
      */
     FormAnswerVariant getAnswerVariantById(Long id);
 
+    FormAnswerVariant getAnswerVariantByTitleAndQuestion(String title, FormQuestion question);
+    
 }
