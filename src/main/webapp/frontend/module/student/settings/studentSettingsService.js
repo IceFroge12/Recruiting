@@ -7,6 +7,17 @@ function studentSettingsService(http) {
 
     var service = {};
 
+    service.changePassword = function (oldPassword, newPassword) {
+
+        http({
+            method : 'POST',
+            url : '/changepassword',
+            params : {oldPassword:oldPassword, newPassword:newPassword}
+        }).success(function (data, status, headers) {
+            return data;
+        })
+    };
+
     return service;
 }
 

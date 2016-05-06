@@ -12,6 +12,7 @@ function formSettingsController($scope,$sce, formAppService) {
             $scope.variants.push(item.variants);
         });
     });
+    
     $scope.types = ["input","checkbox","radio","select"];
     $scope.roles = ["ROLE_ADMIN","ROLE_TECH","ROLE_STUDENT"];
     $scope.sce = $sce;
@@ -50,8 +51,6 @@ function formSettingsController($scope,$sce, formAppService) {
         console.log(selectedValue);
         console.log(selectActiveValue);
         console.log(selectRoleValue);
-        
-
     };
 
 
