@@ -82,7 +82,7 @@
                        <span ng-repeat="variant in question.variants track by $index">
                            <p>
                                <input type="radio" ng-model="question.answers[0].answer" name="question.questionTitle"
-                                      value="{{$index}}"> {{variant.variant}}
+                                      ng-value="variant.variant"> {{variant.variant}} {{question}}
                            </p>
                        </span>
                     </td>
