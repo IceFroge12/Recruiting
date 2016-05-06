@@ -29,7 +29,9 @@ angular.module('app', [
         'appRegistration',
         'appMenuMain',
         'appEducationNC',
-        'appGetToCourses'
+        'appGetToCourses',
+        'appRecoverRequestPage',
+        'appRecoverPassword'
     ])
 
     //     .factory('TokenStorage', function () {
@@ -186,6 +188,17 @@ angular.module('app', [
                 controller: 'registrationController'
             })
 
+            //recoverRequestPassword
+            .when('/recoverPasswordRequest', {
+                templateUrl: 'module/home/recoverRequestPage/recoverRequestPage.html',
+                controller: 'recoverRequestPageController'
+            })
+
+            .when('/recoverPasswordPage', {
+                templateUrl: 'module/home/recoverPasswordPage/recoverPasswordPage.html',
+                controller: 'recoverPasswordPageController'
+            })
+            
             .otherwise({
                 redirectTo: '/'
             });
