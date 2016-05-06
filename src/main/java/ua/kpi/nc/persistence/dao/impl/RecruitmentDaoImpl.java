@@ -84,7 +84,10 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
             "FROM \"recruitment\" r\n" +
             "WHERE r.end_date > CURRENT_DATE;";
-    
+
+    private static final String SQL_GET_REGISTERED_COUNT = "SELECT COUNT(*) FROM \"application_form\" + apl\n" +
+            "WHERE apl.id_recruitment=?";
+
     @Override
     public Recruitment getRecruitmentById(Long id) {
         log.info("Looking for recruitment with id = {}", id);
@@ -131,9 +134,14 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
-	@Override
-	public Recruitment getCurrentRecruitmnet() {
-		log.trace("Getting current recruitment");
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor);
-	}
+    @Override
+    public Recruitment getCurrentRecruitmnet() {
+        log.trace("Getting current recruitment");
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor);
+    }
+
+    private Long getRegisteredNumbers(Long recruitmentId) {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_REGISTERED_COUNT, resultSet -> resultSet.getLong(1), recruitmentId);
+    }
+
 }
