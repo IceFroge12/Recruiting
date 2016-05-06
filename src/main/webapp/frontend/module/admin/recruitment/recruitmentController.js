@@ -6,4 +6,4 @@ function recruitmentController($scope) {
 }
 
 angular.module('appRecruitment')
-    .controller('recruitmentController', ['$scope', recruitmentController]);
+    .controller('recruitmentController', ['$scope', 'recruitmentService', recruitmentController]);

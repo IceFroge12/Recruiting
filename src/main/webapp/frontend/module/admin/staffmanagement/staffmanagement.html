@@ -63,8 +63,8 @@
                 <button class="close" type="button" data-dismiss="modal"><span
                         class="glyphicon glyphicon-remove"></span></button>
                 <h4 class="modal-title">Are you sure?</h4>
-                <button ng-click="deleteEmployee(employee)" class="btn btn-link">Yes</button>
-                <button class="btn btn-link">NO</button>
+                <button ng-click="deleteEmployee(employee)" data-dismiss="modal" class="btn btn-link">Yes</button>
+                <button class="btn btn-link" data-dismiss="modal">NO</button>
             </div>
         </div>
     </div>
@@ -149,12 +149,12 @@
                         <tr>
                             <td> Role</td>
                             <td>
-                                 
                                 <div ng-repeat="employee in employees">
                                        <input id="{{employee.roleName}}" type="checkbox"
                                               value="{{employee.roleName}}"
+                                              ng-click="toggleSelection(employee.roleName)"
                                               ng-checked="selection.indexOf(employee.roleName) > -1"
-                                              ng-click="toggleSelection(employee.roleName)"/>
+                                    />
                                        {{employee.roleName}}
                                 </div>
                             </td>

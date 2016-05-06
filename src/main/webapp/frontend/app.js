@@ -111,7 +111,11 @@ angular.module('app', [
                 templateUrl: 'module/admin/report/report.html',
                 controller: 'reportController'
             })
-
+            .when('/admin/recruitment', {
+                templateUrl: 'module/admin/recruitment/recruitment.html',
+                controller: 'recruitmentController'
+            })
+                
             //STAFF
             .when('/staff/main', {
                 templateUrl: 'module/staff/main/staffMain.html',

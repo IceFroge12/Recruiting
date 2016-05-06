@@ -34,7 +34,6 @@ function staffManagementController($scope, staffManagementService ) {
             $scope.selection.push({roleName: employeeName});
         }
         console.log($scope.selection);
-
     };
 
     $scope.addEmployee = function () {
@@ -91,14 +90,14 @@ function staffManagementController($scope, staffManagementService ) {
     $scope.showAssigned = function (employee) {
         staffManagementService.showAssigned(employee.email);
     };
-
+    var currentEmployee;
     $scope.getEmployee = function (employee) {
-        var employee = employee;
+        currentEmployee = employee;
     };
 
     $scope.deleteEmployee = function () {
-        
-        staffManagementService.deleteEmployee(employee.email);
+        console.log(currentEmployee)
+        staffManagementService.deleteEmployee(currentEmployee.email);
     };
 
 }
