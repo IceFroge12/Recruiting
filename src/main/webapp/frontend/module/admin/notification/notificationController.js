@@ -29,8 +29,8 @@ function notificationController($scope, http, notificationService) {
         console.log($scope.emailTemplate.title);
         $scope.emailTemplate.title = $scope.topic;
         $scope.emailTemplate.text =  $scope.textNotification;
-        
         console.log($scope.emailTemplate);
+        notificationService.saveNotification($scope.emailTemplate);
     }
 
 }

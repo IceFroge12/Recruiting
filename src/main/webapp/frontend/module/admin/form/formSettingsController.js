@@ -13,7 +13,7 @@ function formSettingsController($scope,$sce, formAppService) {
         });
     });
     $scope.types = ["input","checkbox","radio","select"];
-    $scope.roles = ["ADMIN","TECH","SOFT"];
+    $scope.roles = ["ROLE_ADMIN","ROLE_TECH","ROLE_STUDENT"];
     $scope.sce = $sce;
 
     var selectedValue;
