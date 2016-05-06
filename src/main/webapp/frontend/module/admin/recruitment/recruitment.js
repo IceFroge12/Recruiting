@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appRecruitment', []);
+angular.module('appRecruitment', ['angularjs-datetime-picker']);

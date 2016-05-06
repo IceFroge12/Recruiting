@@ -55,7 +55,7 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
-    public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
+    public void addEmployee(@RequestBody UserDto userDto){
 
         System.out.println(userDto.toString());
         List<RoleImpl> roles = userDto.getRoleList();

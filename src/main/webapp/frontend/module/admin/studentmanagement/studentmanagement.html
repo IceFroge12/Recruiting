@@ -14,7 +14,6 @@
             <div class="col-md-5">
                 <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
                 <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
-                <button type="button" class="btn btn-info btn-sm search-element" disabled>End of recruitment</button>
             </div>
             <form class="form-search inline-display col-md-2 col-md-offset-5">
                 <button class="btn btn-sm btn-info search-element" type="button" data-toggle="modal"
@@ -26,7 +25,6 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Photo</th>
                     <th>Name</th>
                     <th>Status</th>
                     <th>University</th>
@@ -34,7 +32,6 @@
                 </tr>
                 <tr ng-repeat="student in students | filter:searchText ">
                     <td>{{student.ID}}</td>
-                    <td>{{student.photoScope}}</td>
                     <td>{{student.user.firstName +" "+ student.user.lastName}}</td>
                     <td><select>
                         <option selected>{{student.status}}</option>
@@ -102,15 +99,6 @@
                                 <input type="checkbox" name="course" value="4">4
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                etc
-                            </td>
-                            <td>
-                                etc
-                            </td>
-                        </tr>
-
                     </table>
                 </div>
             </div>

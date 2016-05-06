@@ -84,6 +84,15 @@ public class RecruitmentImpl implements Recruitment {
         this.numberOfDays = numberOfDays;
     }
 
+    public RecruitmentImpl(String name, int maxAdvancedGroup, int maxGeneralGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline) {
+        this.name = name;
+        this.maxGeneralGroup = maxGeneralGroup;
+        this.maxAdvancedGroup = maxAdvancedGroup;
+        this.registrationDeadline = registrationDeadline;
+        this.scheduleChoicesDeadline = scheduleChoicesDeadline;
+    }
+
+
     @Override
     public Long getId() {
         return id;

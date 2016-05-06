@@ -6,11 +6,17 @@
             <form>
                 <table class="table-cells">
                     <tr>
+                        <td>
+                            <input ng-model="recruitmentName" class="input" type="text">
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Registration deadline</td>
                         <td>
                             <div class="form-group">
-                                <div class="input-group date" id="datetimepicker1">
-                                    <input type="text" class="form-control"/>
+                                <div class="input-group date">
+                                    <input  class="form-control" ng-model="date1" datetime-picker
+                                           date-format="yyyy-MM-dd HH:mm:ss"/>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
@@ -21,31 +27,33 @@
                     <tr>
                         <td>Choosing schedule time deadline</td>
                         <td>
-                            <div class="form-group">
-                                <div class="input-group date" id="datetimepicker2">
-                                    <input type="text" class="form-control"/>
+                        <div class="form-group">
+                            <div class="input-group date">
+                                <input class="form-control" ng-model="date2" datetime-picker
+                                       date-format="yyyy-MM-dd HH:mm:ss"/>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
-                                </div>
                             </div>
+                        </div>
                         </td>
                     </tr>
                     <tr>
                         <td>Number of students to general group</td>
                         <td>
-                            <input class="input-nums" type="text">
+                            <input ng-model="general" class="input-nums" type="text">
                         </td>
                     </tr>
                     <br>
                     <tr>
                         <td>Number of students to advanced group</td>
                         <td>
-                            <input class="input-nums" type="text">
+                            <input ng-model="advanced" class="input-nums" type="text">
                         </td>
                     </tr>
                 </table>
-                <button type="submit" class="btn btn-sm btn-info search-element col-md-1">Save</button>
+                <button type="button" class="btn btn-info btn-sm search-element" disabled>End of recruitment</button>
+                <button ng-click="save()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Save</button>
             </form>
         </div>
     </div>
