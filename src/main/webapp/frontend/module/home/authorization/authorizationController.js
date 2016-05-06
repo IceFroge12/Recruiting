@@ -7,6 +7,7 @@
 function authorizationController($scope, TokenStorage, $http, $rootScope, $location) {
     $rootScope.authenticated = false;
 
+    $scope.authsuccess = false;
 
     $scope.login = function () {
         $http({
@@ -21,6 +22,9 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             $location.path(data.redirectURL);
         }).error(function (data, status, headers) {
             console.log(data);
+            if(status===401){
+                $scope.authsuccess=true;
+            }
         });
     };
     
