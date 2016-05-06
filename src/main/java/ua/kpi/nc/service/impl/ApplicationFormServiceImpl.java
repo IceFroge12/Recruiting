@@ -59,7 +59,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 			FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
 			for (FormAnswer formAnswer : applicationForm.getAnswers()) {
 				formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
-						formAnswer.getFormAnswerVariant(), applicationForm, connection);
+						 applicationForm, connection);
 			}
 			connection.commit();
 		} catch (SQLException e) {

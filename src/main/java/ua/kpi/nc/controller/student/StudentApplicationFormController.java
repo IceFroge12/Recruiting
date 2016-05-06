@@ -15,10 +15,14 @@ import ua.kpi.nc.persistence.dto.StudentAnswerDto;
 import ua.kpi.nc.persistence.dto.StudentAppFormQuestionDto;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
+import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.service.*;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,6 +36,8 @@ public class StudentApplicationFormController {
     private UserService userService;
     private FormQuestionService formQuestionService;
     private FormAnswerVariantService formAnswerVariantService;
+    private RoleService roleService;
+    //private User currentUser;
 
     public StudentApplicationFormController() {
         formAnswerService = ServiceFactory.getFormAnswerService();
@@ -39,6 +45,8 @@ public class StudentApplicationFormController {
         userService = ServiceFactory.getUserService();
         formQuestionService =ServiceFactory.getFormQuestionService();
         formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
+        //currentUser = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails();
+        roleService = ServiceFactory.getRoleService();
     }
 
     @RequestMapping(value ="appform", method = RequestMethod.GET)
@@ -47,16 +55,34 @@ public class StudentApplicationFormController {
         return modelAndView;
     }
 
-//    @RequestMapping(value = "applicationForm", method = RequestMethod.GET)
-//    public ModelAndView studentpage() {
-//        ModelAndView modelAndView = new ModelAndView("studentAppl");
-//        return modelAndView;
-//    }
 
     @RequestMapping(value = "appform", method = RequestMethod.POST)
     @ResponseBody
     public String getApplicationForm() {
-        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(1L);
+        if(applicationFormService.getByUserId(135L).isEmpty()){
+            User user = userService.getUserByID(135L);
+            ApplicationForm applicationForm = new ApplicationFormImpl();
+            List<FormQuestion>  formQuestions = formQuestionService.getByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.STUDENT)));
+            applicationForm.setUser(user);
+            applicationForm.setQuestions(formQuestions);
+            List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
+            System.out.println(applicationForm);
+            for(FormQuestion formQuestion :formQuestions){
+                FormAnswer formAnswer = new FormAnswerImpl();
+                formAnswer.setFormQuestion(formQuestion);
+                formAnswer.setApplicationForm(applicationForm);
+                formAnswers.add(formAnswer);
+                //formAnswerService.insertBlankFormAnswerForApplicationForm(formAnswer);
+                System.out.println(formAnswer.toString());
+            }
+            applicationForm.setAnswers(formAnswers);
+            System.out.println(applicationForm);
+            System.out.println("!!!!!!");
+            applicationFormService.insertApplicationForm(applicationForm);
+            System.out.println(applicationForm);
+        }
+
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(135L);
         Gson applicationFormGson = GsonFactory.getApplicationFormGson();
         String jsonResult = applicationFormGson.toJson(applicationForm);
         System.out.println(jsonResult);
@@ -66,14 +92,16 @@ public class StudentApplicationFormController {
     @RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     @ResponseBody
     public void addUsername(@RequestBody ApplicationFormDto applicationFormDto) throws MessagingException {
+        User currentUser = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails();
         System.out.println(applicationFormDto.getId());
         System.out.println(applicationFormDto.getStatus());
-        for (StudentAppFormQuestionDto q : applicationFormDto.getQuestions()){
-            System.out.println(q.toString());
-        }
-        System.out.println(applicationFormDto.getUser().toString());
 
-        User user = userService.getUserByID(49L);
+//        for (StudentAppFormQuestionDto q : applicationFormDto.getQuestions()){
+//            System.out.println(q.toString());
+//        }
+//        System.out.println(applicationFormDto.getUser().toString());
+
+        User user = userService.getUserByID(155L);
         user.setLastName(applicationFormDto.getUser().getLastName());
         user.setFirstName(applicationFormDto.getUser().getFirstName());
         user.setSecondName(applicationFormDto.getUser().getSecondName());
@@ -85,38 +113,26 @@ public class StudentApplicationFormController {
             for (StudentAnswerDto answerDto : questionDto.getAnswers()) {
 
 
-
-
                 if(answerDto.getID()==0L){
                     System.out.println(answerDto.toString());
                     FormAnswer formAnswer = new FormAnswerImpl();
                     for(QuestionVariantDto questionVariantDto : questionDto.getVariants()){
-                        System.out.println(questionVariantDto.toString());
                         if(String.valueOf(questionVariantDto.getVariant()).equals(String.valueOf(answerDto.getAnswer()))){
                             FormAnswerVariant formAnswerVariant = formAnswerVariantService.getAnswerVariantById(questionVariantDto.getId());
-                            //formAnswer.setAnswer(null);
                             formAnswer.setFormAnswerVariant(formAnswerVariant);
-                            System.out.println(formAnswer.toString());
                         }
                     }
                     formAnswer.setApplicationForm(applicationForm);
                     formAnswer.setFormQuestion(formQuestion);
-                    System.out.println(formAnswer.toString());
                     formAnswerService.insertFormAnswerForApplicationForm(formAnswer);
                 }
-
-             //   }
-
                 else if (Objects.equals(questionDto.getQuestionType(), "input")){
                 FormAnswer formAnswer = formAnswerService.getFormAnswerByID(answerDto.getID());
                 formAnswer.setAnswer(answerDto.getAnswer());
                 formAnswerService.updateFormAnswer(formAnswer);
                 }
-
             }
-
         }
-        System.out.println("EENDDDDDDDD");
 
     }
 }

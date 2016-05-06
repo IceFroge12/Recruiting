@@ -18,7 +18,7 @@ function appFormService(http) {
             url : '/student/saveApplicationForm',
             contentType: 'application/json',
             data : {
-                id : data.id,
+               // id : data.id,
                 status : data.status,
                 user : data.user,
                 questions : data.questions
