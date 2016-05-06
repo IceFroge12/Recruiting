@@ -37,6 +37,11 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     }
 
     @Override
+    public Long insertBlankFormAnswerForApplicationForm(FormAnswer formAnswer) {
+        return formAnswerDao.insertBlankFormAnswerForApplicationForm(formAnswer);
+    }
+
+    @Override
     public int updateFormAnswer(FormAnswer formAnswer) {
         return formAnswerDao.updateFormAnswer(formAnswer);
     }

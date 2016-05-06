@@ -30,7 +30,6 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
         formQuestion.setMandatory(resultSet.getBoolean(MANDATORY_COL));
         formQuestion.setRoles(getRoles(resultSet.getLong(ID_COL)));
         formQuestion.setTitle(resultSet.getString(TITLE_COL));
-        formQuestion.setAnswers(getAnswers(resultSet.getLong(ID_COL)));
         formQuestion.setQuestionType(new QuestionType(resultSet.getLong(ID_QUESTION_TYPE_COL),
                 resultSet.getString(QuestionTypeDaoImpl.TYPE_TITLE_COL)));
         formQuestion.setFormAnswerVariants(getAnswerVariants(resultSet.getLong(ID_COL)));
@@ -147,18 +146,6 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
                         roles.add(new RoleProxy(resultSet.getLong(ROLE_MAP_TABLE_ROLE_ID)));
                     } while (resultSet.next());
                     return roles;
-                }, formQuestionID);
-    }
-
-    private List<FormAnswer> getAnswers(Long formQuestionID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT fa." + FormAnswerDaoImpl.ID_COL + " FROM "
-                        + FormAnswerDaoImpl.TABLE_NAME + " fa\n" + "WHERE fa." + FormAnswerDaoImpl.ID_QUESTION_COL + " = ?;",
-                resultSet -> {
-                    List<FormAnswer> answers = new ArrayList<>();
-                    do {
-                        answers.add(new FormAnswerProxy(resultSet.getLong(FormAnswerDaoImpl.ID_COL)));
-                    } while (resultSet.next());
-                    return answers;
                 }, formQuestionID);
     }
 
