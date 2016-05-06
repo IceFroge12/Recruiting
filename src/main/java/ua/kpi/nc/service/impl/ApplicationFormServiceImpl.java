@@ -81,4 +81,14 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 		return applicationFormDao.updateApplicationForm(applicationForm);
 	}
 
+	@Override
+	public ApplicationForm getCurrentApplicationFormByUserId(Long id) {
+		return applicationFormDao.getCurrentApplicationFormByUserId(id);
+	}
+
+	@Override
+	public ApplicationForm getLastApplicationFormByUserId(Long id) {
+		return applicationFormDao.getLastApplicationFormByUserId(id);
+	}
+
 }

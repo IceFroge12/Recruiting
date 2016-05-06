@@ -1,5 +1,6 @@
 package ua.kpi.nc.controller.student;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class RegistrationController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> registerNewStudent(@RequestBody UserDto user) throws MessagingException {
+    public ResponseEntity<UserDto> registerNewStudent(@RequestBody UserDto user) throws MessagingException {
         if (userService.isExist(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } else {
@@ -73,7 +74,8 @@ public class RegistrationController {
             String subject = "Please confirm your account NC KPI";
 
             senderService.send(user.getEmail(), subject, text);
-            return ResponseEntity.ok(null);
+
+            return ResponseEntity.ok(new UserDto(user.getEmail(), user.getFirstName()));
         }
     }
 
@@ -88,6 +90,6 @@ public class RegistrationController {
         user.setActive(true);
         userService.updateUser(user);
         //TODO redirect on some URL
-        return ResponseEntity.ok("jiwefjwefijwef");
+        return ResponseEntity.ok("");
     }
 }

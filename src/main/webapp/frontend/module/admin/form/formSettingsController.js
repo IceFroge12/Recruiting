@@ -2,7 +2,7 @@
  * Created by dima on 30.04.16.
  */
 
-function formAppController($scope,$sce, formAppService) {
+function formSettingsController($scope,$sce, formAppService) {
     formAppService.getAllQuestion().then(function success(data) {
         console.log(data);
         $scope.questions = data;
@@ -60,4 +60,4 @@ function formAppController($scope,$sce, formAppService) {
 
 
 angular.module('appAdminForm')
-    .controller('formAppController', ['$scope', '$sce','formAppService', formAppController]);
+    .controller('formSettingsController', ['$scope', '$sce','formSettingsService', formSettingsController]);

@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * Created by dima on 27.04.16.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
     private Long id;
@@ -21,6 +23,11 @@ public class UserDto {
 
     public UserDto() {
 
+    }
+
+    public UserDto(String email, String firstName) {
+        this.email = email;
+        this.firstName = firstName;
     }
 
     public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {

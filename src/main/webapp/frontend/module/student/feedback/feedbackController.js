@@ -1,4 +1,4 @@
-function feedbackController($scope, feedback) {
+function feedbackController($scope, feedbackService, feedback) {
     var self = this;
     self.appForm_id = null;
     self.feedback = null;

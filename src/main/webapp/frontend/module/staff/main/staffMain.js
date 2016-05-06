@@ -4,4 +4,10 @@
 
 'use strict';
 
-angular.module('appStaffMain', []);
+angular.module('appStaffMain', [])
+    .directive('appStaffMenu', function () {
+        return {
+            templateUrl: 'module/staff/menu/staffMenu.html',
+            controller: 'staffMenuController'
+        }
+    });

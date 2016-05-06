@@ -9,7 +9,7 @@
 // angular.module('appFeedback')
 //     .service('feedbackService', ['$http', feedbackService]);
 
-angular.module('appFeedback',[]).factory('feedbackService',['$http', '$q', function($http, $q){
+angular.module('appFeedback').factory('feedbackService',['$http', '$q', function($http, $q){
     return {
         setFeedback :function(id, feedback){
             return('/student/feedback/'+id, feedback).then(function(response){
