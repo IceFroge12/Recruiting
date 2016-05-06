@@ -5,6 +5,7 @@ import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,6 +40,10 @@ public interface UserDao {
     Set<User> getAssignedStudents(Long id);
 
     Set<User> getAllStudents();
+
+    List<User> getStudentsFromToRows(Long fromRows);
+
+    List<User> getEmployeesFromToRows(Long fromRows);
 
     Set<User> getAllEmploees();
 

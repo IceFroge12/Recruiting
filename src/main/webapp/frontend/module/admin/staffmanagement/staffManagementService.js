@@ -7,10 +7,20 @@ function staffManagementService(http) {
 
     var service = {};
     
-    service.showAllEmployees = function () {
-        return http.post('/admin/showAllEmployee').then(function (response) {
-            return response.data;
-        });
+    service.showAllEmployees = function (pageNum) {
+        return http({
+            method : 'GET',
+            url : '/admin/showAllEmployees',
+            params : {pageNum:pageNum}
+        })
+
+    };
+
+    service.getCountOfEmployee = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getCountOfEmployee',
+        })
     };
 
     // service.getEmployeeRoles = function(employee){

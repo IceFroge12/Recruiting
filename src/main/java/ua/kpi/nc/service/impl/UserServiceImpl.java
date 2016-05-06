@@ -111,6 +111,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getStudentsFromToRows(Long fromRow) {
+        return userDao.getStudentsFromToRows(fromRow);
+    }
+
+    @Override
+    public List<User> getEmployeesFromToRows(Long fromRow){
+        return userDao.getEmployeesFromToRows(fromRow);
+    }
+    @Override
     public Set<User> getAllEmploees() {
         return userDao.getAllEmploees();
     }

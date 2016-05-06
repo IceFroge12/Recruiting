@@ -3,26 +3,30 @@
  */
 function staffManagementController($scope, staffManagementService) {
 
-    staffManagementService.showAllEmployees().then(function success(data) {
-        var roleName = new String();
+    staffManagementService.showAllEmployees(1).success(function (data) {
         $scope.allEmployee = data;
-        console.log(data);
-        angular.forEach(data, function (value, key) {
-            angular.forEach(value.roles, function (item, i) {
-                roleName += " " + item.roleName + " ";
-                $scope.roleName = roleName;
-            });
-            roleName = new String();
-        });
     }, function error() {
         console.log("error");
     });
 
-   // staffManagementService.getEmployeeRoles(employee).then(function success(data){
-   //     $scope.roles=data;
-   // })
+    staffManagementService.getCountOfEmployee().success(function (data){
+        var itemsByPage = 9;
+        var pages = Math.ceil(data / itemsByPage);
 
+        $scope.range = [];
+        for (var i = 1; i <= pages; i++) {
+            $scope.range.push({index:i});
+        };
+        console.log($scope.range);
+    })
 
+    $scope.showAllEmployees = function showAllEmployees(pageNum){
+        staffManagementService.showAllEmployees(pageNum).success(function (data) {
+            $scope.allEmployee = data;
+        }, function error() {
+            console.log("error");
+        });
+    }
 
     $scope.employees =
         [{roleName: 'ADMIN'},
