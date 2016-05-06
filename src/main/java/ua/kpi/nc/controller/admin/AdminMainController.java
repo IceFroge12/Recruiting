@@ -28,7 +28,7 @@ public class AdminMainController {
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     @ResponseBody
     public Recruitment getRecruitmentData() {
-        Recruitment recruitment = recruitmentService.getRecruitmentById(1L);//TODO change method
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();//TODO change method
         System.out.println(recruitment.toString());
         return recruitment;
     }

@@ -18,7 +18,7 @@ function studentManagementController($scope, studentManagementService) {
     });
 
 
-
+    
     function getStudentsStatus() {
 
         $scope.statuses = ['Approved to Job','Approved to General Courses',

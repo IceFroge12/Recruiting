@@ -30,15 +30,16 @@ public class EmailTemplateDaoImpl extends JdbcDaoSupport implements EmailTemplat
 
 	static final String ID_COL = "id";
 	static final String TITLE_COL = "title";
+	static final String N_TITLE_COL = "n_title";
 	static final String TEXT_COL = "text";
-	static final String ID_NOTIFICATION_TYPE_COL = "id_notification_type";
+	static final String ID_NOTIFICATION_TYPE_COL = "id_notification";
 
 	private static final String GET_BY_ID = "SELECT e." + ID_COL + ", e." + TITLE_COL + ", e." + TEXT_COL + ", n.n_"
 			+ TITLE_COL + " " + ", n.id n_id FROM public." + TABLE_NAME + " e, public.notification_type  n "
 			+ "WHERE n.id = e." + ID_NOTIFICATION_TYPE_COL + " and e." + ID_COL + "=?;";
 	private static final String GET_BY_TITLE = "SELECT e." + ID_COL + ", e." + TITLE_COL + ", e." + TEXT_COL + ", n.n_"
 			+ TITLE_COL + " " + ", n.id n_id FROM public." + TABLE_NAME + " e, public.notification_type n  "
-			+ "WHERE n.id = e." + ID_COL + " and e." + TITLE_COL + "=?;";
+			+ "WHERE n.id = e." + ID_COL + " and n." + N_TITLE_COL + "=?;";
 	private static final String GET_BY_NOTIFICATION_TYPE = "SELECT e." + ID_COL + ", e." + TITLE_COL + ", e." + TEXT_COL
 			+ ", n.n_" + TITLE_COL + " " + ", n.id n_id FROM public." + TABLE_NAME + " e, public.notification_type  n "
 			+ "WHERE n.id = e." + ID_COL + " and n.id=?;";

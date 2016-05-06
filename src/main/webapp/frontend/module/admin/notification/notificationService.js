@@ -7,6 +7,34 @@ function notificationService(http) {
 
     var service = {};
 
+    service.getAllNotificationType = function () {
+        return http.post('/admin/getAllNotificationType').then(function (response) {
+            return response.data;
+        });
+    };
+
+    service.showTemplate = function (title) {
+        http({
+            method : 'POST',
+            url : '/admin/showTemplate',
+            params : {title:title}
+        }).success(function (data) {
+            console.log(data);
+            return data;
+        });
+    };
+
+    service.saveNotification = function (emailTemplate) {
+        http({
+            method : 'POST',
+            url : '/admin/changeNotification',
+            data : emailTemplate
+        }).success(function (data) {
+            console.log(data);
+            return data;
+        });
+    };
+
     return service;
 }
 
