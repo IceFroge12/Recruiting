@@ -124,4 +124,14 @@ public class UserServiceImpl implements UserService {
 		String name = auth.getName();
 		return getUserByUsername(name);
 	}
+
+    @Override
+    public Long getAllStudentCount() {
+        return userDao.getStudentCount();
+    }
+
+    @Override
+    public Long getAllEmployeeCount() {
+        return userDao.getEmployeeCount();
+    }
 }

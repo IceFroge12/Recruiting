@@ -106,7 +106,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "INNER JOIN role r ON ur.id_role = r.id\n" +
             "WHERE r.role <> 'ROLE_STUDENT';";
 
-
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
@@ -243,4 +242,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }, userID);
     }
 
+    @Override
+    public Long getEmployeeCount() {
+        return new Long(String.valueOf(getAllEmploees().size()));
+    }
+
+    @Override
+    public Long getStudentCount() {
+        return new Long(String.valueOf(getAllStudents().size()));
+    }
 }
