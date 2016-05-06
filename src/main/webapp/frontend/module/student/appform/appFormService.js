@@ -12,18 +12,20 @@ function appFormService(http) {
     };
 
     service.changeUserName = function (data) {
-        console.log(data);
-        http({
+       var req =  http({
             method : 'POST',
             url : '/student/saveApplicationForm',
             contentType: 'application/json',
             data : {
-               // id : data.id,
                 status : data.status,
                 user : data.user,
                 questions : data.questions
             }
-        })
+        });
+       req.success(function(data) {
+			console.log(data);
+			return data;
+		});
     };
 
     return service;

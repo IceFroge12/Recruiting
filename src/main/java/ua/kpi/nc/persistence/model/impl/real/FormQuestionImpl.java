@@ -115,8 +115,6 @@ public class FormQuestionImpl implements FormQuestion {
                 .append(id, that.id)
                 .append(title, that.title)
                 .append(questionType, that.questionType)
-                .append(roles, that.roles)
-                .append(formAnswerVariants, that.formAnswerVariants)
                 .isEquals();
     }
 
@@ -128,8 +126,6 @@ public class FormQuestionImpl implements FormQuestion {
                 .append(questionType)
                 .append(enable)
                 .append(mandatory)
-                .append(roles)
-                .append(formAnswerVariants)
                 .toHashCode();
     }
 

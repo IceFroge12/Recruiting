@@ -3,6 +3,7 @@ package ua.kpi.nc.service;
 import ua.kpi.nc.persistence.model.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * QuestionForm service
@@ -31,4 +32,7 @@ public interface FormQuestionService {
 	List<FormQuestion> getByRole(Role role);
 
 	List<FormQuestion> getAll();
+	
+	Set<FormQuestion> getByRoleAsSet(Role role);
+	
 }
