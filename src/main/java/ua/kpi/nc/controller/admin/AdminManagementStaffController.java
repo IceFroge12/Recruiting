@@ -46,6 +46,7 @@ public class AdminManagementStaffController {
         for (User user : users) {
             System.out.println(user);
         }
+
         return users;
     }
 
@@ -117,6 +118,15 @@ public class AdminManagementStaffController {
         User user = userService.getUserByUsername(email);
         System.out.println(user);
         userService.deleteUser(user);
+    }
+
+    @RequestMapping(value="/getroles", method = RequestMethod.GET)
+    public String getUserRoles(@RequestBody User user){
+        User emp =userService.getUserByID(user.getId());
+        String roles="";
+        for(Role role:emp.getRoles())roles.concat(role.getRoleName()+" ");
+        System.out.println(roles);
+        return roles;
     }
 
 
