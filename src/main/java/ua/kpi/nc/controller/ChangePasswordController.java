@@ -31,7 +31,7 @@ public class ChangePasswordController {
 
         User user = userService.getUserByUsername(name);
 
-        if (user.getPassword().equals(oldPassword)) {
+        if (passwordEncoderGeneratorService.matches(user.getPassword(),oldPassword)) {
             user.setPassword(passwordEncoderGeneratorService.encode(newPassword));
             userService.updateUser(user);
         }
