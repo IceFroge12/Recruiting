@@ -40,15 +40,19 @@ public class AdminManagementStaffController {
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
 
-    @RequestMapping(value = "showAllEmployee", method = RequestMethod.POST)
-    public Set<User> showAllEmployees() {
-        Set<User> users = userService.getAllEmploees();
-        for (User user : users) {
-            System.out.println(user);
-        }
-
+    @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
+    public List<User> showEmployees(@RequestParam int pageNum) {
+        Long itemsByPage = 9L;
+        Long fromRow = (pageNum - 1) * itemsByPage;
+        List<User> users = userService.getEmployeesFromToRows(fromRow);
         return users;
     }
+
+    @RequestMapping(value = "getCountOfEmployee", method = RequestMethod.GET)
+    public Long getCountOfEmployee() {
+        return userService.getAllEmployeeCount();
+    }
+
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {

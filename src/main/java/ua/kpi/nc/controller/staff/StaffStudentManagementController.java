@@ -82,7 +82,7 @@ public class StaffStudentManagementController {
 		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
 		for (Interview interview : interviews) {
 			for (Role interviewRole : interviewer.getRoles()) {
-				if (Objects.equals(interview.getRole(), interviewRole)) {
+				if (Objects.equals(interview.getRole(), interviewRole)) { //TODO use class eq
 					return gson.toJson(new MessageDto("This student was already assigned to this type of interviewer",
 							MessageDtoType.ERROR));
 				}

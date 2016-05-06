@@ -46,11 +46,25 @@
                     </td>
                     <td>
                         <button data-toggle="modal"
-                                data-target="#deleteEmployee" ng-click="getEmployee(employee)" class="btn btn-danger" type="button">Delete
+                                data-target="#deleteEmployee" ng-click="getEmployee(employee)" class="btn btn-danger"
+                                type="button">Delete
                         </button>
                     </td>
                 </tr>
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <ul class="list-inline">
+                            <li ng-repeat="item in range">
+                                <button ng-click="showAllEmployees(item.index)"
+                                        class="btn btn-primary" type="button">{{item.index}}
+                                </button>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -154,7 +168,7 @@
                                               value="{{employee.roleName}}"
                                               ng-click="toggleSelection(employee.roleName)"
                                               ng-checked="selection.indexOf(employee.roleName) > -1"
-                                    />
+                                />
                                        {{employee.roleName}}
                                 </div>
                             </td>
