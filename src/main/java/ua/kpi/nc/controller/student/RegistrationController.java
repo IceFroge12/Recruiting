@@ -49,7 +49,7 @@ public class RegistrationController {
         if (userService.isExist(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } else {
-            Role role = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.STUDENT));
+            Role role = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
             Set<Role> roles = new HashSet<>();
             roles.add(role);
             String token = RandomStringUtils.randomAlphabetic(50);

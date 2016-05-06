@@ -101,7 +101,7 @@ public class StaffStudentManagementController {
 		interview.setApplicationForm(applicationForm);
 		interview.setDate(new Timestamp(System.currentTimeMillis()));
 		for (Role role : interviewer.getRoles()) {
-			if (role.getRoleName().equals(RoleEnum.SOFT.name()) || role.getRoleName().equals(RoleEnum.TECH.name())) {
+			if (role.getRoleName().equals(RoleEnum.ROLE_SOFT.name()) || role.getRoleName().equals(RoleEnum.ROLE_TECH.name())) {
 				interview.setRole(role);
 			}
 		}

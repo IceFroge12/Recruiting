@@ -84,7 +84,7 @@ public class StudentApplicationFormController {
 			List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
 			ApplicationForm oldApplicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
 			List<FormQuestion> formQuestions = formQuestionService
-					.getByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.STUDENT)));
+					.getByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 			for (FormQuestion formQuestion : formQuestions) {
 				boolean wasInOldForm = false;
 				if (oldApplicationForm != null) {
@@ -137,7 +137,7 @@ public class StudentApplicationFormController {
 			applicationForm.setRecruitment(recruitment);
 
 			Set<FormQuestion> remainedQuestions = formQuestionService
-					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.STUDENT)));
+					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 			List<FormAnswer> answers = new ArrayList<FormAnswer>();
 			for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
@@ -181,7 +181,7 @@ public class StudentApplicationFormController {
 			System.out.println("PEREMOGA");
 		} else {
 			Set<FormQuestion> remainedQuestions = formQuestionService
-					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.STUDENT)));
+					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 
 			for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
