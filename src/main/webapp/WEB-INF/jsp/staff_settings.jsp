@@ -18,8 +18,8 @@
     <link rel="stylesheet" type="text/css" href="css/client.css">
 </head>
 <body>
-<div id="includedHeader"></div>
-<div id="leftNavStaff"></div>
+<%@include file="staff_header.jsp"%>
+<%@include file="staff_leftnav.jsp"%>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
@@ -27,27 +27,27 @@
                 <h3>Change password</h3>
 
                 <div class="row">
-                    <input type="password" placeholder="old password">
+                    <input id="oldpassword" type="password" placeholder="old password">
                 </div>
                 <br>
 
                 <div class="row">
-                    <input type="password" placeholder="new password">
+                    <input id="newpassword" type="password" placeholder="new password">
                 </div>
                 <br>
 
                 <div class="row">
-                    <input type="password" placeholder="new password">
+                    <input id="confirmpassword" type="password" placeholder="new password">
                 </div>
-                <button type="submit" class="btn btn-info search-element btn-left">Confirm</button>
+                <button id="savepass" type="submit" class="btn btn-info search-element btn-left">Confirm</button>
             </form>
         </div>
     </div>
 </div>
 <!-- footer -->
-<div id="footer"></div>
+<%@include file="staff_footer.jsp"%>
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/client.js"></script>
+<script type="text/javascript" src="js/staff_settings.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/jasny-bootstrap.min.js"></script>
 </body>

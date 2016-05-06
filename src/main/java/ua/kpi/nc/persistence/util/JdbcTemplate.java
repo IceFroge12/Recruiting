@@ -91,7 +91,7 @@ public class JdbcTemplate {
             //TODO logger
             return null;
         }
-        return null;
+   //     return null;
     }
 
     public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects){

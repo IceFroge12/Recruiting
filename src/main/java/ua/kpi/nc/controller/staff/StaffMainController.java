@@ -19,7 +19,7 @@ public class StaffMainController {
     // TODO make ajax js for Staff
     // TODO move it to a seperate package
     @ModelAttribute("showAdminMenu")
-    public boolean getShhowAdminMenu() {
+    public boolean getShowAdminMenu() {
         for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
             if (authority.getAuthority().equals("ROLE_ADMIN"))
                 return true;
