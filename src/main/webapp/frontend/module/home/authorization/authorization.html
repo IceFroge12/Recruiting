@@ -36,7 +36,9 @@
                                                required/>
                                     </div>
                                     <p>
-                                        <a href="#">Forget your password?</a></p>
+
+                                    <p class="text-danger" ng-show="authsuccess">Authorisation Error</p>
+                                    <a href="#">Forget your password?</a></p>
                                 </form>
                             </div>
                         </div>
@@ -62,7 +64,8 @@
                                 </button>
                                 <button ng-click="recoverPassword()" type="button" class="btn btn-labeled btn-info"
                                         value="go">
-                                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Recover password
+                                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Recover
+                                    password
                                 </button>
                             </div>
                         </div>
