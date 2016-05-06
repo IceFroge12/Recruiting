@@ -13,6 +13,7 @@ angular.module('app', [
         'appStaffScheduling',
         'appStaffStudentManagement',
         'appStaffManagement',
+        'appStaffAppForm',
         'appStudentManagement',
         'appReport',
         'appScheduling',
@@ -147,6 +148,11 @@ angular.module('app', [
             .when('/staff/personal', {
                 templateUrl: 'module/staff/personal/staffPersonal.html',
                 controller: 'staffPersonalController'
+            })
+
+            .when('/staff/appformstudent', {
+                templateUrl: 'module/staff/appformstudent/appFormStudent.html',
+                controller: 'appFormStudentController'
             })
 
             // STUDENT
