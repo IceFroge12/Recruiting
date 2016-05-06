@@ -51,22 +51,22 @@ function staffManagementController($scope, staffManagementService ) {
         $scope.secondNameEdit = employee.secondName;
         $scope.lastNameEdit = employee.lastName;
         console.log(employee.roles);
-        // angular.forEach(employee.roles, function (item, i) {
-        //     // if(item.roleName=="ADMIN"){
-        //     //     $scope.adminEdit = true;
-        //     //     editRoles.push({roleName: item.roleName});
-        //     // }
-        //     // if(item.roleName=="SOFT"){
-        //     //     $scope.softEdit = true
-        //     //     editRoles.push({roleName: item.roleName});
-        //     // }
-        //     // if(item.roleName=="TECH"){
-        //     //     $scope.techEdit = true
-        //     //     editRoles.push({roleName: item.roleName});
-        //     // }
-        //     //TODO change logic
-        // });
-        editRoles.push({roleName: "ADMIN"});
+        angular.forEach(employee.roles, function (item, i) {
+            if(item.roleName=="ADMIN"){
+                $scope.adminEdit = true;
+                editRoles.push({roleName: item.roleName});
+            }
+            if(item.roleName=="SOFT"){
+                $scope.softEdit = true
+                editRoles.push({roleName: item.roleName});
+            }
+            if(item.roleName=="TECH"){
+                $scope.techEdit = true
+                editRoles.push({roleName: item.roleName});
+            }
+            //TODO change logic
+        });
+        // editRoles.push({roleName: "ADMIN"});
     };
 
     $scope.editEmployee = function () {
