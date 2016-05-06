@@ -63,11 +63,11 @@ function staffManagementController($scope, staffManagementService) {
                 editRoles.push({roleName: item.roleName});
             }
             if(item.roleName=="SOFT"){
-                $scope.softEdit = true
+                $scope.softEdit = true;
                 editRoles.push({roleName: item.roleName});
             }
             if(item.roleName=="TECH"){
-                $scope.techEdit = true
+                $scope.techEdit = true;
                 editRoles.push({roleName: item.roleName});
             }
             //TODO change logic
