@@ -19,10 +19,15 @@ public class UserDto {
     private String secondName;
     private String lastName;
     private String password;
+    private String token;
     private List<RoleImpl> roleList;
 
     public UserDto() {
 
+    }
+
+    public UserDto(String email) {
+        this.email = email;
     }
 
     public UserDto(String email, String firstName) {

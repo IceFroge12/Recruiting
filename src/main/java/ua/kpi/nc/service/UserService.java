@@ -43,4 +43,10 @@ public interface UserService {
 
     Set<User> getAll();
 
+    User getAuthorizedUser();
+
+    Long getAllStudentCount();
+
+    Long getAllEmployeeCount();
+    
 }

@@ -43,4 +43,8 @@ public interface UserDao {
     Set<User> getAllEmploees();
 
     Set<User> getAll();
+
+    Long getEmployeeCount();
+
+    Long getStudentCount();
 }
