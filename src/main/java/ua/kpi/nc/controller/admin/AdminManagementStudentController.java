@@ -1,44 +1,73 @@
 package ua.kpi.nc.controller.admin;
 
-import com.google.gson.Gson;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.adapter.GsonFactory;
-import ua.kpi.nc.service.ApplicationFormService;
-import ua.kpi.nc.service.ServiceFactory;
+import org.springframework.web.bind.annotation.*;
+import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.service.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dima on 23.04.16.
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminManagementStudentController {
 
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
+    private RoleService roleService = ServiceFactory.getRoleService();
+    private UserService userService=ServiceFactory.getUserService();
+    private FormAnswerService formAnswerService=ServiceFactory.getFormAnswerService();
+    private FormQuestionService formQuestionService=ServiceFactory.getFormQuestionService();
 
-    @RequestMapping(value = "getallstudent", method = RequestMethod.POST)
-    @ResponseBody
-    public List<String> getAllStudents() {
 
-        List<String> allAppFormList = new ArrayList<>();
-        List<ApplicationForm> applicationForms = applicationFormService.getAll();
-
-        for (ApplicationForm applicationForm : applicationForms) {
-            Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-
-            String jsonResult = applicationFormGson.toJson(applicationForm);
-            allAppFormList.add(jsonResult);
-            System.out.println(jsonResult);
-        }
-        return allAppFormList;
+    @RequestMapping(value = "getallstudent", method = RequestMethod.GET)
+    public Set<User> getAllStudents() {
+//        List<String> allAppFormList = new ArrayList<>();
+//        List<ApplicationForm> applicationForms = applicationFormService.getAll();
+//
+//        for (ApplicationForm applicationForm : applicationForms) {
+//            Gson applicationFormGson = GsonFactory.getApplicationFormGson();
+//
+//            String jsonResult = applicationFormGson.toJson(applicationForm);
+//            allAppFormList.add(jsonResult);
+//            System.out.println(jsonResult);
+//        }
+//        return allAppFormList;
+        Role role=roleService.getRoleByTitle("ROLE_STUDENT");
+        Set<User> students = role.getUsers();
+        return students;
     }
+
+    @RequestMapping(value="getStatus", method = RequestMethod.GET)
+    public Status getStatusById(@RequestParam Long id){
+        System.out.println("Request id ="+id);
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+        return af.getStatus();
+    }
+
+    @RequestMapping(value="getUniverse", method = RequestMethod.GET)
+    public FormAnswer getUniverseById(@RequestParam Long id){
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+        List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(3L));
+        return formAnswer.get(0);
+    }
+
+
+    @RequestMapping(value="getCourse", method = RequestMethod.GET)
+    public FormAnswer getCourseById(@RequestParam Long id){
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+        List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(1L));
+        return formAnswer.get(0);
+    }
+
+    @RequestMapping(value="changeStudentsStatus", method = RequestMethod.GET)
+    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status){
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+        af.setStatus(status);
+        return true;
+    };
+
 
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     @ResponseBody
