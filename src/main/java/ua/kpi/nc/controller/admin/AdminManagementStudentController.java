@@ -42,34 +42,29 @@ public class AdminManagementStudentController {
     @RequestMapping(value="getStatus", method = RequestMethod.GET)
     public Status getStatusById(@RequestParam Long id){
         System.out.println("Request id ="+id);
-
-        List<ApplicationForm>afl=applicationFormService.getByUserId(id);
-        //Доделать выбор последней анкеты.
-        ApplicationForm af=null;//Последняя анкета.
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
         return af.getStatus();
     }
 
     @RequestMapping(value="getUniverse", method = RequestMethod.GET)
     public FormAnswer getUniverseById(@RequestParam Long id){
-        List<ApplicationForm>afl=applicationFormService.getByUserId(id);
-        //Доделать выбор последней анкеты.
-        ApplicationForm af=null;
-       List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(3L));
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+        List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(3L));
         return formAnswer.get(0);
     }
 
 
     @RequestMapping(value="getCourse", method = RequestMethod.GET)
     public FormAnswer getCourseById(@RequestParam Long id){
-        List<ApplicationForm>afl=applicationFormService.getByUserId(id);
-        //Доделать выбор последней анкеты.
-        ApplicationForm af=null;
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
         List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(1L));
         return formAnswer.get(0);
     }
 
     @RequestMapping(value="changeStudentsStatus", method = RequestMethod.GET)
-    public boolean changeStatus(){
+    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status){
+        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+        af.setStatus(status);
         return true;
     };
 
