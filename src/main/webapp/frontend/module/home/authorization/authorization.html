@@ -38,22 +38,14 @@
                                     <p>
 
                                     <p class="text-danger" ng-show="authsuccess">Authorisation Error</p>
-                                    <a href="#">Forget your password?</a></p>
+                                    <a ng-click="recoverPassword()">Forget your password?</a></p>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="Remember">
-                                        Remember me
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
                                 <button ng-click="login()" type="button" class="btn btn-labeled btn-info"
                                         value="go">
                                     <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Log in
@@ -61,11 +53,6 @@
                                 <button ng-click="registration()" type="button" class="btn btn-labeled btn-info"
                                         value="go">
                                     <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Registration
-                                </button>
-                                <button ng-click="recoverPassword()" type="button" class="btn btn-labeled btn-info"
-                                        value="go">
-                                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Recover
-                                    password
                                 </button>
                             </div>
                         </div>
