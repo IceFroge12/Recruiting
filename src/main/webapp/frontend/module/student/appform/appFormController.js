@@ -14,9 +14,7 @@ function appFormController($scope, $http, appFormService) {
         console.log("error");
     });
 
-    $scope.changeUserName = function () {
-        console.log("MDDDDDDDD");
-        console.log('---');
+    $scope.submit = function () {
         var req =  $http({
             method : 'POST',
             url : '/student/saveApplicationForm',
@@ -83,6 +81,11 @@ function appFormController($scope, $http, appFormService) {
             }}
         //image.src = _URL.createObjectURL(file);
     });
+
+    $scope.exportAppForm = function() {
+         url = './../student/appform/ApplicatonForm.pdf';
+        window.location = url;
+    }
 
 }
 

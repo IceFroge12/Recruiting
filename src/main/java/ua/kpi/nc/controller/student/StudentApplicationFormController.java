@@ -4,8 +4,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import com.google.gson.Gson;
 
 import javax.mail.MessagingException;
+
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +35,11 @@ import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
+import javax.servlet.http.HttpServletResponse;
+
+
+import java.io.IOException;
+
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.FormAnswerService;
 import ua.kpi.nc.service.FormAnswerVariantService;
@@ -42,6 +49,8 @@ import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.StatusService;
 import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.util.export.ExportApplicationForm;
+import ua.kpi.nc.util.export.ExportapplicationformImpl;
 
 /**
  * Created by dima on 14.04.16.
@@ -238,6 +247,17 @@ public class StudentApplicationFormController {
 			System.out.println("PEREMOGA2");
 			return gson.toJson(new MessageDto("Your application form was updated.", MessageDtoType.SUCCESS));
 		}
+	}
+
+	@RequestMapping(value = "appform/ApplicatonForm.pdf", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportAppform( HttpServletResponse response) throws IOException {
+		User user = userService.getAuthorizedUser();
+		System.out.println(user.toString());
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
+		ExportApplicationForm pdfAppForm = new ExportapplicationformImpl();
+		pdfAppForm.export(user,response);
 	}
 
 	private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
