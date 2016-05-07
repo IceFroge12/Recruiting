@@ -62,9 +62,13 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
     private String determineTargetUrl(Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (authorities.contains("ROLE_ADMIN")) {
-            return "/admin/";
+            return "admin/main";
         } else if (authorities.contains("ROLE_STUDENT")) {
             return "student/appform";
+        }else if (authorities.contains("ROLE_SOFT")){
+            return "staff/main";
+        }else if (authorities.contains("ROLE_TECH")) {
+            return "staff/main";
         } else {
             throw new IllegalStateException();
         }
