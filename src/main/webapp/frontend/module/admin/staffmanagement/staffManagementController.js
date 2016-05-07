@@ -29,20 +29,17 @@ function staffManagementController($scope, $filter, staffManagementService) {
         });
     };
 
-
-    staffManagementService.getEmployeeRoles($scope.id).success(function (data) {
+//TODO id
+    staffManagementService.getEmployeeRoles(74).success(function (data) {
+        $scope.roles='';
         $scope.employeeRols = data;
+        angular.forEach($scope.employeeRols, function(value, key){
+            $scope.roles+=value.roleName+" ";
+        });
     }, function error() {
         console.log("error with getting Employee roles from service");
     });
 
-    // $scope.getEmployeeRoles = function () {
-    //     staffManagementService.getEmployeeRoles(100).success(function (data) {
-    //         $scope.employeeRols = data;
-    //     }, function error() {
-    //         console.log("error");
-    //     });
-    // };
 
 
     $scope.employees =

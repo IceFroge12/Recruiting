@@ -129,7 +129,8 @@ public class AdminManagementStaffController {
         System.out.println("Request id ="+id);
         User emp =userService.getUserByID(id);
         Set<Role> roles=emp.getRoles();
-        System.out.println("Before sending "+ roles);
+        for(Role role:roles)System.out.println(role.getRoleName());
+        System.out.println("Before sending ");
         return roles;
     }
 

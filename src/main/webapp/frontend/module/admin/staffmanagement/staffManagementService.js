@@ -23,7 +23,7 @@ function staffManagementService(http) {
         })
     };
 
-//TODO
+
     service.getEmployeeRoles = function (id) {
         return http({
             method : 'GET',
