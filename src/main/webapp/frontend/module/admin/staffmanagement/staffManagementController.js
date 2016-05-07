@@ -24,6 +24,16 @@ function staffManagementController($scope, $filter, staffManagementService) {
         console.log("error");
     });
 
+    //TODO id
+    staffManagementService.getEmployeeRoles(74).success(function (data) {
+        $scope.roles='';
+        angular.forEach(data, function(value, key){
+            $scope.roles+=value.roleName+" ";
+        });
+    }, function error() {
+        console.log("error with getting Employee roles from service");
+    });
+
     staffManagementService.getCountOfEmployee().success(function (data) {
         $scope.amount = Math.ceil(data / $scope.itemsPerPage);
         console.log($scope.pagedItems);

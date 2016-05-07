@@ -139,6 +139,14 @@
         </dependency>
         <!-- END POI -->
 
+        <!-- iText PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.6</version>
+        </dependency>
+        <!-- END iText PDF -->
+
         <!-- JUNIT -->
         <dependency>
             <groupId>junit</groupId>
