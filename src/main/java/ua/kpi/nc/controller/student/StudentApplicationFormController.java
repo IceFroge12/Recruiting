@@ -167,6 +167,7 @@ public class StudentApplicationFormController {
 			applicationForm.setAnswers(answers);
 			applicationFormService.insertApplicationForm(applicationForm);
 			System.out.println("PEREMOGA");
+			return gson.toJson(new MessageDto("Your application form was created.", MessageDtoType.SUCCESS));
 		} else {
 			Set<FormQuestion> remainedQuestions = formQuestionService
 					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
@@ -235,8 +236,8 @@ public class StudentApplicationFormController {
 				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
 			}
 			System.out.println("PEREMOGA2");
+			return gson.toJson(new MessageDto("Your application form was updated.", MessageDtoType.SUCCESS));
 		}
-		return null;
 	}
 
 	private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
