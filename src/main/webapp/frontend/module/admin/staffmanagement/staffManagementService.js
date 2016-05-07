@@ -23,11 +23,15 @@ function staffManagementService(http) {
         })
     };
 
-    // service.getEmployeeRoles = function(employee){
-    //     http.get('admin/getroles').success(function(data) {
-    //         return data;
-    //     });
-    // };
+
+    service.getEmployeeRoles = function (id) {
+        return http({
+            method : 'GET',
+            url : '/admin/getRoles',
+            params:{id:id}
+        })
+    };
+
     
     service.addEmployee = function (firstName, secondName, lastName, email, roles) {
         http({
@@ -74,7 +78,17 @@ function staffManagementService(http) {
                 return data;
         });
     };
-
+    // service.changeEmployeeStatus = function (email) {
+    //     console.log(email)
+    //     http({
+    //         method : 'GET',
+    //         url : '/admin/changeEmployeeStatus',
+    //         params : {email:email}
+    //     }).success(function (data, status, headers) {
+    //         console.log(data);
+    //         return data;
+    //     });
+    // };
 
     service.showAssigned = function (email) {
         http({
