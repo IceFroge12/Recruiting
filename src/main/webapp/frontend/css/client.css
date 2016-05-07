@@ -318,3 +318,17 @@ h4 {
 .control-label{
     font-weight: normal;
 }
+
+.pagination ul>li>a, .pagination ul>li>span {
+     float: left;
+     padding: 0 14px;
+     line-height: 38px;
+     text-decoration: none;
+     background-color: #ffffff;
+     border: 1px solid #dddddd;
+     border-left-width: 0;
+}
+
+.pagination ul>li {
+    display: inline;
+}

@@ -9,17 +9,17 @@
                 employee
             </button>
             <label>Search: <input ng-model="searchText"></label>
-            <table id="staff_table" class="table table-hover">
+            <table class="table table-condensed table-hover col-md-8">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>E-mail</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Assigned students</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th class="staff-id" custom-sort order="'id'" sort="sort">ID&nbsp</th>
+                    <th class="staff-name" custom-sort order="'name'" sort="sort">Name&nbsp</th>
+                    <th class="staff-email" custom-sort order="'email'" sort="sort">E-mail</th>
+                    <th class="staff-role" custom-sort order="'role'" sort="sort">Role</th>
+                    <th class="staff-status" custom-sort order="'status'" sort="sort">Status</th>
+                    <th class="staff-assigned" custom-sort order="'assigned'" sort="sort">Assigned students</th>
+                    <th class="staff-edit">Edit</th>
+                    <th class="staff-delete">Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,17 +53,25 @@
                 </tr>
                 </tbody>
                 <tfoot>
-                <tr>
-                    <td colspan="5" class="text-center">
-                        <ul class="list-inline">
-                            <li ng-repeat="item in range">
-                                <button ng-click="showAllEmployees(item.index)"
-                                        class="btn btn-primary" type="button">{{item.index}}
-                                </button>
-                            </li>
-                        </ul>
+                    <td colspan="6">
+                        <div class="pagination pull-right">
+                            <ul>
+                                <li ng-class="{disabled: currentPage == 0}">
+                                    <a href ng-click="prevPage()">« Prev</a>
+                                </li>
+
+                                <li ng-repeat="n in range(amount, currentPage, currentPage + gap) "
+                                    ng-class="{active: n+1 == currentPage}"
+                                    ng-click="setPage()">
+                                    <a href ng-bind="n + 1">1</a>
+                                </li>
+
+                                <li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+                                    <a href ng-click="nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
-                </tr>
                 </tfoot>
             </table>
         </div>
@@ -93,6 +101,7 @@
                     <span class="glyphicon glyphicon-remove"></span></button>
 
                 <h4 class="modal-title">Edit employee</h4>
+
                 <div>
                     <table class="table">
                         <tr>
@@ -142,6 +151,7 @@
                 <button class="close" type="button" data-dismiss="modal"><span
                         class="glyphicon glyphicon-remove"></span></button>
                 <h4 class="modal-title">New employee</h4>
+
                 <div>
                     <table class="table">
                         <tr>
@@ -168,7 +178,7 @@
                                               value="{{employee.roleName}}"
                                               ng-click="toggleSelection(employee.roleName)"
                                               ng-checked="selection.indexOf(employee.roleName) > -1"
-                                />
+                                        />
                                        {{employee.roleName}}
                                 </div>
                             </td>
@@ -192,6 +202,7 @@
                 <button class="close" type="button" data-dismiss="modal"><span
                         class="glyphicon glyphicon-remove"></span></button>
                 <h4 class="modal-title">Assigned candidates</h4>
+
                 <div>
                     <table class="table">
                         <thead>

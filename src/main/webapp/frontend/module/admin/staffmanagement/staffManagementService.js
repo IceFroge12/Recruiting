@@ -19,7 +19,7 @@ function staffManagementService(http) {
     service.getCountOfEmployee = function () {
         return http({
             method : 'GET',
-            url : '/admin/getCountOfEmployee',
+            url : '/admin/getCountOfEmployee'
         })
     };
 
