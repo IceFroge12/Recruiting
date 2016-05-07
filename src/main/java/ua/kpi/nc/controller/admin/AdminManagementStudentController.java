@@ -67,14 +67,5 @@ public class AdminManagementStudentController {
         //TODO
     }
 
-    public static void main(String[] args) {
-        ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
-        FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
-        FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
-        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(100L);
-        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(3L));
-        System.out.println(formAnswer.get(0));
-        System.out.println(formAnswer);
-    }
 
 }
