@@ -46,6 +46,7 @@ function staffManagementService(http) {
 
 
     service.editEmployee = function (id,firstName, secondName, lastName, email, roles) {
+        consol.log(roles);
         http({
             method : 'POST',
             url : '/admin/editEmployee',

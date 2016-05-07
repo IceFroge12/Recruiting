@@ -77,7 +77,6 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void editEmployeeParams(@RequestBody UserDto userDto) {
 
-        System.out.println(userDto.toString());
         User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());

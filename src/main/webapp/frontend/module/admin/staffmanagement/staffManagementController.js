@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, staffManagementService) {
+function staffManagementController($scope, $filter, staffManagementService) {
 
     staffManagementService.showAllEmployees(1).success(function (data) {
         $scope.allEmployee = data;
@@ -9,18 +9,18 @@ function staffManagementController($scope, staffManagementService) {
         console.log("error");
     });
 
-    staffManagementService.getCountOfEmployee().success(function (data){
+    staffManagementService.getCountOfEmployee().success(function (data) {
         var itemsByPage = 9;
         var pages = Math.ceil(data / itemsByPage);
 
         $scope.range = [];
         for (var i = 1; i <= pages; i++) {
-            $scope.range.push({index:i});
+            $scope.range.push({index: i});
         };
         console.log($scope.range);
     })
 
-    $scope.showAllEmployees = function showAllEmployees(pageNum){
+    $scope.showAllEmployees = function showAllEmployees(pageNum) {
         staffManagementService.showAllEmployees(pageNum).success(function (data) {
             $scope.allEmployee = data;
         }, function error() {
@@ -29,10 +29,11 @@ function staffManagementController($scope, staffManagementService) {
     }
 
     $scope.employees =
-        [{roleName: 'ADMIN'},
-            {roleName: 'SOFT'},
-            {roleName: 'TECH'}];
-    $scope.selection = [];
+        [{roleName: 'ROLE_ADMIN'},
+            {roleName: 'ROLE_SOFT'},
+            {roleName: 'ROLE_TECH'}];
+
+    $scope.selection=[];
 
     $scope.toggleSelection = function toggleSelection(employeeName) {
         var idx = $scope.selection.indexOf(employeeName);
@@ -40,11 +41,34 @@ function staffManagementController($scope, staffManagementService) {
         if (idx > -1) {
             $scope.selection.splice(idx, 1);
         }
+
         else {
-            $scope.selection.push({roleName: employeeName});
+            $scope.selection.push({roleName:employeeName});
         }
+
         console.log($scope.selection);
     };
+    
+
+    
+    
+    // $scope.toggleSelection = function toggleSelection(employeeName) {
+    
+        // console.log(employeeName);
+        // if(employeeName=="ROLE_ADMIN"){
+        //     $scope.selection.push({roleName: employeeName});
+        // }else{
+        //     $scope.selection.pop(employeeName);
+        // }
+        //
+        // console.log($scope.selection);
+    
+
+        // else {
+        //     $scope.selection.push({roleName: employeeName});
+        // }
+
+    // };
 
     $scope.addEmployee = function () {
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
@@ -62,15 +86,15 @@ function staffManagementController($scope, staffManagementService) {
         $scope.lastNameEdit = employee.lastName;
         console.log(employee.roles);
         angular.forEach(employee.roles, function (item, i) {
-            if(item.roleName=="ADMIN"){
+            if (item.roleName == "ADMIN") {
                 $scope.adminEdit = true;
                 editRoles.push({roleName: item.roleName});
             }
-            if(item.roleName=="SOFT"){
+            if (item.roleName == "SOFT") {
                 $scope.softEdit = true;
                 editRoles.push({roleName: item.roleName});
             }
-            if(item.roleName=="TECH"){
+            if (item.roleName == "TECH") {
                 $scope.techEdit = true;
                 editRoles.push({roleName: item.roleName});
             }
@@ -112,5 +136,5 @@ function staffManagementController($scope, staffManagementService) {
 
 }
 
-    angular.module('appStaffManagement')
-        .controller('staffManagementController', ['$scope', 'staffManagementService', staffManagementController]);
+angular.module('appStaffManagement')
+    .controller('staffManagementController', ['$scope','$filter','staffManagementService', staffManagementController]);

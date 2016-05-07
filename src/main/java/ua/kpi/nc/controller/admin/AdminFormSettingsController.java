@@ -68,9 +68,7 @@ public class AdminFormSettingsController {
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         System.out.println(role.getRoleName());
         FormQuestion formQuestion = new FormQuestionImpl();
-
-
-//        formQuestionService.addRole(formQuestion, role);
+        formQuestionService.addRole(formQuestion, role);
 
     }
 

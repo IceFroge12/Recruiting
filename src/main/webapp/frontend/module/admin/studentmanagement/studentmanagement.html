@@ -31,7 +31,7 @@
                     <th>Course</th>
                 </tr>
                 <tr ng-repeat="student in students | filter:searchText ">
-                    <td>{{student.ID}}</td>
+                    <td>{{student.id}}</td>
                     <td>{{student.user.firstName +" "+ student.user.lastName}}</td>
                     <td><select>
                         <option selected>{{student.status}}</option>

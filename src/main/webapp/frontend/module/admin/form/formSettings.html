@@ -338,7 +338,7 @@
                         <tr>
                             <td> Active</td>
                             <td>
-                                <select  ng-model="myActiveSelect" ng-change="showSelectActiveValue(myActiveSelect)">
+                                <select ng-model="myActiveSelect" ng-change="showSelectActiveValue(myActiveSelect)">
                                     <option selected>true</option>
                                     <option>false</option>
                                 </select>
@@ -346,7 +346,7 @@
                         </tr>
                         <tr>
                             <td> Answer variants</td>
-                            <td><textarea ng-model="addVariant"></textarea></td>
+                            <td><textarea ng-disabled="canMoveForward" ng-model="addVariant"></textarea></td>
                         </tr>
                     </table>
                 </div>
@@ -384,16 +384,8 @@
                             <td><input type="text" ng-model="lastNameEdit" id="lastNameEdit"></td>
                         </tr>
                         <tr>
-                            <td> Email</td>
-                            <td><input type="text" ng-model="emailEdit" id="emailEdit"></td>
-                        </tr>
-                        <tr>
-                            <td> Role</td>
-                            <td>
-                                <input type="checkbox" id="techEdit" ng-model="techEdit" value="option1"> Tech </input>
-                                <input type="checkbox" id="softEdit" ng-model="softEdit" value="option2"> Soft </input>
-                                <input type="checkbox" id="adminEdit" ng-model="adminEdit" value="option3"> Administrator </input>
-                            </td>
+                            <td> Answer Variant</td>
+                            <td><textarea ng-model="editVariant"></textarea></td>
                         </tr>
                     </table>
                 </div>
