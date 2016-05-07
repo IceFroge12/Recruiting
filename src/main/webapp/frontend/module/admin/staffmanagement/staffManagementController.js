@@ -32,14 +32,26 @@ function staffManagementController($scope, $filter, staffManagementService) {
 //TODO id
     staffManagementService.getEmployeeRoles(74).success(function (data) {
         $scope.roles='';
-        $scope.employeeRols = data;
-        angular.forEach($scope.employeeRols, function(value, key){
+       // $scope.employeeRols = data;
+        angular.forEach(data, function(value, key){
             $scope.roles+=value.roleName+" ";
         });
     }, function error() {
         console.log("error with getting Employee roles from service");
     });
 
+    
+    // $scope.getEmpRoles = function(id){
+    //     staffManagementService.getEmployeeRoles(id).success(function (data) {
+    //         $scope.roles='';
+    //         $scope.employeeRols = data;
+    //         angular.forEach($scope.employeeRols, function(value, key){
+    //             $scope.roles+=value.roleName+" ";
+    //         });return roles;
+    //     }, function error() {
+    //         console.log("error with getting Employee roles from service");
+    //     });
+    // };
 
 
     $scope.employees =
