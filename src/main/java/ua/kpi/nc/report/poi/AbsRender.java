@@ -70,7 +70,7 @@ public abstract class AbsRender implements ReportRenderer {
 					log.trace("OutputStream closed.");
 				} catch (IOException e) {
 					e.printStackTrace();
-					log.error("Cannot close OutputStream", e);
+					log.error("Cannot close OutputStreamm", e);
 				}
 			}
 		}

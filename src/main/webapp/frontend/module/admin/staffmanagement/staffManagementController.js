@@ -30,7 +30,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
 
-    staffManagementService.getEmployeeRoles(24).success(function (data) {
+    staffManagementService.getEmployeeRoles($scope.id).success(function (data) {
         $scope.employeeRols = data;
     }, function error() {
         console.log("error with getting Employee roles from service");

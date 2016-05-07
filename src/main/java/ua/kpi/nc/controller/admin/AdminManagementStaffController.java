@@ -129,7 +129,7 @@ public class AdminManagementStaffController {
         System.out.println("Request id ="+id);
         User emp =userService.getUserByID(id);
         Set<Role> roles=emp.getRoles();
-        System.out.println("before sending "+ roles);
+        System.out.println("Before sending "+ roles);
         return roles;
     }
 
