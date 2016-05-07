@@ -127,8 +127,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	@Override
 	public Long insertApplicationForm(ApplicationForm applicationForm, Connection connection) {
 		log.info("Inserting application forms with user_id = " + applicationForm.getUser().getId());
+		Recruitment recruitment = applicationForm.getRecruitment();
 		return this.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
-				applicationForm.isActive(), applicationForm.getRecruitment().getId(), applicationForm.getPhotoScope(),
+				applicationForm.isActive(), recruitment != null ? recruitment.getId() : null, applicationForm.getPhotoScope(),
 				applicationForm.getUser().getId(), applicationForm.getDateCreate(), applicationForm.getFeedback());
 	}
 
