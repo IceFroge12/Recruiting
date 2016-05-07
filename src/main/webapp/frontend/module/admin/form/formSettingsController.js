@@ -14,13 +14,20 @@ function formSettingsController($scope,$sce, formAppService) {
     });
     
     $scope.types = ["input","checkbox","radio","select"];
-    $scope.roles = ["ROLE_ADMIN","ROLE_TECH","ROLE_STUDENT"];
+    $scope.roles = ["MANDATORY","ROLE_TECH","ROLE_STUDENT"];
     $scope.sce = $sce;
+    
 
+    
     var selectedValue;
     $scope.showSelectValue = function(mySelect) {
         console.log(mySelect);
         selectedValue = mySelect;
+        if(selectedValue == "input"){
+            $scope.canMoveForward = true;
+        }else {
+            $scope.canMoveForward= false;
+        }
     };
     var selectActiveValue;
     $scope.showSelectActiveValue = function (myActiveSelect) {
