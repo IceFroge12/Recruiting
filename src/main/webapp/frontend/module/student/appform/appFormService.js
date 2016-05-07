@@ -14,7 +14,7 @@ function appFormService(http) {
     service.changeUserName = function (data) {
        var req =  http({
             method : 'POST',
-            url : '/student/saveApplicationForm',
+            url : '/api/student/saveApplicationForm',
             contentType: 'application/json',
             data : {
                 status : data.status,
