@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appAdminForm', []);
+angular.module('appAdminForm', ['ngToast']);

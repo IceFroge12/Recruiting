@@ -19,7 +19,7 @@ public class AdminMainController {
 
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     public Recruitment getRecruitmentData() {
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();//TODO change method
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         System.out.println(recruitment.toString());
         return recruitment;
     }

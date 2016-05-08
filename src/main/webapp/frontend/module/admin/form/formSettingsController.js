@@ -2,7 +2,8 @@
  * Created by dima on 30.04.16.
  */
 
-function formSettingsController($scope,$sce, formAppService) {
+function formSettingsController($scope,ngToast,$sce, formAppService) {
+
     formAppService.getAllQuestion().then(function success(data) {
         console.log(data);
         $scope.questions = data;
@@ -12,12 +13,12 @@ function formSettingsController($scope,$sce, formAppService) {
             $scope.variants.push(item.variants);
         });
     });
+   
     
     $scope.types = ["input","checkbox","radio","select"];
     $scope.roles = ["MANDATORY","ROLE_TECH","ROLE_STUDENT"];
     $scope.sce = $sce;
     
-
     
     var selectedValue;
     $scope.showSelectValue = function(mySelect) {
@@ -26,6 +27,15 @@ function formSettingsController($scope,$sce, formAppService) {
         if(selectedValue == "input"){
             $scope.canMoveForward = true;
         }else {
+            var myToastMsg = ngToast.info({
+                content: 'a bla bla bla',//TODO
+                timeout: 5000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                dismissOnClick:true,
+                combineDuplications:true,
+                maxNumber:2
+            });
             $scope.canMoveForward= false;
         }
     };
@@ -46,7 +56,7 @@ function formSettingsController($scope,$sce, formAppService) {
     }
 
     $scope.saveForm = function () {
-
+       
         var comma = ',';
 
         var variantArray = splitString($scope.addVariant, comma);
@@ -63,7 +73,5 @@ function formSettingsController($scope,$sce, formAppService) {
 
 }
 
-
-
 angular.module('appAdminForm')
-    .controller('formSettingsController', ['$scope', '$sce','formSettingsService', formSettingsController]);
+    .controller('formSettingsController', ['$scope', 'ngToast', '$sce','formSettingsService', formSettingsController]);
