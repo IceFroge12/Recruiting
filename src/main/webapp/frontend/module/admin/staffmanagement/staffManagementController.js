@@ -3,37 +3,60 @@
  */
 function staffManagementController($scope, $filter, staffManagementService) {
 
-    staffManagementService.showAllEmployees(1).success(function (data) {
+    $scope.sort = {
+        sortingOrder: 'id',
+        reverse: false
+    };
+    $scope.gap = 5;
+
+    $scope.filteredItems = [];
+    $scope.groupedItems = [];
+    $scope.itemsPerPage = 9;
+    $scope.currentPage = 1;
+    $scope.items = [];
+    $scope.amount = 0;
+    $scope.sortingCol = 1;
+    $scope.sortingDir = 1;
+
+    staffManagementService.showAllEmployees(1, $scope.sortingCol, $scope.sortingDir).success(function (data) {
         $scope.allEmployee = data;
+        console.log(data);
+        console.log($scope.sortingCol);
+        console.log($scope.sortingDir);
+
     }, function error() {
         console.log("error");
     });
 
-    staffManagementService.getCountOfEmployee().success(function (data) {
-        var itemsByPage = 9;
-        var pages = Math.ceil(data / itemsByPage);
+    //TODO id
+    staffManagementService.getEmployeeRoles(74).success(function (data) {
+        $scope.roles='';
+        angular.forEach(data, function(value, key){
+            $scope.roles+=value.roleName+" ";
+        });
+    }, function error() {
+        console.log("error with getting Employee roles from service");
+    });
 
-        $scope.range = [];
-        for (var i = 1; i <= pages; i++) {
-            $scope.range.push({index: i});
-        };
-        console.log($scope.range);
-    })
+    staffManagementService.getCountOfEmployee().success(function (data) {
+        $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        console.log($scope.pagedItems);
+    });
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
-        staffManagementService.showAllEmployees(pageNum).success(function (data) {
+        staffManagementService.showAllEmployees(pageNum, $scope.sortingCol, $scope.sortingDir).success(function (data) {
             $scope.allEmployee = data;
+            console.log(data);
         }, function error() {
             console.log("error");
         });
-    }
+    };
 
     $scope.employees =
-        [{roleName: 'ROLE_ADMIN'},
-            {roleName: 'ROLE_SOFT'},
-            {roleName: 'ROLE_TECH'}];
-
-    $scope.selection=[];
+        [{roleName: 'ADMIN'},
+            {roleName: 'SOFT'},
+            {roleName: 'TECH'}];
+    $scope.selection = [];
 
     $scope.toggleSelection = function toggleSelection(employeeName) {
         var idx = $scope.selection.indexOf(employeeName);
@@ -41,40 +64,50 @@ function staffManagementController($scope, $filter, staffManagementService) {
         if (idx > -1) {
             $scope.selection.splice(idx, 1);
         }
-
         else {
-            $scope.selection.push({roleName:employeeName});
+            $scope.selection.push({roleName: employeeName});
         }
-
         console.log($scope.selection);
     };
-    
-
-    
-    
-    // $scope.toggleSelection = function toggleSelection(employeeName) {
-    
-        // console.log(employeeName);
-        // if(employeeName=="ROLE_ADMIN"){
-        //     $scope.selection.push({roleName: employeeName});
-        // }else{
-        //     $scope.selection.pop(employeeName);
-        // }
-        //
-        // console.log($scope.selection);
-    
-
-        // else {
-        //     $scope.selection.push({roleName: employeeName});
-        // }
-
-    // };
 
     $scope.addEmployee = function () {
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
             $scope.lastName, $scope.email, $scope.selection);
     };
 
+    $scope.range = function (size, start, end) {
+        var ret = [];
+        console.log(size, start, end);
+
+        if (size < end) {
+            end = size;
+            start = size - $scope.gap;
+        }
+        for (var i = start; i < end; i++) {
+            if (i >= 0)
+                ret.push(i);
+        }
+        console.log(ret);
+        return ret;
+    };
+
+    $scope.prevPage = function () {
+        if ($scope.currentPage > 0) {
+            $scope.currentPage--;
+        }
+    };
+
+    $scope.nextPage = function () {
+        if ($scope.currentPage < $scope.pagedItems.amount - 1) {
+            $scope.currentPage++;
+        }
+    };
+
+    $scope.setPage = function () {
+        $scope.currentPage = this.n+1;
+        $scope.showAllEmployees($scope.currentPage);
+        console.log($scope.currentPage);
+    };
 
     var editRoles = [];
 
@@ -130,11 +163,52 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.deleteEmployee = function () {
-        console.log(currentEmployee)
+        console.log(currentEmployee);
         staffManagementService.deleteEmployee(currentEmployee.email);
     };
 
 }
 
+angular.module('appStaffManagement').$inject = ['$scope', '$filter'];
+
+angular.module('appStaffManagement').directive("customSort", function () {
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            order: '=',
+            sort: '='
+        },
+        template: ' <a ng-click="sort_by(order)" style="color: #555555;">' +
+        '    <span ng-transclude></span>' +
+        '    <i ng-class="selectedCls(order)"></i>' +
+        '</a>',
+        link: function (scope) {
+
+            // change sorting order
+            scope.sort_by = function (newSortingOrder) {
+                var sort = scope.sort;
+
+                if (sort.sortingOrder == newSortingOrder) {
+                    sort.reverse = !sort.reverse;
+                }
+
+                sort.sortingOrder = newSortingOrder;
+            };
+
+
+            scope.selectedCls = function (column) {
+                if (column == scope.sort.sortingOrder) {
+                    return ('icon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
+                }
+                else {
+                    return 'icon-sort'
+                }
+            };
+        }// end link
+    }
+});
+
+
 angular.module('appStaffManagement')
-    .controller('staffManagementController', ['$scope','$filter','staffManagementService', staffManagementController]);
+    .controller('staffManagementController', ['$scope', '$filter', 'staffManagementService', staffManagementController]);

@@ -41,9 +41,9 @@ public abstract class AbsRender implements ReportRenderer {
 		List<Line> cells =  lines;
 		log.trace("rows and cells initialization was successful");
 		Sheet sheet = wb.createSheet();
-		if (sheet instanceof SXSSFSheet) {//Хрень, без которой не работал автосайз для xlsx
-			SXSSFSheet sxSheet = (SXSSFSheet) sheet;//
-			sxSheet.trackAllColumnsForAutoSizing();//
+		if (sheet instanceof SXSSFSheet) {
+			SXSSFSheet sxSheet = (SXSSFSheet) sheet;
+			sxSheet.trackAllColumnsForAutoSizing();
 		}
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < rows.size(); i++) {
@@ -63,6 +63,16 @@ public abstract class AbsRender implements ReportRenderer {
 			log.trace("Write data into Workbook was successful");
 		} catch (IOException e) {
 			log.error("Cannot write data into Workbook", e);
+		}finally{
+			if(out!=null){
+				try {
+					out.close();
+					log.trace("OutputStream closed.");
+				} catch (IOException e) {
+					e.printStackTrace();
+					log.error("Cannot close OutputStreamm", e);
+				}
+			}
 		}
 	}
 

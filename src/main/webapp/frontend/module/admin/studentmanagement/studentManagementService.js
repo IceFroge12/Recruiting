@@ -7,12 +7,38 @@ function studentManagementService(http) {
 
     var service = {};
 
-    service.loadStudents = function () {
-        return http.post('/admin/getallstudent').then(function (response) {
-            return  "["+ response.data+ "]";
-        });
+    service.showAllStudents = function (pageNum) {
+        return http({
+            method : 'GET',
+            url : '/admin/showAllStudents',
+            params : {pageNum:pageNum}
+        })
+
+    };
+    service.getStudentsUniversity = function (id) {
+        return http({
+            method : 'GET',
+            url : '/admin/getUniverse',
+            params:{id:id}
+        })
     };
 
+    service.getStudentsCourse = function (id) {
+        return http({
+            method : 'GET',
+            url : '/admin/getCourse',
+            params:{id:id}
+        })
+    };
+
+    service.getStudentsStatus = function (id) {
+        return http({
+            method : 'GET',
+            url : '/admin/getStatus',
+            params:{id:id}
+        })
+    };
+    
     return service;
 }
 

@@ -2,9 +2,9 @@
  * Created by dima on 02.05.16.
  */
 
-function appFormController($scope, appFormService) {
+function appFormController($scope, $http, appFormService) {
     appFormService.loadAppFormData().then(function success(data) {
-       // $scope.id =data.id;
+		$scope.id = data.id;
         $scope.questions = data.questions;
         $scope.user = data.user;
         $scope.status = data.status;
@@ -14,9 +14,23 @@ function appFormController($scope, appFormService) {
         console.log("error");
     });
 
-    $scope.changeUserName = function () {
-        console.log("MDDDDDDDD");
-        appFormService.changeUserName($scope.data);
+    $scope.submit = function () {
+        var req =  $http({
+            method : 'POST',
+            url : '/student/saveApplicationForm',
+            contentType: 'application/json',
+            data : {
+                status : $scope.data.status,
+                user : $scope.data.user,
+                questions : $scope.data.questions
+            }
+        });
+       var response; 
+       req.success(function(data) {
+			console.log(data);
+			$scope.resultMessage =  data;
+		});
+       return response;
     };
 
     $scope.toggle = function (item, list){
@@ -68,9 +82,14 @@ function appFormController($scope, appFormService) {
         //image.src = _URL.createObjectURL(file);
     });
 
+    $scope.exportAppForm = function() {
+         url = './../student/appform/ApplicatonForm.pdf';
+        window.location = url;
+    }
+
 }
 
 
 
 angular.module('appStudentForm')
-    .controller('appFormController', ['$scope','appFormService', appFormController]);
+    .controller('appFormController', ['$scope','$http','appFormService', appFormController]);

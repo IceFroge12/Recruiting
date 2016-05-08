@@ -1,5 +1,6 @@
 package ua.kpi.nc.controller.admin;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +42,10 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
-    public List<User> showEmployees(@RequestParam int pageNum) {
+    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam int sortingCol, @RequestParam boolean increase) {
         Long itemsByPage = 9L;
         Long fromRow = (pageNum - 1) * itemsByPage;
-        List<User> users = userService.getEmployeesFromToRows(fromRow);
+        List<User> users = userService.getEmployeesFromToRows(fromRow, sortingCol, increase);
         return users;
     }
 
@@ -123,12 +124,13 @@ public class AdminManagementStaffController {
         userService.deleteUser(user);
     }
 
-    @RequestMapping(value="/getroles", method = RequestMethod.GET)
-    public String getUserRoles(@RequestBody User user){
-        User emp =userService.getUserByID(user.getId());
-        String roles="";
-        for(Role role:emp.getRoles())roles.concat(role.getRoleName()+" ");
-        System.out.println(roles);
+    @RequestMapping(value="getRoles", method = RequestMethod.GET)
+    public Set<Role> getUserRoles(@RequestParam Long id){
+        System.out.println("Request id ="+id);
+        User emp =userService.getUserByID(id);
+        Set<Role> roles=emp.getRoles();
+        for(Role role:roles)System.out.println(role.getRoleName());
+        System.out.println("Before sending ");
         return roles;
     }
 

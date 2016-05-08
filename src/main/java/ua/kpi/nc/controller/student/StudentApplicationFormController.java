@@ -1,38 +1,56 @@
 package ua.kpi.nc.controller.student;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import com.google.gson.Gson;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import javax.mail.MessagingException;
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import ua.kpi.nc.controller.auth.UserAuthentication;
+
+import com.google.gson.Gson;
+
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
-import ua.kpi.nc.persistence.dto.QuestionVariantDto;
 import ua.kpi.nc.persistence.dto.StudentAnswerDto;
 import ua.kpi.nc.persistence.dto.StudentAppFormQuestionDto;
-import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.Status;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
-import ua.kpi.nc.service.*;
+import javax.servlet.http.HttpServletResponse;
 
-import javax.mail.MessagingException;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.io.IOException;
+
+import ua.kpi.nc.service.ApplicationFormService;
+import ua.kpi.nc.service.FormAnswerService;
+import ua.kpi.nc.service.FormAnswerVariantService;
+import ua.kpi.nc.service.FormQuestionService;
+import ua.kpi.nc.service.RecruitmentService;
+import ua.kpi.nc.service.RoleService;
+import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.service.StatusService;
+import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.util.export.ExportApplicationForm;
+import ua.kpi.nc.util.export.ExportapplicationformImpl;
 
 /**
  * Created by dima on 14.04.16.
@@ -46,7 +64,6 @@ public class StudentApplicationFormController {
 	private FormQuestionService formQuestionService;
 	private FormAnswerVariantService formAnswerVariantService;
 	private RoleService roleService;
-	// private User currentUser;
 
 	private StatusService statusService = ServiceFactory.getStatusService();
 	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
@@ -59,8 +76,6 @@ public class StudentApplicationFormController {
 		userService = ServiceFactory.getUserService();
 		formQuestionService = ServiceFactory.getFormQuestionService();
 		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-		// currentUser = ((UserAuthentication)
-		// SecurityContextHolder.getContext().getAuthentication()).getDetails();
 		roleService = ServiceFactory.getRoleService();
 	}
 
@@ -71,15 +86,7 @@ public class StudentApplicationFormController {
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
 		if (applicationForm == null) {
 
-			applicationForm = new ApplicationFormImpl();
-
-			applicationForm.setUser(student);
-			Status status = statusService.getStatusById(StatusEnum.REGISTERED.getId());
-			Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-			applicationForm.setStatus(status);
-			applicationForm.setActive(true);
-			applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-			applicationForm.setRecruitment(recruitment);
+			applicationForm = createApplicationForm(student);
 
 			List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
 			ApplicationForm oldApplicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
@@ -103,7 +110,6 @@ public class StudentApplicationFormController {
 		}
 		Gson applicationFormGson = GsonFactory.getApplicationFormGson();
 		String jsonResult = applicationFormGson.toJson(applicationForm);
-		System.out.println(jsonResult);
 		return jsonResult;
 	}
 
@@ -111,36 +117,27 @@ public class StudentApplicationFormController {
 	@RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST, headers = {
 			"Content-type=application/json" })
 	@ResponseBody
-	public String addUsername(@RequestBody ApplicationFormDto applicationFormDto) throws MessagingException {
-		System.out.println(applicationFormDto);
+	public String addUsername(@RequestBody ApplicationFormDto applicationFormDto) {
 		User user = userService.getAuthorizedUser();
-
-		// for (StudentAppFormQuestionDto q :
-		// applicationFormDto.getQuestions()){
-		// System.out.println(q.toString());
-		// }
-		// System.out.println(applicationFormDto.getUser().toString());
-
 		user.setLastName(applicationFormDto.getUser().getLastName());
 		user.setFirstName(applicationFormDto.getUser().getFirstName());
 		user.setSecondName(applicationFormDto.getUser().getSecondName());
 		userService.updateUser(user);
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(user.getId());
 		if (applicationForm == null) {
-			applicationForm = new ApplicationFormImpl();
-			applicationForm.setUser(user);
-			applicationForm.setActive(true);
-			applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-			Status status = statusService.getStatusById(StatusEnum.REGISTERED.getId());
-			Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-			applicationForm.setStatus(status);
-			applicationForm.setRecruitment(recruitment);
+			applicationForm = createApplicationForm(user);
 
 			Set<FormQuestion> remainedQuestions = formQuestionService
 					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 			List<FormAnswer> answers = new ArrayList<FormAnswer>();
 			for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
+				if (formQuestion == null) {
+					return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+				}
+				if (formQuestion.isMandatory() && !isFilled(questionDto)) {
+					return gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
+				}
 				String questionType = formQuestion.getQuestionType().getTypeTitle();
 				if (formQuestion.isEnable()) {
 					if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
@@ -179,12 +176,19 @@ public class StudentApplicationFormController {
 			applicationForm.setAnswers(answers);
 			applicationFormService.insertApplicationForm(applicationForm);
 			System.out.println("PEREMOGA");
+			return gson.toJson(new MessageDto("Your application form was created.", MessageDtoType.SUCCESS));
 		} else {
 			Set<FormQuestion> remainedQuestions = formQuestionService
 					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 
 			for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
+				if (formQuestion == null) {
+					return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+				}
+				if (formQuestion.isMandatory() && !isFilled(questionDto)) {
+					return gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
+				}
 				String questionType = formQuestion.getQuestionType().getTypeTitle();
 				List<FormAnswer> answers = formAnswerService.getByApplicationFormAndQuestion(applicationForm,
 						formQuestion);
@@ -200,7 +204,15 @@ public class StudentApplicationFormController {
 							answer.setFormAnswerVariant(variant);
 							formAnswerService.updateFormAnswer(answer);
 						}
-						if (questionDto.getAnswers().size() > answers.size()) {
+						if (questionDto.getAnswers().size() < answers.size()) {
+							for (; i < answers.size() - 1; i++) {
+								FormAnswer answer = answers.get(i);
+								formAnswerService.deleteFormAnswer(answer);
+							}
+							FormAnswer answer = answers.get(answers.size() - 1);
+							answer.setFormAnswerVariant(null);
+							formAnswerService.updateFormAnswer(answer);
+						} else {
 							for (; i < questionDto.getAnswers().size(); i++) {
 								StudentAnswerDto answerDto = questionDto.getAnswers().get(i);
 								FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
@@ -208,11 +220,6 @@ public class StudentApplicationFormController {
 										.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
 								formAnswer.setFormAnswerVariant(variant);
 								formAnswerService.insertFormAnswerForApplicationForm(formAnswer);
-							}
-						} else {
-							for (; i < answers.size(); i++) {
-								FormAnswer answer = answers.get(i);
-								formAnswerService.deleteFormAnswer(answer);
 							}
 						}
 					} else {
@@ -238,8 +245,19 @@ public class StudentApplicationFormController {
 				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
 			}
 			System.out.println("PEREMOGA2");
+			return gson.toJson(new MessageDto("Your application form was updated.", MessageDtoType.SUCCESS));
 		}
-		return null;
+	}
+
+	@RequestMapping(value = "appform/ApplicatonForm.pdf", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportAppform( HttpServletResponse response) throws IOException {
+		User user = userService.getAuthorizedUser();
+		System.out.println(user.toString());
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
+		ExportApplicationForm pdfAppForm = new ExportapplicationformImpl();
+		pdfAppForm.export(user,response);
 	}
 
 	private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
@@ -247,6 +265,29 @@ public class StudentApplicationFormController {
 		answer.setApplicationForm(applicationForm);
 		answer.setFormQuestion(question);
 		return answer;
+	}
+
+	private ApplicationForm createApplicationForm(User user) {
+		ApplicationForm applicationForm = new ApplicationFormImpl();
+		applicationForm.setUser(user);
+		Status status = statusService.getStatusById(StatusEnum.REGISTERED.getId());
+		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+		applicationForm.setStatus(status);
+		applicationForm.setActive(true);
+		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
+		applicationForm.setRecruitment(recruitment);
+		return applicationForm;
+	}
+
+	private boolean isFilled(StudentAppFormQuestionDto questionDto) {
+		List<StudentAnswerDto> answersDto = questionDto.getAnswers();
+		if (answersDto.isEmpty())
+			return false;
+		if (answersDto.size() == 1 && answersDto.get(0).getAnswer() == null)
+			return false;
+		if ("".equals(answersDto.get(0).getAnswer()))
+			return false;
+		return true;
 	}
 
 }
