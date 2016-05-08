@@ -8,16 +8,27 @@ function formSettingsService(http) {
 
     var service = {};
 
-    service.getAllQuestion= function () {
-        return http.post('/admin/getapplicationquestions').then(function (response) {
-            return JSON.parse("["+response.data+"]");
+    function handleSuccess( response ) {
+        return( JSON.parse("["+response.data+"]") );
+    }
+
+    service.getAllQuestion = function(role) {
+        var request = http({
+            method: "post",
+            url: "/admin/getapplicationquestions",
+            params: {
+                role: role
+            }
         });
+        return( request.then(handleSuccess) );
     };
+
+  
 
     service.addQuestion = function (question, type, enable, formAnswerVariants,role) {
         http({
             method : 'POST',
-            url : '/admin/addappformquestion',
+            url : '/admin/addAppFormQuestion',
             contentType: 'application/json',
             data : JSON.stringify({
                 question: question,

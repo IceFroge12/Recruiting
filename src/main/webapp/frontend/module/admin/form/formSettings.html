@@ -4,9 +4,10 @@
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" data-target="#applic-form1">Application form</a></li>
-                <li><a data-toggle="tab" data-target="#applic-soft1">Soft form</a></li>
-                <li><a data-toggle="tab" data-target="#applic-tech1">Tech form</a></li>
+                <li ng-click="getMandatory()" class="active"><a data-toggle="tab" data-target="#applic-form1">Application
+                    form</a></li>
+                <li ng-click="getSoft()"><a data-toggle="tab" data-target="#applic-soft1">Soft form</a></li>
+                <li ng-click="getTech()"><a data-toggle="tab" data-target="#applic-tech1">Tech form</a></li>
                 <li><a data-toggle="tab" data-target="#matrix">Decision Matrix</a></li>
             </ul>
             <div class="tab-content">
@@ -23,10 +24,14 @@
                             <tr ng-repeat="question in questions">
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
-                                <td>{{question.enable}}</td>
+                                <td>
+                                    <button class="btn btn-info" type="button">
+                                        {{question.enable}}
+                                    </button>
+                                </td>
                                 <td>
                                     <!--<ul ng-repeat="v in variants">-->
-                                    <!--<li>{{v}}</li>-->
+                                    <!--<li>{{v.variant}}</li>-->
                                     <!--</ul>-->
                                 </td>
                                 <td>
@@ -49,67 +54,26 @@
                             <tr>
                                 <th>Question</th>
                                 <th>Type</th>
+                                <th>Active</th>
+                                <th>Answer Variant</th>
                                 <th>Edit</th>
                             </tr>
-                            <tr>
-                                <td>Soft skills grade</td>
-                                <td>radiobutton</td>
+                            <tr ng-repeat="question in questions">
+                                <td>{{question.title}}</td>
+                                <td>{{question.type}}</td>
                                 <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
+                                    <button class="btn btn-info" type="button">
+                                        {{question.enable}}
                                     </button>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Mark</td>
-                                <td>radiobutton</td>
                                 <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
+                                    <!--<ul ng-repeat="v in variants">-->
+                                    <!--<li>{{v}}</li>-->
+                                    <!--</ul>-->
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Soft skills comment</td>
-                                <td>text</td>
                                 <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Knowledge in telecomunication</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Personal qualities, motivation</td>
-                                <td>dropdown-list</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>English</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Specialization</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
+                                    <button class="btn btn-link" type="button" data-toggle="modal"
+                                            data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
                                 </td>
@@ -124,79 +88,39 @@
                 <div id="applic-tech1" class="tab-pane fade">
                     <form>
                         <table class="table table-hover table-condensed">
-                            <tr>
-                                <th>Question</th>
-                                <th>Type</th>
-                                <th>Edit</th>
-                            </tr>
-                            <tr>
-                                <td>Tech skills grade</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Mark</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tech skills comment</td>
-                                <td>text</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Knowledge in telecomunication</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Personal qualities, motivation</td>
-                                <td>dropdown-list</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>English</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Specialization</td>
-                                <td>radiobutton</td>
-                                <td>
-                                    <button class="btn btn-link" type="button">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                        <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                data-target="#addEmployee">Add
-                            question
-                        </button>
+                            <table class="table table-hover table-condensed">
+                                <tr>
+                                    <th>Question</th>
+                                    <th>Type</th>
+                                    <th>Active</th>
+                                    <th>Answer Variant</th>
+                                    <th>Edit</th>
+                                </tr>
+                                <tr ng-repeat="question in questions">
+                                    <td>{{question.title}}</td>
+                                    <td>{{question.type}}</td>
+                                    <td>
+                                        <button class="btn btn-info" type="button">
+                                            {{question.enable}}
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <!--<ul ng-repeat="v in variants">-->
+                                        <!--<li>{{v}}</li>-->
+                                        <!--</ul>-->
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-link" type="button" data-toggle="modal"
+                                                data-target="#editQuestion">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
+                                    data-target="#addEmployee">Add
+                                question
+                            </button>
                     </form>
                 </div>
                 <div id="matrix" class="tab-pane fade">

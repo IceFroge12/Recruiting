@@ -4,16 +4,13 @@ import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.FormQuestionDto;
-import ua.kpi.nc.persistence.model.Decision;
-import ua.kpi.nc.persistence.model.FormQuestion;
-import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
+import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
+import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
-import ua.kpi.nc.service.DecisionService;
-import ua.kpi.nc.service.FormQuestionService;
-import ua.kpi.nc.service.RoleService;
-import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +18,7 @@ import java.util.List;
 /**
  * Created by dima on 23.04.16.
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminFormSettingsController {
 
@@ -30,6 +27,8 @@ public class AdminFormSettingsController {
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
 
     private RoleService roleService = ServiceFactory.getRoleService();
+
+    private QuestionTypeService questionTypeService = ServiceFactory.getQuestionTypeService();
 
 
     @RequestMapping(value = "addmatrix")
@@ -42,11 +41,10 @@ public class AdminFormSettingsController {
         }
     }
 
-    @RequestMapping(value = "getapplicationquestions",method = RequestMethod.POST)
-    @ResponseBody
-    public List<String> getAppFormQuestions() {
-
-        Role roleAdmin = roleService.getRoleByTitle(String.valueOf(RoleEnum.ROLE_ADMIN));
+    @RequestMapping(value = "getapplicationquestions", method = RequestMethod.POST)
+    public List<String> getAppFormQuestions(@RequestParam String role) {
+        System.out.println(role);
+        Role roleAdmin = roleService.getRoleByTitle(role);
 
         System.out.println(roleAdmin);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleAdmin);
@@ -62,14 +60,26 @@ public class AdminFormSettingsController {
         return adapterFormQuestionList;
     }
 
-    @RequestMapping(value = "addappformquestion")
+    @RequestMapping(value = "addAppFormQuestion")
     public void addAppFormQuestion(@RequestBody FormQuestionDto formQuestionDto) {
         System.out.println(formQuestionDto);
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         System.out.println(role.getRoleName());
-        FormQuestion formQuestion = new FormQuestionImpl();
-        formQuestionService.addRole(formQuestion, role);
+        QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
+        System.out.println(questionType);
 
+        List<Role> roleList = new ArrayList<>();//TODO change list
+        roleList.add(role);
+        List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
+        for (String s : formQuestionDto.getFormAnswerVariants()) {
+            System.out.println(s);
+            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(s);
+            formAnswerVariantList.add(formAnswerVariant);
+        }
+
+        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getQuestion(), questionType,
+                formQuestionDto.isEnable(), true, roleList, formAnswerVariantList);
+        formQuestionService.insertFormQuestion(formQuestion,role,formAnswerVariantList);
     }
 
     @RequestMapping(value = "updateappformquestion")
@@ -77,5 +87,9 @@ public class AdminFormSettingsController {
         formQuestionService.updateFormQuestion(formQuestion);
     }
 
+    @RequestMapping(value = "getAllQuestionType")
+    public List<QuestionType> getAllQuestionType() {
+        return questionTypeService.getAllQuestionType();
+    }
 
 }

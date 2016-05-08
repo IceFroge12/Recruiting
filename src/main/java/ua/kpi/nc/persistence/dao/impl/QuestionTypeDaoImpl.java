@@ -10,6 +10,7 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by IO on 21.04.2016.
@@ -32,18 +33,33 @@ public class QuestionTypeDaoImpl extends JdbcDaoSupport implements QuestionTypeD
     private static final String SQL_GET_ID = "SELECT " + ID_COL + ", " + TYPE_TITLE_COL + " FROM " + TABLE_NAME
             + " WHERE " + ID_COL + " = ?";
 
+    private static final String SQL_GET_BY_NAME = "SELECT " + ID_COL + ", " + TYPE_TITLE_COL + " FROM " + TABLE_NAME
+            + " WHERE " + TYPE_TITLE_COL + " = ?";
+
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + TYPE_TITLE_COL + ") VALUES(?);";
 
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + TABLE_NAME + " = ?;";
 
+    private static final String SQL_GET_ALL = "SELECT " + ID_COL + ", " + TYPE_TITLE_COL + " FROM " + TABLE_NAME;
+
     public QuestionTypeDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
+    }
+
+    public List<QuestionType> getAllQuestionType() {
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL,extractor);
     }
 
     @Override
     public QuestionType getById(Long id) {
         log.trace("Looking for form question with id  = ", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_ID, extractor, id);
+    }
+
+    @Override
+    public QuestionType getByName(String name) {
+        log.trace("Looking for form question with name  = ", name);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_NAME, extractor, name);
     }
 
     @Override
@@ -56,6 +72,5 @@ public class QuestionTypeDaoImpl extends JdbcDaoSupport implements QuestionTypeD
     public int deleteQuestionType(QuestionType questionType) {
         return this.getJdbcTemplate().update(SQL_DELETE, questionType.getId());
     }
-
 
 }
