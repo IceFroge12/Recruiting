@@ -12,12 +12,12 @@
             <table class="table table-condensed table-hover col-md-8">
                 <thead>
                 <tr>
-                    <th class="staff-id" custom-sort order="'id'" sort="sort">ID&nbsp</th>
-                    <th class="staff-name" custom-sort order="'name'" sort="sort">Name&nbsp</th>
-                    <th class="staff-email" custom-sort order="'email'" sort="sort">E-mail</th>
-                    <th class="staff-role" custom-sort order="'role'" sort="sort">Role</th>
-                    <th class="staff-status" custom-sort order="'status'" sort="sort">Status</th>
-                    <th class="staff-assigned" custom-sort order="'assigned'" sort="sort">Assigned students</th>
+                    <th class="staff-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
+                    <th class="staff-name" custom-sort order="5" sort="sort">Name&nbsp;</th>
+                    <th class="staff-email" custom-sort order="2" sort="sort">E-mail&nbsp;</th>
+                    <th class="staff-role">Role</th>
+                    <th class="staff-status">Status</th>
+                    <th class="staff-assigned">Assigned students</th>
                     <th class="staff-edit">Edit</th>
                     <th class="staff-delete">Delete</th>
                 </tr>
@@ -56,17 +56,17 @@
                     <td colspan="6">
                         <div class="pagination pull-right">
                             <ul>
-                                <li ng-class="{disabled: currentPage == 0}">
+                                <li ng-class="{disabled: currentPage == 1}">
                                     <a href ng-click="prevPage()">« Prev</a>
                                 </li>
 
                                 <li ng-repeat="n in range(amount, currentPage, currentPage + gap) "
-                                    ng-class="{active: n+1 == currentPage}"
+                                    ng-class="{active: n == currentPage}"
                                     ng-click="setPage()">
-                                    <a href ng-bind="n + 1">1</a>
+                                    <a href ng-bind="n">1</a>
                                 </li>
 
-                                <li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+                                <li ng-class="{disabled: currentPage == amount}">
                                     <a href ng-click="nextPage()">Next »</a>
                                 </li>
                             </ul>
