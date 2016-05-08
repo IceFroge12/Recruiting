@@ -11,13 +11,7 @@ import com.google.gson.Gson;
 import javax.mail.MessagingException;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.google.gson.Gson;
-
+import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
@@ -50,7 +44,7 @@ import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.StatusService;
 import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.util.export.ExportApplicationForm;
-import ua.kpi.nc.util.export.ExportapplicationformImpl;
+import ua.kpi.nc.util.export.ExportApplicationFormImp;
 
 /**
  * Created by dima on 14.04.16.
@@ -244,15 +238,15 @@ public class StudentApplicationFormController {
 		}
 	}
 
-	@RequestMapping(value = "appform/ApplicatonForm.pdf", method = RequestMethod.GET)
+	@RequestMapping(value = "appform{applicationFormId}", method = RequestMethod.GET)
 	@ResponseBody
-	public void exportAppform(HttpServletResponse response) throws IOException {
-		User user = userService.getAuthorizedUser();
-		System.out.println(user.toString());
+	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
+		ApplicationForm applicationForm =  applicationFormService.getApplicationFormById(applicationFormId);
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
-		ExportApplicationForm pdfAppForm = new ExportapplicationformImpl();
-		pdfAppForm.export(user, response);
+		ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
+		pdfAppForm.export(applicationForm,response);
+
 	}
 
 	private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {

@@ -2,7 +2,7 @@
  * Created by dima on 02.05.16.
  */
 
-function appFormController($scope, $http, appFormService) {
+function appFormController($scope,ngToast, $http, appFormService) {
     appFormService.loadAppFormData().then(function success(data) {
 		$scope.id = data.id;
         $scope.questions = data.questions;
@@ -82,14 +82,36 @@ function appFormController($scope, $http, appFormService) {
         //image.src = _URL.createObjectURL(file);
     });
 
-    $scope.exportAppForm = function() {
-         url = './../student/appform/ApplicatonForm.pdf';
-        window.location = url;
-    }
+
+
+    $scope.exportAppForm = function(){
+        var config = {
+            method: 'GET',
+            url: "/student/appform"+ $scope.id,
+            headers: {
+                'Accept': 'application/pdf'
+            }
+        };
+        $http(config)
+            .success(function(){
+                window.location = "/student/appform"+ $scope.id;
+            })
+            .error(function(){
+                var myToastMsg = ngToast.warning({
+                    content: 'Error exporting Application Form ',
+                    timeout: 5000,  //TODO : Change color, position
+                    horizontalPosition: 'center',
+                    verticalPosition: 'bottom',
+                    dismissOnClick: true,
+                    combineDuplications: true,
+                    maxNumber: 2
+                });
+            });
+    };
 
 }
 
 
 
 angular.module('appStudentForm')
-    .controller('appFormController', ['$scope','$http','appFormService', appFormController]);
+    .controller('appFormController', ['$scope','ngToast','$http','appFormService', appFormController]);
