@@ -12,14 +12,18 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.filteredItems = [];
     $scope.groupedItems = [];
     $scope.itemsPerPage = 9;
-    $scope.pagedItems = [];
     $scope.currentPage = 1;
     $scope.items = [];
     $scope.amount = 0;
-    $scope.pageNums = 0;
+    $scope.sortingCol = 1;
+    $scope.sortingDir = 1;
 
-    staffManagementService.showAllEmployees(1).success(function (data) {
+    staffManagementService.showAllEmployees(1, $scope.sortingCol, $scope.sortingDir).success(function (data) {
         $scope.allEmployee = data;
+        console.log(data);
+        console.log($scope.sortingCol);
+        console.log($scope.sortingDir);
+
     }, function error() {
         console.log("error");
     });
@@ -40,12 +44,13 @@ function staffManagementController($scope, $filter, staffManagementService) {
     });
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
-        staffManagementService.showAllEmployees(pageNum).success(function (data) {
+        staffManagementService.showAllEmployees(pageNum, $scope.sortingCol, $scope.sortingDir).success(function (data) {
             $scope.allEmployee = data;
+            console.log(data);
         }, function error() {
             console.log("error");
         });
-    }
+    };
 
     $scope.employees =
         [{roleName: 'ADMIN'},
@@ -68,31 +73,6 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.addEmployee = function () {
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
             $scope.lastName, $scope.email, $scope.selection);
-    };
-
-    var searchMatch = function (haystack, needle) {
-        if (!needle) {
-            return true;
-        }
-        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
-    };
-
-    // init the filtered items
-    $scope.search = function () {
-        $scope.filteredItems = $filter('filter')($scope.items, function (item) {
-            for (var attr in item) {
-                if (searchMatch(item[attr], $scope.query))
-                    return true;
-            }
-            return false;
-        });
-        // take care of the sorting order
-        if ($scope.sort.sortingOrder !== '') {
-            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sort.sortingOrder, $scope.sort.reverse);
-        }
-        $scope.currentPage = 1;
-        // now group by pages
-        //$scope.groupToPages();
     };
 
     $scope.range = function (size, start, end) {
@@ -118,7 +98,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.pagedItems.length - 1) {
+        if ($scope.currentPage < $scope.pagedItems.amount - 1) {
             $scope.currentPage++;
         }
     };
@@ -128,9 +108,6 @@ function staffManagementController($scope, $filter, staffManagementService) {
         $scope.showAllEmployees($scope.currentPage);
         console.log($scope.currentPage);
     };
-
-    // functions have been describe process the data for display
-    $scope.search();
 
     var editRoles = [];
 
@@ -186,7 +163,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.deleteEmployee = function () {
-        console.log(currentEmployee)
+        console.log(currentEmployee);
         staffManagementService.deleteEmployee(currentEmployee.email);
     };
 
