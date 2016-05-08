@@ -21,7 +21,7 @@ public class AdminManagementStudentController {
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
 
 
-    @RequestMapping(value = "getAllStudents", method = RequestMethod.GET)
+    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<User> getAllStudents(@RequestParam int pageNum) {
         Long itemsByPage = 9L;
         Long fromRow = (pageNum - 1) * itemsByPage;
@@ -31,7 +31,6 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "getStatus", method = RequestMethod.GET)
     public Status getStatusById(@RequestParam Long id) {
-        System.out.println("Request id =" + id);
         ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
         return af.getStatus();
     }
@@ -66,6 +65,5 @@ public class AdminManagementStudentController {
     public void confirmSelection() {
         //TODO
     }
-
 
 }
