@@ -2,12 +2,13 @@ package ua.kpi.nc.controller.student;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import com.google.gson.Gson;
 
 import javax.mail.MessagingException;
-
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,6 @@ import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import javax.servlet.http.HttpServletResponse;
-
 
 import java.io.IOException;
 
@@ -91,7 +91,7 @@ public class StudentApplicationFormController {
 			List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
 			ApplicationForm oldApplicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
 			List<FormQuestion> formQuestions = formQuestionService
-					.getByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+					.getEnableByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 			for (FormQuestion formQuestion : formQuestions) {
 				boolean wasInOldForm = false;
 				if (oldApplicationForm != null) {
@@ -113,7 +113,6 @@ public class StudentApplicationFormController {
 		return jsonResult;
 	}
 
-	// headers = {"Content-type=application/json"}
 	@RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST, headers = {
 			"Content-type=application/json" })
 	@ResponseBody
@@ -124,140 +123,136 @@ public class StudentApplicationFormController {
 		user.setSecondName(applicationFormDto.getUser().getSecondName());
 		userService.updateUser(user);
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(user.getId());
+		boolean newForm = false;
 		if (applicationForm == null) {
 			applicationForm = createApplicationForm(user);
-
-			Set<FormQuestion> remainedQuestions = formQuestionService
-					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
-			List<FormAnswer> answers = new ArrayList<FormAnswer>();
-			for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
-				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
-				if (formQuestion == null) {
-					return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
-				}
-				if (formQuestion.isMandatory() && !isFilled(questionDto)) {
-					return gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
-				}
-				String questionType = formQuestion.getQuestionType().getTypeTitle();
-				if (formQuestion.isEnable()) {
-					if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
-						for (StudentAnswerDto answerDto : questionDto.getAnswers()) {
-							FormAnswerVariant variant = formAnswerVariantService
-									.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-							if (variant != null) {
-								FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
-								formAnswer.setFormAnswerVariant(variant);
-								answers.add(formAnswer);
-							}
-						}
-					} else {
-						if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
-								|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
-							FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
-							StudentAnswerDto answerDto = questionDto.getAnswers().get(0);
-							FormAnswerVariant variant = formAnswerVariantService
-									.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-							formAnswer.setFormAnswerVariant(variant);
-							answers.add(formAnswer);
-						} else {
-							FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
-							formAnswer.setAnswer(questionDto.getAnswers().get(0).getAnswer());
-							answers.add(formAnswer);
-						}
-					}
-					if (!remainedQuestions.remove(formQuestion)) {
-						return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
-					}
-				}
-			}
-			if (!remainedQuestions.isEmpty()) {
+			newForm = true;
+		}
+		Set<FormQuestion> remainedQuestions = formQuestionService
+				.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+		List<FormAnswer> answers = null;
+		if (newForm) {
+			answers = new ArrayList<FormAnswer>();
+		}
+		for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
+			FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
+			if (!isFormQuestionValid(formQuestion)) {
 				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
 			}
+			if (formQuestion.isMandatory() && !isFilled(questionDto)) {
+				return gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
+			}
+			if (!remainedQuestions.remove(formQuestion)) {
+				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+			}
+			if (!newForm) {
+				answers = formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion);
+				updateAnswers(formQuestion, answers, questionDto.getAnswers(), applicationForm);
+			} else {
+				answers.addAll(insertNewAnswers(formQuestion, questionDto.getAnswers(), applicationForm));
+			}
+		}
+		if (!remainedQuestions.isEmpty()) {
+			return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+		}
+		System.out.println("PEREMOGA");
+		if (newForm) {
 			applicationForm.setAnswers(answers);
 			applicationFormService.insertApplicationForm(applicationForm);
-			System.out.println("PEREMOGA");
 			return gson.toJson(new MessageDto("Your application form was created.", MessageDtoType.SUCCESS));
-		} else {
-			Set<FormQuestion> remainedQuestions = formQuestionService
-					.getByRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
-
-			for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
-				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
-				if (formQuestion == null) {
-					return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
-				}
-				if (formQuestion.isMandatory() && !isFilled(questionDto)) {
-					return gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
-				}
-				String questionType = formQuestion.getQuestionType().getTypeTitle();
-				List<FormAnswer> answers = formAnswerService.getByApplicationFormAndQuestion(applicationForm,
-						formQuestion);
-
-				if (formQuestion.isEnable()) {
-					if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
-						int i = 0;
-						for (i = 0; i < questionDto.getAnswers().size() && i < answers.size(); i++) {
-							StudentAnswerDto answerDto = questionDto.getAnswers().get(i);
-							FormAnswer answer = answers.get(i);
-							FormAnswerVariant variant = formAnswerVariantService
-									.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-							answer.setFormAnswerVariant(variant);
-							formAnswerService.updateFormAnswer(answer);
-						}
-						if (questionDto.getAnswers().size() < answers.size()) {
-							for (; i < answers.size() - 1; i++) {
-								FormAnswer answer = answers.get(i);
-								formAnswerService.deleteFormAnswer(answer);
-							}
-							FormAnswer answer = answers.get(answers.size() - 1);
-							answer.setFormAnswerVariant(null);
-							formAnswerService.updateFormAnswer(answer);
-						} else {
-							for (; i < questionDto.getAnswers().size(); i++) {
-								StudentAnswerDto answerDto = questionDto.getAnswers().get(i);
-								FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
-								FormAnswerVariant variant = formAnswerVariantService
-										.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-								formAnswer.setFormAnswerVariant(variant);
-								formAnswerService.insertFormAnswerForApplicationForm(formAnswer);
-							}
-						}
-					} else {
-						FormAnswer formAnswer = answers.get(0);
-						if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
-								|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
-
-							StudentAnswerDto answerDto = questionDto.getAnswers().get(0);
-							FormAnswerVariant variant = formAnswerVariantService
-									.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-							formAnswer.setFormAnswerVariant(variant);
-						} else {
-							formAnswer.setAnswer(questionDto.getAnswers().get(0).getAnswer());
-						}
-						formAnswerService.updateFormAnswer(formAnswer);
-					}
-					if (!remainedQuestions.remove(formQuestion)) {
-						return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
-					}
-				}
-			}
-			if (!remainedQuestions.isEmpty()) {
-				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
-			}
-			System.out.println("PEREMOGA2");
+		}
+		else {
 			return gson.toJson(new MessageDto("Your application form was updated.", MessageDtoType.SUCCESS));
+		}
+	}
+
+	private void updateAnswers(FormQuestion formQuestion, List<FormAnswer> answers, List<StudentAnswerDto> answersDto,
+			ApplicationForm applicationForm) {
+		String questionType = formQuestion.getQuestionType().getTypeTitle();
+		if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
+			int i = 0;
+			for (i = 0; i < answersDto.size() && i < answers.size(); i++) {
+				StudentAnswerDto answerDto = answersDto.get(i);
+				FormAnswer answer = answers.get(i);
+				FormAnswerVariant variant = formAnswerVariantService
+						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
+				answer.setFormAnswerVariant(variant);
+				formAnswerService.updateFormAnswer(answer);
+			}
+			if (answersDto.size() < answers.size()) {
+				for (; i < answers.size() - 1; i++) {
+					FormAnswer answer = answers.get(i);
+					formAnswerService.deleteFormAnswer(answer);
+				}
+				FormAnswer answer = answers.get(answers.size() - 1);
+				answer.setFormAnswerVariant(null);
+				formAnswerService.updateFormAnswer(answer);
+			} else {
+				for (; i < answersDto.size(); i++) {
+					StudentAnswerDto answerDto = answersDto.get(i);
+					FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
+					FormAnswerVariant variant = formAnswerVariantService
+							.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
+					formAnswer.setFormAnswerVariant(variant);
+					formAnswerService.insertFormAnswerForApplicationForm(formAnswer);
+				}
+			}
+		} else {
+			FormAnswer formAnswer = answers.get(0);
+			if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
+					|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
+
+				StudentAnswerDto answerDto = answersDto.get(0);
+				FormAnswerVariant variant = formAnswerVariantService
+						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
+				formAnswer.setFormAnswerVariant(variant);
+			} else {
+				formAnswer.setAnswer(answersDto.get(0).getAnswer());
+			}
+			formAnswerService.updateFormAnswer(formAnswer);
+		}
+	}
+
+	private Collection<? extends FormAnswer> insertNewAnswers(FormQuestion formQuestion,
+			List<StudentAnswerDto> answersDto, ApplicationForm applicationForm) {
+		String questionType = formQuestion.getQuestionType().getTypeTitle();
+		if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
+			List<FormAnswer> answers = new ArrayList<FormAnswer>();
+			for (StudentAnswerDto answerDto : answersDto) {
+				FormAnswerVariant variant = formAnswerVariantService
+						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
+				if (variant != null) {
+					FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
+					formAnswer.setFormAnswerVariant(variant);
+					answers.add(formAnswer);
+				}
+			}
+			return answers;
+		} else {
+			FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
+			;
+			if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
+					|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
+				StudentAnswerDto answerDto = answersDto.get(0);
+				FormAnswerVariant variant = formAnswerVariantService
+						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
+				formAnswer.setFormAnswerVariant(variant);
+			} else {
+				formAnswer.setAnswer(answersDto.get(0).getAnswer());
+			}
+			return Arrays.asList(formAnswer);
 		}
 	}
 
 	@RequestMapping(value = "appform/ApplicatonForm.pdf", method = RequestMethod.GET)
 	@ResponseBody
-	public void exportAppform( HttpServletResponse response) throws IOException {
+	public void exportAppform(HttpServletResponse response) throws IOException {
 		User user = userService.getAuthorizedUser();
 		System.out.println(user.toString());
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
 		ExportApplicationForm pdfAppForm = new ExportapplicationformImpl();
-		pdfAppForm.export(user,response);
+		pdfAppForm.export(user, response);
 	}
 
 	private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
@@ -277,6 +272,13 @@ public class StudentApplicationFormController {
 		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
 		applicationForm.setRecruitment(recruitment);
 		return applicationForm;
+	}
+
+	private boolean isFormQuestionValid(FormQuestion formQuestion) {
+		if (formQuestion == null || !formQuestion.isEnable()) {
+			return false;
+		}
+		return true;
 	}
 
 	private boolean isFilled(StudentAppFormQuestionDto questionDto) {

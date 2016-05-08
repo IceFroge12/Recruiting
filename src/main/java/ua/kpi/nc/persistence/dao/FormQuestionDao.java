@@ -30,7 +30,9 @@ public interface FormQuestionDao {
 
 	int updateFormQuestion(FormQuestion formQuestion);
 
-	Set<FormQuestion> getByRoleAsSet(Role role);
+	Set<FormQuestion> getEnableByRoleAsSet(Role role);
+
+	List<FormQuestion> getEnableByRole(Role role);
 
 
 }

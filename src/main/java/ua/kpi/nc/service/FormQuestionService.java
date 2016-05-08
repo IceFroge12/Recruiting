@@ -33,6 +33,8 @@ public interface FormQuestionService {
 
 	List<FormQuestion> getAll();
 	
-	Set<FormQuestion> getByRoleAsSet(Role role);
+	List<FormQuestion> getEnableByRole(Role role);
+	
+	Set<FormQuestion> getByEnableRoleAsSet(Role role);
 	
 }

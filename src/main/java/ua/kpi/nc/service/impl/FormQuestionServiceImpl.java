@@ -105,7 +105,12 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 	}
 
 	@Override
-	public Set<FormQuestion> getByRoleAsSet(Role role) {
-		return formQuestionDao.getByRoleAsSet(role);
+	public Set<FormQuestion> getByEnableRoleAsSet(Role role) {
+		return formQuestionDao.getEnableByRoleAsSet(role);
+	}
+
+	@Override
+	public List<FormQuestion> getEnableByRole(Role role) {
+		return formQuestionDao.getEnableByRole(role);
 	}
 }
