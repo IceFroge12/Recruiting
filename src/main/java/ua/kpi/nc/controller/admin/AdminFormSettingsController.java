@@ -62,17 +62,14 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "addAppFormQuestion")
     public void addAppFormQuestion(@RequestBody FormQuestionDto formQuestionDto) {
-        System.out.println(formQuestionDto);
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
-        System.out.println(role.getRoleName());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
-        System.out.println(questionType);
 
         List<Role> roleList = new ArrayList<>();//TODO change list
         roleList.add(role);
+
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         for (String s : formQuestionDto.getFormAnswerVariants()) {
-            System.out.println(s);
             FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(s);
             formAnswerVariantList.add(formAnswerVariant);
         }
