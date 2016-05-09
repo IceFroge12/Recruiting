@@ -27,8 +27,11 @@
 						<td>{{student.lastName}}</td>
 						<td>{{student.firstName}}</td>
 						<td>{{student.secondName}}</td>
-						<td><button class="btn btn-sm btn-info"
-								ng-click="deassignApplicationForm(student)" type="button">Deassign</button></td>
+						<td>
+						<div ng-repeat="interview in student.interviews">
+						<button class="btn btn-sm btn-info"	ng-click="deassignApplicationForm(interview.id)" type="button">Deassign as {{roleNames[interview.role - 1]}}</button>
+								</div>
+								</td>
 					</tr>
 				</tbody>
 			</table>
@@ -52,6 +55,7 @@
 						<input ng-model-options="{ debounce: 1000 }" id="candidateName"
 							ng-model="newFormId" ng-change="searchApplicationForm(newFormId)">
 					</form>
+					{{search.resultMessage.message}}
 					<table id="founded_students" class="table table-hover">
 						<thead>
 							<tr>
@@ -60,6 +64,7 @@
 								<th>Last Name</th>
 								<th>First Name</th>
 								<th>Second Name</th>
+								<th>Assign as</th>
 								<th>Assign</th>
 							</tr>
 						</thead>
@@ -71,6 +76,12 @@
 								<td>{{$parent.foundStudent.lastName}}</td>
 								<td>{{$parent.foundStudent.firstName}}</td>
 								<td>{{$parent.foundStudent.secondName}}</td>
+								<td>
+								<div ng-repeat="interview in $parent.foundStudent.interviews">
+									<input type="checkbox" ng-checked="assigning.roles.indexOf(interview.role) > -1"
+									ng-click="chooseRoleForAssign(interview.role)"> {{roleNames[interview.role - 1]}}
+								</div>
+								</td>
 								<td>
 									<button class="btn btn-sm btn-info"
 										ng-click="assignApplicationForm($parent.foundStudent)"
