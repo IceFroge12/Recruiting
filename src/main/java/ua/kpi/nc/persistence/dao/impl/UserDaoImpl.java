@@ -3,8 +3,6 @@ package ua.kpi.nc.persistence.dao.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.kpi.nc.persistence.dao.DaoFactory;
-import ua.kpi.nc.persistence.dao.RoleDao;
 import ua.kpi.nc.persistence.dao.UserDao;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
@@ -18,8 +16,6 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +28,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     private static final int ROLE_STUDENT = 3;
+
+    private static String direction;
 
     private ResultSetExtractor<User> extractor = resultSet -> {
         User user = new UserImpl();
@@ -105,16 +103,26 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE ur.id_role <>" + ROLE_STUDENT;
 
-    private final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS_1 = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
-            "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
-            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE ur.id_role <> " + ROLE_STUDENT + " ORDER BY ";
-    private final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS_2 = " OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY";
+    private static final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS_ASK = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
+            "u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date" +
+            " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT + " )" +
+            " as uuiefnlnsnpctiard ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
-    private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
+
+    private static final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS_DESK = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
+            "u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date" +
+            " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT + " )" +
+            " as uuiefnlnsnpctiard ORDER BY ? DESC OFFSET ? LIMIT ?;";
+
+    private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS_ASK = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
             "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY u.email OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY";
+            "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY ? ASK OFFSET ? LIMIT ?";
+
+    private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS_DESK = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
+            "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
+            "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY ? DESC OFFSET ? LIMIT ?";
 
     @Override
     public User getByID(Long id) {
@@ -130,7 +138,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public boolean isExist(String email) {
-        return this.getJdbcTemplate().queryWithParameters(SQL_EXIST,resultSet -> resultSet.getBoolean(1),email);
+        return this.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
 
     }
 
@@ -215,23 +223,21 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         log.info("Get all Students");
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
     }
+
     @Override
-    public List<User> getStudentsFromToRows(Long fromRows) {
-        log.info("Get Students From To Rows");
-        Long offsetRows = fromRows;
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_STUDENTS_FOR_ROWS, extractor,offsetRows);
+    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
+        log.info("Get Employees From To Rows");
+        String sql = increase ? SQL_GET_ALL_EMPLOYEES_FOR_ROWS_ASK : SQL_GET_ALL_EMPLOYEES_FOR_ROWS_DESK;
+        return this.getJdbcTemplate().queryForList(sql, extractor, sortingCol,
+                fromRows, rowsNum);
     }
 
     @Override
-    public List<User> getEmployeesFromToRows(Long fromRows, int sortingCol, boolean increase) {
-        log.info("Get Employees From To Rows");
-        Long offsetRows = fromRows;
-        String direction = Integer.toString(sortingCol) + (increase ? " ASC" : " DESC");
-        StringBuilder sb = new StringBuilder(SQL_GET_ALL_EMPLOYEES_FOR_ROWS_1);
-        sb.append(direction);
-        sb.append(SQL_GET_ALL_EMPLOYEES_FOR_ROWS_2);
-        String query = sb.toString();
-        return this.getJdbcTemplate().queryForList(query, extractor, offsetRows);
+    public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
+        log.info("Get Students From To Rows");
+        String sql = increase ? SQL_GET_ALL_STUDENTS_FOR_ROWS_ASK : SQL_GET_ALL_STUDENTS_FOR_ROWS_DESK;
+        return this.getJdbcTemplate().queryForList(sql, extractor, sortingCol,
+                fromRows, rowsNum);
     }
 
     @Override

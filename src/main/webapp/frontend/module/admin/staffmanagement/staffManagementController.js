@@ -34,9 +34,8 @@ function staffManagementController($scope, $filter, staffManagementService) {
         console.log($scope.sort.sortingOrder);
     });
 
-    staffManagementService.showAllEmployees(1, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) {
+    staffManagementService.showAllEmployees(1, $scope.sort.sortingOrder, $scope.sort.reverse, true).success(function (data) { //TODO
         $scope.allEmployee = data;
-
     }, function error() {
         console.log("error");
     });
@@ -46,7 +45,8 @@ function staffManagementController($scope, $filter, staffManagementService) {
     });
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
-        staffManagementService.showAllEmployees(pageNum, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) {
+        var itemsByPage = 10;
+        staffManagementService.showAllEmployees(pageNum,itemsByPage, $scope.sort.sortingOrder,true).success(function (data) { //TODO
             $scope.allEmployee = data;
             console.log(data);
         }, function error() {

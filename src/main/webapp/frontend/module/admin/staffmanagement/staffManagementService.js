@@ -7,11 +7,12 @@ function staffManagementService(http) {
 
     var service = {};
     
-    service.showAllEmployees = function (pageNum, sortingCol, increase) {
+    service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase) {
+        console.log("Service showAllEmployees");
         return http({
             method : 'GET',
             url : '/admin/showAllEmployees',
-            params : {pageNum:pageNum, sortingCol:sortingCol, increase:increase}
+            params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
 
     };
