@@ -4,6 +4,8 @@ import ua.kpi.nc.persistence.dao.StatusDao;
 import ua.kpi.nc.persistence.model.Status;
 import ua.kpi.nc.service.StatusService;
 
+import java.util.List;
+
 /**
  * Created by Алексей on 23.04.2016.
  */
@@ -33,5 +35,10 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public int deleteStatus(Status status) {
         return statusDao.deleteStatus(status);
+    }
+
+    @Override
+    public List<Status> getAllStatuses() {
+        return statusDao.getAllStatuses();
     }
 }

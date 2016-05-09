@@ -1,16 +1,8 @@
-function feedbackController($scope, feedbackService, feedback) {
-    var self = this;
-    self.appForm_id = null;
-    self.feedback = null;
 
-    self.setFeedback = function (id, feedback) {
-        feedbackService.setFeedback(id, feedback).then(
-            function (response) {
-                //self.feedback=response.data;
-            }, function (errResponse) {
-                console.error('Error while seting feedback: controller.');
-            })
-    }
+function feedbackController($scope, feedbackService, feedback) {
+
+    feedbackService.saveFeedback(feedback);
+
 }
 
 

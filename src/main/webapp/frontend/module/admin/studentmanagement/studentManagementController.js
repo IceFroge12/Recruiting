@@ -13,56 +13,53 @@ function studentManagementController($scope, studentManagementService) {
 
     studentManagementService.showAllStudents(1).success(function (data) {
         $scope.allStudents = data;
-        // angular.forEach( $scope.allStudents, function (value, key) {
-        //     console.log(value.status);
-        //     if(value.status == "Approved to Job"){
-        //         $scope.approvedToWork += 1;
-        //     }
-        //     if(value.status == "Approved to General Courses"){
-        //         $scope.approvedToGeneral += 1;
-        //     }
-        //     if(value.status == "Rejected"){
-        //         $scope.rejected += 1;
-        //     }
-        //     if(value.status == "Approved to Advanced Coursec"){
-        //         $scope.approvedToAdvanced += 1;
-        //     }
-        // });
     }, function error() {
         console.log("error");
     });
 
-    // studentManagementService.getStudentsUniversity(221).success(function (data) {
-    //     $scope.university=data;
-    // }, function error() {
-    //     console.log("error with getting student university from service");
-    // });
-    
-    // studentManagementService.getStudentsCourse(221).success(function (data) {
-    //     $scope.course=data;
-    // }, function error() {
-    //     console.log("error with getting student course from service");
-    // });
-
-    studentManagementService.getStudentsStatus(221).success(function (data) {
-        $scope.status=data;
+    studentManagementService.getStudentsUniversity(74).success(function (data) {
+        $scope.university=data.answer+".";
+        console.log(data+" university");
     }, function error() {
-        console.log("error with getting Employee roles from service");
+        console.log("error with getting student university from service");
     });
     
+    studentManagementService.getStudentsCourse(74).success(function (data) {
+        $scope.course=data.answer+".";
+        console.log(data+" course");
+    }, function error() {
+        console.log("error with getting student course from service");
+    });
+
+    studentManagementService.getStudentsStatus(74).success(function (data) {
+        $scope.status=data;
+        console.log(data+" status");
+        if(angular.equals($scope.status.title,"Registered")){
+            $scope.approvedToWork += 1;
+        }else
+        if(angular.equals($scope.status.title, "Approved to General Courses")){
+            $scope.approvedToGeneral += 1;
+        }else
+        if(angular.equals($scope.status.title, "Rejected")){
+            $scope.rejected += 1;
+        }else
+        if(angular.equals($scope.status.title, "Approved to Advanced Coursec")){
+            $scope.approvedToAdvanced += 1;
+        }
+    }, function error() {
+        console.log("error with getting student status from service");
+    });
     
-    
-    $scope.statuses =
-        [{studentStatus: 'Registered'},
-            {studentStatus: 'In review'},
-            {studentStatus: 'Approved'},
-            {studentStatus: 'Rejected'},
-            {studentStatus: 'Pending result'},
-            {studentStatus: 'Approved to job'},
-            {studentStatus: 'Approved to general group'},
-            {studentStatus: 'Approved to advanced courses'}
-        ];
-    
+    studentManagementService.getAllStatuses().success(function(data){
+        $scope.statuses=data;
+        //$scope.statuses=[];
+        // angular.forEach(data, function (value, key){
+        //     if(!angular.equals(value.title,scope.status.title))$scope.statuses.add(value);
+        // })
+        console.log(data+" allStatus");
+    }, function error() {
+        console.log("error with getting allStatus");
+    });
 
   }
 

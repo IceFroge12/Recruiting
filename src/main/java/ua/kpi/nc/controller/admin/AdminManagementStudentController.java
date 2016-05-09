@@ -2,8 +2,10 @@ package ua.kpi.nc.controller.admin;
 
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.service.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ public class AdminManagementStudentController {
     private UserService userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
+    private StatusService statusService=ServiceFactory.getStatusService();
 
 
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
@@ -29,6 +32,11 @@ public class AdminManagementStudentController {
         return students;
     }
 
+    @RequestMapping(value = "getAllStatuses", method = RequestMethod.GET)
+    public List<Status> getAllStatuses(){
+        return statusService.getAllStatuses();
+    }
+
     @RequestMapping(value = "getStatus", method = RequestMethod.GET)
     public Status getStatusById(@RequestParam Long id) {
         ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
@@ -37,33 +45,34 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "getUniverse", method = RequestMethod.GET)
     public FormAnswer getUniverseById(@RequestParam Long id) {
+        System.out.println("Зашли 8");
         ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
-        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(3L));
+        System.out.println("get app form 8");
+        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(8L));
+        if(formAnswer==null)System.out.println("form answer = NULL");
+        System.out.println("get form answer 8");
+        System.out.println("Перед отправкой 8"+formAnswer.get(0));
         return formAnswer.get(0);
     }
 
 
     @RequestMapping(value = "getCourse", method = RequestMethod.GET)
     public FormAnswer getCourseById(@RequestParam Long id) {
+        System.out.println("Зашли 9");
         ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
-        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(1L));
+        System.out.println("get app form 9");
+        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(9L));
+        if(formAnswer==null)System.out.println("form answer = NULL");
+        System.out.println("get form answer 9");
+        System.out.println("Перед отправкой 9"+formAnswer.get(0));
         return formAnswer.get(0);
     }
 
-    @RequestMapping(value = "changeStudentsStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
         ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
         af.setStatus(status);
         return true;
-    }
-
-    ;
-
-
-    @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
-    @ResponseBody
-    public void confirmSelection() {
-        //TODO
     }
 
 }

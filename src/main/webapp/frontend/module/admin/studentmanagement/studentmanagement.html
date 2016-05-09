@@ -12,9 +12,12 @@
                 <label>Search:<input ng-model="searchText"></label>
             </div>
             <div class="col-md-5">
+                <tr ng-repeat="student in allStudents">
                 <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
                 <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
+            </tr>
             </div>
+
             <form class="form-search inline-display col-md-2 col-md-offset-5">
                 <button class="btn btn-sm btn-info search-element" type="button" data-toggle="modal"
                         data-target="#filtration">
@@ -36,11 +39,11 @@
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td><select>
                         <option selected>{{status.title}}</option>
-                        <option ng-repeat="status in statuses">{{status.studentStatus}}</option>
+                        <option ng-repeat="status in statuses">{{status.title}}</option>
                     </select>
                     </td>
-                    <td>{{university.answer}}</td>
-                    <td>{{course.answer}}</td>
+                    <td>{{university}}</td>
+                    <td>{{course}}</td>
                 </tr>
                 </thead>
                 <tbody>

@@ -124,15 +124,4 @@ public class AdminManagementStaffController {
         userService.deleteUser(user);
     }
 
-    @RequestMapping(value="getRoles", method = RequestMethod.GET)
-    public Set<Role> getUserRoles(@RequestParam Long id){
-        System.out.println("Request id ="+id);
-        User emp =userService.getUserByID(id);
-        Set<Role> roles=emp.getRoles();
-        for(Role role:roles)System.out.println(role.getRoleName());
-        System.out.println("Before sending ");
-        return roles;
-    }
-
-
 }

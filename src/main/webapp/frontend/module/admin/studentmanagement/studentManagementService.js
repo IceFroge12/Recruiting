@@ -15,6 +15,14 @@ function studentManagementService(http) {
         })
 
     };
+
+    service.getAllStatuses = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getAllStatuses'
+        })
+    };
+    
     service.getStudentsUniversity = function (id) {
         return http({
             method : 'GET',
@@ -38,6 +46,7 @@ function studentManagementService(http) {
             params:{id:id}
         })
     };
+    
     
     return service;
 }
