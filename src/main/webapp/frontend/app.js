@@ -15,6 +15,7 @@ angular.module('app', [
         'appStaffStudentManagement',
         'appStaffManagement',
         'appStaffAppForm',
+        'appInterview',
         'appStudentManagement',
         'appReport',
         'appScheduling',
@@ -141,6 +142,11 @@ angular.module('app', [
             .when('/staff/studentManagement', {
                 templateUrl: 'module/staff/view/staffStudentManagement.html',
                 controller: 'staffStudentManagementController'
+            })
+
+            .when('/staff/interview', {
+                templateUrl: 'module/staff/view/interview.html',
+                controller: 'interviewController'
             })
 
             .when('/staff/scheduling', {

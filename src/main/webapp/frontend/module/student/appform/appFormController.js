@@ -2,8 +2,7 @@
  * Created by dima on 02.05.16.
  */
 
-function appFormController($scope,ngToast, $http, appFormService, Upload) {
-
+function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
 
     appFormService.loadAppFormData().then(function success(data) {
 		$scope.id = data.id;
@@ -128,4 +127,4 @@ function appFormController($scope,ngToast, $http, appFormService, Upload) {
 
 
 angular.module('appStudentForm')
-    .controller('appFormController', ['$scope','ngToast', 'appFormService', 'Upload', appFormController]);
+    .controller('appFormController', ['$scope','ngToast','$http', 'appFormService', 'Upload', appFormController]);
