@@ -18,6 +18,11 @@ public class FormAnswerVariantImpl implements FormAnswerVariant {
     public FormAnswerVariantImpl() {
     }
 
+
+    public FormAnswerVariantImpl(String answer) {
+        this.answer = answer;
+    }
+
     public FormAnswerVariantImpl(String answer, FormQuestion formQuestion) {
         this.answer = answer;
         this.formQuestion = formQuestion;

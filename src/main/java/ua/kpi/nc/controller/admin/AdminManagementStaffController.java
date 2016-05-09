@@ -42,10 +42,10 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
-    public List<User> showEmployees(@RequestParam int pageNum) {
+    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam int sortingCol, @RequestParam boolean increase) {
         Long itemsByPage = 9L;
         Long fromRow = (pageNum - 1) * itemsByPage;
-        List<User> users = userService.getEmployeesFromToRows(fromRow);
+        List<User> users = userService.getEmployeesFromToRows(fromRow, sortingCol, increase);
         return users;
     }
 

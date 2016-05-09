@@ -43,7 +43,7 @@ public interface UserDao {
 
     List<User> getStudentsFromToRows(Long fromRows);
 
-    List<User> getEmployeesFromToRows(Long fromRows);
+    List<User> getEmployeesFromToRows(Long fromRows, int sortingCol, boolean increase);
 
     Set<User> getAllEmploees();
 

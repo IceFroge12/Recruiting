@@ -4,7 +4,7 @@
 function staffManagementController($scope, $filter, staffManagementService) {
 
     $scope.sort = {
-        sortingOrder: 'id',
+        sortingOrder: 1,
         reverse: false
     };
     $scope.gap = 5;
@@ -12,14 +12,31 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.filteredItems = [];
     $scope.groupedItems = [];
     $scope.itemsPerPage = 9;
-    $scope.pagedItems = [];
     $scope.currentPage = 1;
     $scope.items = [];
     $scope.amount = 0;
-    $scope.pageNums = 0;
+    $scope.sortingDir = 1;
 
-    staffManagementService.showAllEmployees(1).success(function (data) {
+    // init the sorted items
+    $scope.$watch("sort.reverse",function(){
+        $scope.currentPage = 1;
+        $scope.showAllEmployees($scope.currentPage);
+        console.log($scope.currentPage);
+        console.log($scope.sort.reverse);
+        console.log($scope.sort.sortingOrder);
+    });
+
+    $scope.$watch("sort.sortingOrder",function(){
+        $scope.currentPage = 1;
+        $scope.showAllEmployees($scope.currentPage);
+        console.log($scope.currentPage);
+        console.log($scope.sort.reverse);
+        console.log($scope.sort.sortingOrder);
+    });
+
+    staffManagementService.showAllEmployees(1, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) {
         $scope.allEmployee = data;
+
     }, function error() {
         console.log("error");
     });
@@ -36,16 +53,16 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
     staffManagementService.getCountOfEmployee().success(function (data) {
         $scope.amount = Math.ceil(data / $scope.itemsPerPage);
-        console.log($scope.pagedItems);
     });
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
-        staffManagementService.showAllEmployees(pageNum).success(function (data) {
+        staffManagementService.showAllEmployees(pageNum, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) {
             $scope.allEmployee = data;
+            console.log(data);
         }, function error() {
             console.log("error");
         });
-    }
+    };
 
     $scope.employees =
         [{roleName: 'ADMIN'},
@@ -70,44 +87,21 @@ function staffManagementController($scope, $filter, staffManagementService) {
             $scope.lastName, $scope.email, $scope.selection);
     };
 
-    var searchMatch = function (haystack, needle) {
-        if (!needle) {
-            return true;
-        }
-        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
-    };
-
-    // init the filtered items
-    $scope.search = function () {
-        $scope.filteredItems = $filter('filter')($scope.items, function (item) {
-            for (var attr in item) {
-                if (searchMatch(item[attr], $scope.query))
-                    return true;
-            }
-            return false;
-        });
-        // take care of the sorting order
-        if ($scope.sort.sortingOrder !== '') {
-            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sort.sortingOrder, $scope.sort.reverse);
-        }
-        $scope.currentPage = 1;
-        // now group by pages
-        //$scope.groupToPages();
-    };
-
     $scope.range = function (size, start, end) {
         var ret = [];
         console.log(size, start, end);
 
+
         if (size < end) {
             end = size;
             start = size - $scope.gap;
+            end++;
+            start++;
         }
         for (var i = start; i < end; i++) {
-            if (i >= 0)
+            if (i > 0)
                 ret.push(i);
         }
-        console.log(ret);
         return ret;
     };
 
@@ -118,19 +112,15 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.pagedItems.length - 1) {
+        if ($scope.currentPage < $scope.pagedItems.amount - 1) {
             $scope.currentPage++;
         }
     };
 
     $scope.setPage = function () {
-        $scope.currentPage = this.n+1;
+        $scope.currentPage = this.n;
         $scope.showAllEmployees($scope.currentPage);
-        console.log($scope.currentPage);
     };
-
-    // functions have been describe process the data for display
-    $scope.search();
 
     var editRoles = [];
 
@@ -186,7 +176,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.deleteEmployee = function () {
-        console.log(currentEmployee)
+        console.log(currentEmployee);
         staffManagementService.deleteEmployee(currentEmployee.email);
     };
 
@@ -222,13 +212,13 @@ angular.module('appStaffManagement').directive("customSort", function () {
 
             scope.selectedCls = function (column) {
                 if (column == scope.sort.sortingOrder) {
-                    return ('icon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
+                    return (' glyphicon glyphicon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
                 }
                 else {
-                    return 'icon-sort'
+                    return 'glyphicon glyphicon-sort'
                 }
             };
-        }// end link
+        }
     }
 });
 

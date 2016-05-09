@@ -105,10 +105,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE ur.id_role <>" + ROLE_STUDENT;
 
-    private static final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
+    private final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS_1 = "SELECT DISTINCT u.id, u.email, u.first_name,u.last_name," +
             "u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE ur.id_role <> " + ROLE_STUDENT + " ORDER BY u.email OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY";
+            "WHERE ur.id_role <> " + ROLE_STUDENT + " ORDER BY ";
+    private final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS_2 = " OFFSET ? ROWS FETCH NEXT 9 ROWS ONLY";
 
     private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
             "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
@@ -222,10 +223,15 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public List<User> getEmployeesFromToRows(Long fromRows) {
+    public List<User> getEmployeesFromToRows(Long fromRows, int sortingCol, boolean increase) {
         log.info("Get Employees From To Rows");
         Long offsetRows = fromRows;
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_EMPLOYEES_FOR_ROWS, extractor,offsetRows);
+        String direction = Integer.toString(sortingCol) + (increase ? " ASC" : " DESC");
+        StringBuilder sb = new StringBuilder(SQL_GET_ALL_EMPLOYEES_FOR_ROWS_1);
+        sb.append(direction);
+        sb.append(SQL_GET_ALL_EMPLOYEES_FOR_ROWS_2);
+        String query = sb.toString();
+        return this.getJdbcTemplate().queryForList(query, extractor, offsetRows);
     }
 
     @Override

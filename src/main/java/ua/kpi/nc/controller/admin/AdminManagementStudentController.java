@@ -16,57 +16,48 @@ public class AdminManagementStudentController {
 
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
     private RoleService roleService = ServiceFactory.getRoleService();
-    private UserService userService=ServiceFactory.getUserService();
-    private FormAnswerService formAnswerService=ServiceFactory.getFormAnswerService();
-    private FormQuestionService formQuestionService=ServiceFactory.getFormQuestionService();
+    private UserService userService = ServiceFactory.getUserService();
+    private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
+    private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
 
 
-    @RequestMapping(value = "getallstudent", method = RequestMethod.GET)
-    public Set<User> getAllStudents() {
-//        List<String> allAppFormList = new ArrayList<>();
-//        List<ApplicationForm> applicationForms = applicationFormService.getAll();
-//
-//        for (ApplicationForm applicationForm : applicationForms) {
-//            Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-//
-//            String jsonResult = applicationFormGson.toJson(applicationForm);
-//            allAppFormList.add(jsonResult);
-//            System.out.println(jsonResult);
-//        }
-//        return allAppFormList;
-        Role role=roleService.getRoleByTitle("ROLE_STUDENT");
-        Set<User> students = role.getUsers();
+    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
+    public List<User> getAllStudents(@RequestParam int pageNum) {
+        Long itemsByPage = 9L;
+        Long fromRow = (pageNum - 1) * itemsByPage;
+        List<User> students = userService.getStudentsFromToRows(fromRow);
         return students;
     }
 
-    @RequestMapping(value="getStatus", method = RequestMethod.GET)
-    public Status getStatusById(@RequestParam Long id){
-        System.out.println("Request id ="+id);
-        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+    @RequestMapping(value = "getStatus", method = RequestMethod.GET)
+    public Status getStatusById(@RequestParam Long id) {
+        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
         return af.getStatus();
     }
 
-    @RequestMapping(value="getUniverse", method = RequestMethod.GET)
-    public FormAnswer getUniverseById(@RequestParam Long id){
-        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
-        List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(3L));
+    @RequestMapping(value = "getUniverse", method = RequestMethod.GET)
+    public FormAnswer getUniverseById(@RequestParam Long id) {
+        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
+        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(3L));
         return formAnswer.get(0);
     }
 
 
-    @RequestMapping(value="getCourse", method = RequestMethod.GET)
-    public FormAnswer getCourseById(@RequestParam Long id){
-        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
-        List<FormAnswer> formAnswer=formAnswerService.getByApplicationFormAndQuestion(af,formQuestionService.getById(1L));
+    @RequestMapping(value = "getCourse", method = RequestMethod.GET)
+    public FormAnswer getCourseById(@RequestParam Long id) {
+        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
+        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(1L));
         return formAnswer.get(0);
     }
 
-    @RequestMapping(value="changeStudentsStatus", method = RequestMethod.GET)
-    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status){
-        ApplicationForm af=applicationFormService.getCurrentApplicationFormByUserId(id);
+    @RequestMapping(value = "changeStudentsStatus", method = RequestMethod.POST)
+    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
+        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
         af.setStatus(status);
         return true;
-    };
+    }
+
+    ;
 
 
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
@@ -74,6 +65,5 @@ public class AdminManagementStudentController {
     public void confirmSelection() {
         //TODO
     }
-
 
 }

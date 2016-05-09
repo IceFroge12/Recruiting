@@ -2,8 +2,9 @@
 <div app-menu-student></div>
 <div ng-app="questions" id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
-        <form name="myForm" data-toggle="validator" role="form">
-            <button type="button" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
+        <form data-toggle="validator" role="form">
+            <button type="button" ng-if="false" class="btn btn-sm btn-info search-element col-md-2 btn-left" ng-click="exportAppForm()">Export</button>
+            <p ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS', 'text-info' : resultMessage.type == 'INFO'}">{{resultMessage.message}}</p>
             <table class="table table-hover table-condensed">
                 <tr class="text-success">
                     <td>Status</td>
@@ -31,15 +32,6 @@
                                    required
                                    ngf-model-invalid="errorFile">
                         </label>
-                        <i ng-show="myForm.file.$error.required">*required</i><br>
-                        <i ng-show="myForm.file.$error.maxSize">Photo too large
-                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                        <i ng-show="myForm.file.$error.maxWidth">Photo width must be 300px</i>
-                        <i ng-show="myForm.file.$error.maxHeight">Photo height must be 400px</i>
-                        <i ng-show="myForm.file.$error.minHeight">Photo height must be 400px</i>
-                        <i ng-show="myForm.file.$error.minWidth">Photo width must be 300px</i>
-
-                        <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
                     </td>
                 </tr>
                 <tr class="form-group">
