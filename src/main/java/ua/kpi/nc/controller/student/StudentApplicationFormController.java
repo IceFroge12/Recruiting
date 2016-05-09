@@ -72,8 +72,6 @@ public class StudentApplicationFormController {
     private StatusService statusService = ServiceFactory.getStatusService();
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
 
-    private Gson gson = new Gson();
-
     public StudentApplicationFormController() {
         formAnswerService = ServiceFactory.getFormAnswerService();
         applicationFormService = ServiceFactory.getApplicationFormService();
@@ -86,14 +84,6 @@ public class StudentApplicationFormController {
 
 	private static final String JSON_WRONG_INPUT_MESSAGE = gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
 
-	public StudentApplicationFormController() {
-		formAnswerService = ServiceFactory.getFormAnswerService();
-		applicationFormService = ServiceFactory.getApplicationFormService();
-		userService = ServiceFactory.getUserService();
-		formQuestionService = ServiceFactory.getFormQuestionService();
-		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-		roleService = ServiceFactory.getRoleService();
-	}
 
 
     @RequestMapping(value = "uploadPhoto")
