@@ -7,6 +7,7 @@ angular.module('app', [
         'ngRoute',
         'appHome',
         'appMain',
+        'appError',
         'appFeedback',
         'appStaffMain',
         'appStaffPersonal',
@@ -94,6 +95,11 @@ angular.module('app', [
                 templateUrl: 'module/home/educationnc/educationNC.html',
                 controller: 'educationNCController'
             })
+             .when('/accessDenied', {
+                templateUrl: 'module/error/accessdenied.html',
+                controller: 'accessdeniedController'
+            })
+
             .when('/admin/main', {
                 templateUrl: 'module/admin/main/main.html',
                 controller: 'mainController'
