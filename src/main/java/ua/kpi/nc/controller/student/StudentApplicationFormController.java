@@ -6,12 +6,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import com.google.gson.Gson;
 
-import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
@@ -30,10 +36,6 @@ import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.FormAnswerService;
 import ua.kpi.nc.service.FormAnswerVariantService;
@@ -62,8 +64,10 @@ public class StudentApplicationFormController {
 	private StatusService statusService = ServiceFactory.getStatusService();
 	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
 
-	private Gson gson = new Gson();
+	private static Gson gson = new Gson();
 
+	private static final String JSON_WRONG_INPUT_MESSAGE = gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
+	
 	public StudentApplicationFormController() {
 		formAnswerService = ServiceFactory.getFormAnswerService();
 		applicationFormService = ServiceFactory.getApplicationFormService();
@@ -122,22 +126,26 @@ public class StudentApplicationFormController {
 			applicationForm = createApplicationForm(user);
 			newForm = true;
 		}
-		Set<FormQuestion> remainedQuestions = formQuestionService
-				.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+		Set<FormQuestion> remainedQuestions;
+
 		List<FormAnswer> answers = null;
 		if (newForm) {
 			answers = new ArrayList<FormAnswer>();
+			remainedQuestions = formQuestionService
+					.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+		} else {
+			remainedQuestions = formQuestionService.getByApplicationFormAsSet(applicationForm);
 		}
 		for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
 			FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
 			if (!isFormQuestionValid(formQuestion)) {
-				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+				return JSON_WRONG_INPUT_MESSAGE;
 			}
 			if (formQuestion.isMandatory() && !isFilled(questionDto)) {
 				return gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
 			}
 			if (!remainedQuestions.remove(formQuestion)) {
-				return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+				return JSON_WRONG_INPUT_MESSAGE;
 			}
 			if (!newForm) {
 				answers = formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion);
@@ -147,15 +155,14 @@ public class StudentApplicationFormController {
 			}
 		}
 		if (!remainedQuestions.isEmpty()) {
-			return gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
+			return JSON_WRONG_INPUT_MESSAGE;
 		}
 		System.out.println("PEREMOGA");
 		if (newForm) {
 			applicationForm.setAnswers(answers);
 			applicationFormService.insertApplicationForm(applicationForm);
 			return gson.toJson(new MessageDto("Your application form was created.", MessageDtoType.SUCCESS));
-		}
-		else {
+		} else {
 			return gson.toJson(new MessageDto("Your application form was updated.", MessageDtoType.SUCCESS));
 		}
 	}
@@ -241,11 +248,11 @@ public class StudentApplicationFormController {
 	@RequestMapping(value = "appform{applicationFormId}", method = RequestMethod.GET)
 	@ResponseBody
 	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
-		ApplicationForm applicationForm =  applicationFormService.getApplicationFormById(applicationFormId);
+		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
 		ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
-		pdfAppForm.export(applicationForm,response);
+		pdfAppForm.export(applicationForm, response);
 
 	}
 
@@ -277,13 +284,16 @@ public class StudentApplicationFormController {
 
 	private boolean isFilled(StudentAppFormQuestionDto questionDto) {
 		List<StudentAnswerDto> answersDto = questionDto.getAnswers();
-		if (answersDto.isEmpty())
+		if (answersDto == null) {
 			return false;
-		if (answersDto.size() == 1 && answersDto.get(0).getAnswer() == null)
-			return false;
-		if ("".equals(answersDto.get(0).getAnswer()))
-			return false;
-		return true;
+		}
+		for (int i = 0; i < answersDto.size(); i++) {
+			StudentAnswerDto answer = answersDto.get(i);
+			if (answer != null && answer.getAnswer() != null && !answer.getAnswer().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

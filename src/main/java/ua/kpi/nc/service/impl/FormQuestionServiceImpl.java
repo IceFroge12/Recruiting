@@ -12,6 +12,7 @@ import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerVariantDao;
 import ua.kpi.nc.persistence.dao.FormQuestionDao;
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Role;
@@ -112,5 +113,10 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 	@Override
 	public List<FormQuestion> getEnableByRole(Role role) {
 		return formQuestionDao.getEnableByRole(role);
+	}
+
+	@Override
+	public Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm) {
+		return formQuestionDao.getByApplicationFormAsSet(applicationForm);
 	}
 }

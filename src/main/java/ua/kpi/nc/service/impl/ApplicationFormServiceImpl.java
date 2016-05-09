@@ -13,6 +13,7 @@ import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -92,6 +93,16 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	@Override
 	public ApplicationForm getLastApplicationFormByUserId(Long id) {
 		return applicationFormDao.getLastApplicationFormByUserId(id);
+	}
+
+	@Override
+	public List<ApplicationForm> getByInterviewer(User interviewer) {
+		return applicationFormDao.getByInterviewer(interviewer);
+	}
+
+	@Override
+	public boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role) {
+		return applicationFormDao.isAssignedForThisRole(applicationForm, role);
 	}
 
 }

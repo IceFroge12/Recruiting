@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Connection;
@@ -27,4 +28,8 @@ public interface ApplicationFormDao {
 	ApplicationForm getCurrentApplicationFormByUserId(Long id);
 
 	ApplicationForm getLastApplicationFormByUserId(Long id);
+
+	List<ApplicationForm> getByInterviewer(User interviewer);
+
+	boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
 }
