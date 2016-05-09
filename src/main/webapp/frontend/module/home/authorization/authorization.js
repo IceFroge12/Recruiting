@@ -21,7 +21,7 @@ angular.module('appAuthorization', [])
                 return localStorage.removeItem(storageToken);
             }
         };
-    }).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
+    }).factory('TokenAuthInterceptor', function ($q, TokenStorage, $location) {
     return {
         request: function (config) {
             var authToken = TokenStorage.retrieve();
@@ -33,6 +33,7 @@ angular.module('appAuthorization', [])
         responseError: function (error) {
             if (error.status === 401 || error.status === 403) {
                 TokenStorage.clear();
+                $location.path('/accessDenied');
             }
             //TODO error page
             return $q.reject(error);
