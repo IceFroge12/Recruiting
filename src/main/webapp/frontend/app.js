@@ -5,6 +5,7 @@
 
 angular.module('app', [
         'ngRoute',
+        'ngFileUpload',
         'appHome',
         'appMain',
         'appError',
@@ -15,6 +16,7 @@ angular.module('app', [
         'appStaffStudentManagement',
         'appStaffManagement',
         'appStaffAppForm',
+        'appInterview',
         'appStudentManagement',
         'appReport',
         'appScheduling',
@@ -101,84 +103,89 @@ angular.module('app', [
             })
 
             .when('/admin/main', {
-                templateUrl: 'module/admin/main/main.html',
+                templateUrl: 'module/admin/view/main.html',
                 controller: 'mainController'
             })
             .when('/admin/staffmanagement', {
-                templateUrl: 'module/admin/staffmanagement/staffmanagement.html',
+                templateUrl: 'module/admin/view/staffmanagement.html',
                 controller: 'staffManagementController'
             })
             .when('/admin/studentmanagement', {
-                templateUrl: 'module/admin/studentmanagement/studentmanagement.html',
+                templateUrl: 'module/admin/view/studentmanagement.html',
                 controller: 'studentManagementController'
             })
             .when('/admin/adminformsettings', {
-                templateUrl: 'module/admin/form/formSettings.html',
+                templateUrl: 'module/admin/view/formSettings.html',
                 controller: 'formSettingsController'
             })
             .when('/admin/scheduling', {
-                templateUrl: 'module/admin/scheduling/scheduling.html',
+                templateUrl: 'module/admin/view/scheduling.html',
                 controller: 'schedulingController'
             })
             .when('/admin/report', {
-                templateUrl: 'module/admin/report/report.html',
+                templateUrl: 'module/admin/view/report.html',
                 controller: 'reportController'
             })
             .when('/admin/recruitment', {
-                templateUrl: 'module/admin/recruitment/recruitment.html',
+                templateUrl: 'module/admin/view/recruitment.html',
                 controller: 'recruitmentController'
             })
             .when('/admin/notification', {
-                templateUrl: 'module/admin/notification/notification.html',
+                templateUrl: 'module/admin/view/notification.html',
                 controller: 'notificationController'
             })
             .when('/admin/personal', {
-                templateUrl: 'module/admin/personal/personal.html',
+                templateUrl: 'module/admin/view/personal.html',
                 controller: 'personalController'
             })
 
             //STAFF
             .when('/staff/main', {
-                templateUrl: 'module/staff/main/staffMain.html',
+                templateUrl: 'module/staff/view/staffMain.html',
                 controller: 'staffMainController'
             })
 
             .when('/staff/studentManagement', {
-                templateUrl: 'module/staff/studentmanagement/staffStudentManagement.html',
+                templateUrl: 'module/staff/view/staffStudentManagement.html',
                 controller: 'staffStudentManagementController'
             })
 
+            .when('/staff/interview', {
+                templateUrl: 'module/staff/view/interview.html',
+                controller: 'interviewController'
+            })
+
             .when('/staff/scheduling', {
-                templateUrl: 'module/staff/scheduling/staffScheduling.html',
+                templateUrl: 'module/staff/view/staffScheduling.html',
                 controller: 'staffSchedulingController'
             })
 
             .when('/staff/personal', {
-                templateUrl: 'module/staff/personal/staffPersonal.html',
+                templateUrl: 'module/staff/view/staffPersonal.html',
                 controller: 'staffPersonalController'
             })
 
             .when('/staff/appformstudent', {
-                templateUrl: 'module/staff/appformstudent/appFormStudent.html',
+                templateUrl: 'module/staff/view/appFormStudent.html',
                 controller: 'appFormStudentController'
             })
 
             // STUDENT
             .when('/student/appform', {
-                templateUrl: 'module/student/appform/appForm.html',
+                templateUrl: 'module/student/view/appForm.html',
                 controller: 'appFormController'
             })
             .when('/student/feedback', {
-                templateUrl: 'module/student/feedback/feedback.html',
+                templateUrl: 'module/student/view/feedback.html',
                 controller: 'feedbackController'
             })
             .when('/student/scheduling', {
-                templateUrl: 'module/student/scheduling/studentScheduling.html',
+                templateUrl: 'module/student/view/studentScheduling.html',
                 controller: 'studentSchedulingController'
             })
 
             .when('/student/settings', {
-                templateUrl: 'module/student/settings/studentSettings.html',
+                templateUrl: 'module/student/view/studentSettings.html',
                 controller: 'studentSettingsController'
             })
 

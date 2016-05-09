@@ -37,4 +37,6 @@ public interface FormQuestionService {
 	
 	Set<FormQuestion> getByEnableRoleAsSet(Role role);
 	
+	Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
+	
 }

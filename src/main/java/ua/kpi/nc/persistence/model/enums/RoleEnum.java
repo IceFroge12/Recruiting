@@ -10,12 +10,12 @@ public enum RoleEnum {
     ROLE_ADMIN, ROLE_STUDENT, ROLE_SOFT, ROLE_TECH;
 
 
-    public UserAuthority asAuthorityFor(final User user) {
-        final UserAuthority authority = new UserAuthority();
-        authority.setAuthority("ROLE_" + toString());
-        authority.setUser(user);
-        return authority;
-    }
+//    public UserAuthority asAuthorityFor(final User user) {
+//        final UserAuthority authority = new UserAuthority();
+//        authority.setAuthority("ROLE_" + toString());
+//        authority.setUser(user);
+//        return authority;
+//    }
 
     public static RoleEnum valueOf(final UserAuthority authority) {
         switch (authority.getAuthority()) {

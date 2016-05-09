@@ -319,19 +319,19 @@ public class UserImpl implements User {
      *
      *
      */
-    public void setUserAuthorities(Set<UserAuthority> userAuthorities) {
-        this.userAuthorities = userAuthorities;
-    }
-
-    public Set<UserAuthority> getUserAuthorities() {
-        return userAuthorities;
-    }
-
-    public void grantRole(RoleEnum role) {
-        if (userAuthorities == null) {
-            userAuthorities = new HashSet<UserAuthority>();
-        }
-        userAuthorities.add(role.asAuthorityFor(this));
-    }
+//    public void setUserAuthorities(Set<UserAuthority> userAuthorities) {
+//        this.userAuthorities = userAuthorities;
+//    }
+//
+//    public Set<UserAuthority> getUserAuthorities() {
+//        return userAuthorities;
+//    }
+//
+//    public void grantRole(RoleEnum role) {
+//        if (userAuthorities == null) {
+//            userAuthorities = new HashSet<UserAuthority>();
+//        }
+//        userAuthorities.add(role.asAuthorityFor(this));
+//    }
 
 }

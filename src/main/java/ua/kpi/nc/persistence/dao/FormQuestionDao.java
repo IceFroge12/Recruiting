@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.dao;
 
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Role;
 
@@ -33,6 +34,8 @@ public interface FormQuestionDao {
 	Set<FormQuestion> getEnableByRoleAsSet(Role role);
 
 	List<FormQuestion> getEnableByRole(Role role);
+
+	Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
 
 
 }
