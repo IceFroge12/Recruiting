@@ -21,21 +21,21 @@ function studentManagementController($scope, studentManagementService) {
     
     function getStudentsStatus() {
 
-        $scope.statuses = ['Approved to Job','Approved to General Courses',
-            'Approved to Advanced Coursec', 'Rejected','In review', 'Registered','Approved']; //TODO getAllStatus
+        $scope.statuses = ['Approved to Job','Approved to General group',
+            'Approved to Advanced group', 'Registered','Approved']; //TODO getAllStatus
 
         angular.forEach( $scope.students, function (value, key) {
             console.log(value.status);
-            if(value.status == "Approved to Job"){
+            if(value.status == "Approved to job"){
                 $scope.approvedToWork += 1;
             }
-            if(value.status == "Approved to General Courses"){
+            if(value.status == "Approved to general group"){
                 $scope.approvedToGeneral += 1;
             }
             if(value.status == "Rejected"){
                 $scope.rejected += 1;
             }
-            if(value.status == "Approved to Advanced Coursec"){
+            if(value.status == "Approved to advanced group"){
                 $scope.approvedToAdvanced += 1;
             }
         });

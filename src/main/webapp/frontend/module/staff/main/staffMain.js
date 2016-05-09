@@ -7,7 +7,7 @@
 angular.module('appStaffMain', [])
     .directive('appStaffMenu', function () {
         return {
-            templateUrl: 'module/staff/menu/staffMenu.html',
+            templateUrl: 'module/staff/view/staffMenu.html',
             controller: 'staffMenuController'
         }
     });
