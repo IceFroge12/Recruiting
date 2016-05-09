@@ -2,7 +2,8 @@
  * Created by dima on 02.05.16.
  */
 
-function appFormController($scope,ngToast, $http, appFormService) {
+function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
+
     appFormService.loadAppFormData().then(function success(data) {
 		$scope.id = data.id;
         $scope.questions = data.questions;
@@ -56,6 +57,18 @@ function appFormController($scope,ngToast, $http, appFormService) {
         return false;
     };
 
+    function uploadPic(file) {
+        file.upload = Upload.upload({
+            url: '/student/uploadPhoto',
+            fields: {'username': 'test'}, // additional data to send
+            file: file
+        }).progress(function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+        }).success(function (data, status, headers, config) {
+            console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+        });
+    }
 
     var _URL = window.URL || window.webkitURL;
 
@@ -114,4 +127,4 @@ function appFormController($scope,ngToast, $http, appFormService) {
 
 
 angular.module('appStudentForm')
-    .controller('appFormController', ['$scope','ngToast','$http','appFormService', appFormController]);
+    .controller('appFormController', ['$scope','ngToast','$http', 'appFormService', 'Upload', appFormController]);

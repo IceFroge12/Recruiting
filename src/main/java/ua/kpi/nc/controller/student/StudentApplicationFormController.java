@@ -1,5 +1,7 @@
 package ua.kpi.nc.controller.student;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,9 +9,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.MessagingException;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
+import org.springframework.web.multipart.MultipartFile;
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
@@ -51,40 +59,52 @@ import ua.kpi.nc.util.export.ExportApplicationFormImp;
 /**
  * Created by dima on 14.04.16.
  */
-@Controller
+@RestController
 @RequestMapping("/student")
 public class StudentApplicationFormController {
-	private FormAnswerService formAnswerService;
-	private ApplicationFormService applicationFormService;
-	private UserService userService;
-	private FormQuestionService formQuestionService;
-	private FormAnswerVariantService formAnswerVariantService;
-	private RoleService roleService;
+    private FormAnswerService formAnswerService;
+    private ApplicationFormService applicationFormService;
+    private UserService userService;
+    private FormQuestionService formQuestionService;
+    private FormAnswerVariantService formAnswerVariantService;
+    private RoleService roleService;
 
-	private StatusService statusService = ServiceFactory.getStatusService();
-	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+    private StatusService statusService = ServiceFactory.getStatusService();
+    private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
 
+    public StudentApplicationFormController() {
+        formAnswerService = ServiceFactory.getFormAnswerService();
+        applicationFormService = ServiceFactory.getApplicationFormService();
+        userService = ServiceFactory.getUserService();
+        formQuestionService = ServiceFactory.getFormQuestionService();
+        formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
+        roleService = ServiceFactory.getRoleService();
+    }
 	private static Gson gson = new Gson();
 
 	private static final String JSON_WRONG_INPUT_MESSAGE = gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
-	
-	public StudentApplicationFormController() {
-		formAnswerService = ServiceFactory.getFormAnswerService();
-		applicationFormService = ServiceFactory.getApplicationFormService();
-		userService = ServiceFactory.getUserService();
-		formQuestionService = ServiceFactory.getFormQuestionService();
-		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-		roleService = ServiceFactory.getRoleService();
-	}
 
-	@RequestMapping(value = "appform", method = RequestMethod.POST)
-	@ResponseBody
-	public String getApplicationForm() {
-		User student = userService.getAuthorizedUser();
-		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
-		if (applicationForm == null) {
 
-			applicationForm = createApplicationForm(student);
+
+    @RequestMapping(value = "uploadPhoto")
+    public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) throws IOException {
+
+        //TODO INSERT FILE FOR PHOTO
+        file.transferTo(new File("C:\\Users\\IO\\Recruiting\\src\\main\\webapp\\frontend\\img\\"
+                + applicationFormService.getLastApplicationFormByUserId(userService.getAuthorizedUser().getId())
+                + ".jpg"));
+
+        return ResponseEntity.ok(null);
+    }
+
+    @RequestMapping(value = "appform", method = RequestMethod.POST)
+    @ResponseBody
+    public String getApplicationForm() {
+        User student = userService.getAuthorizedUser();
+        ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
+        if (applicationForm == null) {
+
+            applicationForm = createApplicationForm(student);
 
 			List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
 			ApplicationForm oldApplicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
