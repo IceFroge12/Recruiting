@@ -1,10 +1,14 @@
 package ua.kpi.nc.controller.admin;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import ua.kpi.nc.controller.auth.UserAuthentication;
 import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ServiceFactory;
 

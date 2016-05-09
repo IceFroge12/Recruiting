@@ -5,6 +5,12 @@
 'use strict';
 
 angular.module('appStudentForm', [])
+    .directive('appMenuStudent', function () {
+        return {
+            templateUrl: 'module/student/view/studentMenu.html',
+            controller: 'studentMenuController.js'
+        };
+    })
     .directive('myDirective', function (httpPostFactory) {
         return {
             restrict: 'A',
@@ -34,8 +40,8 @@ angular.module('appStudentForm', [])
             }
         };
     })
-    .factory('httpPostFactory', function($http) {
-        return function(file, data, callback) {
+    .factory('httpPostFactory', function ($http) {
+        return function (file, data, callback) {
             $http({
                 url: file,
                 method: "POST",
@@ -43,7 +49,7 @@ angular.module('appStudentForm', [])
                 headers: {
                     'Content-Type': undefined
                 }
-            }).success(function(response) {
+            }).success(function (response) {
                 callback(response);
             });
         };

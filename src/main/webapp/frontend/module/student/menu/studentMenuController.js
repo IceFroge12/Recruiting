@@ -2,6 +2,7 @@
  * Created by Vova on 03.05.2016.
  */
 function studentMenuController($scope, $location) {
+    
     $scope.appform = function () {
         $location.path("/student/appform");
     };
@@ -17,4 +18,4 @@ function studentMenuController($scope, $location) {
 }
 
 angular.module('appStudentMenu')
-    .controller('studentMenuController', ['$scope', '$location',studentMenuController]);
+    .controller('studentMenuController', ['$scope', '$location', studentMenuController]);
