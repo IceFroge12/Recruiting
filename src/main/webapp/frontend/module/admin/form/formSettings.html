@@ -1,5 +1,10 @@
 <div app-header></div>
 <div app-menu-admin></div>
+<style>
+    ul {
+        list-style: square outside;
+    }
+</style>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
@@ -25,17 +30,17 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button class="btn btn-info" type="button">
+                                    <button ng-click="changeStatus(question)" class="btn btn-info" type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <!--<ul ng-repeat="v in variants">-->
-                                    <!--<li>{{v.variant}}</li>-->
-                                    <!--</ul>-->
+                                    <ul ng-repeat="variant in question.variants track by $index ">
+                                        <li>{{variant.variant}}</li>
+                                    </ul>
                                 </td>
                                 <td>
-                                    <button class="btn btn-link" type="button" data-toggle="modal"
+                                    <button ng-click="showQuestion(question)" class="btn btn-link" type="button" data-toggle="modal"
                                             data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
@@ -62,17 +67,17 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button class="btn btn-info" type="button">
+                                    <button  ng-click="changeStatus(question)" class="btn btn-info" type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <!--<ul ng-repeat="v in variants">-->
-                                    <!--<li>{{v}}</li>-->
-                                    <!--</ul>-->
+                                    <ul ng-repeat="variant in question.variants track by $index ">
+                                        <li>{{variant.variant}}</li>
+                                    </ul>
                                 </td>
                                 <td>
-                                    <button class="btn btn-link" type="button" data-toggle="modal"
+                                    <button ng-click="showQuestion(question)" class="btn btn-link" type="button" data-toggle="modal"
                                             data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
@@ -88,54 +93,42 @@
                 <div id="applic-tech1" class="tab-pane fade">
                     <form>
                         <table class="table table-hover table-condensed">
-                            <table class="table table-hover table-condensed">
-                                <tr>
-                                    <th>Question</th>
-                                    <th>Type</th>
-                                    <th>Active</th>
-                                    <th>Answer Variant</th>
-                                    <th>Edit</th>
-                                </tr>
-                                <tr ng-repeat="question in questions">
-                                    <td>{{question.title}}</td>
-                                    <td>{{question.type}}</td>
-                                    <td>
-                                        <button class="btn btn-info" type="button">
-                                            {{question.enable}}
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <!--<ul ng-repeat="v in variants">-->
-                                        <!--<li>{{v}}</li>-->
-                                        <!--</ul>-->
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-link" type="button" data-toggle="modal"
-                                                data-target="#editQuestion">
-                                            <span class="glyphicon glyphicon-edit"></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </table>
-                            <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                    data-target="#addEmployee">Add
-                                question
-                            </button>
+                            <tr>
+                                <th>Question</th>
+                                <th>Type</th>
+                                <th>Active</th>
+                                <th>Answer Variant</th>
+                                <th>Edit</th>
+                            </tr>
+                            <tr ng-repeat="question in questions">
+                                <td>{{question.title}}</td>
+                                <td>{{question.type}}</td>
+                                <td>
+                                    <button ng-click="changeStatus(question)" class="btn btn-info" type="button">
+                                        {{question.enable}}
+                                    </button>
+                                </td>
+                                <td>
+                                    <ul ng-repeat="variant in question.variants track by $index ">
+                                        <li>{{variant.variant}}</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <button ng-click="showQuestion(question)" class="btn btn-link" type="button" data-toggle="modal"
+                                            data-target="#editQuestion">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                        <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
+                                data-target="#addQuestion">Add
+                            question
+                        </button>
                     </form>
                 </div>
                 <div id="matrix" class="tab-pane fade">
                     <form>
-                        <div>
-                            <h4>Scale (max mark)
-                                <select id="scale" name="scale">
-                                    <!--<script>-->
-                                    <!--for (var i = 0; i < 1000; i++) {-->
-                                    <!--document.write('<option value="' + i + '">' + i + '</option>');-->
-                                    <!--}-->
-                                    <!--</script>-->
-                                </select>
-                            </h4>
-                        </div>
                         <table class="table table-hover table-condensed">
                             <tr>
                                 <th>Tech Skill</th>
@@ -297,15 +290,11 @@
                     <table class="table">
                         <tr>
                             <td> Text</td>
-                            <td><input type="text" ng-model="firstNameEdit" id="firstNameEdit"></td>
+                            <td><input type="text" ng-model="text"></td>
                         </tr>
                         <tr>
                             <td> Type</td>
-                            <td><input type="text" ng-model="secondNameEdit" id="secondNameEdit"></td>
-                        </tr>
-                        <tr>
-                            <td> Last Name</td>
-                            <td><input type="text" ng-model="lastNameEdit" id="lastNameEdit"></td>
+                            <td><input type="text" ng-model="type"></td>
                         </tr>
                         <tr>
                             <td> Answer Variant</td>

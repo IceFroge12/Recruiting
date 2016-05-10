@@ -33,9 +33,7 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "addmatrix")
     public void addDecisionMatrix(@RequestParam List<Decision> decisionList) {
-
         decisionService.truncateDecisionTable();
-
         for (Decision decision : decisionList) {
             decisionService.insertDecision(decision);
         }
@@ -43,7 +41,6 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "getapplicationquestions", method = RequestMethod.POST)
     public List<String> getAppFormQuestions(@RequestParam String role) {
-        System.out.println(role);
         Role roleAdmin = roleService.getRoleByTitle(role);
 
         System.out.println(roleAdmin);
@@ -52,7 +49,6 @@ public class AdminFormSettingsController {
         List<String> adapterFormQuestionList = new ArrayList<>();
 
         for (FormQuestion formQuestion : formQuestionList) {
-            System.out.println(formQuestion);
             Gson questionGson = GsonFactory.getFormQuestionGson();
             String jsonResult = questionGson.toJson(formQuestion);
             adapterFormQuestionList.add(jsonResult);
@@ -65,7 +61,7 @@ public class AdminFormSettingsController {
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
 
-        List<Role> roleList = new ArrayList<>();//TODO change list
+        List<Role> roleList = new ArrayList<>();
         roleList.add(role);
 
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
@@ -76,17 +72,34 @@ public class AdminFormSettingsController {
 
         FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getQuestion(), questionType,
                 formQuestionDto.isEnable(), true, roleList, formAnswerVariantList);
-        formQuestionService.insertFormQuestion(formQuestion,role,formAnswerVariantList);
+        formQuestionService.insertFormQuestion(formQuestion, role, formAnswerVariantList);
     }
 
-    @RequestMapping(value = "updateappformquestion")
-    public void updateAppFormQuestions(@RequestBody FormQuestion formQuestion) {
+    @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST, headers = {"Content-type=application/json"})
+    public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
+
+        QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
+        List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
+        for (String s : formQuestionDto.getFormAnswerVariants()) {
+            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(s);
+            formAnswerVariantList.add(formAnswerVariant);
+        }
+
+        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(),formQuestionDto.getQuestion(), questionType ,formAnswerVariantList);
         formQuestionService.updateFormQuestion(formQuestion);
     }
 
     @RequestMapping(value = "getAllQuestionType")
     public List<QuestionType> getAllQuestionType() {
         return questionTypeService.getAllQuestionType();
+    }
+
+    @RequestMapping(value = "changeQuestionStatus", method = RequestMethod.GET)
+    public boolean changeQuestionStatus(@RequestParam Long id) {
+        FormQuestion formQuestion = formQuestionService.getById(id);
+        formQuestion.setEnable(!formQuestion.isEnable());
+        formQuestionService.updateFormQuestion(formQuestion);
+        return formQuestion.isEnable();
     }
 
 }

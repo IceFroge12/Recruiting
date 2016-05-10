@@ -42,6 +42,12 @@ public class FormQuestionImpl implements FormQuestion {
         this.formAnswerVariants = formAnswerVariants;
     }
 
+    public FormQuestionImpl(Long id, String title, QuestionType questionType, List<FormAnswerVariant> formAnswerVariants) {
+        this.id = id;
+        this.title = title;
+        this.questionType = questionType;
+        this.formAnswerVariants = formAnswerVariants;
+    }
 
     public Long getId() {
         return id;

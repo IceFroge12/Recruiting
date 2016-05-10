@@ -57,9 +57,6 @@ public class AdminManagementStudentController {
         return true;
     }
 
-    ;
-
-
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     @ResponseBody
     public void confirmSelection() {

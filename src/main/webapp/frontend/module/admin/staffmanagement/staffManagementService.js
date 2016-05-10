@@ -13,8 +13,9 @@ function staffManagementService(http) {
             url : '/admin/showAllEmployees',
             params : {pageNum:pageNum, sortingCol:sortingCol, increase:increase}
         })
-
     };
+
+
 
     service.getCountOfEmployee = function () {
         return http({

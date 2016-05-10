@@ -8,29 +8,44 @@ function formSettingsService(http) {
 
     var service = {};
 
-    function handleSuccess( response ) {
-        return( JSON.parse("["+response.data+"]") );
-    }
+    service.getAllQuestionType = function () {
+        return http.post('/admin/getAllQuestionType').then(function (response) {
+            return response;
+        });
+    };
 
-    service.getAllQuestion = function(role) {
+    function handleSuccess(response) {
+        return ( JSON.parse("[" + response.data + "]") );
+    };
+
+    service.getAllQuestion = function (role) {
         var request = http({
-            method: "post",
+            method: "POST",
             url: "/admin/getapplicationquestions",
             params: {
                 role: role
             }
         });
-        return( request.then(handleSuccess) );
+        return ( request.then(handleSuccess) );
     };
-
-  
-
-    service.addQuestion = function (question, type, enable, formAnswerVariants,role) {
+    
+    service.changeQuestionStatus = function (id) {
+        var request = http({
+            method: "GET",
+            url: "/admin/changeQuestionStatus",
+            params: {
+                id: id
+            }
+        });
+        return ( request.then(handleSuccess) );
+    };
+    
+    service.addQuestion = function (question, type, enable, formAnswerVariants, role) {
         http({
-            method : 'POST',
-            url : '/admin/addAppFormQuestion',
+            method: 'POST',
+            url: '/admin/addAppFormQuestion',
             contentType: 'application/json',
-            data : JSON.stringify({
+            data: JSON.stringify({
                 question: question,
                 type: type,
                 enable: enable,
@@ -39,7 +54,23 @@ function formSettingsService(http) {
             })
         });
     };
-    
+
+    service.editQuestion = function (id, question, type, enable, formAnswerVariants, role) {
+        http({
+            method: 'POST',
+            url: '/admin/updateAppFormQuestion',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                id:id,
+                question: question,
+                type: type,
+                enable: enable,
+                formAnswerVariants: formAnswerVariants,
+                role: role
+            })
+        });
+    };
+
     return service;
 }
 

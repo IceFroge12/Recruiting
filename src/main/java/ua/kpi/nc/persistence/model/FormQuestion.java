@@ -7,6 +7,7 @@ import java.util.List;
  * Created by Алексей on 21.04.2016.
  */
 public interface FormQuestion extends Serializable {
+
     Long getId();
 
     void setId(Long id);

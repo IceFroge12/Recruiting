@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class FormQuestionDto {
 
+    private Long id;
     private String question;
     private String type;
     private boolean enable;
@@ -24,6 +25,14 @@ public class FormQuestionDto {
         this.enable = enable;
         this.formAnswerVariants = formAnswerVariants;
         this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getQuestion() {
