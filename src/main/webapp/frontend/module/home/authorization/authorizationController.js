@@ -19,6 +19,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             TokenStorage.store(headers('X-AUTH-TOKEN'));
             $rootScope.username = data.username;
             $rootScope.id = data.id;
+            $rootScope.role = data.role;
             $location.path(data.redirectURL);
         }).error(function (data, status, headers) {
             console.log(data);

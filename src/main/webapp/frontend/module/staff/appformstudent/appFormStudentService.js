@@ -11,21 +11,19 @@ function appFormStudentService(http) {
         });
     };
 
-    service.getAppForm = function () {
+    service.getAppForm = function (id) {
         console.log("Service getAppForm");
         return http({
-            method : 'POST',
-            url : '/staff/getApplicationForm'+101
-            //params : {appFormId:appFormId}
+            method: 'POST',
+            url: '/staff/getApplicationForm/' + id
         })
-
     };
-    service.getInterview = function (appFormId) {
+    service.getInterview = function (appFormId, role) {
         console.log("Service getInterview");
         return http({
-            method : 'POST',
-            url : '/staff/getInterview'+appFormId
-           // params : {applicationFormId:42}
+            method: 'POST',
+            url: '/staff/getInterview/' + appFormId,
+            params: {role: role}
         })
 
     };

@@ -1,10 +1,11 @@
 /**
  * Created by Alona on 06.05.2016.
  */
-function appFormStudentController($scope, appFormStudentService) {
+function appFormStudentController($scope,appFormStudentService,$routeParams) {
 
     $scope.showAppForm = function showAppForm() {
-            appFormStudentService.getAppForm().success(function (data) {
+        var id = $routeParams.id;
+            appFormStudentService.getAppForm(id).success(function (data) {
                 $scope.appForm = data;
                 console.log(data);
             }, function error() {
@@ -14,6 +15,8 @@ function appFormStudentController($scope, appFormStudentService) {
 
     $scope.showInterview = function showInterview() {
         var appFormId = $scope.appForm.id;
+        var role = $scope.role;
+        console.log($scope.role);
         appFormStudentService.getInterview(appFormId).success(function (data) {
             $scope.interview = data;
             console.log(data);
@@ -52,4 +55,4 @@ function appFormStudentController($scope, appFormStudentService) {
 
 
 angular.module('appStaffAppForm')
-    .controller('appFormStudentController', ['$scope','appFormStudentService', appFormStudentController]);
+    .controller('appFormStudentController', ['$scope','appFormStudentService', '$routeParams', appFormStudentController]);

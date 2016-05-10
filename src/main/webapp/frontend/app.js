@@ -137,6 +137,7 @@ angular.module('app', [
                 templateUrl: 'module/admin/view/personal.html',
                 controller: 'personalController'
             })
+           
 
             //STAFF
             .when('/staff/main', {
@@ -163,8 +164,7 @@ angular.module('app', [
                 templateUrl: 'module/staff/view/staffPersonal.html',
                 controller: 'staffPersonalController'
             })
-
-            .when('/staff/appformstudent', {
+            .when('/staff/appformstudent/:id', {
                 templateUrl: 'module/staff/view/appFormStudent.html',
                 controller: 'appFormStudentController'
             })

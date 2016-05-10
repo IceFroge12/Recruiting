@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import ua.kpi.nc.controller.auth.UserAuthentication;
 import ua.kpi.nc.controller.auth.UserAuthority;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
 import javax.jws.soap.SOAPBinding;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,16 +61,15 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
         response.getWriter().write(new Gson().toJson(map));
     }
 
-
     private String determineTargetUrl(Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (authorities.contains("ROLE_ADMIN")) {
             return "admin/main";
         } else if (authorities.contains("ROLE_STUDENT")) {
             return "student/appform";
-        }else if (authorities.contains("ROLE_SOFT")){
+        } else if (authorities.contains("ROLE_SOFT")) {
             return "staff/main";
-        }else if (authorities.contains("ROLE_TECH")) {
+        } else if (authorities.contains("ROLE_TECH")) {
             return "staff/main";
         } else {
             throw new IllegalStateException();

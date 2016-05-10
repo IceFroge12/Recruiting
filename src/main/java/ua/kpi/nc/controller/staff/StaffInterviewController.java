@@ -34,15 +34,16 @@ public class StaffInterviewController {
         interviewService = ServiceFactory.getInterviewService();
     }
 
-    @RequestMapping(value = "getApplicationForm{applicationFormId}", method = RequestMethod.POST)
+    @RequestMapping(value = "getApplicationForm/{applicationFormId}", method = RequestMethod.POST)
     public String getApplicationForm(@PathVariable Long applicationFormId) {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         Gson applicationFormGson = GsonFactory.getApplicationFormGson();
         String jsonResult = applicationFormGson.toJson(applicationForm);
         return jsonResult;
     }
-    @RequestMapping(value = "getInterview{applicationFormId}", method = RequestMethod.POST)
-    public String getInterview(@PathVariable Long applicationFormId) {
+
+    @RequestMapping(value = "getInterview/{applicationFormId}", method = RequestMethod.POST)
+    public String getInterview(@PathVariable Long applicationFormId, @RequestParam String role) {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
         Interview interview = interviews.get(0);
@@ -51,6 +52,7 @@ public class StaffInterviewController {
         String jsonResult = interviewGson.toJson(interview);
         return jsonResult;
     }
+
 
 
 
