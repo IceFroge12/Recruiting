@@ -56,11 +56,45 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
         }
         return false;
     };
+    function ge(id) {
+    	return document.getElementById(id);
+    }
+    $scope.saveForm = function() {
+		var fileInp = ge('file');
+		var fd = new FormData();
+		var fileVal = document.getElementById("file");
+		fd.append('applicationForm', angular.toJson($scope.data));
+		var fileData = fileInp.files[0];
+		var blobData;
+		if(fileData == null) {
+			fileData = '';
+			blobData = [""];
+		}
+		else {
+			blobData = [ fileInp.files[0] ];
+		}
+		fd.append("file", new Blob(blobData, {
+			type : undefined
+		}), fileInp.value.substring(fileInp.value.lastIndexOf('\\')));
 
-    function uploadPic(file) {
+		var req = $http.post('/student/saveApplicationForm', fd, {
+			transformRequest : angular.identity,
+			headers : {
+				'Content-Type' : undefined
+			}
+		});
+		req.success(function(data) {
+			console.log(data);
+			$scope.resultMessage =  data;
+		});
+
+	}
+    $scope.uploadPic = function (file) {
+    	
+    	
         file.upload = Upload.upload({
             url: '/student/uploadPhoto',
-            fields: {'username': 'test'}, // additional data to send
+//            fields: {'username': 'test'}, // additional data to send
             file: file
         }).progress(function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -121,6 +155,37 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
                 });
             });
     };
+    $scope.uploadImage = function(file) {
+    	
+//    	 Upload.upload({
+//    	        url: '../student/upload',
+//    	        fields: {'username': 'zouroto'}, // additional data to send
+//    	        file: file
+//    	    }).progress(function (evt) {
+//    	        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+//    	        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+//    	    }).success(function (data, status, headers, config) {
+//    	        console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+//    	    });
+//    	 
+//    	 return;
+    	file.upload = Upload.upload({
+    	      url: '../student/upload',
+    	      data: {username: $scope.data.questions, file: file},
+    	    });
+
+    	    file.upload.then(function (response) {
+    	      $timeout(function () {
+    	        file.result = response.data;
+    	      });
+    	    }, function (response) {
+    	      if (response.status > 0)
+    	        $scope.errorMsg = response.status + ': ' + response.data;
+    	    }, function (evt) {
+    	      // Math.min is to fix IE which reports 200% sometimes
+    	      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+    	    });
+    }
 
 }
 

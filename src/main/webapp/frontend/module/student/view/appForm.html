@@ -16,20 +16,21 @@
                 </tr>
                 <tr class="form-group">
                     <td class="mandatory">
-                        <!--<label for="file" class="control-label">Photo</label>-->
+                        <label for="file" class="control-label">Photo</label>
                     </td>
-                    <td><label class="file">
-                            <!--<input type="file" id="file" ngf-select ng-model="picFile" name="file"-->
-                                   <!--accept="image/*"-->
-                                   <!--ngf-max-size="5MB"-->
-                                   <!--ngf-min-height="400"-->
-                                   <!--ngf-max-height="400"-->
-                                   <!--ngf-max-width="300"-->
-                                   <!--ngf-min-width="300"-->
+                    <td><img ng-src="/photo/{{data.photoScope}}" width=100px>
+                        <label class="file">
+                            <input type="file" id="file" ngf-select ng-model="picFile" name="file"
+                                   accept="image/*"
+                                   ngf-max-size="5MB"
+                                   ngf-min-height="400"
+                                   ngf-max-height="400"
+                                   ngf-max-width="300"
+                                   ngf-min-width="300"
 
 
-                                   <!--required-->
-                                   <!--ngf-model-invalid="errorFile">-->
+                                   
+                                   ngf-model-invalid="errorFile">
                         </label>
                         <i ng-show="myForm.file.$error.required">*required</i><br>
                         <i ng-show="myForm.file.$error.maxSize">Photo too large
@@ -114,7 +115,7 @@
                 </tr>
             </table>
             <div class="form-group">
-                <button ng-click="submit(picFile)" type="submit" class="btn btn-sm btn-info search-element">
+                <button ng-click="saveForm()" type="submit" class="btn btn-sm btn-info search-element">
                     Submit
                 </button>
             </div>

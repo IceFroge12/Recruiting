@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import javax.servlet.http.HttpServletResponse;
@@ -62,49 +63,43 @@ import ua.kpi.nc.util.export.ExportApplicationFormImp;
 @RestController
 @RequestMapping("/student")
 public class StudentApplicationFormController {
-    private FormAnswerService formAnswerService;
-    private ApplicationFormService applicationFormService;
-    private UserService userService;
-    private FormQuestionService formQuestionService;
-    private FormAnswerVariantService formAnswerVariantService;
-    private RoleService roleService;
+	private FormAnswerService formAnswerService;
+	private ApplicationFormService applicationFormService;
+	private UserService userService;
+	private FormQuestionService formQuestionService;
+	private FormAnswerVariantService formAnswerVariantService;
+	private RoleService roleService;
 
-    private StatusService statusService = ServiceFactory.getStatusService();
-    private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+	private StatusService statusService = ServiceFactory.getStatusService();
+	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
 
-    public StudentApplicationFormController() {
-        formAnswerService = ServiceFactory.getFormAnswerService();
-        applicationFormService = ServiceFactory.getApplicationFormService();
-        userService = ServiceFactory.getUserService();
-        formQuestionService = ServiceFactory.getFormQuestionService();
-        formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-        roleService = ServiceFactory.getRoleService();
-    }
+	private static final String PHOTO_DIR_NAME = "D:\\Java\\Tomcat 8.0\\wtpwebapps\\Recruiting\\photo\\";
+	
+	public StudentApplicationFormController() {
+		formAnswerService = ServiceFactory.getFormAnswerService();
+		applicationFormService = ServiceFactory.getApplicationFormService();
+		userService = ServiceFactory.getUserService();
+		formQuestionService = ServiceFactory.getFormQuestionService();
+		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
+		roleService = ServiceFactory.getRoleService();
+	}
+
 	private static Gson gson = new Gson();
 
-	private static final String JSON_WRONG_INPUT_MESSAGE = gson.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
+	private static final String JSON_WRONG_INPUT_MESSAGE = gson
+			.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
 
+	private static final String[] AVAILABLE_PHOTO_EXTENSIONS = {"jpg", "jpeg", "png"};
+	
 
+	@RequestMapping(value = "appform", method = RequestMethod.POST)
+	@ResponseBody
+	public String getApplicationForm() {
+		User student = userService.getAuthorizedUser();
+		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
+		if (applicationForm == null) {
 
-    @RequestMapping(value = "uploadPhoto")
-    public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) throws IOException {
-
-        //TODO INSERT FILE FOR PHOTO
-        file.transferTo(new File("C:\\Users\\IO\\Recruiting\\src\\main\\webapp\\frontend\\img\\"
-                + applicationFormService.getLastApplicationFormByUserId(userService.getAuthorizedUser().getId())
-                + ".jpg"));
-
-        return ResponseEntity.ok(null);
-    }
-
-    @RequestMapping(value = "appform", method = RequestMethod.POST)
-    @ResponseBody
-    public String getApplicationForm() {
-        User student = userService.getAuthorizedUser();
-        ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
-        if (applicationForm == null) {
-
-            applicationForm = createApplicationForm(student);
+			applicationForm = createApplicationForm(student);
 
 			List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
 			ApplicationForm oldApplicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
@@ -131,10 +126,11 @@ public class StudentApplicationFormController {
 		return jsonResult;
 	}
 
-	@RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST, headers = {
-			"Content-type=application/json" })
+	@RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST)
 	@ResponseBody
-	public String addUsername(@RequestBody ApplicationFormDto applicationFormDto) {
+	public String saveApplicationForm(@RequestParam("applicationForm") String jsonApplicationFormDto,
+			@RequestParam("file") MultipartFile file) {
+		ApplicationFormDto applicationFormDto = gson.fromJson(jsonApplicationFormDto, ApplicationFormDto.class);
 		User user = userService.getAuthorizedUser();
 		user.setLastName(applicationFormDto.getUser().getLastName());
 		user.setFirstName(applicationFormDto.getUser().getFirstName());
@@ -143,6 +139,9 @@ public class StudentApplicationFormController {
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(user.getId());
 		boolean newForm = false;
 		if (applicationForm == null) {
+			if (file.isEmpty()) {
+				return gson.toJson(new MessageDto("You must upload photo.", MessageDtoType.ERROR));
+			}
 			applicationForm = createApplicationForm(user);
 			newForm = true;
 		}
@@ -177,10 +176,29 @@ public class StudentApplicationFormController {
 		if (!remainedQuestions.isEmpty()) {
 			return JSON_WRONG_INPUT_MESSAGE;
 		}
-		System.out.println("PEREMOGA");
 		if (newForm) {
 			applicationForm.setAnswers(answers);
 			applicationFormService.insertApplicationForm(applicationForm);
+		}
+		if (!file.isEmpty()) {
+			try {
+				String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
+				if(!hasPhotoValidFormat(fileExtension)) {
+					return gson.toJson(new MessageDto("Photo has wrong format", MessageDtoType.ERROR));
+				}
+				
+				String photoScope = applicationForm.getId() + "."
+						+ fileExtension;
+				file.transferTo(new File(PHOTO_DIR_NAME + photoScope));
+				applicationForm.setPhotoScope(photoScope);
+				applicationFormService.updateApplicationForm(applicationForm);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				return gson.toJson(new MessageDto("Cannot upload photo", MessageDtoType.ERROR));
+			}
+		}
+		System.out.println("PEREMOGA");
+		if (newForm) {
 			return gson.toJson(new MessageDto("Your application form was created.", MessageDtoType.SUCCESS));
 		} else {
 			return gson.toJson(new MessageDto("Your application form was updated.", MessageDtoType.SUCCESS));
@@ -316,4 +334,12 @@ public class StudentApplicationFormController {
 		return false;
 	}
 
+	private boolean hasPhotoValidFormat(String fileExtension) {
+		for(int i = 0; i < AVAILABLE_PHOTO_EXTENSIONS.length; i++) {
+			if(AVAILABLE_PHOTO_EXTENSIONS[i].equals(fileExtension)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
