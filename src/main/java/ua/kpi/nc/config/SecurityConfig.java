@@ -44,28 +44,55 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("**/**").permitAll()
-//                .anyRequest().authenticated()
 
-//                .antMatchers(HttpMethod.POST, "/loginIn").permitAll()
-//
-//                .antMatchers(HttpMethod.GET, "/login").permitAll()
-//
-//                .antMatchers("/student/**").hasRole("STUDENT")
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/student.html").hasRole("STUDENT")
-//                .antMatchers("/admin.html").hasRole("STUDENT")
-//                .antMatchers("appForm.html").hasRole("STUDENT")
+        http
+//                .authorizeRequests().anyRequest().permitAll().and()
+                .authorizeRequests()
+                .antMatchers("/home").anonymous()
                 .and()
+                .authorizeRequests()
+                .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
+                .authorizeRequests()
+                .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")
+                .antMatchers("/student/**").hasRole("STUDENT")
+                .and()
+                .authorizeRequests()
+                .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")
+                .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
+                .and()
+
                 .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+
                 .exceptionHandling().and()
                 .csrf().disable()
-                .anonymous().and()
                 .servletApi().and()
                 .headers().cacheControl();
+
+
+//        http
+//                .authorizeRequests()
+////                .antMatchers("**/**").permitAll()
+//
+//                .antMatchers("/index.html", "/home.html", "/login.html", "/").permitAll()
+//
+//                .and()
+//
+////                .antMatchers(HttpMethod.POST, "/loginIn").permitAll()
+////
+////                .antMatchers(HttpMethod.GET, "/login").permitAll()
+////
+////                .antMatchers("/student/**").hasRole("STUDENT")
+////                .antMatchers("/admin/**").hasRole("ADMIN")
+////                .antMatchers("/student.html").hasRole("STUDENT")
+////                .antMatchers("/admin.html").hasRole("STUDENT")
+////                .antMatchers("appForm.html").hasRole("STUDENT")
+//
+//                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+
 
     }
 

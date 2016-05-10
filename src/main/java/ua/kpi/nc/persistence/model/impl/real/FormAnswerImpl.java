@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.model.impl.real;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ua.kpi.nc.persistence.model.*;
 
 /**
@@ -10,9 +11,13 @@ public class FormAnswerImpl implements FormAnswer {
     private static final long serialVersionUID = 7004025676148335072L;
     private Long id;
     private String answer;
+    @JsonIgnore
     private FormQuestion formQuestion;
+    @JsonIgnore
     private ApplicationForm applicationForm;
+    @JsonIgnore
     private FormAnswerVariant formAnswerVariant;
+    @JsonIgnore
     private Interview interview;
 
     public FormAnswerImpl() {

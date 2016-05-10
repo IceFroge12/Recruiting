@@ -7,18 +7,17 @@ import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
 
 
-@Controller
+@RestController
 @RequestMapping("/student")
 public class StudentFeedbackController {
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 
-    @RequestMapping(value = "/feedback/{id}", method = RequestMethod.POST)
-    @ResponseBody
-    public void getFeedback(@PathVariable("id") long id, @RequestBody String feedback){
-    ApplicationForm ap=applicationFormService.getApplicationFormById(id);
-        ap.setFeedback(feedback);
-    applicationFormService.updateApplicationForm(ap);
-        System.out.println("Feedback was update");
+    @RequestMapping(value = "feedback", method = RequestMethod.POST)
+    public void getFeedback(@RequestParam String feedback){
+//    ApplicationForm ap=applicationFormService.getApplicationFormById(id);
+//        ap.setFeedback(feedback);
+//    applicationFormService.updateApplicationForm(ap);
+        System.out.println(feedback);
     }
 
 }

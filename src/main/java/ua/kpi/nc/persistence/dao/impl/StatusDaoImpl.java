@@ -12,6 +12,7 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by IO on 21.04.2016.
@@ -36,6 +37,12 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
         log.trace("Looking for user with id = ", id);
         return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.id = ?;",
                 extractor, id);
+    }
+
+    @Override
+    public List<Status> getAllStatuses() {
+        log.trace("Looking for all statuses");
+        return this.getJdbcTemplate().queryForList("SELECT s.id, s.title FROM \"status\" s", extractor);
     }
 
     @Override

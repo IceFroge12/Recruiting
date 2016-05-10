@@ -26,7 +26,8 @@ public class DataSourceSingleton {
 
     private static class DataSourceSingletonHolder{
         static DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
-        private DataSourceSingletonHolder() {}
+        private DataSourceSingletonHolder() {
+        }
     }
 
     public static DataSource getInstance() {

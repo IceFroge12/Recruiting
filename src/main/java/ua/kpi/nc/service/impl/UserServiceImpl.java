@@ -111,13 +111,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getStudentsFromToRows(Long fromRow) {
-        return userDao.getStudentsFromToRows(fromRow);
+    public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
+        return userDao.getStudentsFromToRows(fromRows, rowsNum, sortingCol,increase);
     }
 
     @Override
-    public List<User> getEmployeesFromToRows(Long fromRow, int sortingCol, boolean increase){
-        return userDao.getEmployeesFromToRows(fromRow, sortingCol, increase);
+    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase){
+        return userDao.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
     }
     @Override
     public Set<User> getAllEmploees() {

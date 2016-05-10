@@ -41,9 +41,9 @@ public interface UserDao {
 
     Set<User> getAllStudents();
 
-    List<User> getStudentsFromToRows(Long fromRows);
+    List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
-    List<User> getEmployeesFromToRows(Long fromRows, int sortingCol, boolean increase);
+    List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
     Set<User> getAllEmploees();
 

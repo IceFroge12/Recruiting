@@ -2,7 +2,7 @@
 <html ng-app="recruiting">
 <head lang="en">
     <title>Stateless Authentication Example</title>
-    <script src="/js/util/angular.js"></script>
+    <script src="/frontend/ng-upload/angular.js"></script>
     <script src="/js/auth/controllers.js"></script>
 </head>
 <body ng-controller="AuthCtrl" ng-init="init()" style="padding: 10% 20%">

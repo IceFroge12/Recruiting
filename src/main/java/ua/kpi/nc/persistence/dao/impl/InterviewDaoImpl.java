@@ -8,6 +8,7 @@ import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.ApplicationFormProxy;
+import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -49,6 +50,7 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 		interview.setAdequateMark(resultSet.getBoolean("adequate_mark"));
 		interview.setDate(resultSet.getTimestamp("date"));
 		interview.setMark(resultSet.getInt("mark"));
+		interview.setRole(new RoleProxy(resultSet.getLong("interviewer_role")));
 		interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
 		interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));
 		return interview;

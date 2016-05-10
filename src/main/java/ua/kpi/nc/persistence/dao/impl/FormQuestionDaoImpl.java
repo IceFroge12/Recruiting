@@ -59,6 +59,10 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
     private static final String SQL_GET_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
             + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ?;";
+    private static final String SQL_GET_ENABLE_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
+            + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ? AND fq." + ENABLE_COL + " = true";
+    
+    private static final String SQL_GET_BY_APPLICATION_FORM = SQL_GET_ALL + " INNER JOIN form_answer fa ON fa.id_question = fq.id WHERE fa.id_application_form = ?;";
 
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " ( " + TITLE_COL + ", " + ENABLE_COL + ", "
             + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ") " + "VALUES (?,?,?,?);";
@@ -172,9 +176,20 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     }
 
 	@Override
-	public Set<FormQuestion> getByRoleAsSet(Role role) {
+	public Set<FormQuestion> getEnableByRoleAsSet(Role role) {
 		log.info("Looking for set of form questions by role = {}", role.getRoleName());
-        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_ROLE, extractor, role.getId());
+        return this.getJdbcTemplate().queryForSet(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
+	}
+
+	@Override
+	public List<FormQuestion> getEnableByRole(Role role) {
+		log.info("Looking for form question by role = {}", role.getRoleName());
+		return this.getJdbcTemplate().queryForList(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
+	}
+
+	@Override
+	public Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm) {
+		return this.getJdbcTemplate().queryForSet(SQL_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
 	}
 
 }

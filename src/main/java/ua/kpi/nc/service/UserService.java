@@ -39,9 +39,9 @@ public interface UserService {
 
     Set<User> getAllStudents();
 
-    List<User> getStudentsFromToRows(Long fromRow);
+    List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
-    List<User> getEmployeesFromToRows(Long fromRow, int sortingCol, boolean increase);
+    List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
     Set<User> getAllEmploees();
 

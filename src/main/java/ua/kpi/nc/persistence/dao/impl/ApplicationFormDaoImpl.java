@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.ApplicationFormDao;
 import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.proxy.*;
 import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -88,6 +89,16 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 			+ "\" a INNER JOIN status s ON s.id = a.id_status \n"
 			+ "WHERE a.id_user = ? AND a.date_create = (SELECT MAX(a_in.date_create) from application_form a_in where a_in.id_user = ?)";
 
+	private static final String SQL_GET_BY_INTERVIEWER = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
+			+ ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
+			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+			+ "\" a INNER JOIN status s ON s.id = a.id_status \n"
+			+ "WHERE EXISTS (SELECT i.id FROM interview i WHERE i.id_application_form = a." + ID_COL
+			+ " AND i.id_interviewer = ?) AND a." + IS_ACTIVE_COL + " = true AND a." + ID_STATUS_COL + " = "
+			+ StatusEnum.APPROVED.getId();
+
+	private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
+
 	private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
 	public ApplicationFormDaoImpl(DataSource dataSource) {
@@ -129,8 +140,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 		log.info("Inserting application forms with user_id = " + applicationForm.getUser().getId());
 		Recruitment recruitment = applicationForm.getRecruitment();
 		return this.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
-				applicationForm.isActive(), recruitment != null ? recruitment.getId() : null, applicationForm.getPhotoScope(),
-				applicationForm.getUser().getId(), applicationForm.getDateCreate(), applicationForm.getFeedback());
+				applicationForm.isActive(), recruitment != null ? recruitment.getId() : null,
+				applicationForm.getPhotoScope(), applicationForm.getUser().getId(), applicationForm.getDateCreate(),
+				applicationForm.getFeedback());
 	}
 
 	@Override
@@ -186,6 +198,18 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	public ApplicationForm getLastApplicationFormByUserId(Long id) {
 		log.trace("Looking for last application form with user id = {}", id);
 		return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST, extractor, id, id);
+	}
+
+	@Override
+	public List<ApplicationForm> getByInterviewer(User interviewer) {
+		log.trace("Looking for application forms, thar are assigned for interviewer with id = {}", interviewer.getId());
+		return this.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEWER, extractor, interviewer.getId());
+	}
+
+	@Override
+	public boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role) {
+		return this.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1),
+				role.getId(), applicationForm.getId());
 	}
 
 }

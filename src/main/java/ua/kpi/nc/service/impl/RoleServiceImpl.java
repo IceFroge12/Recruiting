@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.kpi.nc.persistence.dao.RoleDao;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.RoleService;
 
 import java.util.Set;
@@ -48,4 +49,8 @@ public class RoleServiceImpl implements RoleService {
     public int deleteRole(Role role) {
         return roleDao.deleteRole(role);
     }
+    
+    public boolean isInterviewerRole(Role role) {
+		return RoleEnum.ROLE_SOFT.name().equals(role.getRoleName()) || RoleEnum.ROLE_TECH.name().equals(role.getRoleName());
+	}
 }

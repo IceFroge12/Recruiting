@@ -7,7 +7,7 @@
 var app = angular.module('appMain', ['appMenu','appHeader','appFooter']);
 app.directive('appMenuAdmin', function () {
     return {
-        templateUrl: 'module/admin/menu/menu.html',
+        templateUrl: 'module/admin/view/menu.html',
         controller: 'menuController'
     };
 });

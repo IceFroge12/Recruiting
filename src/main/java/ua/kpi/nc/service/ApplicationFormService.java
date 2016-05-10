@@ -4,6 +4,7 @@ import java.util.List;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswer;
+import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
 /**
@@ -30,4 +31,8 @@ public interface ApplicationFormService {
 	int updateApplicationForm(ApplicationForm applicationForm);
 
 	List<ApplicationForm> getAll();
+	
+	List<ApplicationForm> getByInterviewer(User interviewer);
+
+	boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
 }

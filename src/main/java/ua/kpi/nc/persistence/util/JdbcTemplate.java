@@ -13,20 +13,19 @@ import java.util.*;
  * Created by Chalienko on 20.04.2016.
  */
 public class JdbcTemplate {
-
     private DataSource dataSource;
 
     private static Logger log = LoggerFactory.getLogger(JdbcTemplate.class.getName());
+
+    public JdbcTemplate(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public DataSource getDataSource() {
         return dataSource;
     }
 
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public JdbcTemplate(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -90,7 +89,7 @@ public class JdbcTemplate {
         } catch (SQLException e) {
             log.error("Cannot read object",e);
         }
-        return null;
+        return collection;
     }
 
     public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects){

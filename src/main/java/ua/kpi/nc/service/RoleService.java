@@ -9,15 +9,17 @@ import java.util.Set;
  */
 
 public interface RoleService {
-    Role getRoleById(Long id);
+	Role getRoleById(Long id);
 
-    Role getRoleByTitle(String title);
+	Role getRoleByTitle(String title);
 
-    Set<Role> getAll();
+	Set<Role> getAll();
 
-    Long insertRole(Role role);
+	Long insertRole(Role role);
 
-    int updateRole(Role role);
+	int updateRole(Role role);
 
-    int deleteRole(Role role);
+	int deleteRole(Role role);
+
+	public boolean isInterviewerRole(Role role);
 }
