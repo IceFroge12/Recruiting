@@ -1,5 +1,7 @@
 package ua.kpi.nc.persistence.model.impl.proxy;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.service.InterviewService;
@@ -17,7 +19,6 @@ public class InterviewProxy implements Interview {
 	private InterviewImpl interview;
 
 	private InterviewService interviewService;
-	private List<FormAnswer> answers;
 
 	public InterviewProxy() {
 	}
@@ -25,16 +26,6 @@ public class InterviewProxy implements Interview {
 	public InterviewProxy(Long id) {
 		super();
 		this.id = id;
-	}
-
-	@Override
-	public List<FormAnswer> getAnswers() {
-		return answers;
-	}
-
-	@Override
-	public void setAnswers(List<FormAnswer> answers) {
-		this.answers = answers;
 	}
 
 	public Long getId() {
@@ -104,6 +95,19 @@ public class InterviewProxy implements Interview {
 		checkInterview();
 		interview.setApplicationForm(applicationForm);
 	}
+
+	@Override
+	public List<FormAnswer> getAnswers() {
+		checkInterview();
+		return interview.getAnswers();
+	}
+
+	@Override
+	public void setAnswers(List<FormAnswer> answers) {
+		checkInterview();
+		interview.setAnswers(answers);
+	}
+
 	private void checkInterview(){
 		if (interview == null) {
 			interviewService = ServiceFactory.getInterviewService();
@@ -115,4 +119,27 @@ public class InterviewProxy implements Interview {
 		return (InterviewImpl) interviewService.getById(id);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		InterviewProxy that = (InterviewProxy) o;
+
+		return new EqualsBuilder()
+				.append(id, that.id)
+				.append(interview, that.interview)
+				.append(interviewService, that.interviewService)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37)
+				.append(id)
+				.append(interview)
+				.append(interviewService)
+				.toHashCode();
+	}
 }

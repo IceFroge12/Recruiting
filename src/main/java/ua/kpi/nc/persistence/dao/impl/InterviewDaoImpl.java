@@ -3,11 +3,9 @@ package ua.kpi.nc.persistence.dao.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.InterviewDao;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.proxy.ApplicationFormProxy;
+import ua.kpi.nc.persistence.model.impl.proxy.FormAnswerProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
@@ -53,6 +51,7 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 		interview.setRole(new RoleProxy(resultSet.getLong("interviewer_role")));
 		interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
 		interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));
+		interview.setAnswers(getAnswers(resultSet.getLong("id")));
 		return interview;
 	};
 
@@ -106,6 +105,15 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 	public List<Interview> getAll() {
 		log.info("Getting all interviews");
 		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+	}
+
+	private static final String SQL_GET_ANSWERS = "SELECT fa.id FROM \"form_answer\" fa WHERE fa.id_interview = ?;";
+
+	private List<FormAnswer> getAnswers(Long interviewId) {
+		return this.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
+			FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
+			return formAnswerProxy;
+		}, interviewId);
 	}
 
 }
