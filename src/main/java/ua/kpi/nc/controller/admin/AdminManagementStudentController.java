@@ -24,13 +24,13 @@ public class AdminManagementStudentController {
     private StatusService statusService=ServiceFactory.getStatusService();
 
 
-    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
-    public List<User> getAllStudents(@RequestParam int pageNum) {
-        Long itemsByPage = 9L;
-        Long fromRow = (pageNum - 1) * itemsByPage;
-        List<User> students = userService.getStudentsFromToRows(fromRow);
-        return students;
-    }
+//    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
+//    public List<User> getAllStudents(@RequestParam int pageNum) {
+//        Long itemsByPage = 9L;
+//        Long fromRow =  (pageNum - 1) * itemsByPage;
+//        List<User> students = userService.getStudentsFromToRows(fromRow);
+//        return students;
+//    }
 
     @RequestMapping(value = "getAllStatuses", method = RequestMethod.GET)
     public List<Status> getAllStatuses(){

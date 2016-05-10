@@ -1,7 +1,5 @@
 package ua.kpi.nc.controller.student;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +10,22 @@ import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
-import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
-import ua.kpi.nc.service.*;
+import ua.kpi.nc.service.EmailTemplateService;
+import ua.kpi.nc.service.RoleService;
+import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.service.UserService;
 import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import javax.mail.MessagingException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-@Controller
+@RestController
 @RequestMapping(value = "/registrationStudent")
 public class RegistrationController {
 
@@ -43,7 +45,6 @@ public class RegistrationController {
 
     }
 
-    @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<UserDto> registerNewStudent(@RequestBody UserDto user) throws MessagingException {
         if (userService.isExist(user.getEmail())) {
@@ -79,7 +80,6 @@ public class RegistrationController {
         }
     }
 
-    @ResponseBody
     @RequestMapping(value = "{token}", method = RequestMethod.GET)
     public ResponseEntity<String> registrationConfirm(@PathVariable("token") String token) {
         User user = userService.getUserByToken(token);

@@ -4,4 +4,4 @@
 
 'use strict';
 
-var app = angular.module('appStaffStudentManagement', ['appHeader','appFooter']);
+var app = angular.module('appStaffStudentManagement', []);

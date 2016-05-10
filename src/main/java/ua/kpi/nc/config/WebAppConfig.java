@@ -27,13 +27,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
         registry.addResourceHandler("/photo/**").addResourceLocations("/photo/");
         registry.addResourceHandler("/frontend/**").addResourceLocations("/frontend/");
-
     }
-
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("forward:/frontend/index.html");
-//    }
 
     @Bean
     public InternalResourceViewResolver setupViewResolver() {

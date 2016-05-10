@@ -41,11 +41,15 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         });
     });
 
+
     $scope.showQuestion = function (question) {
+        
         $scope.question = question;
-        console.log(question);
+        
         $scope.text = question.title;
+
         $scope.type = question.type;
+
         $scope.editVariant = [];
         angular.forEach(question.variants, function (item, i) {
             if (i == 0) {
@@ -106,25 +110,22 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         } else {
             variantArray = [];
         }
-
+            
         var role;
         if (selectRoleValue == "MANDATORY") {
             role = "ROLE_ADMIN";
         } else {
             role = selectRoleValue;
         }
-
         formAppService.addQuestion($scope.addText, selectedValue, selectActiveValue, variantArray, role);
-
-        // console.log($scope.addText);
-        // console.log(selectedValue);
-        // console.log(selectActiveValue);
-        // console.log(selectRoleValue);
     };
 
     $scope.editEmployee = function () {
+        
         $scope.question.title = $scope.text;
+        
         $scope.question.type = $scope.type;
+        
         var comma = ',';
         var variantArray = splitString($scope.editVariant, comma);
         var variants = [];

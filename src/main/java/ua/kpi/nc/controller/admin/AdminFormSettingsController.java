@@ -1,13 +1,10 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.FormQuestionDto;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
-import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
-import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
@@ -85,7 +82,7 @@ public class AdminFormSettingsController {
             formAnswerVariantList.add(formAnswerVariant);
         }
 
-        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(),formQuestionDto.getQuestion(), questionType ,formAnswerVariantList);
+        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(), formQuestionDto.getQuestion(), questionType, formAnswerVariantList);
         formQuestionService.updateFormQuestion(formQuestion);
     }
 

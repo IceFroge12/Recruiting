@@ -4,7 +4,6 @@
 
 function registrationController($scope, $http) {
 
-
     $scope.registerStudent = function () {
         $scope.emailSend = false;
         
@@ -26,6 +25,8 @@ function registrationController($scope, $http) {
             console.log(status);
         });
     }
+    
+        
 }
 
 angular.module('appRegistration')

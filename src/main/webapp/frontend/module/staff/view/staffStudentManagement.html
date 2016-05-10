@@ -22,7 +22,8 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="student in assignedStudents">
-						<td>{{student.id}}</td>
+						<td>
+							<a href="/staff/appformstudent">{{student.id}}</a></td>
 						<td><img ng-src="photos/{{student.photoScope}}"></td>
 						<td>{{student.lastName}}</td>
 						<td>{{student.firstName}}</td>
