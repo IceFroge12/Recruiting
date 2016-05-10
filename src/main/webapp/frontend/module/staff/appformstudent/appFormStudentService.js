@@ -11,19 +11,23 @@ function appFormStudentService(http) {
         });
     };
 
-    service.changeUserName = function (data) {
-        console.log(data);
-        http({
+    service.getAppForm = function () {
+        console.log("Service getAppForm");
+        return http({
             method : 'POST',
-            url : '/staff/saveApplicationForm',
-            contentType: 'application/json',
-            data : {
-                id : data.id,
-                status : data.status,
-                user : data.user,
-                questions : data.questions
-            }
+            url : '/staff/getApplicationForm'+101
+            //params : {appFormId:appFormId}
         })
+
+    };
+    service.getInterview = function (appFormId) {
+        console.log("Service getInterview");
+        return http({
+            method : 'POST',
+            url : '/staff/getInterview'+appFormId
+           // params : {applicationFormId:42}
+        })
+
     };
 
     return service;

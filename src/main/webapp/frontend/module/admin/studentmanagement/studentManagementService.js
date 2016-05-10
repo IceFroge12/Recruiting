@@ -7,13 +7,14 @@ function studentManagementService(http) {
 
     var service = {};
 
-    service.showAllStudents = function (pageNum) {
+    service.showAllStudents = function (pageNum, rowsNum, sortingCol, increase) {
+        console.log("Service showAllStudents");
         return http({
             method : 'GET',
             url : '/admin/showAllStudents',
-            params : {pageNum:pageNum}
+            params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
-
+    
     };
 
     service.getAllStatuses = function () {
@@ -46,8 +47,18 @@ function studentManagementService(http) {
             params:{id:id}
         })
     };
-    
-    
+
+
+    service.confirmSelection = function (id, status) {
+        return http({
+            method : 'POST',
+            url : '/admin/confirmSelection',
+            params:{id:id},
+            data: status
+        })
+    };
+
+
     return service;
 }
 

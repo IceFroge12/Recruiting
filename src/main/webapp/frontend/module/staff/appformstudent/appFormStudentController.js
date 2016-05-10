@@ -1,21 +1,25 @@
 /**
  * Created by Alona on 06.05.2016.
  */
-function appFormStudentController($scope, appFormService) {
-    appFormService.loadAppFormData().then(function success(data) {
-        $scope.id =data.id;
-        $scope.questions = data.questions;
-        $scope.user = data.user;
-        $scope.status = data.status;
-        $scope.data = data;
+function appFormStudentController($scope, appFormStudentService) {
 
-    }, function error() {
-        console.log("error");
-    });
+    $scope.showAppForm = function showAppForm() {
+            appFormStudentService.getAppForm().success(function (data) {
+                $scope.appForm = data;
+                console.log(data);
+            }, function error() {
+                console.log("error");
+            });
+    };
 
-    $scope.changeUserName = function () {
-        console.log("MDDDDDDDD");
-        appFormService.changeUserName($scope.data);
+    $scope.showInterview = function showInterview() {
+        var appFormId = $scope.appForm.id;
+        appFormStudentService.getInterview(appFormId).success(function (data) {
+            $scope.interview = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
     };
 
     $scope.toggle = function (item, list){
@@ -42,30 +46,6 @@ function appFormStudentController($scope, appFormService) {
     };
 
 
-    var _URL = window.URL || window.webkitURL;
-
-    $("#file").change(function() {
-
-        var image, file;
-        console.log(this.files[0]);
-
-        if ((file = this.files[0])) {
-
-            file.type.match("/.png/");
-            image = new Image();
-
-            image.onload = function() {
-
-                if(this.width !=300 && this.height !=400){
-                    alert("Wrong size");
-
-                }
-                else {
-                    image.src = _URL.createObjectURL(file);
-                }
-            }}
-        //image.src = _URL.createObjectURL(file);
-    });
 
 }
 

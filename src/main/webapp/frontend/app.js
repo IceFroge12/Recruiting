@@ -8,7 +8,6 @@ angular.module('app', [
         'ngFileUpload',
         'appHome',
         'appMain',
-        'appError',
         'appFeedback',
         'appStaffMain',
         'appStaffPersonal',
