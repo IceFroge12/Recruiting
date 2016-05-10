@@ -4,10 +4,13 @@ import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.Interview;
+import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.service.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Korzh
@@ -42,16 +45,32 @@ public class StaffInterviewController {
         return jsonResult;
     }
 
-    @RequestMapping(value = "getInterview/{applicationFormId}", method = RequestMethod.POST)
-    public String getInterview(@PathVariable Long applicationFormId, @RequestParam String role) {
+    @RequestMapping(value = "getInterview/{applicationFormId}/{role}", method = RequestMethod.POST)
+    public String getInterview(@PathVariable Long applicationFormId, @PathVariable Long role) {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
-        Interview interview = interviews.get(0);
+        Interview interview = null;
+        for (Interview i : interviews){
+            if(i.getRole().getId().equals(role)){
+                interview = i;
+            }
+        }
         System.out.println(interview.toString());
         Gson interviewGson = GsonFactory.getInterviewGson();
         String jsonResult = interviewGson.toJson(interview);
         return jsonResult;
     }
+
+    @RequestMapping(value = "getRoles", method = RequestMethod.GET)
+    public Set<Role> getRoles() {
+        User interviwer = userService.getAuthorizedUser();
+        Set<Role> interviwerRoles = interviwer.getRoles();
+        System.out.println(interviwerRoles.toString());
+        return interviwerRoles;
+    }
+
+
+
 
 
 

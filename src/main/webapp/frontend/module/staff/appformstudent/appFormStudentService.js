@@ -22,12 +22,18 @@ function appFormStudentService(http) {
         console.log("Service getInterview");
         return http({
             method: 'POST',
-            url: '/staff/getInterview/' + appFormId,
-            params: {role: role}
+            url: '/staff/getInterview/' + appFormId + '/' + role
+            //params: {role: role}
         })
 
     };
-
+    service.getRoles = function () {
+        console.log("Service getRoles");
+        return http({
+            method: 'GET',
+            url: '/staff/getRoles'
+        })
+    };
     return service;
 }
 
