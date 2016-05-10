@@ -117,7 +117,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS_ASK = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
             "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY ? ASK OFFSET ? LIMIT ?";
+            "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY ? ASC OFFSET ? LIMIT ?";
 
     private static final String SQL_GET_ALL_STUDENTS_FOR_ROWS_DESK = "SELECT u.id,u.email,u.first_name,u.last_name,u.second_name," +
             "u.password,u.confirm_token,u.is_active, u.registration_date\n" +
