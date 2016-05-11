@@ -86,6 +86,7 @@ public class StaffInterviewController {
 				List<FormAnswer> answers = formAnswerService.getByInterviewAndQuestion(interview, formQuestion);
 				updateAnswers(formQuestion, answers, questionDto.getAnswers(), interview);
 			}
+			interviewService.updateInterview(interview);
 			return gson.toJson(new MessageDto("Interview was updated.", MessageDtoType.SUCCESS));
 		}
 		return gson.toJson(new MessageDto("This student is not assigned to you.", MessageDtoType.ERROR));
