@@ -151,4 +151,13 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
 		return this.getJdbcTemplate().queryForList(SQL_GET_BY_APPLICATION_FORM_AND_QUESTION, extractor,
 				applicationForm.getId(), question.getId());
 	}
+
+	@Override
+	public Long insertFormAnswerForInterview(FormAnswer formAnswer) {
+		FormAnswerVariant variant = formAnswer.getFormAnswerVariant();
+			log.info("Inserting form answer with interview_id, question_id, form answer variant id= ", formAnswer.getInterview().getId(),
+					formAnswer.getFormQuestion().getTitle(), variant != null ? variant.getId() : null);
+			return this.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, formAnswer.getAnswer(),
+					formAnswer.getFormQuestion().getId(), variant != null ? variant.getId() : null, formAnswer.getInterview().getId());
+	}
 }

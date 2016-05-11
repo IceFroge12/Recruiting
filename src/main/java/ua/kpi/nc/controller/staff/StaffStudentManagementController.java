@@ -48,23 +48,12 @@ public class StaffStudentManagementController {
 	public String getAssignedStudents() {
 		User interviewer = userService.getAuthorizedUser();
 		List<ApplicationForm> assignedForms = applicationFormService.getByInterviewer(interviewer);
-		JsonObject jsonObject = new JsonObject();
-		JsonArray jsonRoles = new JsonArray();
-		for (Role role : interviewer.getRoles()) {
-			if (roleService.isInterviewerRole(role)) {
-				JsonObject jsonRole = new JsonObject();
-				jsonRole.addProperty("role", role.getRoleName());
-				jsonRoles.add(jsonRole);
-			}
-		}
-		jsonObject.add("roles", jsonRoles);
 		JsonArray jsonStudents = new JsonArray();
 		for (ApplicationForm applicationForm : assignedForms) {
 			JsonObject jsonStudent = applicationFormToJson(applicationForm, interviewer);
 			jsonStudent.add("interviews", assignedInterviewsToJson(applicationForm, interviewer));
 			jsonStudents.add(jsonStudent);
 		}
-		jsonObject.add("students", jsonStudents);
 		return gson.toJson(jsonStudents);
 	}
 
@@ -91,7 +80,6 @@ public class StaffStudentManagementController {
 
 	@RequestMapping(value = "assign", method = RequestMethod.POST)
 	public String assignStudent(@RequestBody AssigningDto assigningDto) {
-		System.out.println(assigningDto);
 		User interviewer = userService.getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(assigningDto.getId());
 		if (!isApplicaionFormActual(applicationForm)) {
@@ -117,7 +105,7 @@ public class StaffStudentManagementController {
 		interview.setDate(new Timestamp(System.currentTimeMillis()));
 		interview.setRole(role);
 		FormQuestionService questionService = ServiceFactory.getFormQuestionService();
-		List<FormQuestion> questions = questionService.getByRole(role);
+		List<FormQuestion> questions = questionService.getEnableByRole(role);
 		List<FormAnswer> answers = new ArrayList<>();
 		for (FormQuestion formQuestion : questions) {
 			if (formQuestion.isEnable()) {

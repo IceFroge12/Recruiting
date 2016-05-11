@@ -55,4 +55,11 @@ public class FormAnswerServiceImpl implements FormAnswerService {
 	public List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question) {
 		return formAnswerDao.getByApplicationFormAndQuestion(applicationForm, question);
 	}
+
+	@Override
+	public Long insertFormAnswerForInterview(FormAnswer formAnswer) {
+		return formAnswerDao.insertFormAnswerForInterview(formAnswer);
+	}
+	
+	
 }

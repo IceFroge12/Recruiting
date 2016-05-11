@@ -33,4 +33,6 @@ public interface FormAnswerDao {
 
 	List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question);
 
+	Long insertFormAnswerForInterview(FormAnswer formAnswer);
+
 }
