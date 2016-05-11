@@ -178,19 +178,19 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	@Override
 	public Long getCountToWorkAppForm() {
 		log.info("Looking for Count To Work AppForm");
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(5));
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_APPROVED_TO_WORK_COUNT, resultSet -> resultSet.getLong(1), new Long(5));
 	}
 
 	@Override
 	public Long getCountGeneralAppForm() {
 		log.info("Looking for Count General AppForm");
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(6));
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_APPROVED_TO_GENERAL_COUNT, resultSet -> resultSet.getLong(1), new Long(6));
 	}
 
 	@Override
 	public Long getCountAdvancedAppForm() {
 		log.info("Looking for Count Advanced AppForm");
-		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(7));
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_APPROVED_TO_ADVANCED_COUNT, resultSet -> resultSet.getLong(1), new Long(7));
 	}
 
 	;
