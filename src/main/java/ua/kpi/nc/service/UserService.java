@@ -52,5 +52,7 @@ public interface UserService {
     Long getAllStudentCount();
 
     Long getAllEmployeeCount();
-    
+
+    int deleteToken(Long id);
+
 }

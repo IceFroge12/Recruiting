@@ -52,4 +52,6 @@ public interface UserDao {
     Long getEmployeeCount();
 
     Long getStudentCount();
+
+    int deleteToken(Long id);
 }

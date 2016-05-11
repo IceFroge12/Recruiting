@@ -1,5 +1,6 @@
 package ua.kpi.nc.controller.student;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,7 @@ import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import javax.mail.MessagingException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/registrationStudent")
@@ -46,33 +45,33 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<UserDto> registerNewStudent(@RequestBody UserDto user) throws MessagingException {
-        if (userService.isExist(user.getEmail())) {
+    public ResponseEntity<UserDto> registerNewStudent(@RequestBody UserDto userDto) throws MessagingException {
+        if (userService.isExist(userDto.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         } else {
             Role role = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
             Set<Role> roles = new HashSet<>();
             roles.add(role);
             String token = RandomStringUtils.randomAlphabetic(50);
-            userService.insertUser(
-                    new UserImpl(
-                            user.getEmail(),
-                            user.getFirstName(),
-                            user.getSecondName(),
-                            user.getLastName(),
-                            passwordEncoderGeneratorService.encode(user.getPassword()),
-                            false,
-                            new Timestamp(System.currentTimeMillis()),
-                            token
-                    ),
-                    new ArrayList<>(roles));
-            String url = "http://91.207.104.206:8020/registrationStudent/" + token;
+            User user = new UserImpl(userDto.getEmail(),
+                    userDto.getFirstName(),
+                    userDto.getSecondName(),
+                    userDto.getLastName(),
+                    passwordEncoderGeneratorService.encode(userDto.getPassword()),
+                    false,
+                    new Timestamp(System.currentTimeMillis()),
+                    token);
+            userService.insertUser(user,new ArrayList<>(roles));
+
+            String url = "http://localhost:8085/frontend/index.html#/registrationStudent/" + token;
 
             EmailTemplate emailTemplate = emailTemplateService.getById(2L);
 
-            String text = emailTemplate.getTitle() +
-                    url + " " + emailTemplate.getText();
-            String subject = "Please confirm your account NC KPI";
+            String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+
+            String text = template +"\n"+ url;
+
+            String subject = emailTemplate.getTitle();
 
             senderService.send(user.getEmail(), subject, text);
 
@@ -80,16 +79,20 @@ public class RegistrationController {
         }
     }
 
-    @RequestMapping(value = "{token}", method = RequestMethod.GET)
-    public ResponseEntity<String> registrationConfirm(@PathVariable("token") String token) {
+
+    @RequestMapping(value = "/{token}", method = RequestMethod.GET)
+    public String registrationConfirm(@PathVariable("token") String token) {
         User user = userService.getUserByToken(token);
-        if (null == user){
-            //TODO error page. URL has been expired
-            return ResponseEntity.status(410).body("URL expired");
+        Gson gson = new Gson();
+        if (null == user) {
+            String json = "error";
+            return gson.toJson(json);
         }
         user.setActive(true);
         userService.updateUser(user);
-        //TODO redirect on some URL
-        return ResponseEntity.ok("");
+//        userService.deleteToken(user.getId());
+
+        String json = "ok";
+        return gson.toJson(json);
     }
 }

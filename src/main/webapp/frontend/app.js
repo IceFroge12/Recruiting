@@ -33,7 +33,8 @@ angular.module('app', [
         'appEducationNC',
         'appGetToCourses',
         'appRecoverRequestPage',
-        'appRecoverPassword'
+        'appRecoverPassword',
+        'appConfirmRegistration'
     ])
 
     //     .factory('TokenStorage', function () {
@@ -99,6 +100,10 @@ angular.module('app', [
              .when('/accessDenied', {
                 templateUrl: 'module/error/accessdenied.html',
                 controller: 'accessdeniedController'
+            })
+            .when('/registrationStudent/:token',{
+                templateUrl: 'module/home/confirmregistration/confirmregistration.html',
+                controller: 'confirmRegistrationController'
             })
 
             .when('/admin/main', {

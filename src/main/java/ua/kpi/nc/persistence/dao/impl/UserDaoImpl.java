@@ -124,6 +124,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "FROM \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE ur.id_role = " + ROLE_STUDENT + " ORDER BY ? DESC OFFSET ? LIMIT ?";
 
+    private static final String SQL_DELETE_TOKEN = "Update \"user\" SET confirm_token = NULL  where id=?";
+
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
@@ -284,5 +286,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public Long getStudentCount() {
         return new Long(String.valueOf(getAllStudents().size()));
+    }
+
+    @Override
+    public int deleteToken(Long id) {
+        log.info("Delete token user with id = {}", id);
+        return this.getJdbcTemplate().update(SQL_DELETE_TOKEN, id );
     }
 }

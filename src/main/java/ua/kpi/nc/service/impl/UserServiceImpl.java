@@ -143,4 +143,9 @@ public class UserServiceImpl implements UserService {
     public Long getAllEmployeeCount() {
         return userDao.getEmployeeCount();
     }
+
+    @Override
+    public int deleteToken(Long id) {
+        return userDao.deleteToken(id);
+    }
 }
