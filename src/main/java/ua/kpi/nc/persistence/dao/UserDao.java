@@ -56,4 +56,7 @@ public interface UserDao {
     int deleteToken(Long id);
 
     List<ScheduleTimePoint> getFinalTimePoints(Long id);
+
+    List<User> getEmployeesByNameFromToRows(String name);
+
 }

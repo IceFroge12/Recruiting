@@ -57,5 +57,4 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 		}
 		return inputText;
 	}
-
 }

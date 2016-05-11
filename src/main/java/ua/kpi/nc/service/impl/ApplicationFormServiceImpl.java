@@ -105,4 +105,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 		return applicationFormDao.isAssignedForThisRole(applicationForm, role);
 	}
 
+	@Override
+	public int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus) {
+		return applicationFormDao.changeCurrentsAppFormStatus(fromIdStatus, toIdStatus);
+	}
+
 }

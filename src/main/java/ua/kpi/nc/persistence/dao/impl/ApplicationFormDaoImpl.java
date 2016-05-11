@@ -97,6 +97,8 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 			+ " AND i.id_interviewer = ?) AND a." + IS_ACTIVE_COL + " = true AND a." + ID_STATUS_COL + " = "
 			+ StatusEnum.APPROVED.getId();
 
+	private static final String SQL_CHANGE_STATUS = "UPDATE application_form SET id_status = ? where id_status = ?;";
+
 	private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
 
 	private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
@@ -210,6 +212,11 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	public boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role) {
 		return this.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1),
 				role.getId(), applicationForm.getId());
+	}
+
+	@Override
+	public int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus) {
+		return this.getJdbcTemplate().update(SQL_CHANGE_STATUS,fromIdStatus,toIdStatus);
 	}
 
 }

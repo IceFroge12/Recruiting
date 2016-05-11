@@ -32,4 +32,7 @@ public interface ApplicationFormDao {
 	List<ApplicationForm> getByInterviewer(User interviewer);
 
 	boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
+
+    int changeCurrentsAppFormStatus(Long fromIdStatus,Long toIdStatus);
+
 }

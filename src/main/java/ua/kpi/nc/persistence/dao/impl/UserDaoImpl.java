@@ -11,6 +11,7 @@ import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.ScheduleTimePointProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
+import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
@@ -132,6 +133,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_DELETE_TOKEN = "Update \"user\" SET confirm_token = NULL  where id=?";
 
+    private static final String SQL_SEARCH_BY_NAME = "SELECT * from (SELECT DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role = 2 OR ur.id_role = 5 )as uuiefnlnsnpctiard ORDER BY ? ASC OFFSET ? LIMIT ?;";
+
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
@@ -147,7 +151,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public boolean isExist(String email) {
         return this.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
-
     }
 
     @Override
@@ -297,17 +300,22 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public int deleteToken(Long id) {
         log.info("Delete token user with id = {}", id);
-        return this.getJdbcTemplate().update(SQL_DELETE_TOKEN, id );
+        return this.getJdbcTemplate().update(SQL_DELETE_TOKEN, id);
     }
 
     @Override
     public List<ScheduleTimePoint> getFinalTimePoints(Long timeID) {
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
-            List<ScheduleTimePoint> set = new ArrayList<ScheduleTimePoint>();
+            List<ScheduleTimePoint> list = new ArrayList<ScheduleTimePoint>();
             do {
-                set.add(new ScheduleTimePointProxy(resultSet.getLong("id")));
+                list.add(new ScheduleTimePointProxy(resultSet.getLong("id")));
             } while (resultSet.next());
-            return set;
+            return list;
         }, timeID);
+    }
+
+    @Override
+    public List<User> getEmployeesByNameFromToRows(String name) {
+        return this.getJdbcTemplate().queryForList(SQL_SEARCH_BY_NAME, extractor, name);
     }
 }
