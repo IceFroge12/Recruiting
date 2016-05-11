@@ -45,4 +45,6 @@ public interface ApplicationFormService {
 	boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
 
 	int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus);
+
+	Long getCountRecruitmentStudents(Long id);
 }

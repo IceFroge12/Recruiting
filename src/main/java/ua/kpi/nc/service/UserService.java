@@ -55,4 +55,6 @@ public interface UserService {
 
     int deleteToken(Long id);
 
+    List<User> getEmployeesByNameFromToRows(String name);
+
 }

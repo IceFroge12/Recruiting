@@ -148,4 +148,9 @@ public class UserServiceImpl implements UserService {
     public int deleteToken(Long id) {
         return userDao.deleteToken(id);
     }
+
+    @Override
+    public List<User> getEmployeesByNameFromToRows(String name) {
+        return userDao.getEmployeesByNameFromToRows(name);
+    }
 }

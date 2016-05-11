@@ -15,9 +15,16 @@ function staffManagementService(http) {
             params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
     };
+    
+    service.searchEmployee = function (lastName) {
+        return http({
+            method : 'GET',
+            url : '/admin/search',
+            params : {lastName : lastName}
+        })
+    };
 
-
-
+    
     service.getCountOfEmployee = function () {
         return http({
             method : 'GET',
@@ -80,17 +87,6 @@ function staffManagementService(http) {
                 return data;
         });
     };
-    // service.changeEmployeeStatus = function (email) {
-    //     console.log(email)
-    //     http({
-    //         method : 'GET',
-    //         url : '/admin/changeEmployeeStatus',
-    //         params : {email:email}
-    //     }).success(function (data, status, headers) {
-    //         console.log(data);
-    //         return data;
-    //     });
-    // };
 
     service.showAssigned = function (email) {
         http({
