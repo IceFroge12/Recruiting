@@ -6,6 +6,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import ua.kpi.nc.DeadlineController;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
@@ -33,7 +34,6 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
         FilterRegistration.Dynamic securityFilter = servletContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class);
         securityFilter.addMappingForUrlPatterns(null, false, "/*");
-
     }
 
     @Override

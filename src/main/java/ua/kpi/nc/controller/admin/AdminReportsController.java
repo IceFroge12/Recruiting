@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -28,19 +27,21 @@ import ua.kpi.nc.service.ServiceFactory;
 /**
  * Created by dima on 23.04.16.
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminReportsController {
 
-	@RequestMapping(value = "reports", method = RequestMethod.GET)
-	public ModelAndView adminPage() {
-		ModelAndView modelAndView = new ModelAndView("adminreports");
-		return modelAndView;
-	}
+//	@RequestMapping(value = "reports", method = RequestMethod.GET)
+//	public ModelAndView adminPage() {
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		ModelAndView modelAndView = new ModelAndView("adminreports");
+//		return modelAndView;
+//	}
 
 	@RequestMapping(value = "reports/approved.{format}", method = RequestMethod.GET)
 	@ResponseBody
 	public void generateReportOfApproved(@PathVariable String format, HttpServletResponse response) throws IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ReportService service = ServiceFactory.getReportService();
 		Report report = service.getReportOfApproved();
 		renderReport(report, format, response);
@@ -50,12 +51,14 @@ public class AdminReportsController {
 	@ResponseBody
 	public void generateReportOfAnswers(@PathVariable String format, @PathVariable Long questionId,
 			HttpServletResponse response) throws IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ReportService service = ServiceFactory.getReportService();
 		Report report = service.getReportOfAnswers(new FormQuestionProxy(questionId));
 		renderReport(report, format, response);
 	}
 
 	private void renderReport(Report report, String format, HttpServletResponse response) throws IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ReportRenderer renderer = null;
 		String mimeType = null;
 		switch (format) {
@@ -87,6 +90,7 @@ public class AdminReportsController {
 	@RequestMapping(value = "reports/answers/questions")
 	@ResponseBody
 	public String getQuestions() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		FormQuestionService questionService = ServiceFactory.getFormQuestionService();
 		List<FormQuestion> questions = questionService.getAll();
 		JsonArray jsonArray = new JsonArray();

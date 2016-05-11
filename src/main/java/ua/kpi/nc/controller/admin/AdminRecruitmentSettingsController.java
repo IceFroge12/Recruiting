@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.nc.DeadlineController;
 import ua.kpi.nc.persistence.dto.RecruitmentSettingsDto;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
@@ -20,6 +21,7 @@ import java.sql.Timestamp;
 public class AdminRecruitmentSettingsController {
 
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+    private DeadlineController deadlineController = new DeadlineController();
 
     @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     private void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) {
@@ -27,8 +29,7 @@ public class AdminRecruitmentSettingsController {
 
         Recruitment recruitment = new RecruitmentImpl(recruitmentDto.getName(), recruitmentDto.getMaxAdvancedGroup(), recruitmentDto.getMaxGeneralGroup(),
                 Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()), Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
-
         recruitmentService.addRecruitment(recruitment);
+        deadlineController.setDeadLine(recruitment.getRegistrationDeadline());
     }
-
 }

@@ -1,9 +1,9 @@
 /**
  * Created by Alona on 09.05.2016.
  */
-function accessdeniedController($scope) {
+function accessDeniedController($scope) {
 
 }
 
 angular.module('appError')
-    .controller('accessdeniedController', ['$scope', accessdeniedController]);
+    .controller('appErrorController', ['$scope', accessDeniedController]);
