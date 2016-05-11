@@ -54,4 +54,6 @@ public interface UserDao {
     Long getStudentCount();
 
     int deleteToken(Long id);
+
+    List<ScheduleTimePoint> getFinalTimePoints(Long id);
 }

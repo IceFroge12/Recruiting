@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import ua.kpi.nc.controller.auth.UserAuthority;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
@@ -13,6 +14,7 @@ import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,9 +46,9 @@ public class UserImpl implements User {
 
     private Set<SocialInformation> socialInformations;
 
+    private List<ScheduleTimePoint> scheduleTimePoint;
+
     private Set<UserAuthority> userAuthorities;
-
-
 
 
     /******************** UserDetails */
@@ -262,6 +264,14 @@ public class UserImpl implements User {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    public List<ScheduleTimePoint> getScheduleTimePoint() {
+        return scheduleTimePoint;
+    }
+
+    public void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint) {
+        this.scheduleTimePoint = scheduleTimePoint;
     }
 
     @Override

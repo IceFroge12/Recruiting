@@ -5,6 +5,7 @@ import ua.kpi.nc.service.UserService;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,4 +58,8 @@ public interface User extends Serializable, UserDetails {
     void setSocialInformations(Set<SocialInformation> socialInformations);
 
     Long getExpireDate();
+
+    List<ScheduleTimePoint> getScheduleTimePoint();
+
+    void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint);
 }

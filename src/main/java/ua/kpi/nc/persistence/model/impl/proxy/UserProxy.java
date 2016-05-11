@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
@@ -14,6 +15,7 @@ import ua.kpi.nc.service.UserService;
 
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -177,6 +179,18 @@ public class UserProxy implements User {
     }
 
     @Override
+    public List<ScheduleTimePoint> getScheduleTimePoint() {
+        checkUserForExist();
+        return user.getScheduleTimePoint();
+    }
+
+    @Override
+    public void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint) {
+        checkUserForExist();
+        user.setScheduleTimePoint(scheduleTimePoint);
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         checkUserForExist();
         return user.getAuthorities();
@@ -208,6 +222,8 @@ public class UserProxy implements User {
     public boolean isEnabled() {
         return false;
     }
+
+
 
     private void checkUserForExist() {
         if (user == null) {
