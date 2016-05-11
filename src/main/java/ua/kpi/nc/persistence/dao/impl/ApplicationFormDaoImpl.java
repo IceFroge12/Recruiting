@@ -83,6 +83,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
 			+ "\" a INNER JOIN status s ON s.id = a.id_status \n"
 			+ "WHERE a.id_user = ? AND a.id_recruitment = (SELECT r.id FROM recruitment r WHERE r.end_date > CURRENT_DATE)";
+
 	private static final String SQL_GET_LAST = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
 			+ ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
 			+ ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
@@ -96,6 +97,15 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 			+ "WHERE EXISTS (SELECT i.id FROM interview i WHERE i.id_application_form = a." + ID_COL
 			+ " AND i.id_interviewer = ?) AND a." + IS_ACTIVE_COL + " = true AND a." + ID_STATUS_COL + " = "
 			+ StatusEnum.APPROVED.getId();
+
+	private static final String SQL_GET_APPROVED_TO_WORK_COUNT = "select count(id_status) AS \"approved_to_work\" from \"application_form\" where id_status=?";
+
+	private static final String SQL_GET_APPROVED_TO_ADVANCED_COUNT = "select count(id_status) AS \"approved_to_advanced\" from \"application_form\" where id_status=?";
+
+	private static final String SQL_GET_APPROVED_TO_GENERAL_COUNT = "select count(id_status) AS \"approved_to_general\" from \"application_form\" where id_status=?";
+
+	private static final String SQL_GET_REJECTED_COUNT = "select count(id_status) AS \"rejected\" from \"application_form\" where id_status=?";
+
 
 	private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
 
@@ -157,6 +167,30 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	public List<ApplicationForm> getAll() {
 		log.info("Get all application forms");
 		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+	}
+
+	@Override
+	public Long getCountRejectedAppForm() {
+		log.info("Looking for Count Rejected AppForm");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(8));
+	}
+
+	@Override
+	public Long getCountToWorkAppForm() {
+		log.info("Looking for Count To Work AppForm");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(5));
+	}
+
+	@Override
+	public Long getCountGeneralAppForm() {
+		log.info("Looking for Count General AppForm");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(6));
+	}
+
+	@Override
+	public Long getCountAdvancedAppForm() {
+		log.info("Looking for Count Advanced AppForm");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_REJECTED_COUNT, resultSet -> resultSet.getLong(1), new Long(7));
 	}
 
 	;

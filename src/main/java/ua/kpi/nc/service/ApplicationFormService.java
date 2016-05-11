@@ -24,6 +24,14 @@ public interface ApplicationFormService {
 
 	List<ApplicationForm> getByState(boolean state);
 
+	Long getCountRejectedAppForm();
+
+	Long getCountToWorkAppForm();
+
+	Long getCountGeneralAppForm();
+
+	Long getCountAdvancedAppForm();
+
 	int deleteApplicationForm(ApplicationForm applicationForm);
 
 	boolean insertApplicationForm(ApplicationForm applicationForm);

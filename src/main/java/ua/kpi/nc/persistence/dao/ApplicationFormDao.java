@@ -25,6 +25,14 @@ public interface ApplicationFormDao {
 
     List<ApplicationForm> getAll();
 
+    Long getCountRejectedAppForm();
+
+    Long getCountToWorkAppForm();
+
+    Long getCountGeneralAppForm();
+
+    Long getCountAdvancedAppForm();
+
 	ApplicationForm getCurrentApplicationFormByUserId(Long id);
 
 	ApplicationForm getLastApplicationFormByUserId(Long id);

@@ -50,6 +50,26 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
+	public Long getCountRejectedAppForm() {
+		return applicationFormDao.getCountRejectedAppForm();
+	}
+
+	@Override
+	public Long getCountToWorkAppForm() {
+		return applicationFormDao.getCountToWorkAppForm();
+	}
+
+	@Override
+	public Long getCountGeneralAppForm() {
+		return applicationFormDao.getCountGeneralAppForm();
+	}
+
+	@Override
+	public Long getCountAdvancedAppForm() {
+		return applicationFormDao.getCountAdvancedAppForm();
+	}
+
+	@Override
 	public int deleteApplicationForm(ApplicationForm applicationForm) {
 		return applicationFormDao.deleteApplicationForm(applicationForm);
 	}
