@@ -18,15 +18,16 @@
                         <b class="caret"></b>
                     </a>
                 </li>
-                <li ng-class="{active:tab===2}" class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 2; showInterview()" >
-                        Soft Form
+                <li ng-show="roleSoft" ng-class="{active:tab===2}" class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 2; showInterview(2)" >
+                        Tech Form
                         <b class="caret"></b>
                     </a>
                 </li>
-                <li  ng-class="{active:tab===3}" class="dropdown" >
-                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 3">
-                        Tech Form
+
+                <li ng-show="roleTech" ng-class="{active:tab===3}" class="dropdown" >
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 3; showInterview(5)">
+                        Soft Form
                         <b class="caret"></b>
                     </a>
                 </li>
@@ -88,97 +89,33 @@
                 </div>
                 <div ng-show="tab === 2"  class="tab-pane fade in active">
                     <table class="table table-hover table-condensed">
-                        <tr>
-                            <td>Soft skills grade</td>
-                            <td><i>3</i></td>
-                        </tr>
-                        <tr>
-                            <td>Mark</td>
-                            <td><i>yes</i></td>
-                        </tr>
-                        <tr>
-                            <td>Soft skills comment</td>
-                            <td><i>he is my friend</i></td>
-                        </tr>
-                        <tr>
-                            <td>Knowledge in telecommunication</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>Knowledge in software engineering methodologies</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>Personal qualities, motivation</td>
-                            <td><i>self-confident</i></td>
-                        </tr>
-                        <tr>
-                            <td>The maturity of interest</td>
-                            <td><i>mature</i></td>
-                        </tr>
-                        <tr>
-                            <td>Loyalty</td>
-                            <td><i>exactly our people</i></td>
-                        </tr>
-                        <tr>
-                            <td>Whether submitted skills level corresponds with the one shown in the interview</td>
-                            <td><i>yes</i></td>
-                        </tr>
-                        <tr>
-                            <td>Specialization</td>
-                            <td><i>development</i></td>
-                        </tr>
-                        <tr>
-                            <td>English</td>
-                            <td><i>5</i></td>
+                        <tr ng-repeat="question in interviewTech.questions">
+                            <td > {{question.questionTitle}}</td>
+                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                {{answer.answer}}
+                            </td>
+                            <td ng-if="question.questionType == 'checkbox'" >
+                                <p ng-repeat="variant in question.variants">
+                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                </p>
+                            </td>
                         </tr>
                     </table>
                 </div>
                 <div ng-show="tab === 3"  class="tab-pane fade in active">
                     <table class="table table-hover table-condensed">
-                        <tr>
-                            <td>Tech skills grade</td>
-                            <td><i>3</i></td>
-                        </tr>
-                        <tr>
-                            <td>Mark</td>
-                            <td><i>yes</i></td>
-                        </tr>
-                        <tr>
-                            <td>Tech skills comment</td>
-                            <td><i>he is my friend</i></td>
-                        </tr>
-                        <tr>
-                            <td>Java practice</td>
-                            <td><i>1</i></td>
-                        </tr>
-                        <tr>
-                            <td>SQL practice</td>
-                            <td><i>1</i></td>
-                        </tr>
-                        <tr>
-                            <td>Java theory</td>
-                            <td><i>4</i></td>
-                        </tr>
-                        <tr>
-                            <td>SQL theory</td>
-                            <td><i>4</i></td>
-                        </tr>
-                        <tr>
-                            <td>General knowledge</td>
-                            <td><i>5</i></td>
-                        </tr>
-                        <tr>
-                            <td>Personal qualities, motivation</td>
-                            <td><i>naive</i></td>
-                        </tr>
-                        <tr>
-                            <td>Whether submitted skills level corresponds with the one shown in the interview</td>
-                            <td><i>yes</i></td>
-                        </tr>
-                        <tr>
-                            <td>Specialization</td>
-                            <td><i>development</i></td>
+                        <tr ng-repeat="question in interviewSoft.questions">
+                            <td > {{question.questionTitle}}</td>
+                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                {{answer.answer}}
+                            </td>
+                            <td ng-if="question.questionType == 'checkbox'" >
+                                <p ng-repeat="variant in question.variants">
+                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                </p>
+                            </td>
                         </tr>
                     </table>
                 </div>

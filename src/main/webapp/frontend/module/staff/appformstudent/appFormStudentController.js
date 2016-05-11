@@ -11,15 +11,41 @@ function appFormStudentController($scope,appFormStudentService,$routeParams) {
             }, function error() {
                 console.log("error");
             });
+
+            appFormStudentService.getRoles().success(function (data) {
+                $scope.roles = data;
+                console.log(data);
+                $scope.roleTech = false;
+                $scope.roleSoft = false;
+                for(var i=0; i< data.length; i++){
+
+                    if(data[i].id==2){
+                        $scope.roleTech = true;
+                    }
+
+                    if(data[i].id==5){
+                        $scope.roleSoft = true;
+                    }
+                }
+                console.log($scope.roleTech);
+                console.log($scope.roleSoft);
+            }, function error() {
+                console.log("error");
+            });
+
     };
 
-    $scope.showInterview = function showInterview() {
+    $scope.showInterview = function showInterview(role) {
         var appFormId = $scope.appForm.id;
-        var role = $scope.role;
-        console.log($scope.role);
-        appFormStudentService.getInterview(appFormId).success(function (data) {
-            $scope.interview = data;
-            console.log(data);
+        appFormStudentService.getInterview(appFormId,role).success(function (data) {
+            var role = data.role;
+            console.log(role);
+            if(role == 2) {
+                $scope.interviewTech = data;
+
+            }else if (role == 5){
+                $scope.interviewSoft = data;
+            }
         }, function error() {
             console.log("error");
         });
