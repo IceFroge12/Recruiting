@@ -9,6 +9,8 @@ import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.service.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,17 +57,35 @@ public class StaffInterviewController {
                 interview = i;
             }
         }
-        System.out.println(interview.toString());
         Gson interviewGson = GsonFactory.getInterviewGson();
         String jsonResult = interviewGson.toJson(interview);
         return jsonResult;
     }
 
-    @RequestMapping(value = "getRoles", method = RequestMethod.GET)
-    public Set<Role> getRoles() {
+    @RequestMapping(value = "submitInterview", method = RequestMethod.POST)
+
+    public void saveApplicationForm(@RequestBody String jsonInterviewDto) {
+
+        System.out.println(jsonInterviewDto);
+    }
+
+    @RequestMapping(value = "getRoles/{applicationFormId}", method = RequestMethod.GET)
+    public Set<Role> getRoles(@PathVariable Long applicationFormId) {
         User interviwer = userService.getAuthorizedUser();
-        Set<Role> interviwerRoles = interviwer.getRoles();
-        System.out.println(interviwerRoles.toString());
+        List<Interview> interviews = new ArrayList<>();
+        for(Interview interview : interviewService.getByInterviewer(interviwer)){
+            if(interview.getApplicationForm().getId().equals(applicationFormId)){
+                interviews.add(interview);
+            }
+        }
+        Set<Role> interviwerRoles = new HashSet<>();
+        for(Role role : interviwer.getRoles()) {
+            for (Interview i : interviews){
+                if(i.getRole().getId().equals(role.getId())){
+                    interviwerRoles.add(role);
+                }
+            }
+        }
         return interviwerRoles;
     }
 

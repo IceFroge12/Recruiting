@@ -5,7 +5,7 @@
         <div>
             <div class="row">
                 <div class="col-md-2">
-                    <h4>Nikolai Gogol</h4>
+                    <h4>{{appForm.user.firstName}} {{appForm.user.lastName}}</h4>
                 </div>
             </div>
 
@@ -18,14 +18,14 @@
                         <b class="caret"></b>
                     </a>
                 </li>
-                <li ng-show="roleSoft" ng-class="{active:tab===2}" class="dropdown">
+                <li ng-show="roleTech" ng-class="{active:tab===2}" class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 2; showInterview(2)" >
                         Tech Form
                         <b class="caret"></b>
                     </a>
                 </li>
 
-                <li ng-show="roleTech" ng-class="{active:tab===3}" class="dropdown" >
+                <li ng-show="roleSoft" ng-class="{active:tab===3}" class="dropdown" >
                     <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 3; showInterview(5)">
                         Soft Form
                         <b class="caret"></b>
@@ -85,36 +85,90 @@
                         </tr>
                     </table>
                     <button type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
-                    <button type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Back</button>
                 </div>
                 <div ng-show="tab === 2"  class="tab-pane fade in active">
                     <table class="table table-hover table-condensed">
+
+
                         <tr ng-repeat="question in interviewTech.questions">
-                            <td > {{question.questionTitle}}</td>
-                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
-                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
-                                {{answer.answer}}
+                            <td ng-if="question.isMandatory == true" class="mandatory"> {{question.questionTitle}}</td>
+                            <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
+                            <td ng-if="question.questionType == 'select'">
+                                <select class="form-control" ng-model="question.answers[0].answer">
+                                    <option ng-repeat="variant in question.variants track by $index"
+                                            value="{{variant.variant}}">{{variant.variant}}
+                                    </option>
+                                </select>
                             </td>
-                            <td ng-if="question.questionType == 'checkbox'" >
-                                <p ng-repeat="variant in question.variants">
-                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                            <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
+                                <input ng-model="answer.answer" ng-model="answer.ID" type="text" value="{{answer.answer}}"
+                                       class="form-control">
+                            </td>
+                            <td ng-if="question.questionType == 'checkbox'">
+                       <span ng-repeat="variant in question.variants">
+                           <p>
+                               <input type="checkbox" ng-checked="exists(variant.variant, question.answers)"
+                                      ng-click="toggle(variant.variant, question.answers)"> {{variant.variant}}
+                           </p>
+                       </span>
+                            </td>
+                            <td ng-if="question.questionType == 'radio'">
+                       <span ng-repeat="variant in question.variants track by $index">
+                           <p>
+                               <input type="radio" ng-model="question.answers[0].answer" name="question.questionTitle"
+                                      ng-value="variant.variant"> {{variant.variant}}
+                           </p>
+                       </span>
+                            </td>
+                            <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
+                                <p>
+                                    <input ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
+                                           value="{{answer.answer}}"> {{variant.variant}}
                                 </p>
+
                             </td>
                         </tr>
                     </table>
+                    <button  ng-click="submitInter(interviewTech)" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Submit</button>
                 </div>
                 <div ng-show="tab === 3"  class="tab-pane fade in active">
                     <table class="table table-hover table-condensed">
                         <tr ng-repeat="question in interviewSoft.questions">
-                            <td > {{question.questionTitle}}</td>
-                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
-                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
-                                {{answer.answer}}
+                            <td ng-if="question.isMandatory == true" class="mandatory"> {{question.questionTitle}}</td>
+                            <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
+                            <td ng-if="question.questionType == 'select'">
+                                <select class="form-control" ng-model="question.answers[0].answer">
+                                    <option ng-repeat="variant in question.variants track by $index"
+                                            value="{{variant.variant}}">{{variant.variant}}
+                                    </option>
+                                </select>
                             </td>
-                            <td ng-if="question.questionType == 'checkbox'" >
-                                <p ng-repeat="variant in question.variants">
-                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                            <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
+                                <input ng-model="answer.answer" ng-model="answer.ID" type="text" value="{{answer.answer}}"
+                                       class="form-control">
+                            </td>
+                            <td ng-if="question.questionType == 'checkbox'">
+                       <span ng-repeat="variant in question.variants">
+                           <p>
+                               <input type="checkbox" ng-checked="exists(variant.variant, question.answers)"
+                                      ng-click="toggle(variant.variant, question.answers)"> {{variant.variant}}
+                           </p>
+                       </span>
+                            </td>
+                            <td ng-if="question.questionType == 'radio'">
+                       <span ng-repeat="variant in question.variants track by $index">
+                           <p>
+                               <input type="radio" ng-model="question.answers[0].answer" name="question.questionTitle"
+                                      ng-value="variant.variant"> {{variant.variant}}
+                           </p>
+                       </span>
+                            </td>
+                            <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
+                                <p>
+                                    <input ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
+                                           value="{{answer.answer}}"> {{variant.variant}}
                                 </p>
+
                             </td>
                         </tr>
                     </table>
