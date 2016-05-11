@@ -48,7 +48,34 @@ function studentManagementService(http) {
         })
     };
 
+    service.getRejectCount = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getRejectCount'
+        })
+    };
 
+    service.getJobCount = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getJobCount'
+        })
+    };
+
+    service.getAdvancedCount = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getAdvancedCount'
+        })
+    };
+
+    service.getGeneralCount = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getGeneralCount'
+        })
+    };
+    
     service.confirmSelection = function (id, status) {
         return http({
             method : 'POST',
