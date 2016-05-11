@@ -109,6 +109,14 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
 	}
 
+	@Override
+	public boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId) {
+		log.info("Getting NonAdequateMarks");
+		return this.getJdbcTemplate().queryWithParameters("select exists( select i.adequate_mark from " +
+				"interview i where i.adequate_mark=false and i.id_application_form = ? and i.id_interviewer <> ?) ",resultSet ->
+		resultSet.getBoolean(1),applicationFormID, interviewerId);
+	}
+
 	private static final String SQL_GET_ANSWERS = "SELECT fa.id FROM \"form_answer\" fa WHERE fa.id_interview = ?;";
 
 	private List<FormAnswer> getAnswers(Long interviewId) {

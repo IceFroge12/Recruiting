@@ -81,4 +81,9 @@ public class InterviewServiceImpl implements InterviewService {
     public int deleteInterview(Interview interview) {
         return interviewDao.deleteInterview(interview);
     }
+
+    @Override
+    public boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId) {
+        return interviewDao.haveNonAdequateMark(applicationFormID,interviewerId);
+    }
 }

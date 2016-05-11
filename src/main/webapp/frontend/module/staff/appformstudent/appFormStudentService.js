@@ -34,6 +34,13 @@ function appFormStudentService(http) {
         })
     };
 
+    service.getNonAdequateMark = function (appFormId) {
+        console.log("Service getAdequateMark");
+        return http({
+            method: 'GET',
+            url: '/staff/getAdequateMark/'+ appFormId
+        })
+    };
     service.submitInterview = function (data) {
         var req =  http({
             method : 'POST',
