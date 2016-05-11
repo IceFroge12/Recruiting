@@ -9,24 +9,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import javax.mail.MessagingException;
-
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 
-import org.springframework.web.multipart.MultipartFile;
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
@@ -93,7 +87,6 @@ public class StudentApplicationFormController {
 	
 
 	@RequestMapping(value = "appform", method = RequestMethod.POST)
-	@ResponseBody
 	public String getApplicationForm() {
 		User student = userService.getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
@@ -127,7 +120,6 @@ public class StudentApplicationFormController {
 	}
 
 	@RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST)
-	@ResponseBody
 	public String saveApplicationForm(@RequestParam("applicationForm") String jsonApplicationFormDto,
 			@RequestParam("file") MultipartFile file) {
 		ApplicationFormDto applicationFormDto = gson.fromJson(jsonApplicationFormDto, ApplicationFormDto.class);
@@ -284,7 +276,6 @@ public class StudentApplicationFormController {
 	}
 
 	@RequestMapping(value = "appform{applicationFormId}", method = RequestMethod.GET)
-	@ResponseBody
 	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
 		response.setContentType("application/pdf");
