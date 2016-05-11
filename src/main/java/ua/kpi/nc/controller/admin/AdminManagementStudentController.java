@@ -84,4 +84,9 @@ public class AdminManagementStudentController {
         return true;
     }
 
+    @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
+    public List<User> searchStudentById(@RequestParam String lastName){
+        return userService.getEmployeesByNameFromToRows(lastName);
+    }
+
 }

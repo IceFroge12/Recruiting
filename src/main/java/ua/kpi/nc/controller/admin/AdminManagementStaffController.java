@@ -49,8 +49,8 @@ public class AdminManagementStaffController {
         return userService.getAllEmployeeCount();
     }
 
-    @RequestMapping(value = "search", method = RequestMethod.GET)
-    public List<User> search(@RequestParam String lastName){
+    @RequestMapping(value = "search", method = RequestMethod.POST)
+    public List<User> searchEmployee(@RequestParam String lastName){
         return userService.getEmployeesByNameFromToRows(lastName);
     }
 

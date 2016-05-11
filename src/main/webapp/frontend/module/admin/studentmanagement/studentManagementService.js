@@ -85,6 +85,14 @@ function studentManagementService(http) {
         })
     };
 
+    service.searchStudent = function (lastName) {
+        return http({
+            method : 'POST',
+            url : '/admin/searchStudent',
+            params : {lastName : lastName}
+        })
+    };
+
 
     return service;
 }

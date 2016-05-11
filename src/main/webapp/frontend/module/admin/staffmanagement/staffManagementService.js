@@ -18,7 +18,7 @@ function staffManagementService(http) {
     
     service.searchEmployee = function (lastName) {
         return http({
-            method : 'GET',
+            method : 'POST',
             url : '/admin/search',
             params : {lastName : lastName}
         })

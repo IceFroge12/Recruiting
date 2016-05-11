@@ -59,4 +59,6 @@ public interface UserDao {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
+    List<User> getStudentsByNameFromToRows(String lastName);
+
 }

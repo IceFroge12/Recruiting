@@ -9,7 +9,10 @@
                 <div class="col-md-2"><h6><i>Approved to advanced: {{approvedToAdvanced}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Approved to general: {{approvedToGeneral}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
-                <label>Search:<input ng-model="searchText"></label>
+                <label class="col-md-6">Search:
+                    <input ng-model-options="{ debounce: 1000 }"
+                           ng-model="studentName" ng-change="searchStudent(studentName)">
+                </label>
             </div>
             <div class="col-md-5">
                 <tr ng-repeat="student in allStudents">

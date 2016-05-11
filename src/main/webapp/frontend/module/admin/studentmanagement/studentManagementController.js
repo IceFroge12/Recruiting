@@ -127,6 +127,16 @@ function studentManagementController($scope, studentManagementService) {
         console.log("error with getting allStatus");
     });
 
+    $scope.searchStudent = function (studentName) {
+        console.log(studentName);
+        studentManagementService.searchStudent(studentName).success(function (data) {
+            console.log(data);
+            $scope.allStudents = data;
+        }, function error() {
+            console.log("error");
+        });
+    };
+
     //studentManagementService.confirmSelection(id, $scope.statusj);
 }
 

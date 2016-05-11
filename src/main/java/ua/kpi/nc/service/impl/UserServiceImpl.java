@@ -153,4 +153,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getEmployeesByNameFromToRows(String name) {
         return userDao.getEmployeesByNameFromToRows(name);
     }
+
+    @Override
+    public List<User> getStudentsByNameFromToRows(String lastName){
+        return userDao.getStudentsByNameFromToRows(lastName);
+    }
 }
