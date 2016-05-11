@@ -80,7 +80,7 @@ public class StaffInterviewController {
 		Gson gson = new Gson();
 		if (interview.getInterviewer().getId().equals(interviewer.getId())) {
 			interview.setAdequateMark(interviewDto.isAdequateMark());
-			interview.setMark(interview.getMark());
+			interview.setMark(interviewDto.getMark());
 			for (StudentAppFormQuestionDto questionDto : interviewDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
 				List<FormAnswer> answers = formAnswerService.getByInterviewAndQuestion(interview, formQuestion);

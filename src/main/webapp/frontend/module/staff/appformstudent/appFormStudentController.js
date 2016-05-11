@@ -71,7 +71,7 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
                 date: data.date,
                 id: data.id,
                 interviewer: data.interviewer,
-                mark: data.mark,
+                mark: parseInt(data.mark),
                 questions: data.questions,
                 role: data.role
             }
