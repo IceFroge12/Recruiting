@@ -51,6 +51,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 		varMap.put("email", user.getEmail());
 		varMap.put("id", String.valueOf(user.getId()));
 		varMap.put("password", user.getPassword());
+		varMap.put("userInterviewTime", String.valueOf(user.getScheduleTimePoint()));
 		for (Map.Entry<String, String> entry : varMap.entrySet()) {
 			inputText = inputText.replace('%' + entry.getKey() + '%', entry.getValue());
 		}

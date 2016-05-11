@@ -9,6 +9,7 @@ import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
+import ua.kpi.nc.persistence.model.impl.proxy.ScheduleTimePointProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
@@ -16,6 +17,7 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +46,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
         user.setRoles(getRoles(resultSet.getLong("id")));
         user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
+        user.setScheduleTimePoint(getFinalTimePoints(resultSet.getLong("id")));
         return user;
     };
 
@@ -82,6 +85,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String DELETE_FINAL_TIME_POINT = "DELETE FROM user_time_final p " +
             "WHERE p.id_user = ? and p.id_time_point = ?;";
+
+    private static final String SQL_GET_FINAL_TIME_POINT = "SELECT sch.time_point from schedule_time_point sch\n" +
+            "  join user_time_final utf on sch.id = utf.id_time_point JOIN \"user\" on \"user\".id=utf.id_user where \"user\".id = ?";
 
     private static final String SQL_GET_USERS_BY_TOKEN = "SELECT u.id, u.email, u.first_name, u.last_name," +
             " u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date\n" +
@@ -292,5 +298,16 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public int deleteToken(Long id) {
         log.info("Delete token user with id = {}", id);
         return this.getJdbcTemplate().update(SQL_DELETE_TOKEN, id );
+    }
+
+    @Override
+    public List<ScheduleTimePoint> getFinalTimePoints(Long timeID) {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
+            List<ScheduleTimePoint> set = new ArrayList<ScheduleTimePoint>();
+            do {
+                set.add(new ScheduleTimePointProxy(resultSet.getLong("id")));
+            } while (resultSet.next());
+            return set;
+        }, timeID);
     }
 }

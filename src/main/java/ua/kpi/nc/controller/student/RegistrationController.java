@@ -90,7 +90,7 @@ public class RegistrationController {
         }
         user.setActive(true);
         userService.updateUser(user);
-//        userService.deleteToken(user.getId());
+        userService.deleteToken(user.getId());
 
         String json = "ok";
         return gson.toJson(json);
