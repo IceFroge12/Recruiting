@@ -47,8 +47,14 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
         var itemsByPage = 10;
         staffManagementService.showAllEmployees(pageNum,itemsByPage, $scope.sort.sortingOrder,true).success(function (data) { //TODO
+            angular.forEach(data,function (value1, key1){
+                angular.forEach(value1.roles, function(value2, key2){
+                    value2.roleName=value2.roleName.slice(5);
+                })
+            })
             $scope.allEmployee = data;
             console.log(data);
+
         }, function error() {
             console.log("error");
         });

@@ -245,7 +245,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	@Override
 	public int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus) {
-		return this.getJdbcTemplate().update(SQL_CHANGE_STATUS,fromIdStatus,toIdStatus);
+		return this.getJdbcTemplate().update(SQL_CHANGE_STATUS,toIdStatus, fromIdStatus);
 	}
 
 	@Override

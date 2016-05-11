@@ -23,17 +23,40 @@ function appFormStudentService(http) {
         return http({
             method: 'POST',
             url: '/staff/getInterview/' + appFormId + '/' + role
-            //params: {role: role}
         })
 
     };
-    service.getRoles = function () {
+    service.getRoles = function (appFormId) {
         console.log("Service getRoles");
         return http({
             method: 'GET',
-            url: '/staff/getRoles'
+            url: '/staff/getRoles/'+ appFormId
         })
     };
+
+    service.submitInterview = function (data) {
+        var req =  http({
+            method : 'POST',
+            url : '/staff/submitInterview',
+            contentType: 'application/json',
+            data : {
+                adequateMark: data.adequateMark,
+                applicationForm: data.applicationForm,
+                date: data.date,
+                id: data.id,
+                interviewer: data.interviewer,
+                mark: data.mark,
+                questions: data.questions,
+                role: data.role
+            }
+        });
+        var response;
+        req.success(function(data) {
+            response =  data;
+        });
+        return response;
+    };
+
     return service;
 }
 

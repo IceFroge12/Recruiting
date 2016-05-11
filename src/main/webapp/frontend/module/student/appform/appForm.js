@@ -8,7 +8,7 @@ angular.module('appStudentForm', [])
     .directive('appMenuStudent', function () {
         return {
             templateUrl: 'module/student/view/studentMenu.html',
-            controller: 'studentMenuController.js'
+            controller: 'studentMenuController'
         };
     })
     .directive('myDirective', function (httpPostFactory) {

@@ -56,6 +56,26 @@ public class AdminManagementStudentController {
         return formAnswer.get(0);
     }
 
+    @RequestMapping(value = "getRejectCount", method = RequestMethod.GET)
+    public Long getRejectCount(){
+        return ServiceFactory.getApplicationFormService().getCountRejectedAppForm();
+    }
+
+    @RequestMapping(value = "getJobCount", method = RequestMethod.GET)
+    public Long getJobCount(){
+        return ServiceFactory.getApplicationFormService().getCountToWorkAppForm();
+    }
+
+    @RequestMapping(value = "getAdvancedCount", method = RequestMethod.GET)
+    public Long getAdvancedCount(){
+        return ServiceFactory.getApplicationFormService().getCountAdvancedAppForm();
+    }
+
+    @RequestMapping(value = "getGeneralCount", method = RequestMethod.GET)
+    public Long getGeneralCount(){
+        return ServiceFactory.getApplicationFormService().getCountGeneralAppForm();
+    }
+
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
         System.out.println(id+"\n"+status);

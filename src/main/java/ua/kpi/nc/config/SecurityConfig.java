@@ -20,6 +20,8 @@ import ua.kpi.nc.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.filter.StatelessLoginFilter;
 import ua.kpi.nc.service.util.UserAuthService;
 
+import javax.ws.rs.GET;
+
 /**
  * Created by IO on 22.04.16.
  */
@@ -46,13 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-//                .authorizeRequests().anyRequest().permitAll().and()
+                .authorizeRequests().anyRequest().permitAll().and()
                 .authorizeRequests()
                 .antMatchers("/home").anonymous()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/admin/report/*").hasAnyRole()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")

@@ -8,7 +8,7 @@
 				type="button" data-toggle="modal" data-target="#assignNew">
 				Assign new student</button>
 			<p
-				ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS'}">{{resultMessage.message}}</p>
+				ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS','text-warning' : resultMessage.type == 'WARNING',}">{{resultMessage.message}}</p>
 			<table id="students_table" class="table table-hover">
 				<thead>
 					<tr>
@@ -23,8 +23,8 @@
 				<tbody>
 					<tr ng-repeat="student in assignedStudents">
 						<td>
-							<a href="http://localhost:8085/frontend/index.html#/staff/appformstudent/{{student.id}}">{{student.id}}</a></td>
-						<td><img ng-src="photos/{{student.photoScope}}"></td>
+							<a href="index.html#/staff/appformstudent/{{student.id}}">{{student.id}}</a></td>
+						<td><img ng-src="/photo/{{student.photoScope}}"></td>
 						<td>{{student.lastName}}</td>
 						<td>{{student.firstName}}</td>
 						<td>{{student.secondName}}</td>
@@ -61,7 +61,6 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Photo</th>
 								<th>Last Name</th>
 								<th>First Name</th>
 								<th>Second Name</th>
@@ -72,8 +71,6 @@
 						<tbody>
 							<tr ng-if="foundStudent.id != null">
 								<td>{{$parent.foundStudent.id}}</td>
-								<td><img
-									ng-src="photos/{{$parent.foundStudent.photoScope}}"></td>
 								<td>{{$parent.foundStudent.lastName}}</td>
 								<td>{{$parent.foundStudent.firstName}}</td>
 								<td>{{$parent.foundStudent.secondName}}</td>

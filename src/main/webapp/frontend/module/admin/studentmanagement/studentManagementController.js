@@ -4,10 +4,30 @@
 
 function studentManagementController($scope, studentManagementService) {
 
-    $scope.approvedToWork = 0;
-    $scope.approvedToAdvanced = 0;
-    $scope.approvedToGeneral = 0;
-    $scope.rejected = 0;
+
+    studentManagementService.getRejectCount().success(function(data){
+        $scope.rejected = data;
+    }, function error() {
+        console.log("error");
+    });
+
+    studentManagementService.getAdvancedCount().success(function(data){
+        $scope.approvedToAdvanced = data;
+    }, function error() {
+        console.log("error");
+    });
+
+    studentManagementService.getGeneralCount().success(function(data){
+        $scope.approvedToGeneral = data;
+    }, function error() {
+        console.log("error");
+    });
+
+    studentManagementService.getJobCount().success(function(data){
+        $scope.approvedToWork = data;
+    }, function error() {
+        console.log("error");
+    });
 
     $scope.sort = {
         sortingOrder: 1,
@@ -15,9 +35,11 @@ function studentManagementController($scope, studentManagementService) {
     };
 
     $scope.currentPage = 1;
+    $scope.status;
+    $scope.statuses = [];
+    $scope.UnivList=[];
 
-
-    $scope.$watch("sort.reverse",function(){
+    $scope.$watch("sort.reverse", function () {
         $scope.currentPage = 1;
         $scope.showAllStudents($scope.currentPage);
         console.log($scope.currentPage);
@@ -25,7 +47,7 @@ function studentManagementController($scope, studentManagementService) {
         console.log($scope.sort.sortingOrder);
     });
 
-    $scope.$watch("sort.sortingOrder",function(){
+    $scope.$watch("sort.sortingOrder", function () {
         $scope.currentPage = 1;
         $scope.showAllStudents($scope.currentPage);
         console.log($scope.currentPage);
@@ -35,15 +57,22 @@ function studentManagementController($scope, studentManagementService) {
 
     studentManagementService.showAllStudents(1, $scope.sort.sortingOrder, $scope.sort.reverse, true).success(function (data) {
         $scope.allStudents = data;
+        // angular.forEach(data,function (value, key){
+        //     $scope.UnivList.push($scope.getStudentsUniversity(value.id));
+        // });console.log($scope.UnivList);
     }, function error() {
         console.log("error");
     });
 
+  
+
     $scope.showAllStudents = function showAllStudents(pageNum) {
         var itemsByPage = 10;
-        studentManagementService.showAllStudents(pageNum,itemsByPage, $scope.sort.sortingOrder,true).success(function (data) {
+        studentManagementService.showAllStudents(pageNum, itemsByPage, $scope.sort.sortingOrder, true).success(function (data) {
             $scope.allStudents = data;
-            console.log(data);
+            // angular.forEach(data,function (value, key){
+            //     $scope.UnivList.push($scope.getUniv(155));
+            // });console.log($scope.UnivList);
         }, function error() {
             console.log("error");
         });
@@ -56,47 +85,50 @@ function studentManagementController($scope, studentManagementService) {
         console.log("error with getting student university from service");
     });
 
+    // $scope.getUniv = function getUniv(id) {
+    //     studentManagementService.getStudentsUniversity(id).success(function (data) {
+    //         $scope.university = data.answer + ".";
+    //         console.log(data + " university");
+    //     }, function error() {
+    //         console.log("error with getting student university from service");
+    //     });
+    // };
+
     studentManagementService.getStudentsCourse(155).success(function (data) {
-        $scope.course=data.answer+".";
-        console.log(data+" course");
+        $scope.course = data.answer + ".";
+        console.log(data + " course");
     }, function error() {
         console.log("error with getting student course from service");
     });
 
-    //$scope.status={id:null, title:''};
+
     studentManagementService.getStudentsStatus(155).success(function (data) {
-        $scope.status=data;
-        console.log(data+" status");
-        if(angular.equals($scope.status.title,"Approved to job")){
+        $scope.status = data;
+        console.log(data + " status");
+        if (angular.equals($scope.status.title, "Approved to job")) {
             $scope.approvedToWork += 1;
-        }else
-        if(angular.equals($scope.status.title, "Approved to general group")){
+        } else if (angular.equals($scope.status.title, "Approved to general group")) {
             $scope.approvedToGeneral += 1;
-        }else
-        if(angular.equals($scope.status.title, "Rejected")){
+        } else if (angular.equals($scope.status.title, "Rejected")) {
             $scope.rejected += 1;
-        }else
-        if(angular.equals($scope.status.title, "Approved to advanced courses")){
+        } else if (angular.equals($scope.status.title, "Approved to advanced courses")) {
             $scope.approvedToAdvanced += 1;
         }
     }, function error() {
         console.log("error with getting student status from service");
     });
 
-    studentManagementService.getAllStatuses().success(function(data){
-
-        $scope.statuses=[];
-        angular.forEach(data, function (value, key){
-            if(!angular.equals(value.title,"Approved to general group"))$scope.statuses.push(value);//$scope.status.title
+    studentManagementService.getAllStatuses().success(function (data) {
+        angular.forEach(data, function (value, key) {
+            if (!angular.equals(value.title, $scope.status.title))$scope.statuses.push(value);//$scope.status.title "Approved to general group"
         });
-        console.log(data+" allStatus");
+        console.log(data + " allStatus");
     }, function error() {
         console.log("error with getting allStatus");
     });
 
     //studentManagementService.confirmSelection(id, $scope.statusj);
-  }
-
+}
 
 
 angular.module('appStudentManagement')

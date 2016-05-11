@@ -21,4 +21,6 @@ public interface FormAnswerService {
     int updateFormAnswer(FormAnswer formAnswer);
 
     int deleteFormAnswer(FormAnswer formAnswer);
+    
+    Long insertFormAnswerForInterview(FormAnswer formAnswer);
 }

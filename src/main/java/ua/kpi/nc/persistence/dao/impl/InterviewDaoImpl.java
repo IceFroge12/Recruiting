@@ -91,8 +91,10 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 
 	@Override
 	public int updateInterview(Interview interview) {
-		log.info("Update interview with id = ", interview.getId());
-		return this.getJdbcTemplate().update(SQL_UPDATE, interview.getId());
+		log.info("Update interview with id = {}", interview.getId());
+		return this.getJdbcTemplate().update(SQL_UPDATE, interview.getMark(), interview.getDate(),
+				interview.getInterviewer().getId(),interview.getRole().getId(), interview.isAdequateMark(), interview.getApplicationForm().getId(),
+				interview.getId());
 	}
 
 	@Override

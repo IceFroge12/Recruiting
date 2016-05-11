@@ -41,9 +41,16 @@
                     </ul>
                     </td>
                     <td>
-                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-info"
-                                type="button">{{employee.enabled}}
+                        <div ng-if="employee.active">
+                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-success"
+                                type="button">Active
                         </button>
+                        </div>
+                        <div ng-if="!employee.active">
+                            <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-danger"
+                                    type="button">UnActive
+                            </button>
+                        </div>
                     </td>
                     <td>
                         <button class="btn btn-info" ng-click="showAssigned(employee)" type="button" data-toggle="modal"
