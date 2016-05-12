@@ -19,7 +19,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.sortingDir = 1;
     $scope.startId = 0;
     $scope.finishId = 1000;
-    $scope.rolesChoosen = {roles: 1, roles: 2};
+    $scope.rolesChoosen = [1,2,3,5];
     $scope.interviewer = true;
     $scope.notInterviewer = false;
     $scope.notEvaluated = true; //TODO
@@ -299,6 +299,8 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.filter = function () {
         $scope.startId = $scope.slider.minValue;
         $scope.finishId = $scope.slider.maxValue;
+        $scope.currentPage = 1;
+        $scope.showFilteredEmployees($scope.currentPage);
         $scope.filtered = true;
     }
 
