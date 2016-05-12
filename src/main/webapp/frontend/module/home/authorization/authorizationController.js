@@ -10,6 +10,9 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
     $scope.authsuccess = false;
 
     $scope.login = function () {
+        if($scope.password === undefined){
+            console.log("Auth error");
+        }else{
         $http({
             method: 'POST',
             url: '/loginIn',
@@ -27,6 +30,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                 $scope.authsuccess=true;
             }
         });
+        }
     };
     
     $scope.registration = function () {

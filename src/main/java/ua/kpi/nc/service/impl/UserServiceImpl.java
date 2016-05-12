@@ -48,17 +48,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean insertUser(User user, List<Role> roles) {
-        try(Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
             Long generatedUserId = userDao.insertUser(user, connection);
             user.setId(generatedUserId);
-            for (Role role : roles){
-                userDao.addRole(user,role,connection);
+            for (Role role : roles) {
+                userDao.addRole(user, role, connection);
             }
             connection.commit();
         } catch (SQLException e) {
             if (log.isWarnEnabled()) {
-                log.warn("Cannot insert user",e);
+                log.warn("Cannot insert user", e);
             }
             return false;
         }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user){
+    public int updateUser(User user) {
         return userDao.updateUser(user);
     }
 
@@ -87,12 +87,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.insertFinalTimePoint(user,scheduleTimePoint);
+        return userDao.insertFinalTimePoint(user, scheduleTimePoint);
     }
 
     @Override
     public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.deleteFinalTimePoint(user,scheduleTimePoint);
+        return userDao.deleteFinalTimePoint(user, scheduleTimePoint);
     }
 
     @Override
@@ -112,27 +112,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
-        return userDao.getStudentsFromToRows(fromRows, rowsNum, sortingCol,increase);
+        return userDao.getStudentsFromToRows(fromRows, rowsNum, sortingCol, increase);
     }
 
     @Override
-    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase){
+    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
         return userDao.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
     }
+
     @Override
     public Set<User> getAllEmploees() {
         return userDao.getAllEmploees();
     }
 
     @Override
-    public Set<User> getAll(){ return userDao.getAll();}
+    public Set<User> getAll() {
+        return userDao.getAll();
+    }
 
-	@Override
-	public User getAuthorizedUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName();
-		return getUserByUsername(name);
-	}
+    @Override
+    public User getAuthorizedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        return getUserByUsername(name);
+    }
 
     @Override
     public Long getAllStudentCount() {
@@ -155,7 +158,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getStudentsByNameFromToRows(String lastName){
-        return userDao.getStudentsByNameFromToRows(lastName);
+    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
+        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum, sortingCol);
     }
 }

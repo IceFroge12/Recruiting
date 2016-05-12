@@ -90,8 +90,10 @@ public class AdminManagementStudentController {
     }
 
     @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
-    public List<User> searchStudentById(@RequestParam String lastName){
-        return userService.getEmployeesByNameFromToRows(lastName);
+    public List<User> searchStudentById(@RequestParam String lastName,
+                                        @RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol){
+        Long fromRow = (pageNum - 1) * rowsNum;
+        return userService.getStudentsByNameFromToRows(lastName,fromRow,rowsNum,sortingCol);
     }
 
 }

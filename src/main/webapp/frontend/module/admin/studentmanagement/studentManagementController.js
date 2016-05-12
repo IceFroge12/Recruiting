@@ -73,7 +73,7 @@ function studentManagementController($scope, studentManagementService) {
     });
 
     studentManagementService.getCountOfStudents().success(function (data) {
-        console.log("Count of students" + data)
+        console.log("Count of students" + data);
         $scope.amount = Math.ceil(data / $scope.pageItems);
     });
 
@@ -145,7 +145,7 @@ function studentManagementController($scope, studentManagementService) {
 
     $scope.searchStudent = function (studentName) {
         console.log(studentName);
-        studentManagementService.searchStudent(studentName).success(function (data) {
+        studentManagementService.searchStudent(studentName,pageNum,$scope.pageItems, $scope.sort.sortingOrder).success(function (data) {
             console.log(data);
             $scope.allStudents = data;
         }, function error() {
@@ -186,6 +186,7 @@ function studentManagementController($scope, studentManagementService) {
     $scope.setPage = function () {
         $scope.currentPage = this.n;
         $scope.showAllStudents($scope.currentPage);
+        //TODO
     };
 
 

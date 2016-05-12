@@ -137,7 +137,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "WHERE (ur.id_role = 2 OR ur.id_role = 5) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY 2 ASC OFFSET 0 LIMIT 9";
 
     private static final String SQL_SEARCH_STUDENT_BY_LAST_NAME = "Select * from (Select DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE (ur.id_role = 3) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY 2 ASC OFFSET 0 LIMIT 9";
+            "WHERE (ur.id_role = 3) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY ? OFFSET ? LIMIT ?";
+
+
 
     @Override
     public User getByID(Long id) {
@@ -323,7 +325,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public List<User> getStudentsByNameFromToRows(String lastName) {
-        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, "%"+lastName+"%");
+    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
+        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, "%"+lastName+"%",sortingCol,
+                fromRows, rowsNum);
     }
 }

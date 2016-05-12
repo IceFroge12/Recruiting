@@ -95,7 +95,11 @@ function studentManagementService(http) {
         return http({
             method : 'POST',
             url : '/admin/searchStudent',
-            params : {lastName : lastName}
+            params : {lastName : lastName,
+                pageNum:pageNum, 
+                rowsNum: rowsNum, 
+                sortingCol:sortingCol
+            }
         })
     };
 

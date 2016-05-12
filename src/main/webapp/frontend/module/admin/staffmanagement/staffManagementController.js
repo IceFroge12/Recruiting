@@ -132,8 +132,11 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     var editRoles = [];
-
+  
     $scope.showUserData = function (employee) {
+        $scope.adminEdit = false;
+        $scope.softEdit = false;
+        $scope.techEdit = false;
         $scope.id = employee.id;
         $scope.emailEdit = employee.email;
         $scope.firstNameEdit = employee.firstName;
@@ -155,6 +158,8 @@ function staffManagementController($scope, $filter, staffManagementService) {
             }
             //TODO change logic
         });
+    
+        editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 

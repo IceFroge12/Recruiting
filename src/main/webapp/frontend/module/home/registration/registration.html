@@ -16,35 +16,55 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 login-box">
-                                <form role="form">
+                                <form name="registrationForm" role="form">
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input ng-model="firstName" type="text" class="form-control" placeholder="First name" required autofocus/>
+                                        <input ng-model="firstName" name="firstName" type="text" class="form-control" ng-maxlength="77"
+                                               ng-minlength="1" placeholder="First name" required autofocus/>
+                                        <div ng-messages="registrationForm.firstName.$error">
+                                            <div ng-message="maxlength">Password must not exceed 77 characters</div>
+                                            <div ng-message="minlength">Password must be over 1 characters</div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input ng-model="secondName" type="text" class="form-control" placeholder="Second name" required
-                                               autofocus/>
+                                        <input ng-model="secondName" type="text" name="secondName" class="form-control" ng-maxlength="77"
+                                               ng-minlength="1" placeholder="Second name" required autofocus/>
+                                        <div ng-messages="registrationForm.secondName.$error">
+                                            <div ng-message="maxlength">Password must not exceed 77 characters</div>
+                                            <div ng-message="minlength">Password must be over 1 characters</div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input ng-model="lastName" type="text" class="form-control" placeholder="Last name" required
-                                               autofocus/>
+                                        <input ng-model="lastName" name="lastName" type="text" class="form-control" ng-maxlength="77" ng-minlength="1"
+                                               placeholder="Last name" required autofocus/>
+                                        <div ng-messages="registrationForm.lastName.$error">
+                                            <div ng-message="maxlength">Password must not exceed 77 characters</div>
+                                            <div ng-message="minlength">Password must be over 1 characters</div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-envelope"></span></span>
-                                        <input ng-model="email" type="text" class="form-control" placeholder="Email" required
+                                        <input ng-model="email" type="email" name="userEmail" class="form-control" placeholder="Email" required
                                                autofocus/>
+                                    </div>
+                                    <div ng-messages="registrationForm.userEmail.$error">
+                                        <div ng-message="email">Your email address is invalid</div>
                                     </div>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-lock"></span></span>
-                                        <input ng-model="password" type="password" class="form-control" placeholder="Password"
+                                        <input ng-model="password" type="password"  name="password"  ng-maxlength="16" ng-minlength="4" class="form-control" placeholder="Password"
                                                required/>
+                                        <div ng-messages="registrationForm.password.$error">
+                                            <div ng-message="maxlength">Password must not exceed 16 characters</div>
+                                            <div ng-message="minlength">Password must be over 4 characters</div>
+                                        </div>
                                     </div>
                                     <p>
                                 </form>
