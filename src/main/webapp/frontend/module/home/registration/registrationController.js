@@ -8,7 +8,7 @@ function registrationController($scope, $http) {
         $scope.emailSend = false;
         if ($scope.email === undefined || $scope.password === undefined ||
         $scope.lastName === undefined || $scope.secondName === undefined || $scope.firstName === undefined) {
-            console.log("Email not valid");
+            console.log("Error");
         } else {
             $http({
                 method: 'POST',
