@@ -163,4 +163,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByNameFromToRows(String lastName){
         return userDao.getStudentsByNameFromToRows(lastName);
     }
+
+    @Override
+    public Long getUserCount() {
+        return userDao.getUserCount();
+    }
 }

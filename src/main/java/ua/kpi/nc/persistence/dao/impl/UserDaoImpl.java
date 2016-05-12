@@ -151,6 +151,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             " AND u.id >= ? AND u.id <= ? AND ur.id_role::varchar IN (?) AND u.is_active::varchar IN (?))" +
             " as uuiefnlnsnpctiard ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
+    private static final String SQL_GET_MAX_ID = "SELECT MAX(u.id) FROM \"user\" u;";
+
 
     @Override
     public User getByID(Long id) {
@@ -358,5 +360,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public List<User> getStudentsByNameFromToRows(String lastName) {
         return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, "%"+lastName+"%");
+    }
+
+    @Override
+    public Long getUserCount() {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_MAX_ID, resultSet -> resultSet.getLong(1));
     }
 }

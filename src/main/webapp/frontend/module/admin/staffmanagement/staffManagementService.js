@@ -7,12 +7,21 @@ function staffManagementService(http) {
 
     var service = {};
 
-    service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
+    service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase) {
+        console.log("Service showAllEmployees");
+        return http({
+            method : 'GET',
+            url : '/admin/showAllEmployees',
+            params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
+        })
+    };
+
+    service.showFilteredEmployees = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
                                          notInterviewer, notEvaluated) {
         console.log("Service showAllEmployees");
         return http({
-            method: 'GET',
-            url: '/admin/showAllEmployees',
+            method: 'POST',
+            url: '/admin/showFilteredEmployees',
             params: {
                 pageNum: pageNum,
                 rowsNum: rowsNum,
@@ -123,6 +132,13 @@ function staffManagementService(http) {
         }).error(function (data, status, headers) {
             console.log(status);
         });
+    };
+
+    service.getMaxId = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getMaxId'
+        })
     };
 
     return service;

@@ -38,22 +38,25 @@ public class AdminManagementStaffController {
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
 
-    //    @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
-//    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-//                                    @RequestParam boolean increase) {
-//        Long fromRow = (pageNum - 1) * rowsNum;
-//        return userService.getEmployeesFromToRows(fromRow,rowsNum, sortingCol, increase);
-//    }
-
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
+    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+                                    @RequestParam boolean increase) {
+        return userService.getEmployeesFromToRows(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase);
+    }
+
+    @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.POST)
     public List<User> showFilteredEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                            @RequestParam boolean increase, @RequestParam Long idStart,@RequestParam Long idFinish,
-                                            @RequestParam List<Long> roles,@RequestParam boolean interviewer,@RequestParam boolean notInterviewer,@RequestParam boolean notEvaluated) {
-        List<Role> neededRoles = roles.stream().map(roleService::getRoleById).collect(Collectors.toList());
-        System.out.println(increase+" "+pageNum+" "+interviewer+" "+roles);
-        List<User> res = userService.getFilteredEmployees(Long.valueOf(pageNum), rowsNum, sortingCol, increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
-        for(User us: res) System.out.println(us);
+                                            @RequestParam boolean increase, @RequestParam Long idStart, @RequestParam Long idFinish,
+                                            @RequestParam List<Long> rolesId, @RequestParam boolean interviewer, @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
+        List<Role> neededRoles = rolesId.stream().map(roleService::getRoleById).collect(Collectors.toList());
+        System.out.println(increase + " " + pageNum + " " + interviewer + " " + rolesId);
+        List<User> res = userService.getFilteredEmployees(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
+        for (User us : res) System.out.println(us);
         return res;
+    }
+
+    private Long calculateStartRow(int pageNum, Long rowsNum) {
+        return (pageNum - 1) * rowsNum;
     }
 
     @RequestMapping(value = "getCountOfEmployee", method = RequestMethod.GET)
@@ -62,7 +65,7 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public List<User> searchEmployee(@RequestParam String lastName){
+    public List<User> searchEmployee(@RequestParam String lastName) {
         return userService.getEmployeesByNameFromToRows(lastName);
     }
 
@@ -78,7 +81,7 @@ public class AdminManagementStaffController {
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), password, true, new Timestamp(date.getTime()),null);
+                userDto.getLastName(), password, true, new Timestamp(date.getTime()), null);
         userService.insertUser(user, userRoles);
         System.out.println(user);
         EmailTemplate emailTemplate = emailTemplateService.getById(3L);
@@ -119,7 +122,7 @@ public class AdminManagementStaffController {
         List<Interview> interviewList = interviewService.getByInterviewer(user);
 
         interviewList.get(0).getApplicationForm().getUser().getFirstName();
-        for (Interview interview: interviewList){
+        for (Interview interview : interviewList) {
             System.out.println(interview.toString());
         }
 
@@ -129,12 +132,16 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "deleteEmployee", method = RequestMethod.GET)
-    public void deleteEmployee(@RequestParam String email){
+    public void deleteEmployee(@RequestParam String email) {
         System.out.println(email);
         User user = userService.getUserByUsername(email);
         System.out.println(user);
         userService.deleteUser(user);
     }
 
+    @RequestMapping(value = "getMaxId", method = RequestMethod.GET)
+    public Long getMaxId() {
+        return userService.getUserCount();
+    }
 
 }

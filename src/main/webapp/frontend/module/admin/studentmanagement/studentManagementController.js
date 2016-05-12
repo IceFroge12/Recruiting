@@ -24,7 +24,6 @@ function studentManagementController($scope, studentManagementService) {
     $scope.statuses = [];
     $scope.UnivList=[];
 
-    studentManagementService.getRejectCount().success(function(data){
     function getAllQuestions() {
         studentManagementService.getAllQuestions().then(function success(data) {
             for (var i = 0, len = data.length; i < len; i++) {
@@ -101,8 +100,6 @@ function studentManagementController($scope, studentManagementService) {
         console.log("error");
     });
 
-
-
     $scope.$watch("sort.reverse", function () {
         $scope.currentPage = 1;
         $scope.showAllStudents($scope.currentPage);
@@ -128,7 +125,7 @@ function studentManagementController($scope, studentManagementService) {
     });
 
     studentManagementService.getCountOfStudents().success(function (data) {
-        console.log("Count of students" + data)
+        console.log("Count of students" + data);
         $scope.amount = Math.ceil(data / $scope.pageItems);
     });
 
@@ -243,6 +240,11 @@ function studentManagementController($scope, studentManagementService) {
         $scope.showAllStudents($scope.currentPage);
     };
 
+    $scope.filter= function (){
+        $scope.startId = $scope.slider.minValue;
+        $scope.finishId = $scope.slider.maxValue;
+        $scope.showAllEmployees($scope.currentPage);
+    };
 
     //studentManagementService.confirmSelection(id, $scope.statusj);
 }
