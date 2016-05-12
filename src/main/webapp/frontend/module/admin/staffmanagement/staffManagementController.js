@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, $filter, $http, staffManagementService) {
+function staffManagementController($scope, $filter, staffManagementService) {
 
 
     $scope.sort = {
@@ -19,7 +19,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.sortingDir = 1;
     $scope.startId = 0;
     $scope.finishId = 1000;
-    $scope.rolesChoosen = {roles: 1, roles: 2};
+    $scope.rolesChoosen = [1,2,5];
     $scope.interviewer = true;
     $scope.notInterviewer = false;
     $scope.notEvaluated = true; //TODO
@@ -27,7 +27,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
 
 
     // init the sorted items
-    $scope.$watch("sort.reverse",function(){
+    $scope.$watch("sort.reverse", function () {
         $scope.currentPage = 1;
         if ($scope.filtered)
             $scope.showFilteredEmployees($scope.currentPage);
@@ -35,7 +35,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             $scope.showAllEmployees($scope.currentPage);
     });
 
-    $scope.$watch("sort.sortingOrder",function(){
+    $scope.$watch("sort.sortingOrder", function () {
         $scope.currentPage = 1;
         if ($scope.filtered)
             $scope.showFilteredEmployees($scope.currentPage);
@@ -180,7 +180,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     };
 
     var editRoles = [];
-  
+
     $scope.showUserData = function (employee) {
         $scope.adminEdit = false;
         $scope.softEdit = false;
@@ -206,7 +206,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             }
             //TODO change logic
         });
-    
+
         editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
@@ -300,21 +300,37 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.toggle = function (item, list) {
         var idx = -1;
         for (var i = 0; i < list.length; i++) {
-            if (list[i].answer == item)
+            if (list[i] == item)
                 idx = i;
         }
         if (idx > -1) {
             list.splice(idx, 1);
         }
         else {
-            list.push({answer: item});
+            list.push(item);
         }
         console.log(list);
     };
 
+    $scope.existingRoles =
+        [{
+            roleName: 'ADMIN',
+            id: 1
+        },
+            {
+                roleName: 'SOFT',
+                id: 5
+            },
+            {
+                roleName: 'TECH',
+                id: 2
+            }];
+
     $scope.filter = function () {
         $scope.startId = $scope.slider.minValue;
         $scope.finishId = $scope.slider.maxValue;
+        $scope.currentPage = 1;
+        $scope.showFilteredEmployees($scope.currentPage);
         $scope.filtered = true;
     }
 
@@ -359,7 +375,7 @@ angular.module('appStaffManagement').directive("customSort", function () {
         }
     }
 
-   
+
 });
 
 

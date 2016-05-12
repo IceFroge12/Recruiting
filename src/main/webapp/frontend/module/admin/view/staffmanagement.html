@@ -162,7 +162,7 @@
                         <td>
                             <span ng-repeat="role in existingRoles">
                            <p>
-                               <input type="checkbox" checked ng-click="toggle(role, rolelist)"> {{role}}
+                               <input type="checkbox" ng-checked="rolesChoosen.indexOf(role.id)>-1" ng-click="toggle(role.id, rolesChoosen)"> {{role.roleName}}
                            </p>
                        </span>
                         </td>
@@ -170,8 +170,8 @@
                     <tr>
                         <td>Status</td>
                         <td>
-                               <input type="checkbox" checked ng-click="toggle('true', statuslist)"> interviewers
-                               <input type="checkbox" checked ng-click="toggle('false', statuslist)"> not interviewers
+                               <input type="checkbox" ng-model="interviewer"> interviewers
+                               <input type="checkbox" ng-model="notInterviewer"> not interviewers
                         </td>
                     </tr>
                     <tr>
