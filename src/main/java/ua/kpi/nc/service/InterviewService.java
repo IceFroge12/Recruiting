@@ -28,4 +28,6 @@ public interface InterviewService {
 	int deleteInterview(Interview interview);
 
 	List<Interview> getAll();
+
+	boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
 }

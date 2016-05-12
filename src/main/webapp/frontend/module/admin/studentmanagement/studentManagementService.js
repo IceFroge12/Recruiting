@@ -7,14 +7,20 @@ function studentManagementService(http) {
 
     var service = {};
 
-    service.showAllStudents = function (pageNum, rowsNum, sortingCol, increase) {
+    service.showAllStudents= function (pageNum, rowsNum, sortingCol, increase) {
         console.log("Service showAllStudents");
         return http({
             method : 'GET',
             url : '/admin/showAllStudents',
             params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
-    
+    };
+
+    service.getCountOfStudents= function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getCountOfStudents'
+        })
     };
 
     service.getAllStatuses = function () {

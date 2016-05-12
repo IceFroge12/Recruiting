@@ -15,20 +15,19 @@ function staffManagementService(http) {
             params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
     };
-    
+
+    service.getCountOfEmployee = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getCountOfEmployee'
+        })
+    };
+
     service.searchEmployee = function (lastName) {
         return http({
             method : 'POST',
             url : '/admin/search',
             params : {lastName : lastName}
-        })
-    };
-
-    
-    service.getCountOfEmployee = function () {
-        return http({
-            method : 'GET',
-            url : '/admin/getCountOfEmployee'
         })
     };
 

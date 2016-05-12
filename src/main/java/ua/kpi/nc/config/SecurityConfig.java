@@ -20,7 +20,7 @@ import ua.kpi.nc.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.filter.StatelessLoginFilter;
 import ua.kpi.nc.service.util.UserAuthService;
 
-import javax.ws.rs.GET;
+//import javax.ws.rs.GET;
 
 /**
  * Created by IO on 22.04.16.
@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/admin/report/*").hasAnyRole()
+                .antMatchers("/student/appform/*").hasRole("STUDENT")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")

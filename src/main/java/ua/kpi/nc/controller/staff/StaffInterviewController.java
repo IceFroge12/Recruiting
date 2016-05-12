@@ -112,6 +112,13 @@ public class StaffInterviewController {
 		return interviwerRoles;
 	}
 
+    @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)
+    public boolean getAdequateMark(@PathVariable Long applicationFormId) {
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
+        User interviewer = userService.getAuthorizedUser();
+        return interviewService.haveNonAdequateMark(applicationFormId,interviewer.getId());
+    }
+
 	private void updateAnswers(FormQuestion formQuestion, List<FormAnswer> answers, List<StudentAnswerDto> answersDto,
 			Interview interview) {
 		String questionType = formQuestion.getQuestionType().getTypeTitle();
