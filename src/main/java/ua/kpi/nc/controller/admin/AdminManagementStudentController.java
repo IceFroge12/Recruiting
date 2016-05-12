@@ -1,13 +1,13 @@
 package ua.kpi.nc.controller.admin;
 
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Status;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.service.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dima on 23.04.16.

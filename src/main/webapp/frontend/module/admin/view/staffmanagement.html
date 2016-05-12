@@ -13,7 +13,7 @@
                    ng-model="employeeName" ng-change="searchEmployee(employeeName)">
         </label>
             <button id="filter" class="btn btn-info btn-sm col-md-2" type="button" data-toggle="modal"
-                    data-target="#filter">Filter
+                    data-target="#filterTable" ng-click="showFiltration()">Filter
             </button>
             <table class="table table-condensed table-hover col-md-8">
                 <thead>
@@ -34,20 +34,20 @@
                     <td>{{employee.firstName}}</td>
                     <td>{{employee.email}}</td>
                     <td>
-                    <ul>
-                        <li ng-repeat="role in employee.roles">
-                            {{role.roleName}}
-                        </li>
-                    </ul>
+                        <ul>
+                            <li ng-repeat="role in employee.roles">
+                                {{role.roleName}}
+                            </li>
+                        </ul>
                     </td>
                     <td>
                         <div ng-if="employee.active">
-                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-success"
-                                type="button">Active
-                        </button>
+                            <button style="width:80px;height:35px" ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-success"
+                                    type="button">Active
+                            </button>
                         </div>
                         <div ng-if="!employee.active">
-                            <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-danger"
+                            <button style="width:80px; height:35px" ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-danger"
                                     type="button">UnActive
                             </button>
                         </div>
@@ -73,25 +73,25 @@
                 </tr>
                 </tbody>
                 <tfoot>
-                    <td colspan="6">
-                        <div class="pagination pull-right">
-                            <ul>
-                                <li ng-class="{disabled: currentPage == 1}">
-                                    <a href ng-click="prevPage()">« Prev</a>
-                                </li>
+                <td colspan="6">
+                    <div class="pagination pull-right">
+                        <ul>
+                            <li ng-class="{disabled: currentPage == 1}">
+                                <a href ng-click="prevPage()">« Prev</a>
+                            </li>
 
-                                <li ng-repeat="n in range(amount, currentPage, currentPage + gap) "
-                                    ng-class="{active: n == currentPage}"
-                                    ng-click="setPage()">
-                                    <a href ng-bind="n">1</a>
-                                </li>
+                            <li ng-repeat="n in range(amount, currentPage, currentPage + gap) "
+                                ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                <a href ng-bind="n">1</a>
+                            </li>
 
-                                <li ng-class="{disabled: currentPage == amount}">
-                                    <a href ng-click="nextPage()">Next »</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
+                            <li ng-class="{disabled: currentPage == amount}">
+                                <a href ng-click="nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
                 </tfoot>
             </table>
         </div>
@@ -113,6 +113,74 @@
 </div>
 
 <!-- modal dialog -->
+
+<div id="filterTable" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span></button>
+
+                <h4 class="modal-title">Filtration</h4>
+
+                <div>
+                    <p>Choose appropriate parameters:</p>
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Restriction</th>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>
+                            <rzslider
+                                    rz-slider-model="slider.minValue"
+                                    rz-slider-high="slider.maxValue"
+                                    rz-slider-options="slider.options">
+                            </rzslider>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Role</td>
+                        <td>
+                            <span ng-repeat="role in existingRoles">
+                           <p>
+                               <input type="checkbox" checked ng-click="toggle(role, rolelist)"> {{role}}
+                           </p>
+                       </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>
+                               <input type="checkbox" checked ng-click="toggle('true', statuslist)"> interviewers
+                               <input type="checkbox" checked ng-click="toggle('false', statuslist)"> not interviewers
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Just who has not evaluated students</td>
+                        <td>
+                            <input type="checkbox" ng-checked="notEval" ng-click="toggle()">
+                        </td>
+                    </tr>
+                    </tbody>
+                    </thead>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="filter()" type="button" id="acceptFiltration"
+                        data-dismiss="modal">Filter
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <div id="editEmployee" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">

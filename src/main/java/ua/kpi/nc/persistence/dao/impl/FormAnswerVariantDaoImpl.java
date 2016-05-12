@@ -50,7 +50,7 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
     
     private static final String SQL_GET_BY_TITLE_QUESTION = SQL_GET + " WHERE " + ANSWER_COL + " = ? AND " + ID_QUESTION_COL + " = ?";
 
-    private static final String SQL_GET_BY_QUESTION_ID = SQL_GET + " WHERE " + ID_QUESTION_COL + " = ?;";
+    private static final String SQL_GET_BY_QUESTION_ID = SQL_GET + " WHERE " + ID_QUESTION_COL + " = ? ORDER BY " + ID_COL;
 
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + ANSWER_COL + ", " + ID_QUESTION_COL
             + ") VALUES (?,?);";

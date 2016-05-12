@@ -140,6 +140,21 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
 
 
+    private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_DESC = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
+            "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
+            " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +
+            " AND u.id >= ? AND u.id <= ? AND ur.id_role::varchar IN (?) AND u.is_active::varchar IN (?))" +
+            " as uuiefnlnsnpctiard ORDER BY ? DESC OFFSET ? LIMIT ?;";
+
+    private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_ASC = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
+            "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
+            " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +
+            " AND u.id >= ? AND u.id <= ? AND ur.id_role::varchar IN (?) AND u.is_active::varchar IN (?))" +
+            " as uuiefnlnsnpctiard ORDER BY ? ASC OFFSET ? LIMIT ?;";
+
+    private static final String SQL_GET_MAX_ID = "SELECT MAX(u.id) FROM \"user\" u;";
+
+
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
@@ -256,6 +271,26 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
+    public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+        log.info("Get Filtered Employees");
+
+        String sql = increase ? SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_ASC : SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_DESC;
+        StringBuilder sb = new StringBuilder();
+        for(Role role: roles) {
+            if (sb.length() == 0)
+                sb.append(Long.toString(role.getId()));
+            else
+                sb.append("','" + role.getId());
+        }
+        String inQuery = sb.toString();
+
+        String active = interviewer ? (notIntrviewer ? "true\\',\\'false" : "true") : (notIntrviewer ? "false" : "");
+        return this.getJdbcTemplate().queryForList(sql, extractor, idStart, idFinish, inQuery, active, sortingCol,
+                fromRows, rowsNum);
+    }
+
+
+    @Override
     public Set<User> getAllEmploees() {
         log.info("Get all Employees");
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, extractor);
@@ -327,5 +362,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
         return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, "%"+lastName+"%",sortingCol,
                 fromRows, rowsNum);
+    }
+
+    @Override
+    public Long getUserCount() {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_MAX_ID, resultSet -> resultSet.getLong(1));
     }
 }
