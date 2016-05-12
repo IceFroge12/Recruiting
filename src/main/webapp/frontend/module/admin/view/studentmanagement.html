@@ -13,13 +13,14 @@
             </div>
             <div class="col-md-5">
                 <tr ng-repeat="student in allStudents">
-                <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
-                <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
-            </tr>
+                    <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
+                    <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
+                </tr>
             </div>
 
             <form class="form-search inline-display col-md-2 col-md-offset-5">
-                <button class="btn btn-sm btn-info search-element" type="button" data-toggle="modal"
+                <button ng-click="showFiltration()" class="btn btn-sm btn-info search-element" type="button"
+                        data-toggle="modal"
                         data-target="#filtration">
                     Filter table
                 </button>
@@ -59,58 +60,38 @@
             <div class="modal-header">
                 <button class="close" type="button" data-dismiss="modal"><span
                         class="glyphicon glyphicon-remove"></span></button>
-                <h4 class="modal-title">Filtration parameters</h4>
+                <h4 class="modal-title">Filtration</h4>
 
                 <div>
-                    <table class="table">
-                        <tr>
-                            <th>
-                                Application form field
-                            </th>
-                            <th>
-                                Restrictions
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                Status
-                            </td>
-                            <td>
-                                <input type="checkbox" name="status" value="1">to job
-                                <input type="checkbox" name="status" value="2">to general course
-                                <input type="checkbox" name="status" value="3">to advanced course
-                                <input type="checkbox" name="status" value="4">rejected
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                University
-                            </td>
-                            <td>
-                                <input type="checkbox" name="iniv" value="1">KPI
-                                <input type="checkbox" name="iniv" value="2">KNU
-                                <input type="checkbox" name="iniv" value="3">NAU
-                                <input type="checkbox" name="iniv" value="4">other
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Course
-                            </td>
-                            <td>
-                                <input type="checkbox" name="course" value="1">1
-                                <input type="checkbox" name="course" value="2">2
-                                <input type="checkbox" name="course" value="3">3
-                                <input type="checkbox" name="course" value="4">4
-                            </td>
-                        </tr>
-                    </table>
+                    <p>Choose appropriate parameters:</p>
                 </div>
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Restriction</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="question in questions"
+                        ng-if="question.type == 'checkbox' || question.type == 'radio' || question.type == 'select'">
+                        <td>{{question.title}}</td>
+                        <td>
+                                <span ng-repeat="variant in question.variants track by $index ">
+                                    <p>
+                                        <input type="checkbox" ng-checked="exists(variant, question)"
+                                               ng-click="toggle(variant, question)"> {{variant.variant}}
+                                    </p>
+                                </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-info" type="button" data-dismiss="modal">Filter</button>
-            </div>
+        <div class="modal-footer">
+            <button class="btn btn-info" type="button" data-dismiss="modal">Filter</button>
         </div>
     </div>
+</div>
 </div>
 <div app-footer></div>

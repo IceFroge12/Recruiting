@@ -55,4 +55,5 @@ public interface UserService {
 
     int deleteToken(Long id);
 
+    List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 }

@@ -20,6 +20,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by dima on 23.04.16.
@@ -41,11 +42,22 @@ public class AdminManagementStaffController {
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
 
 
+    //    @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
+//    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+//                                    @RequestParam boolean increase) {
+//        Long fromRow = (pageNum - 1) * rowsNum;
+//        return userService.getEmployeesFromToRows(fromRow,rowsNum, sortingCol, increase);
+//    }
+
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
-    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                    @RequestParam boolean increase) {
-        Long fromRow = (pageNum - 1) * rowsNum;
-        return userService.getEmployeesFromToRows(fromRow,rowsNum, sortingCol, increase);
+    public List<User> showFilteredEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+                                            @RequestParam boolean increase, @RequestParam Long idStart,@RequestParam Long idFinish,
+                                            @RequestParam List<Long> roles,@RequestParam boolean interviewer,@RequestParam boolean notInterviewer,@RequestParam boolean notEvaluated) {
+        List<Role> neededRoles = roles.stream().map(roleService::getRoleById).collect(Collectors.toList());
+        System.out.println(increase+" "+pageNum+" "+interviewer+" "+roles);
+        List<User> res = userService.getFilteredEmployees(Long.valueOf(pageNum), rowsNum, sortingCol, increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
+        for(User us: res) System.out.println(us);
+        return res;
     }
 
     @RequestMapping(value = "getCountOfEmployee", method = RequestMethod.GET)

@@ -6,17 +6,28 @@
 function staffManagementService(http) {
 
     var service = {};
-    
-    service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase) {
+
+    service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
+                                         notInterviewer, notEvaluated) {
         console.log("Service showAllEmployees");
         return http({
-            method : 'GET',
-            url : '/admin/showAllEmployees',
-            params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
+            method: 'GET',
+            url: '/admin/showAllEmployees',
+            params: {
+                pageNum: pageNum,
+                rowsNum: rowsNum,
+                sortingCol: sortingCol,
+                increase: increase,
+                idStart: idStart,
+                idFinish: idFinish,
+                roles: roles,
+                interviewer: interviewer,
+                notInterviewer: notInterviewer,
+                notEvaluated: notEvaluated
+            }
         })
+
     };
-
-
 
     service.getCountOfEmployee = function () {
         return http({

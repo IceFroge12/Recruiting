@@ -16,6 +16,13 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.items = [];
     $scope.amount = 0;
     $scope.sortingDir = 1;
+    $scope.startId = 0;
+    $scope.finishId = 1000;
+    $scope.rolesChoosen = 1;
+    $scope.interviewer = true;
+    $scope.notInterviewer = false;
+    $scope.notEvaluated = true; //TODO
+
 
     // init the sorted items
     $scope.$watch("sort.reverse",function(){
@@ -34,11 +41,19 @@ function staffManagementController($scope, $filter, staffManagementService) {
         console.log($scope.sort.sortingOrder);
     });
 
-    staffManagementService.showAllEmployees(1, $scope.sort.sortingOrder, $scope.sort.reverse, true).success(function (data) { //TODO
-        $scope.allEmployee = data;
-    }, function error() {
-        console.log("error");
-    });
+    staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse,
+        $scope.startId, $scope.finishId , $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+        $scope.notEvaluated).success(function (data) { //TODO
+            angular.forEach(data,function (value1, key1){
+                angular.forEach(value1.roles, function(value2, key2){
+                    value2.roleName=value2.roleName.slice(5);
+                })
+            });
+            $scope.allEmployee = data;
+        }, function error() {
+            console.log("error");
+        });
+
     
     staffManagementService.getCountOfEmployee().success(function (data) {
         $scope.amount = Math.ceil(data / $scope.itemsPerPage);
@@ -46,19 +61,21 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
         var itemsByPage = 10;
-        staffManagementService.showAllEmployees(pageNum,itemsByPage, $scope.sort.sortingOrder,true).success(function (data) { //TODO
-            angular.forEach(data,function (value1, key1){
-                angular.forEach(value1.roles, function(value2, key2){
-                    value2.roleName=value2.roleName.slice(5);
-                })
-            })
-            $scope.allEmployee = data;
-            console.log(data);
-
-        }, function error() {
-            console.log("error");
-        });
+        staffManagementService.showAllEmployees(pageNum,itemsByPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+            $scope.startId, $scope.finishId , $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+            $scope.notEvaluated).success(function (data) { //TODO
+                angular.forEach(data,function (value1, key1){
+                    angular.forEach(value1.roles, function(value2, key2){
+                        value2.roleName=value2.roleName.slice(5);
+                    })
+                });
+                $scope.allEmployee = data;
+                console.log(data);
+            }, function error() {
+                console.log("error");
+            });
     };
+
 
     $scope.employees =
         [{roleName: 'ADMIN'},
@@ -175,6 +192,30 @@ function staffManagementController($scope, $filter, staffManagementService) {
         console.log(currentEmployee);
         staffManagementService.deleteEmployee(currentEmployee.email);
     };
+    // Slider
+    $scope.slider = {
+        min: 100,
+        max: 180,
+        options: {
+            floor: 0,
+            ceil: 450
+        }
+    };
+
+    $scope.toggle = function (item, list){
+        var idx=-1;
+        for(var i=0; i<list.length; i++){
+            if(list[i].answer==item)
+                idx=i;
+        }
+        if (idx >-1){
+            list.splice(idx,1);
+        }
+        else {
+            list.push({answer: item});
+        }
+        console.log(list);
+    };
 
 }
 
@@ -219,5 +260,5 @@ angular.module('appStaffManagement').directive("customSort", function () {
 });
 
 
-angular.module('appStaffManagement')
+angular.module('appStaffManagement', ['rzModule'])
     .controller('staffManagementController', ['$scope', '$filter', 'staffManagementService', staffManagementController]);

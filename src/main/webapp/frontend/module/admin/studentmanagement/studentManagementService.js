@@ -85,6 +85,20 @@ function studentManagementService(http) {
         })
     };
 
+    service.getAllQuestions = function () {
+        var request = http({
+            method: "POST",
+            url: "/admin/getapplicationquestions",
+            params: {
+                role: "ROLE_ADMIN"
+            }
+        });
+        return ( request.then(handleSuccess) );
+    };
+
+    function handleSuccess(response) {
+        return ( JSON.parse("[" + response.data + "]") );
+    }
 
     return service;
 }
