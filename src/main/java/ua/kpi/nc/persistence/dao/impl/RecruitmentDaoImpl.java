@@ -62,6 +62,8 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
             "FROM \"recruitment\" r\n";
+    
+    private static final String SQL_GET_ALL_SORTED = SQL_GET_ALL + " ORDER BY r.start_date";
 
     private static final String SQL_UPDATE = "UPDATE \"recruitment\" " +
             "SET name = ? , start_date = ?,\n" +
@@ -143,5 +145,10 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
     private Long getRegisteredNumbers(Long recruitmentId) {
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_REGISTERED_COUNT, resultSet -> resultSet.getLong(1), recruitmentId);
     }
+
+	@Override
+	public List<Recruitment> getAllSorted() {
+		return this.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
+	}
 
 }

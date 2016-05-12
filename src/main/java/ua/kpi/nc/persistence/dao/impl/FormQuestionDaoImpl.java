@@ -155,7 +155,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     }
 
     private List<FormAnswerVariant> getAnswerVariants(Long formQuestionID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT fav.id FROM form_answer_variant fav WHERE fav.id_question = ?;",
+        return this.getJdbcTemplate().queryWithParameters("SELECT fav.id FROM form_answer_variant fav WHERE fav.id_question = ? ORDER BY fav.id",
                 resultSet -> {
                     List<FormAnswerVariant> answersVariants = new ArrayList<>();
                     do {
