@@ -51,16 +51,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authorizeRequests().anyRequest().permitAll().and()
                 .authorizeRequests()
                 .antMatchers("/home").anonymous()
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/admin/report/*").hasAnyRole()
-                .antMatchers("/student/appform/*").hasRole("STUDENT")
+                .antMatchers("/admin/report/*").anonymous()
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")
                 .antMatchers("/student/**").hasRole("STUDENT")
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")

@@ -11,6 +11,7 @@ import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.*;
+import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
@@ -37,6 +38,8 @@ public class AdminManagementStaffController {
     private SenderService senderService = SenderServiceImpl.getInstance();
 
     private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
+
+    private PasswordEncoderGeneratorService passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
@@ -82,9 +85,9 @@ public class AdminManagementStaffController {
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), password, true, new Timestamp(date.getTime()),null);
+                userDto.getLastName(), passwordEncoderGeneratorService.encode(password), true, new Timestamp(date.getTime()),null);
         userService.insertUser(user, userRoles);
-        System.out.println(user);
+        user.setPassword(password);
         EmailTemplate emailTemplate = emailTemplateService.getById(3L);
         String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
         senderService.send(user.getEmail(), emailTemplate.getTitle(), template);

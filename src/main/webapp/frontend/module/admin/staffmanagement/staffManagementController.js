@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, $filter, staffManagementService) {
+function staffManagementController($scope, $filter, $http, staffManagementService) {
 
 
     $scope.sort = {
