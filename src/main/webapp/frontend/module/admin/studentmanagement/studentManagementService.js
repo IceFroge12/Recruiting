@@ -108,7 +108,7 @@ function studentManagementService(http) {
             method: "POST",
             url: "/admin/getapplicationquestions",
             params: {
-                role: "ROLE_ADMIN"
+                role: "ROLE_STUDENT"
             }
         });
         return ( request.then(handleSuccess) );
