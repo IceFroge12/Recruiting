@@ -6,6 +6,14 @@
 function appFormStudentService(http) {
 
     var service = {};
+
+    service.getAppForm = function (id) {
+        console.log("Service getAppForm");
+        return http({
+            method: 'POST',
+            url: '/staff/getApplicationForm/' + id
+        })
+    };
     
     return service;
 }

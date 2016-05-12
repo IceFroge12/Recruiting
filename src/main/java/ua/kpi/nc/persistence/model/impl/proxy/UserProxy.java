@@ -178,17 +178,6 @@ public class UserProxy implements User {
         return user.getExpireDate();
     }
 
-    @Override
-    public List<ScheduleTimePoint> getScheduleTimePoint() {
-        checkUserForExist();
-        return user.getScheduleTimePoint();
-    }
-
-    @Override
-    public void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint) {
-        checkUserForExist();
-        user.setScheduleTimePoint(scheduleTimePoint);
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

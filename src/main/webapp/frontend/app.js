@@ -144,12 +144,11 @@ angular.module('app', [
                 templateUrl: 'module/admin/view/personal.html',
                 controller: 'personalController'
             })
-            .when('/admin/studentform',{
+            .when('/admin/studentform/:id',{
                 templateUrl: 'module/admin/view/studentappform.html',
                 controller: 'adminStudentFormController'
             })
-           
-
+                
             //STAFF
             .when('/staff/main', {
                 templateUrl: 'module/staff/view/staffMain.html',

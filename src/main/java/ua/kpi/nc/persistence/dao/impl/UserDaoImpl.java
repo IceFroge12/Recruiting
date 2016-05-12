@@ -47,7 +47,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
         user.setRoles(getRoles(resultSet.getLong("id")));
         user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
-        user.setScheduleTimePoint(getFinalTimePoints(resultSet.getLong("id")));
         return user;
     };
 
