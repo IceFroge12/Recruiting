@@ -112,6 +112,17 @@ public class StaffInterviewController {
 		return interviwerRoles;
 	}
 
+	@RequestMapping(value = "getRolesInterview/{applicationFormId}", method = RequestMethod.GET)
+	public Set<Role> getInterviewRoles(@PathVariable Long applicationFormId) {
+		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
+		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
+		Set<Role> interviewRoles = new HashSet<>();
+		for( Interview interview : interviews){
+			interviewRoles.add(interview.getRole());
+		}
+		return interviewRoles;
+	}
+
     @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)
     public boolean getAdequateMark(@PathVariable Long applicationFormId) {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
