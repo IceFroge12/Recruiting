@@ -1,10 +1,7 @@
 package ua.kpi.nc.controller.admin;
 
-import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Interview;
@@ -17,7 +14,6 @@ import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import javax.mail.MessagingException;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,10 +61,14 @@ public class AdminManagementStaffController {
         return userService.getAllEmployeeCount();
     }
 
+    @RequestMapping(value = "search", method = RequestMethod.POST)
+    public List<User> searchEmployee(@RequestParam String lastName){
+        return userService.getEmployeesByNameFromToRows(lastName);
+    }
+
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
-    public void addEmployee(@RequestBody UserDto userDto){
-
+    public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
         System.out.println(userDto.toString());
         List<RoleImpl> roles = userDto.getRoleList();
         List<Role> userRoles = new ArrayList<>();
@@ -80,9 +80,10 @@ public class AdminManagementStaffController {
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
                 userDto.getLastName(), password, true, new Timestamp(date.getTime()),null);
         userService.insertUser(user, userRoles);
-//        EmailTemplate emailTemplate = emailTemplateService.getById(1L);
-
-//        senderService.send(user.getEmail(), emailTemplate.getTitle(), emailTemplate.getText() + " " + password);
+        System.out.println(user);
+        EmailTemplate emailTemplate = emailTemplateService.getById(3L);
+        String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
     }
 
 
@@ -134,7 +135,6 @@ public class AdminManagementStaffController {
         System.out.println(user);
         userService.deleteUser(user);
     }
-
 
 
 }

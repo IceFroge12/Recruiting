@@ -39,7 +39,6 @@ public class AdminReportsController {
 //	}
 
 	@RequestMapping(value = "reports/approved.{format}", method = RequestMethod.GET)
-	@ResponseBody
 	public void generateReportOfApproved(@PathVariable String format, HttpServletResponse response) throws IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ReportService service = ServiceFactory.getReportService();
@@ -48,7 +47,6 @@ public class AdminReportsController {
 	}
 
 	@RequestMapping(value = "reports/answers.{format}/{questionId}", method = RequestMethod.GET)
-	@ResponseBody
 	public void generateReportOfAnswers(@PathVariable String format, @PathVariable Long questionId,
 			HttpServletResponse response) throws IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,7 +86,6 @@ public class AdminReportsController {
 	}
 
 	@RequestMapping(value = "reports/answers/questions")
-	@ResponseBody
 	public String getQuestions() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		FormQuestionService questionService = ServiceFactory.getFormQuestionService();

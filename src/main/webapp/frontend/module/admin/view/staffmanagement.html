@@ -8,7 +8,10 @@
                     data-target="#addEmployee">Add
                 employee
             </button>
-            <label class="col-md-6">Search: <input ng-model="searchText"></label>
+            <label class="col-md-6">Search:
+            <input ng-model-options="{ debounce: 1000 }"
+                   ng-model="employeeName" ng-change="searchEmployee(employeeName)">
+        </label>
             <button id="filter" class="btn btn-info btn-sm col-md-2" type="button" data-toggle="modal"
                     data-target="#filterTable">Filter
             </button>
@@ -26,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="employee in allEmployee | filter:searchText">
+                <tr ng-repeat="employee in allEmployee">
                     <td>{{employee.id}}</td>
                     <td>{{employee.firstName}}</td>
                     <td>{{employee.email}}</td>
@@ -38,11 +41,19 @@
                         </ul>
                     </td>
                     <td>
-                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-info"
-                                type="button">btn-danger
+                        <div ng-if="employee.active">
+                        <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-success"
+                                type="button">Active
                         </button>
+                        </div>
+                        <div ng-if="!employee.active">
+                            <button ng-click="changeEmployeeStatus(employee)" ng-class="myClass" class="btn btn-danger"
+                                    type="button">UnActive
+                            </button>
+                        </div>
                     </td>
                     <td>
+
                         <button class="btn btn-info" ng-click="showAssigned(employee)" type="button" data-toggle="modal"
                                 data-target="#assignedList">Show list
                         </button>

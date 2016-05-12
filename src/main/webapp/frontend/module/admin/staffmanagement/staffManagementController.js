@@ -77,27 +77,39 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
 
+    
+    //NE TROGAT ROLI !!!!!!!!!!!!!
     $scope.employees =
-        [{roleName: 'ADMIN'},
-            {roleName: 'SOFT'},
-            {roleName: 'TECH'}];
+        [{roleName: 'ROLE_ADMIN'},
+            {roleName: 'ROLE_SOFT'},
+            {roleName: 'ROLE_TECH'}];
+    
     $scope.selection = [];
 
+    
     $scope.toggleSelection = function toggleSelection(employeeName) {
         var idx = $scope.selection.indexOf(employeeName);
-
+        
         if (idx > -1) {
             $scope.selection.splice(idx, 1);
         }
+            
         else {
-            $scope.selection.push({roleName: employeeName});
+            $scope.selection.push(employeeName);
         }
         console.log($scope.selection);
     };
 
     $scope.addEmployee = function () {
+        
+        var roleArray = [];
+        
+        angular.forEach($scope.selection, function (item, i) {
+            roleArray.push({roleName:item})
+        });
+        
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
-            $scope.lastName, $scope.email, $scope.selection);
+            $scope.lastName, $scope.email, roleArray);
     };
 
     $scope.range = function (size, start, end) {
@@ -202,6 +214,16 @@ function staffManagementController($scope, $filter, staffManagementService) {
         }
     };
 
+    $scope.searchEmployee = function (employeeName) {
+        console.log(employeeName);
+        staffManagementService.searchEmployee(employeeName).success(function (data) {
+            console.log(data);
+            $scope.allEmployee = data;
+        }, function error() {
+            console.log("error");
+        });
+    }
+
     $scope.toggle = function (item, list){
         var idx=-1;
         for(var i=0; i<list.length; i++){
@@ -257,6 +279,8 @@ angular.module('appStaffManagement').directive("customSort", function () {
             };
         }
     }
+
+   
 });
 
 

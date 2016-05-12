@@ -91,8 +91,10 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 
 	@Override
 	public int updateInterview(Interview interview) {
-		log.info("Update interview with id = ", interview.getId());
-		return this.getJdbcTemplate().update(SQL_UPDATE, interview.getId());
+		log.info("Update interview with id = {}", interview.getId());
+		return this.getJdbcTemplate().update(SQL_UPDATE, interview.getMark(), interview.getDate(),
+				interview.getInterviewer().getId(),interview.getRole().getId(), interview.isAdequateMark(), interview.getApplicationForm().getId(),
+				interview.getId());
 	}
 
 	@Override
@@ -105,6 +107,14 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 	public List<Interview> getAll() {
 		log.info("Getting all interviews");
 		return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+	}
+
+	@Override
+	public boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId) {
+		log.info("Getting NonAdequateMarks");
+		return this.getJdbcTemplate().queryWithParameters("select exists( select i.adequate_mark from " +
+				"interview i where i.adequate_mark=false and i.id_application_form = ? and i.id_interviewer <> ?) ",resultSet ->
+		resultSet.getBoolean(1),applicationFormID, interviewerId);
 	}
 
 	private static final String SQL_GET_ANSWERS = "SELECT fa.id FROM \"form_answer\" fa WHERE fa.id_interview = ?;";

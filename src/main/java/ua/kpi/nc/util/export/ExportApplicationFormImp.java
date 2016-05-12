@@ -13,6 +13,7 @@ import ua.kpi.nc.service.UserService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -22,13 +23,14 @@ import java.net.URL;
 public class ExportApplicationFormImp implements ExportApplicationForm {
     private final static int FONT_SIZE_BIG = 20;
 
+    private final static String URL_PHOTO = "C:\\Users\\Vova\\IdeaProjects\\Recruting13\\target\\recruitingSystem\\photo\\";
     private UserService  userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     public ExportApplicationFormImp() {
 
     }
 
-    //private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
+
     private static Logger log = LoggerFactory.getLogger(ExportApplicationFormImp.class.getName());
     @Override
     public void export(ApplicationForm applicationForm, HttpServletResponse response) throws Exception {
@@ -52,8 +54,8 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         PdfPTable table = new PdfPTable(3);
         insertBaseStudentData(table,user);
         /** Inserting Image in document **/
-        URL url = Thread.currentThread().getContextClassLoader().getResource("photos/"+ applicationForm.getId() + ".jpg");
-        insertImage(table,url);
+        URL url1 = new File(URL_PHOTO + applicationForm.getPhotoScope()).toURI().toURL();
+        insertImage(table,url1);
         /** Image inserted**/
         table.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.setWidthPercentage(100);
@@ -102,15 +104,6 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                     paragraph.add(variant);
                 }
             }
-//            if (formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.INPUT.getTitle())
-//                    || formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.TEXTAREA.getTitle())){
-//
-//            }
-
-//            for (FormAnswerVariant variant : formQuestion.getFormAnswerVariants()){
-//                if(formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.SELECT.getTitle()))
-//                paragraph.add(new Phrase(variant.getAnswer()));
-//            }
             document.add(paragraph);
         }
         document.close();

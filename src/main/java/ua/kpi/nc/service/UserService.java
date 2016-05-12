@@ -55,5 +55,9 @@ public interface UserService {
 
     int deleteToken(Long id);
 
+    List<User> getEmployeesByNameFromToRows(String name);
+
+    List<User> getStudentsByNameFromToRows(String lastName);
+
     List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 }

@@ -14,7 +14,13 @@ function studentManagementService(http) {
             url : '/admin/showAllStudents',
             params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
-    
+    };
+
+    service.getCountOfStudents= function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getCountOfStudents'
+        })
     };
 
     service.getAllStatuses = function () {
@@ -82,6 +88,14 @@ function studentManagementService(http) {
             url : '/admin/confirmSelection',
             params:{id:id},
             data: status
+        })
+    };
+
+    service.searchStudent = function (lastName) {
+        return http({
+            method : 'POST',
+            url : '/admin/searchStudent',
+            params : {lastName : lastName}
         })
     };
 

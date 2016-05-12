@@ -9,7 +9,7 @@ public class InterviewDto {
 	
 	private Boolean adequateMark;
 	
-	Integer mark;
+	private Integer mark;
 	
 	private List<StudentAppFormQuestionDto> questions = new ArrayList<>();
 	

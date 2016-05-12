@@ -26,13 +26,22 @@ function staffManagementService(http) {
                 notEvaluated: notEvaluated
             }
         })
-
     };
+
+
 
     service.getCountOfEmployee = function () {
         return http({
             method : 'GET',
             url : '/admin/getCountOfEmployee'
+        })
+    };
+
+    service.searchEmployee = function (lastName) {
+        return http({
+            method : 'POST',
+            url : '/admin/search',
+            params : {lastName : lastName}
         })
     };
 
@@ -91,17 +100,6 @@ function staffManagementService(http) {
                 return data;
         });
     };
-    // service.changeEmployeeStatus = function (email) {
-    //     console.log(email)
-    //     http({
-    //         method : 'GET',
-    //         url : '/admin/changeEmployeeStatus',
-    //         params : {email:email}
-    //     }).success(function (data, status, headers) {
-    //         console.log(data);
-    //         return data;
-    //     });
-    // };
 
     service.showAssigned = function (email) {
         http({

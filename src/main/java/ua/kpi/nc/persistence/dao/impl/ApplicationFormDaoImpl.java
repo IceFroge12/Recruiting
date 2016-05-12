@@ -100,10 +100,11 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
 	private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"approved_to_work\" from \""+TABLE_NAME+"\" where id_status=?";
 
-
 	private static final String SQL_CHANGE_STATUS = "UPDATE application_form SET id_status = ? where id_status = ?;";
 
 	private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
+
+	private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS ="SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =?";
 
 	private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
@@ -245,6 +246,16 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	@Override
 	public int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus) {
 		return this.getJdbcTemplate().update(SQL_CHANGE_STATUS,toIdStatus, fromIdStatus);
+	}
+
+	@Override
+	public Long getCountRecruitmentStudents(Long id) {
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS, new ResultSetExtractor<Long>() {
+			@Override
+			public Long extractData(ResultSet resultSet) throws SQLException {
+				return resultSet.getLong("rowcount");
+			}
+		}, id);
 	}
 
 }

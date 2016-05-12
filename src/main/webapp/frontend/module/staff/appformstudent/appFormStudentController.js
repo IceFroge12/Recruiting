@@ -9,6 +9,10 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
                 $scope.appForm = data;
                 console.log(data);
                 var appFormId = $scope.appForm.id;
+                appFormStudentService.getNonAdequateMark(appFormId).success( function(data){
+                    console.log(data);
+                    $scope.adequate = data;
+                });
                 appFormStudentService.getRoles(appFormId).success(function (data) {
                     $scope.roles = data;
                     console.log(data);
@@ -71,7 +75,7 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
                 date: data.date,
                 id: data.id,
                 interviewer: data.interviewer,
-                mark: data.mark,
+                mark: parseInt(data.mark),
                 questions: data.questions,
                 role: data.role
             }

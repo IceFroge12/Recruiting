@@ -130,4 +130,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 		return applicationFormDao.changeCurrentsAppFormStatus(fromIdStatus, toIdStatus);
 	}
 
+	@Override
+	public Long getCountRecruitmentStudents(Long id) {
+		return applicationFormDao.getCountRecruitmentStudents(id);
+	}
+
 }

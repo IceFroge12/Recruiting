@@ -27,4 +27,6 @@ public interface InterviewDao {
     int deleteInterview(Interview interview);
 
     List<Interview> getAll();
+
+    boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
 }

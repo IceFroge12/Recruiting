@@ -80,7 +80,7 @@ public class StaffInterviewController {
 		Gson gson = new Gson();
 		if (interview.getInterviewer().getId().equals(interviewer.getId())) {
 			interview.setAdequateMark(interviewDto.isAdequateMark());
-			interview.setMark(interview.getMark());
+			interview.setMark(interviewDto.getMark());
 			for (StudentAppFormQuestionDto questionDto : interviewDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
 				List<FormAnswer> answers = formAnswerService.getByInterviewAndQuestion(interview, formQuestion);
@@ -111,6 +111,13 @@ public class StaffInterviewController {
 		}
 		return interviwerRoles;
 	}
+
+    @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)
+    public boolean getAdequateMark(@PathVariable Long applicationFormId) {
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
+        User interviewer = userService.getAuthorizedUser();
+        return interviewService.haveNonAdequateMark(applicationFormId,interviewer.getId());
+    }
 
 	private void updateAnswers(FormQuestion formQuestion, List<FormAnswer> answers, List<StudentAnswerDto> answersDto,
 			Interview interview) {
