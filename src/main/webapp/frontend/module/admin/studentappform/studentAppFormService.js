@@ -14,7 +14,6 @@ function appFormStudentService(http) {
             url: '/staff/getApplicationForm/' + id
         })
     };
-    
     return service;
 }
 
