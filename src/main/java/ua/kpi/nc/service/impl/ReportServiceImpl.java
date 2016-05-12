@@ -59,10 +59,7 @@ public class ReportServiceImpl implements ReportService {
 		ReportInfo reportInfo = getByID(ReportTypeEnum.ANSWERS.getId());
 		Report report = new Report(reportInfo.getTitle());
 		FormAnswerVariantService variantService = ServiceFactory.getFormAnswerVariantService();
-		List<Recruitment> recruitments = recruitmentService.getAll();
-		recruitments.sort((Recruitment r1, Recruitment r2) -> {
-			return r1.getStartDate().compareTo(r2.getStartDate());
-		});
+		List<Recruitment> recruitments = recruitmentService.getAllSorted();
 		report.getHeader().addCell("Recruitment");
 		for (Recruitment recruitment : recruitments) {
 			report.getHeader().addCell(recruitment.getName());
