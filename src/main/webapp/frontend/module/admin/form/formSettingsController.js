@@ -5,7 +5,7 @@
 function formSettingsController($scope, ngToast, $sce, formAppService) {
     
     $scope.getMandatory = function () {
-        var role = "ROLE_ADMIN";
+        var role = "ROLE_STUDENT";
         $scope.questions = [];
         getAllQuestion(role);
     };
@@ -60,7 +60,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         });
     };
 
-    $scope.roles = ["MANDATORY", "ROLE_TECH", "ROLE_SOFT"];
+    $scope.roles = ["ROLE_STUDENT", "ROLE_TECH", "ROLE_SOFT"];
     $scope.sce = $sce;
 
     var selectedValue;
@@ -111,12 +111,8 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             variantArray = [];
         }
             
-        var role;
-        if (selectRoleValue == "MANDATORY") {
-            role = "ROLE_ADMIN";
-        } else {
-            role = selectRoleValue;
-        }
+        var role = selectRoleValue;
+        
         formAppService.addQuestion($scope.addText, selectedValue, selectActiveValue, variantArray, role);
     };
 

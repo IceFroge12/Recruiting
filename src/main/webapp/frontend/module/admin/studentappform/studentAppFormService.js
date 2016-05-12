@@ -3,7 +3,7 @@
  */
 'use strict';
 
-function appFormStudentService(http) {
+function studentAppFormService(http) {
 
     var service = {};
 
@@ -11,12 +11,26 @@ function appFormStudentService(http) {
         console.log("Service getAppForm");
         return http({
             method: 'POST',
-            url: '/staff/getApplicationForm/' + id
+            url: '/admin/getApplicationForm/' + id
         })
     };
-    
+
+    service.getRolesInt = function (appFormId) {
+        console.log("Service getRoles");
+        return http({
+            method: 'GET',
+            url: '/staff/getRolesInterview/'+ appFormId
+        })
+    };
+    service.getInterview = function (appFormId, role) {
+        console.log("Service getInterview");
+        return http({
+            method: 'POST',
+            url: '/staff/getInterview/' + appFormId + '/' + role
+        })
+    };
     return service;
 }
 
-angular.module('appFormStudent')
-    .service('appFormStudentService', ['$http', appFormStudentService]);
+angular.module('appFormStudents')
+    .service('studentAppFormService', ['$http', studentAppFormService]);
