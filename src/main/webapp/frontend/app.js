@@ -5,6 +5,7 @@
 
 angular.module('app', [
         'ngRoute',
+        'appFormStudents',
         'ngFileUpload',
         'appHome',
         'appMain',
@@ -35,6 +36,7 @@ angular.module('app', [
         'appRecoverRequestPage',
         'appRecoverPassword',
         'appConfirmRegistration'
+        
     ])
 
     //     .factory('TokenStorage', function () {
@@ -141,6 +143,10 @@ angular.module('app', [
             .when('/admin/personal', {
                 templateUrl: 'module/admin/view/personal.html',
                 controller: 'personalController'
+            })
+            .when('/admin/studentform',{
+                templateUrl: 'module/admin/view/studentappform.html',
+                controller: 'adminStudentFormController'
             })
            
 

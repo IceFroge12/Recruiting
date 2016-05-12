@@ -39,7 +39,7 @@
 
                 <tr ng-repeat="student in allStudents | filter:searchText ">
                     <td>{{student.id}}</td>
-                    <td>{{student.firstName +" "+ student.lastName}}</td>
+                    <td><a href="">{{student.firstName +" "+ student.lastName}}</a></td>
                     <td><select>
                         <option selected>{{status.title}}</option>
                         <option ng-repeat="stat in statuses">{{stat.title}}</option>
