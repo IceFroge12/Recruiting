@@ -87,7 +87,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String DELETE_FINAL_TIME_POINT = "DELETE FROM user_time_final p " +
             "WHERE p.id_user = ? and p.id_time_point = ?;";
 
-    private static final String SQL_GET_FINAL_TIME_POINT = "SELECT sch.time_point from schedule_time_point sch\n" +
+    private static final String SQL_GET_FINAL_TIME_POINT = "SELECT sch.id, sch.time_point from schedule_time_point sch\n" +
             "  join user_time_final utf on sch.id = utf.id_time_point JOIN \"user\" on \"user\".id=utf.id_user where \"user\".id = ?";
 
     private static final String SQL_GET_USERS_BY_TOKEN = "SELECT u.id, u.email, u.first_name, u.last_name," +
