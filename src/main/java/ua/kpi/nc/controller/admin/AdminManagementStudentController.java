@@ -1,9 +1,7 @@
 package ua.kpi.nc.controller.admin;
 
-import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.model.*;
-import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.service.*;
 
@@ -32,13 +30,6 @@ public class AdminManagementStudentController {
         return userService.getStudentsFromToRows(fromRow,rowsNum, sortingCol, increase);
     }
 
-    @RequestMapping(value = "getApplicationForm/{studentId}", method = RequestMethod.POST)
-    public String getApplicationForm(@PathVariable Long studentId) {
-        ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(studentId);
-        Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-        String jsonResult = applicationFormGson.toJson(applicationForm);
-        return jsonResult;
-    }
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)
     public Long getCountOfStudents() {
         return userService.getAllStudentCount();
