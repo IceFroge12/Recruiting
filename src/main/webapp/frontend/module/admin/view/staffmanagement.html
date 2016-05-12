@@ -112,6 +112,20 @@
     </div>
 </div>
 
+<div id="deleteAssignedStudent" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button ng-click="deleteAssignedStudent(employee)" data-dismiss="modal" class="btn btn-link">Yes</button>
+                <button class="btn btn-link" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- modal dialog -->
 <div id="editEmployee" class="modal fade">
     <div class="modal-dialog">
@@ -226,21 +240,32 @@
                 <div>
                     <table class="table">
                         <thead>
-                        <th>ID</th>
-                        <th>First name</th>
-                        <th>Second name</th>
-                        <th>Last name</th>
-                        <th>Mark</th>
-                        <th>Type</th>
+                        <tr>
+                            <th>ID</th>
+                            <!--<th>ID interview</th>-->
+                            <th>First name</th>
+                            <th>Second name</th>
+                            <th>Last name</th>
+                            <th>Mark</th>
+                            <th>Type</th>
+                            <th>Deassigne</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="student in assignedStudents">
                             <td>{{student.id}}</td>
+                            <!--<td>{{student.idInterview}}</td>-->
                             <td>{{student.firstName}}</td>
                             <td>{{student.secondName}}</td>
                             <td>{{student.lastName}}</td>
                             <td>{{student.mark}}</td>
                             <td>{{student.interviewType}}</td>
+                            <td>
+                                <button data-toggle="modal"
+                                        data-target="#deleteAssignedStudent" ng-click="getEmployee(student)" class="btn btn-danger"
+                                        type="button">Delete
+                                </button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

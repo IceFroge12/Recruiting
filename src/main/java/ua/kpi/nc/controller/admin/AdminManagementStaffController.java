@@ -108,7 +108,8 @@ public class AdminManagementStaffController {
         for (Interview interview : interviewService.getByInterviewer(user)) {
             UserRateDto userRateDto = new UserRateDto(interview.getApplicationForm().getUser(),
                     interview.getMark(),
-                    interview.getRole());
+                    interview.getRole(),
+                    interview.getId());
             userRateDtos.add(userRateDto);
         }
 
@@ -121,6 +122,17 @@ public class AdminManagementStaffController {
         User user = userService.getUserByUsername(email);
         System.out.println(user);
         userService.deleteUser(user);
+    }
+
+    @RequestMapping(value = "deleteAssignedStudent", method = RequestMethod.POST)
+    public void deleteAssignedStudent(@RequestParam String idInterview){
+        Interview interview = interviewService.getById(Long.parseLong(idInterview));
+        if (null == interview){
+            //// TODO: 12.05.2016 someaction;
+        }else {
+            interviewService.deleteInterview(interview);
+        }
+
     }
 
 

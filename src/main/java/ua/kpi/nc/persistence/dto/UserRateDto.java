@@ -10,19 +10,30 @@ import ua.kpi.nc.persistence.model.enums.RoleEnum;
 public class UserRateDto {
 
     private long id;
+    private long idInterview;
     private String firstName;
     private String secondName;
     private String lastName;
     private int mark;
     private String interviewType;
 
-    public UserRateDto(User user, int mark, Role role) {
+    public UserRateDto(User user, int mark, Role role, Long idInterview) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.secondName = user.getSecondName();
         this.lastName = user.getLastName();
         this.mark = mark;
         this.interviewType = defineInterviewType(role);
+        this.idInterview = idInterview;
+    }
+
+    public UserRateDto(String firstName, long id, String interviewType, String lastName, int mark, String secondName) {
+        this.firstName = firstName;
+        this.id = id;
+        this.interviewType = interviewType;
+        this.lastName = lastName;
+        this.mark = mark;
+        this.secondName = secondName;
     }
 
     private String defineInterviewType(Role role){
@@ -81,6 +92,14 @@ public class UserRateDto {
 
     public void setInterviewType(String interviewType) {
         this.interviewType = interviewType;
+    }
+
+    public long getIdInterview() {
+        return idInterview;
+    }
+
+    public void setIdInterview(long idInterview) {
+        this.idInterview = idInterview;
     }
 }
 

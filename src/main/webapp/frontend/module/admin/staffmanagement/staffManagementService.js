@@ -111,6 +111,21 @@ function staffManagementService(http) {
         });
     };
 
+    service.deleteAssignedStudent = function (employee) {
+        console.log('deleteAssignedStudentService');
+        console.log(employee);
+        http({
+            method : 'POST',
+            url:'/admin/deleteAssignedStudent',
+            contentType: 'application/json',
+            params:{
+                idInterview:employee.idInterview
+            }
+        }).error(function (data, status, headers) {
+            console.log(status);
+        });
+    };
+
     return service;
 }
 

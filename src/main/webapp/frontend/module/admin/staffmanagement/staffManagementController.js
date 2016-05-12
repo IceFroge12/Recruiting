@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, $filter, staffManagementService) {
+function staffManagementController($scope, $filter, $http, staffManagementService) {
 
 
     $scope.sort = {
@@ -184,13 +184,19 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.showAssigned = function (employee) {
-        staffManagementService.showAssigned(employee.email).success(function (data) {
+        $http({
+            method : 'POST',
+            url : '/admin/showAssignedStudent',
+            params : {email:employee.email}
+        }).success(function (data, status, headers) {
             console.log(data);
             $scope.assignedStudents = data;
-
+            return data;
+        }).error(function (data, status, headers) {
+            console.log(status);
         });
-        console.log($scope.assignedStudents)
     };
+    
     var currentEmployee;
     $scope.getEmployee = function (employee) {
         currentEmployee = employee;
@@ -199,6 +205,16 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.deleteEmployee = function () {
         console.log(currentEmployee);
         staffManagementService.deleteEmployee(currentEmployee.email);
+        var index = $scope.allEmployee.indexOf(currentEmployee);
+        $scope.allEmployee.splice(index, 1);
+    };
+    
+    $scope.deleteAssignedStudent = function () {
+        console.log('deleteAssignedStudent');
+        console.log(currentEmployee)
+        staffManagementService.deleteAssignedStudent(currentEmployee);
+        var index = $scope.assignedStudents.indexOf(currentEmployee);
+        $scope.assignedStudents.splice(index, 1);
     };
 
     $scope.searchEmployee = function (employeeName) {
@@ -257,4 +273,4 @@ angular.module('appStaffManagement').directive("customSort", function () {
 
 
 angular.module('appStaffManagement')
-    .controller('staffManagementController', ['$scope', '$filter', 'staffManagementService', staffManagementController]);
+    .controller('staffManagementController', ['$scope', '$filter', '$http', 'staffManagementService', staffManagementController]);
