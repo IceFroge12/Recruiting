@@ -206,14 +206,15 @@ function staffManagementController($scope, $filter, staffManagementService) {
             }
             //TODO change logic
         });
-    
-        editRoles = [];
+        $scope.r = editRoles;
+        // editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 
     $scope.editEmployee = function () {
+        console.log(editRoles);
         staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
-            $scope.lastNameEdit, $scope.emailEdit, editRoles);
+            $scope.lastNameEdit, $scope.emailEdit, $scope.r);
     };
 
 
