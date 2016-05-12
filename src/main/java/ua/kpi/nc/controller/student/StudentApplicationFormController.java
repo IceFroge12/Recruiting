@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -68,7 +69,7 @@ public class StudentApplicationFormController {
 	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
 
 	private static final String PHOTO_DIR_NAME = "D:\\Java\\Tomcat 8.0\\wtpwebapps\\Recruiting\\photo\\";
-	
+
 	public StudentApplicationFormController() {
 		formAnswerService = ServiceFactory.getFormAnswerService();
 		applicationFormService = ServiceFactory.getApplicationFormService();
@@ -83,8 +84,7 @@ public class StudentApplicationFormController {
 	private static final String JSON_WRONG_INPUT_MESSAGE = gson
 			.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
 
-	private static final String[] AVAILABLE_PHOTO_EXTENSIONS = {"jpg", "jpeg", "png"};
-	
+	private static final String[] AVAILABLE_PHOTO_EXTENSIONS = { "jpg", "jpeg", "png" };
 
 	@RequestMapping(value = "appform", method = RequestMethod.POST)
 	public String getApplicationForm() {
@@ -129,6 +129,9 @@ public class StudentApplicationFormController {
 		user.setSecondName(applicationFormDto.getUser().getSecondName());
 		userService.updateUser(user);
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(user.getId());
+		Set<FormQuestion> remainedQuestions;
+
+		List<FormAnswer> answers = null;
 		boolean newForm = false;
 		if (applicationForm == null) {
 			if (file.isEmpty()) {
@@ -136,15 +139,14 @@ public class StudentApplicationFormController {
 			}
 			applicationForm = createApplicationForm(user);
 			newForm = true;
-		}
-		Set<FormQuestion> remainedQuestions;
-
-		List<FormAnswer> answers = null;
-		if (newForm) {
 			answers = new ArrayList<FormAnswer>();
 			remainedQuestions = formQuestionService
 					.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 		} else {
+			if (applicationForm.getRecruitment().getRegistrationDeadline().before(new Date())) {
+				return gson.toJson(new MessageDto(
+						"You cannot update your application form after registration deadline.", MessageDtoType.ERROR));
+			}
 			remainedQuestions = formQuestionService.getByApplicationFormAsSet(applicationForm);
 		}
 		for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
@@ -175,12 +177,11 @@ public class StudentApplicationFormController {
 		if (!file.isEmpty()) {
 			try {
 				String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-				if(!hasPhotoValidFormat(fileExtension)) {
+				if (!hasPhotoValidFormat(fileExtension)) {
 					return gson.toJson(new MessageDto("Photo has wrong format", MessageDtoType.ERROR));
 				}
-				
-				String photoScope = applicationForm.getId() + "."
-						+ fileExtension;
+
+				String photoScope = applicationForm.getId() + "." + fileExtension;
 				file.transferTo(new File(PHOTO_DIR_NAME + photoScope));
 				applicationForm.setPhotoScope(photoScope);
 				applicationFormService.updateApplicationForm(applicationForm);
@@ -300,7 +301,9 @@ public class StudentApplicationFormController {
 		applicationForm.setStatus(status);
 		applicationForm.setActive(true);
 		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-		applicationForm.setRecruitment(recruitment);
+		if (recruitment.getRegistrationDeadline().before(new Date())) {
+			applicationForm.setRecruitment(recruitment);
+		}
 		return applicationForm;
 	}
 
@@ -326,11 +329,12 @@ public class StudentApplicationFormController {
 	}
 
 	private boolean hasPhotoValidFormat(String fileExtension) {
-		for(int i = 0; i < AVAILABLE_PHOTO_EXTENSIONS.length; i++) {
-			if(AVAILABLE_PHOTO_EXTENSIONS[i].equals(fileExtension)) {
+		for (int i = 0; i < AVAILABLE_PHOTO_EXTENSIONS.length; i++) {
+			if (AVAILABLE_PHOTO_EXTENSIONS[i].equals(fileExtension)) {
 				return true;
 			}
 		}
 		return false;
 	}
+
 }

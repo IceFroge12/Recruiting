@@ -116,7 +116,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
+    public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+        return userDao.getFilteredEmployees(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer, notIntrviewer, notEvaluated);
+    }
+
+    @Override
+    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase){
         return userDao.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
     }
 
@@ -160,5 +165,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
         return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum, sortingCol);
+    }
+
+    @Override
+    public Long getUserCount() {
+        return userDao.getUserCount();
     }
 }

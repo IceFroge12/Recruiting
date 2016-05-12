@@ -357,3 +357,7 @@ h4 {
     background-color: transparent;
     cursor: default;
 }
+
+/*.table-condensed{*/
+    /*table-layout: fixed;*/
+/*}*/

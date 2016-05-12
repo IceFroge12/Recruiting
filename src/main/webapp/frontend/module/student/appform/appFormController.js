@@ -186,6 +186,14 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
     	      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
     	    });
     }
+    $scope.checkAnswersSelected = function(question) {
+    	for(var i = 0; i < question.answers.length; i++) {
+    		if(question.answers[i].answer != null) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 
 }
 

@@ -20,7 +20,7 @@
                     </td>
                     <td><img ng-src="/photo/{{data.photoScope}}" width=100px>
                         <label class="file">
-                            <input type="file" id="file" ngf-select ng-model="picFile" name="file"
+                            <input type="file" id="file" ng-required="id == null || id == 0" ngf-select ng-model="picFile" name="file"
                                    accept="image/*"
                                    ngf-max-size="5MB"
                                    ngf-min-height="400"
@@ -79,20 +79,22 @@
                     <td ng-if="question.isMandatory == true" class="mandatory"> {{question.questionTitle}}</td>
                     <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
                     <td ng-if="question.questionType == 'select'">
-                        <select class="form-control" ng-model="question.answers[0].answer">
+                        <select class="form-control" ng-model="question.answers[0].answer" ng-required="question.isMandatory">
                             <option ng-repeat="variant in question.variants track by $index"
                                     value="{{variant.variant}}">{{variant.variant}}
                             </option>
                         </select>
                     </td>
                     <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
-                        <input ng-model="answer.answer" ng-model="answer.ID" type="text" value="{{answer.answer}}"
+                        <input ng-model="answer.answer" ng-model="answer.ID" ng-required="question.isMandatory" type="text" value="{{answer.answer}}"
                                class="form-control">
                     </td>
                     <td ng-if="question.questionType == 'checkbox'">
                        <span ng-repeat="variant in question.variants">
                            <p>
-                               <input type="checkbox" ng-checked="exists(variant.variant, question.answers)"
+                               <input type="checkbox"
+                               ng-required="question.isMandatory && !checkAnswersSelected(question)"
+                                ng-checked="exists(variant.variant, question.answers)"
                                       ng-click="toggle(variant.variant, question.answers)"> {{variant.variant}}
                            </p>
                        </span>
@@ -100,14 +102,15 @@
                     <td ng-if="question.questionType == 'radio'">
                        <span ng-repeat="variant in question.variants track by $index">
                            <p>
-                               <input type="radio" ng-model="question.answers[0].answer" name="question.questionTitle"
+                               <input type="radio" ng-required="question.isMandatory && !checkAnswersSelected(question)"
+                               ng-model="question.answers[0].answer" name="question.questionTitle"
                                       ng-value="variant.variant"> {{variant.variant}}
                            </p>
                        </span>
                     </td>
                     <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                         <p>
-                            <input ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
+                            <input ng-model="answer.answer" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="answer.ID" class="form-control" type="text"
                                    value="{{answer.answer}}"> {{variant.variant}}
                         </p>
 

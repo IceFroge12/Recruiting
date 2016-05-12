@@ -21,5 +21,7 @@ public interface RecruitmentService {
 
     List<Recruitment> getAll();
     
+    List<Recruitment> getAllSorted();
+    
     Recruitment getCurrentRecruitmnet();
 }

@@ -6,7 +6,7 @@
 function staffManagementService(http) {
 
     var service = {};
-    
+
     service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase) {
         console.log("Service showAllEmployees");
         return http({
@@ -15,6 +15,29 @@ function staffManagementService(http) {
             params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
         })
     };
+
+    service.showFilteredEmployees = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
+                                         notInterviewer, notEvaluated) {
+        console.log("Service showAllEmployees");
+        return http({
+            method: 'POST',
+            url: '/admin/showFilteredEmployees',
+            params: {
+                pageNum: pageNum,
+                rowsNum: rowsNum,
+                sortingCol: sortingCol,
+                increase: increase,
+                idStart: idStart,
+                idFinish: idFinish,
+                roles: roles,
+                interviewer: interviewer,
+                notInterviewer: notInterviewer,
+                notEvaluated: notEvaluated
+            }
+        })
+    };
+
+
 
     service.getCountOfEmployee = function () {
         return http({
@@ -109,6 +132,13 @@ function staffManagementService(http) {
         }).error(function (data, status, headers) {
             console.log(status);
         });
+    };
+
+    service.getMaxId = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getMaxId'
+        })
     };
 
     service.deleteAssignedStudent = function (employee) {

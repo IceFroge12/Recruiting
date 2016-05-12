@@ -43,6 +43,8 @@ public interface UserDao {
 
     List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
+    List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
+
     List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
     Set<User> getAllEmploees();
@@ -60,5 +62,7 @@ public interface UserDao {
     List<User> getEmployeesByNameFromToRows(String name);
 
     List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol);
+
+    Long getUserCount();
 
 }

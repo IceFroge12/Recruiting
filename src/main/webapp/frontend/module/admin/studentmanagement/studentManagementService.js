@@ -7,7 +7,7 @@ function studentManagementService(http) {
 
     var service = {};
 
-    service.showAllStudents= function (pageNum, rowsNum, sortingCol, increase) {
+    service.showAllStudents = function (pageNum, rowsNum, sortingCol, increase) {
         console.log("Service showAllStudents");
         return http({
             method : 'GET',
@@ -103,6 +103,20 @@ function studentManagementService(http) {
         })
     };
 
+    service.getAllQuestions = function () {
+        var request = http({
+            method: "POST",
+            url: "/admin/getapplicationquestions",
+            params: {
+                role: "ROLE_ADMIN"
+            }
+        });
+        return ( request.then(handleSuccess) );
+    };
+
+    function handleSuccess(response) {
+        return ( JSON.parse("[" + response.data + "]") );
+    }
 
     return service;
 }
