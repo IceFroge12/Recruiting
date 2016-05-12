@@ -16,9 +16,9 @@
             </div>
             <div class="col-md-5">
                 <tr ng-repeat="student in allStudents">
-                <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
-                <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
-            </tr>
+                    <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
+                    <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
+                </tr>
             </div>
 
             <form class="form-search inline-display col-md-2 col-md-offset-5">
@@ -27,31 +27,76 @@
                     Filter table
                 </button>
             </form>
-            <table class="table table-hover" id="students_table">
+
+
+            <table class="table table-condensed table-hover col-md-8">
                 <thead>
                 <tr>
                     <th class="student-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort order="5" sort="sort">Name&nbsp;</th>
                     <th class="student-status" custom-sort order="2" sort="sort">Status&nbsp;</th>
-                    <th class="student-University">University</th>
-                    <th class="student-Course">Course</th>
-                </tr>
-
-                <tr ng-repeat="student in allStudents | filter:searchText ">
+                </thead>
+                <tbody>
+                <tr ng-repeat="student in allStudents">
                     <td>{{student.id}}</td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
-                    <td><select>
+                    <td>
+                        <select>
                         <option selected>{{status.title}}</option>
                         <option ng-repeat="stat in statuses">{{stat.title}}</option>
                     </select>
-                    </td>
-                    <td>{{university}}</td>
-                    <td>{{course}}</td>
                 </tr>
-                </thead>
-                <tbody>
                 </tbody>
+                <tfoot>
+                <td colspan="6">
+                    <div class="pagination pull-right">
+                        <ul>
+                            <li ng-class="{disabled: currentPage == 1}">
+                                <a href ng-click="prevPage()">« Prev</a>
+                            </li>
+
+                            <li ng-repeat="n in range(amount, currentPage, currentPage + gap) "
+                                ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                <a href ng-bind="n">1</a>
+                            </li>
+
+                            <li ng-class="{disabled: currentPage == amount}">
+                                <a href ng-click="nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                </tfoot>
             </table>
+
+
+            <!---->
+            <!--<table class="table table-hover" id="students_table">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--<th class="student-id" custom-sort order="1" sort="sort">ID&nbsp;</th>-->
+            <!--<th class="student-name" custom-sort order="5" sort="sort">Name&nbsp;</th>-->
+            <!--<th class="student-status" custom-sort order="2" sort="sort">Status&nbsp;</th>-->
+            <!--<th class="student-University">University</th>-->
+            <!--<th class="student-Course">Course</th>-->
+            <!--</tr>-->
+
+            <!--<tr ng-repeat="student in allStudents | filter:searchText ">-->
+            <!--<td>{{student.id}}</td>-->
+            <!--<td>{{student.firstName +" "+ student.lastName}}</td>-->
+            <!--<td><select>-->
+            <!--<option selected>{{status.title}}</option>-->
+            <!--<option ng-repeat="stat in statuses">{{stat.title}}</option>-->
+            <!--</select>-->
+            <!--</td>-->
+            <!--<td>{{university}}</td>-->
+            <!--<td>{{course}}</td>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--</tbody>-->
+            <!--</table>-->
         </div>
     </div>
 </div>

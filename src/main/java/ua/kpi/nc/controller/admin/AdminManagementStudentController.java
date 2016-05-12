@@ -30,6 +30,11 @@ public class AdminManagementStudentController {
         return userService.getStudentsFromToRows(fromRow,rowsNum, sortingCol, increase);
     }
 
+    @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)
+    public Long getCountOfStudents() {
+        return userService.getAllStudentCount();
+    }
+
     @RequestMapping(value = "getAllStatuses", method = RequestMethod.GET)
     public List<Status> getAllStatuses(){
         return statusService.getAllStatuses();
@@ -58,22 +63,22 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "getRejectCount", method = RequestMethod.GET)
     public Long getRejectCount(){
-        return ServiceFactory.getApplicationFormService().getCountRejectedAppForm();
+        return applicationFormService.getCountRejectedAppForm();
     }
 
     @RequestMapping(value = "getJobCount", method = RequestMethod.GET)
     public Long getJobCount(){
-        return ServiceFactory.getApplicationFormService().getCountToWorkAppForm();
+        return applicationFormService.getCountToWorkAppForm();
     }
 
     @RequestMapping(value = "getAdvancedCount", method = RequestMethod.GET)
     public Long getAdvancedCount(){
-        return ServiceFactory.getApplicationFormService().getCountAdvancedAppForm();
+        return applicationFormService.getCountAdvancedAppForm();
     }
 
     @RequestMapping(value = "getGeneralCount", method = RequestMethod.GET)
     public Long getGeneralCount(){
-        return ServiceFactory.getApplicationFormService().getCountGeneralAppForm();
+        return applicationFormService.getCountGeneralAppForm();
     }
 
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
