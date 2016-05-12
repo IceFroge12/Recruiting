@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="student in allStudents">
-                    <td>{{student.id}}</td>
+                    <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
                         <select>
