@@ -20,23 +20,33 @@
                                     Twitter</a>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 login-box">
-                                <form role="form">
+                                <form name="authForm" role="form">
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input ng-model="email" type="text" class="form-control" placeholder="Email"
+                                        <input ng-model="email" name="userEmail" type="email" class="form-control" placeholder="Email"
                                                required
                                                autofocus/>
                                     </div>
+
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-lock"></span></span>
-                                        <input ng-model="password" type="password" class="form-control"
-                                               placeholder="Password"
+                                        <input ng-model="password" name="password" type="password" class="form-control"
+                                               placeholder="Password" ng-maxlength="16" ng-minlength="4"
                                                required/>
                                     </div>
-                                    <p>
 
+                                    <div ng-messages="authForm.userEmail.$error">
+                                        <div ng-message="email">Your email address is invalid</div>
+                                    </div>
+                                    </br>
+                                    <div ng-messages="authForm.password.$error">
+                                        <div ng-message="maxlength">Password must not exceed 16 characters</div>
+                                        <div ng-message="minlength">Password must be over 4 characters</div>
+                                    </div>
+                                    <p>
+                                    <p>
                                     <p class="text-danger" ng-show="authsuccess">Authorisation Error</p>
                                     <a ng-click="recoverPassword()">Forget your password?</a></p>
                                 </form>

@@ -4,6 +4,7 @@
 'use strict';
 
 angular.module('app', [
+        'ngMessages',
         'ngRoute',
         'appFormStudents',
         'ngFileUpload',
@@ -36,40 +37,39 @@ angular.module('app', [
         'appRecoverRequestPage',
         'appRecoverPassword',
         'appConfirmRegistration'
-        
     ])
 
-    //     .factory('TokenStorage', function () {
-    //     var storageToken = 'auth_token';
-    //     return {
-    //         store: function (token) {
-    //             return localStorage.setItem(storageToken, token);
-    //         },
-    //         retrieve: function () {
-    //             return localStorage.getItem(storageToken);
-    //         },
-    //         clear: function () {
-    //             return localStorage.removeItem(storageToken);
-    //         }
-    //     };
-    // }).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
-    //     return {
-    //         request: function (config) {
-    //             var authToken = TokenStorage.retrieve();
-    //             if (authToken) {
-    //                 config.headers['X-AUTH-TOKEN'] = authToken;
-    //             }
-    //             return config;
-    //         },
-    //         responseError: function (error) {
-    //             if (error.status === 401 || error.status === 403) {
-    //                 TokenStorage.clear();
-    //             }
-    //             return $q.reject(error);
-    //         }
-    //     };
-    // })
-    //
+        .factory('TokenStorage', function () {
+        var storageToken = 'auth_token';
+        return {
+            store: function (token) {
+                return localStorage.setItem(storageToken, token);
+            },
+            retrieve: function () {
+                return localStorage.getItem(storageToken);
+            },
+            clear: function () {
+                return localStorage.removeItem(storageToken);
+            }
+        };
+    }).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
+        return {
+            request: function (config) {
+                var authToken = TokenStorage.retrieve();
+                if (authToken) {
+                    config.headers['X-AUTH-TOKEN'] = authToken;
+                }
+                return config;
+            },
+            responseError: function (error) {
+                if (error.status === 401 || error.status === 403) {
+                    TokenStorage.clear();
+                }
+                return $q.reject(error);
+            }
+        };
+    })
+    
 
 
     .controller('appController', function ($scope, $http, $rootScope) {
@@ -144,12 +144,11 @@ angular.module('app', [
                 templateUrl: 'module/admin/view/personal.html',
                 controller: 'personalController'
             })
-            .when('/admin/studentform',{
+            .when('/admin/studentform/:id',{
                 templateUrl: 'module/admin/view/studentappform.html',
                 controller: 'adminStudentFormController'
             })
-           
-
+                
             //STAFF
             .when('/staff/main', {
                 templateUrl: 'module/staff/view/staffMain.html',

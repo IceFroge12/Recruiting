@@ -59,7 +59,4 @@ public interface User extends Serializable, UserDetails {
 
     Long getExpireDate();
 
-    List<ScheduleTimePoint> getScheduleTimePoint();
-
-    void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint);
 }

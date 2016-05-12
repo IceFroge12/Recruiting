@@ -24,7 +24,6 @@ function appFormStudentService(http) {
             method: 'POST',
             url: '/staff/getInterview/' + appFormId + '/' + role
         })
-
     };
     service.getRoles = function (appFormId) {
         console.log("Service getRoles");

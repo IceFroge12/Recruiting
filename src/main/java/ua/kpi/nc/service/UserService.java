@@ -57,7 +57,7 @@ public interface UserService {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
-    List<User> getStudentsByNameFromToRows(String lastName);
+    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol);
 
     List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 

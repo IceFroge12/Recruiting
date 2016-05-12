@@ -47,7 +47,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         user.setRegistrationDate(resultSet.getTimestamp("registration_date"));
         user.setRoles(getRoles(resultSet.getLong("id")));
         user.setSocialInformations(getSocialInfomations(resultSet.getLong("id")));
-        user.setScheduleTimePoint(getFinalTimePoints(resultSet.getLong("id")));
         return user;
     };
 
@@ -87,7 +86,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String DELETE_FINAL_TIME_POINT = "DELETE FROM user_time_final p " +
             "WHERE p.id_user = ? and p.id_time_point = ?;";
 
-    private static final String SQL_GET_FINAL_TIME_POINT = "SELECT sch.time_point from schedule_time_point sch\n" +
+    private static final String SQL_GET_FINAL_TIME_POINT = "SELECT sch.id, sch.time_point from schedule_time_point sch\n" +
             "  join user_time_final utf on sch.id = utf.id_time_point JOIN \"user\" on \"user\".id=utf.id_user where \"user\".id = ?";
 
     private static final String SQL_GET_USERS_BY_TOKEN = "SELECT u.id, u.email, u.first_name, u.last_name," +
@@ -137,7 +136,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "WHERE (ur.id_role = 2 OR ur.id_role = 5) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY 2 ASC OFFSET 0 LIMIT 9";
 
     private static final String SQL_SEARCH_STUDENT_BY_LAST_NAME = "Select * from (Select DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE (ur.id_role = 3) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY 2 ASC OFFSET 0 LIMIT 9";
+            "WHERE (ur.id_role = 3) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY ? OFFSET ? LIMIT ?";
+
+
 
     private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_DESC = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
@@ -358,8 +359,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public List<User> getStudentsByNameFromToRows(String lastName) {
-        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, "%"+lastName+"%");
+    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
+        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, "%"+lastName+"%",sortingCol,
+                fromRows, rowsNum);
     }
 
     @Override

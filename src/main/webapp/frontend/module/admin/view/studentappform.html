@@ -1,5 +1,5 @@
 <div app-header></div>
-<div app-staff-menu></div>
+<div app-menu-admin></div>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
@@ -9,7 +9,7 @@
                 </div>
             </div>
 
-            <h4>Indicator of relevant: (“Relevant”/“Not relevant”/“Hard to answer”)</h4>
+            <h4 ng-if="adequate" >NonRelevant</h4>
 
             <ul ng-init="tab = 1;showAppForm()" class="nav nav-tabs">
                 <li ng-class="{active:tab===1}" class="dropdown active">
@@ -31,18 +31,6 @@
                         <b class="caret"></b>
                     </a>
                 </li>
-                <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="">
-                        Last Forms (if they exists)
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a data-toggle="tab" href="applic-form1">2013</a></li>
-                        <li><a data-toggle="tab" href="">2014</a></li>
-                        <li><a data-toggle="tab" href="">2015</a></li>
-                    </ul>
-                </li>
-
             </ul>
             <div  class="tab-content">
                 <div ng-show="tab === 1"  class="tab-pane fade in active">
@@ -53,36 +41,40 @@
                         </tr>
                         <tr class="text-success">
                             <td>ID</td>
-                            <td ng-model="id">{{id}}</td>
+                            <td ng-model="id">{{appForm.id}}</td>
                         </tr>
-                        <tr>
-                            <td>Last Name</td>
-                            <td>{{appForm.user.lastName}}</td>
-                        </tr>
-                        <tr>
-                            <td>Firs name</td>
-                            <td>{{appForm.user.firstName}}</td>
-                        </tr>
-                        <tr>
-                            <td>Second name</td>
-                            <td>{{appForm.user.secondName}}</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>{{appForm.user.email}}</td>
-                        </tr>
-                        <tr ng-repeat="question in appForm.questions">
-                            <td > {{question.questionTitle}}</td>
-                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                        <td >
+                            <label class="control-label">Photo</label>
+                        </td>
+                        <td><img ng-src="/photo/{{appForm.photoScope}}" width=100px>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>{{appForm.user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Firs name</td>
+                                <td>{{appForm.user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Second name</td>
+                                <td>{{appForm.user.secondName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{appForm.user.email}}</td>
+                            </tr>
+                            <tr ng-repeat="question in appForm.questions">
+                                <td > {{question.questionTitle}}</td>
+                                <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
                             question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
-                                {{answer.answer}}
-                            </td>
-                            <td ng-if="question.questionType == 'checkbox'" >
-                                <p ng-repeat="variant in question.variants">
-                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
-                                </p>
-                            </td>
-                        </tr>
+                                    {{answer.answer}}
+                                </td>
+                                <td ng-if="question.questionType == 'checkbox'" >
+                                    <p ng-repeat="variant in question.variants">
+                                        {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                    </p>
+                                </td>
+                            </tr>
                     </table>
                     <button type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
                 </div>
@@ -98,6 +90,19 @@
                                     <option ng-selected="interviewTech.mark==2" value=2>2</option>
                                     <option ng-selected="interviewTech.mark==3" value=3>3</option>
                                 </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Adequate Mark
+                            </td>
+                            <td>
+                                <p>
+                                    <input ng-model="interviewTech.adequateMark" type="radio" ng-value="true"> Adequate
+                                </p>
+                                <p>
+                                    <input ng-model="interviewTech.adequateMark" type="radio" ng-value="false"> NonAdequate
+                                </p>
                             </td>
                         </tr>
                         <tr ng-repeat="question in interviewTech.questions">

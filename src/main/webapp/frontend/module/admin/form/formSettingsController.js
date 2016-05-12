@@ -3,7 +3,7 @@
  */
 
 function formSettingsController($scope, ngToast, $sce, formAppService) {
-
+    
     $scope.getMandatory = function () {
         var role = "ROLE_ADMIN";
         $scope.questions = [];

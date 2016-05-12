@@ -197,7 +197,7 @@ function studentManagementController($scope, studentManagementService) {
 
     $scope.searchStudent = function (studentName) {
         console.log(studentName);
-        studentManagementService.searchStudent(studentName).success(function (data) {
+        studentManagementService.searchStudent(studentName,pageNum,$scope.pageItems, $scope.sort.sortingOrder).success(function (data) {
             console.log(data);
             $scope.allStudents = data;
         }, function error() {
@@ -238,6 +238,7 @@ function studentManagementController($scope, studentManagementService) {
     $scope.setPage = function () {
         $scope.currentPage = this.n;
         $scope.showAllStudents($scope.currentPage);
+        //TODO
     };
 
     $scope.filter= function (){

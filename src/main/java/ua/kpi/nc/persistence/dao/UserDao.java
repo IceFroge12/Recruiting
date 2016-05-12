@@ -61,7 +61,7 @@ public interface UserDao {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
-    List<User> getStudentsByNameFromToRows(String lastName);
+    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol);
 
     Long getUserCount();
 

@@ -294,25 +294,21 @@
                 <div>
                     <table class="table">
                         <thead>
-                        <th>Name</th>
-                        <th>Rated</th>
+                        <th>ID</th>
+                        <th>First name</th>
+                        <th>Second name</th>
+                        <th>Last name</th>
+                        <th>Mark</th>
+                        <th>Type</th>
                         </thead>
                         <tbody>
-                        <tr>
-                            <!--<td><a href="#">Ilya Muromets</td>-->
-                            <td>+</td>
-                        </tr>
-                        <tr>
-                            <!--<td><a href="#">Dobrynya Nikitich</td>-->
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <!--<td><a href="#">Alyosha Popovich</td>-->
-                            <td>+</td>
-                        </tr>
-                        <tr>
-                            <!--<td><a href="#">Svyatogor</td>-->
-                            <td>+</td>
+                        <tr ng-repeat="student in assignedStudents">
+                            <td>{{student.id}}</td>
+                            <td>{{student.firstName}}</td>
+                            <td>{{student.secondName}}</td>
+                            <td>{{student.lastName}}</td>
+                            <td>{{student.mark}}</td>
+                            <td>{{student.interviewType}}</td>
                         </tr>
                         </tbody>
                     </table>

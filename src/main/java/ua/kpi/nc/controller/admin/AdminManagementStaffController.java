@@ -3,6 +3,7 @@ package ua.kpi.nc.controller.admin;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.UserDto;
+import ua.kpi.nc.persistence.dto.UserRateDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
@@ -81,7 +82,7 @@ public class AdminManagementStaffController {
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), password, true, new Timestamp(date.getTime()), null);
+                userDto.getLastName(), password, true, new Timestamp(date.getTime()),null);
         userService.insertUser(user, userRoles);
         System.out.println(user);
         EmailTemplate emailTemplate = emailTemplateService.getById(3L);
@@ -115,24 +116,22 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
-    public List<Interview> showAssignedStudent(@RequestParam String email) {
+    public List<UserRateDto> showAssignedStudent(@RequestParam String email) {
 
         User user = userService.getUserByUsername(email);
-
-        List<Interview> interviewList = interviewService.getByInterviewer(user);
-
-        interviewList.get(0).getApplicationForm().getUser().getFirstName();
-        for (Interview interview : interviewList) {
-            System.out.println(interview.toString());
+        List<UserRateDto> userRateDtos = new ArrayList<>();
+        for (Interview interview : interviewService.getByInterviewer(user)) {
+            UserRateDto userRateDto = new UserRateDto(interview.getApplicationForm().getUser(),
+                    interview.getMark(),
+                    interview.getRole());
+            userRateDtos.add(userRateDto);
         }
 
-        Set<User> assignedStudent = userService.getAssignedStudents(user.getId());
-
-        return interviewList;
+        return userRateDtos;
     }
 
     @RequestMapping(value = "deleteEmployee", method = RequestMethod.GET)
-    public void deleteEmployee(@RequestParam String email) {
+    public void deleteEmployee(@RequestParam String email){
         System.out.println(email);
         User user = userService.getUserByUsername(email);
         System.out.println(user);

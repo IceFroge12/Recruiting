@@ -266,13 +266,6 @@ public class UserImpl implements User {
         return false;
     }
 
-    public List<ScheduleTimePoint> getScheduleTimePoint() {
-        return scheduleTimePoint;
-    }
-
-    public void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint) {
-        this.scheduleTimePoint = scheduleTimePoint;
-    }
 
     @Override
     public String toString() {

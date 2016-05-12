@@ -5,6 +5,8 @@ import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.NotificationType;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.EmailTemplateService;
+import ua.kpi.nc.service.ScheduleTimePointService;
+import ua.kpi.nc.service.ServiceFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.Map;
 public class EmailTemplateServiceImpl implements EmailTemplateService {
 
 	private EmailTemplateDao emailTemplateDao;
+	private ScheduleTimePointService scheduleTimePointService = ServiceFactory.getScheduleTimePointService();
 
 	public EmailTemplateServiceImpl(EmailTemplateDao emailTemplateDao) {
 		this.emailTemplateDao = emailTemplateDao;
@@ -51,7 +54,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 		varMap.put("email", user.getEmail());
 		varMap.put("id", String.valueOf(user.getId()));
 		varMap.put("password", user.getPassword());
-		varMap.put("userInterviewTime", String.valueOf(user.getScheduleTimePoint()));
+//		varMap.put("userInterviewTime", ));
 		for (Map.Entry<String, String> entry : varMap.entrySet()) {
 			inputText = inputText.replace('%' + entry.getKey() + '%', entry.getValue());
 		}

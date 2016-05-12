@@ -3,6 +3,7 @@
  */
 function staffManagementController($scope, $filter, staffManagementService) {
 
+
     $scope.sort = {
         sortingOrder: 1,
         reverse: false
@@ -22,10 +23,11 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.interviewer = true;
     $scope.notInterviewer = false;
     $scope.notEvaluated = true; //TODO
+    $scope.assignedStudents = [];
 
 
     // init the sorted items
-    $scope.$watch("sort.reverse", function () {
+    $scope.$watch("sort.reverse",function(){
         $scope.currentPage = 1;
         if ($scope.filtered)
             $scope.showFilteredEmployees($scope.currentPage);
@@ -33,7 +35,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
             $scope.showAllEmployees($scope.currentPage);
     });
 
-    $scope.$watch("sort.sortingOrder", function () {
+    $scope.$watch("sort.sortingOrder",function(){
         $scope.currentPage = 1;
         if ($scope.filtered)
             $scope.showFilteredEmployees($scope.currentPage);
@@ -178,8 +180,11 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     var editRoles = [];
-
+  
     $scope.showUserData = function (employee) {
+        $scope.adminEdit = false;
+        $scope.softEdit = false;
+        $scope.techEdit = false;
         $scope.id = employee.id;
         $scope.emailEdit = employee.email;
         $scope.firstNameEdit = employee.firstName;
@@ -201,6 +206,8 @@ function staffManagementController($scope, $filter, staffManagementService) {
             }
             //TODO change logic
         });
+    
+        editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 
@@ -223,7 +230,12 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.showAssigned = function (employee) {
-        staffManagementService.showAssigned(employee.email);
+        staffManagementService.showAssigned(employee.email).success(function (data) {
+            console.log(data);
+            $scope.assignedStudents = data;
+
+        });
+        console.log($scope.assignedStudents)
     };
     var currentEmployee;
     $scope.getEmployee = function (employee) {
@@ -319,6 +331,7 @@ angular.module('appStaffManagement').directive("customSort", function () {
                 sort.sortingOrder = newSortingOrder;
             };
 
+
             scope.selectedCls = function (column) {
                 if (column == scope.sort.sortingOrder) {
                     return (' glyphicon glyphicon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
@@ -330,7 +343,7 @@ angular.module('appStaffManagement').directive("customSort", function () {
         }
     }
 
-
+   
 });
 
 

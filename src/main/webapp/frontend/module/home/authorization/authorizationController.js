@@ -5,11 +5,16 @@
 'use strict';
 
 function authorizationController($scope, TokenStorage, $http, $rootScope, $location) {
+
     $rootScope.authenticated = false;
 
     $scope.authsuccess = false;
 
     $scope.login = function () {
+        
+        if($scope.password === undefined){
+            console.log("Auth error");
+        }else{
         $http({
             method: 'POST',
             url: '/loginIn',
@@ -21,12 +26,14 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             $rootScope.id = data.id;
             $rootScope.role = data.role;
             $location.path(data.redirectURL);
+            $rootScope.authenticated = true;
         }).error(function (data, status, headers) {
             console.log(data);
             if(status===401){
                 $scope.authsuccess=true;
             }
         });
+        }
     };
     
     $scope.registration = function () {

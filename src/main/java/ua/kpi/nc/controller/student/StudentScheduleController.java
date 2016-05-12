@@ -55,7 +55,7 @@ public class StudentScheduleController {
 	@RequestMapping(value = "schedule", method = RequestMethod.GET)
 	@ResponseBody
 	public String getStudentSchedule() {
-		User student = getAuthorizedUser();
+		User student = userService.getAuthorizedUser();
 		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
 		if (recruitment == null) {
 			return gson.toJson(new MessageDto("There is no recruitment now.", MessageDtoType.INFO));
@@ -106,7 +106,7 @@ public class StudentScheduleController {
 	@ResponseBody
 	public String updateStudentSchedule(@RequestBody StudentSchedulePriorityDto[] dtoPriorities) {
 		try {
-			User user = getAuthorizedUser();
+			User user = userService.getAuthorizedUser();
 			for (StudentSchedulePriorityDto priorityDto : dtoPriorities) {
 				SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 				Date parsedDate = dateFormat.parse(priorityDto.getTimePoint());
@@ -133,9 +133,4 @@ public class StudentScheduleController {
 		return new Date().after(deadline);
 	}
 
-	private User getAuthorizedUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName();
-		return userService.getUserByUsername(name);
-	}
 }
