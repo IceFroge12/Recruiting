@@ -148,7 +148,7 @@
                         <td>
                             <span ng-repeat="role in existingRoles">
                            <p>
-                               <input type="checkbox" checked ng-click="toggle(role, rolelist)"> {{role}}
+                               <input type="checkbox" ng-checked="rolesChoosen.indexOf(role.id)>-1" ng-click="toggle(role.id, rolesChoosen)"> {{role.roleName}}
                            </p>
                        </span>
                         </td>
