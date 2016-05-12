@@ -83,12 +83,11 @@ public class AdminManagementStaffController {
             userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
         }
         Date date = new Date();
-        String password = passwordEncoderGeneratorService.encode(RandomStringUtils.randomAlphabetic(10));
-        System.out.println("PASSWORD"+password);
+        String password = RandomStringUtils.randomAlphabetic(10);
         User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), password , true, new Timestamp(date.getTime()),null);
+                userDto.getLastName(), passwordEncoderGeneratorService.encode(password), true, new Timestamp(date.getTime()),null);
         userService.insertUser(user, userRoles);
-        System.out.println(user);
+        user.setPassword(password);
         EmailTemplate emailTemplate = emailTemplateService.getById(3L);
         String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
         senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
@@ -127,7 +126,8 @@ public class AdminManagementStaffController {
         for (Interview interview : interviewService.getByInterviewer(user)) {
             UserRateDto userRateDto = new UserRateDto(interview.getApplicationForm().getUser(),
                     interview.getMark(),
-                    interview.getRole());
+                    interview.getRole(),
+                    interview.getId());
             userRateDtos.add(userRateDto);
         }
 
@@ -140,6 +140,17 @@ public class AdminManagementStaffController {
         User user = userService.getUserByUsername(email);
         System.out.println(user);
         userService.deleteUser(user);
+    }
+
+    @RequestMapping(value = "deleteAssignedStudent", method = RequestMethod.POST)
+    public void deleteAssignedStudent(@RequestParam String idInterview){
+        Interview interview = interviewService.getById(Long.parseLong(idInterview));
+        if (null == interview){
+            //// TODO: 12.05.2016 someaction;
+        }else {
+            interviewService.deleteInterview(interview);
+        }
+
     }
 
     @RequestMapping(value = "getMaxId", method = RequestMethod.GET)
