@@ -65,6 +65,7 @@ function staffManagementService(http) {
 
     
     service.addEmployee = function (firstName, secondName, lastName, email, roles) {
+        console.log(firstName+secondName+ lastName+email+roles);
         http({
             method : 'POST',
             url : '/admin/addEmployee',

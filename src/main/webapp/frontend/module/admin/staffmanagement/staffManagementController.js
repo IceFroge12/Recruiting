@@ -19,7 +19,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.sortingDir = 1;
     $scope.startId = 0;
     $scope.finishId = 1000;
-    $scope.rolesChoosen = [1,2,5];
+    $scope.rolesChoosen = [1, 2, 5];
     $scope.interviewer = true;
     $scope.notInterviewer = false;
     $scope.notEvaluated = true; //TODO
@@ -46,15 +46,15 @@ function staffManagementController($scope, $filter, staffManagementService) {
     staffManagementService.showFilteredEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse,
         $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
         $scope.notEvaluated).success(function (data) { //TODO
-            angular.forEach(data, function (value1, key1) {
-                angular.forEach(value1.roles, function (value2, key2) {
-                    value2.roleName = value2.roleName.slice(5);
-                })
-            });
-            $scope.allEmployee = data;
-        }, function error() {
-            console.log("error");
+        angular.forEach(data, function (value1, key1) {
+            angular.forEach(value1.roles, function (value2, key2) {
+                value2.roleName = value2.roleName.slice(5);
+            })
         });
+        $scope.allEmployee = data;
+    }, function error() {
+        console.log("error");
+    });
 
     staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, true).success(function (data) { //TODO
         angular.forEach(data, function (value1, key1) {
@@ -78,16 +78,16 @@ function staffManagementController($scope, $filter, staffManagementService) {
         staffManagementService.showFilteredEmployees(pageNum, itemsByPage, $scope.sort.sortingOrder, $scope.sort.reverse,
             $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
             $scope.notEvaluated).success(function (data) { //TODO
-                angular.forEach(data, function (value1, key1) {
-                    angular.forEach(value1.roles, function (value2, key2) {
-                        value2.roleName = value2.roleName.slice(5);
-                    })
-                });
-                $scope.allEmployee = data;
-                console.log(data);
-            }, function error() {
-                console.log("error");
+            angular.forEach(data, function (value1, key1) {
+                angular.forEach(value1.roles, function (value2, key2) {
+                    value2.roleName = value2.roleName.slice(5);
+                })
             });
+            $scope.allEmployee = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
     };
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
@@ -108,8 +108,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
 
     //NE TROGAT ROLI !!!!!!!!!!!!!
-    $scope.employees =
-        [{roleName: 'ROLE_ADMIN'},
+    $scope.employees = [{roleName: 'ROLE_ADMIN'},
             {roleName: 'ROLE_SOFT'},
             {roleName: 'ROLE_TECH'}];
 
@@ -131,19 +130,22 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
     $scope.addEmployee = function () {
 
-        var roleArray = [];
-
-        angular.forEach($scope.selection, function (item, i) {
-            roleArray.push({roleName: item})
-        });
+        // var roleArray = [];
+        //
+        // angular.forEach($scope.employees, function (item, i) {
+        //     console.log(item.roleName);
+        //
+        //     roleArray.push({roleName:item.roleName})
+        // });
 
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
-            $scope.lastName, $scope.email, roleArray);
+            $scope.lastName, $scope.email, $scope.selection);
     };
 
     $scope.range = function (size, start, end) {
         var ret = [];
-        console.log(size, start, end);
+        // console.log(size, start, end);
+
 
 
         if (size < end) {
@@ -219,10 +221,10 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
     $scope.changeEmployeeStatus = function (employee) {
         staffManagementService.changeEmployeeStatus(employee.email).success(function (data) {
-            console.log(data);
+            // console.log(data);
         });
 
-        console.log($scope.dat);
+        // console.log($scope.dat);
         if ($scope.myClass === "btn-danger")
             $scope.myClass = "btn btn-info";
         else
@@ -231,11 +233,11 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
     $scope.showAssigned = function (employee) {
         staffManagementService.showAssigned(employee.email).success(function (data) {
-            console.log(data);
+            // console.log(data);
             $scope.assignedStudents = data;
 
         });
-        console.log($scope.assignedStudents)
+        // console.log($scope.assignedStudents)
     };
     var currentEmployee;
     $scope.getEmployee = function (employee) {
@@ -243,7 +245,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     $scope.deleteEmployee = function () {
-        console.log(currentEmployee);
+        // console.log(currentEmployee);
         staffManagementService.deleteEmployee(currentEmployee.email);
     };
 
@@ -255,7 +257,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.getMaxId = function getMaxId() {
         staffManagementService.getMaxId().success(function (data) {
             $scope.max = data;
-            console.log(data);
+            // console.log(data);
             $scope.slider = {
                 minValue: 10,
                 maxValue: $scope.max,
@@ -274,7 +276,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.searchEmployee = function (employeeName) {
         console.log(employeeName);
         staffManagementService.searchEmployee(employeeName).success(function (data) {
-            console.log(data);
+            // console.log(data);
             $scope.allEmployee = data;
         }, function error() {
             console.log("error");
@@ -363,5 +365,5 @@ angular.module('appStaffManagement').directive("customSort", function () {
 });
 
 
-angular.module('appStaffManagement',['rzModule'])
+angular.module('appStaffManagement', ['rzModule'])
     .controller('staffManagementController', ['$scope', '$filter', 'staffManagementService', staffManagementController]);
