@@ -19,7 +19,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.sortingDir = 1;
     $scope.startId = 0;
     $scope.finishId = 1000;
-    $scope.rolesChoosen = {roles: 1, roles: 2};
+    $scope.rolesChoosen = [1,2,5];
     $scope.interviewer = true;
     $scope.notInterviewer = false;
     $scope.notEvaluated = true; //TODO
@@ -27,7 +27,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
 
 
     // init the sorted items
-    $scope.$watch("sort.reverse",function(){
+    $scope.$watch("sort.reverse", function () {
         $scope.currentPage = 1;
         if ($scope.filtered)
             $scope.showFilteredEmployees($scope.currentPage);
@@ -35,7 +35,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
             $scope.showAllEmployees($scope.currentPage);
     });
 
-    $scope.$watch("sort.sortingOrder",function(){
+    $scope.$watch("sort.sortingOrder", function () {
         $scope.currentPage = 1;
         if ($scope.filtered)
             $scope.showFilteredEmployees($scope.currentPage);
@@ -180,7 +180,7 @@ function staffManagementController($scope, $filter, staffManagementService) {
     };
 
     var editRoles = [];
-  
+
     $scope.showUserData = function (employee) {
         $scope.adminEdit = false;
         $scope.softEdit = false;
@@ -206,15 +206,14 @@ function staffManagementController($scope, $filter, staffManagementService) {
             }
             //TODO change logic
         });
-        $scope.r = editRoles;
-        // editRoles = [];
+
+        editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 
     $scope.editEmployee = function () {
-        console.log(editRoles);
         staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
-            $scope.lastNameEdit, $scope.emailEdit, $scope.r);
+            $scope.lastNameEdit, $scope.emailEdit, editRoles);
     };
 
 
@@ -285,21 +284,37 @@ function staffManagementController($scope, $filter, staffManagementService) {
     $scope.toggle = function (item, list) {
         var idx = -1;
         for (var i = 0; i < list.length; i++) {
-            if (list[i].answer == item)
+            if (list[i] == item)
                 idx = i;
         }
         if (idx > -1) {
             list.splice(idx, 1);
         }
         else {
-            list.push({answer: item});
+            list.push(item);
         }
         console.log(list);
     };
 
+    $scope.existingRoles =
+        [{
+            roleName: 'ADMIN',
+            id: 1
+        },
+            {
+                roleName: 'SOFT',
+                id: 5
+            },
+            {
+                roleName: 'TECH',
+                id: 2
+            }];
+
     $scope.filter = function () {
         $scope.startId = $scope.slider.minValue;
         $scope.finishId = $scope.slider.maxValue;
+        $scope.currentPage = 1;
+        $scope.showFilteredEmployees($scope.currentPage);
         $scope.filtered = true;
     }
 
@@ -344,9 +359,9 @@ angular.module('appStaffManagement').directive("customSort", function () {
         }
     }
 
-   
+
 });
 
 
-angular.module('appStaffManagement', ['rzModule'])
+angular.module('appStaffManagement',['rzModule'])
     .controller('staffManagementController', ['$scope', '$filter', 'staffManagementService', staffManagementController]);

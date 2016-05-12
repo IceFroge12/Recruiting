@@ -18,9 +18,9 @@ function staffManagementService(http) {
 
     service.showFilteredEmployees = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
                                          notInterviewer, notEvaluated) {
-        console.log("Service showAllEmployees");
+        console.log("Service showFilteredEmployees");
         return http({
-            method: 'POST',
+            method: 'GET',
             url: '/admin/showFilteredEmployees',
             params: {
                 pageNum: pageNum,
@@ -29,7 +29,7 @@ function staffManagementService(http) {
                 increase: increase,
                 idStart: idStart,
                 idFinish: idFinish,
-                roles: roles,
+                rolesId: roles,
                 interviewer: interviewer,
                 notInterviewer: notInterviewer,
                 notEvaluated: notEvaluated
