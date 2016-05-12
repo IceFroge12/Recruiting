@@ -37,7 +37,6 @@ angular.module('app', [
         'appRecoverRequestPage',
         'appRecoverPassword',
         'appConfirmRegistration'
-        
     ])
 
         .factory('TokenStorage', function () {

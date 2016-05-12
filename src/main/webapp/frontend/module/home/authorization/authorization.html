@@ -33,7 +33,7 @@
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-lock"></span></span>
                                         <input ng-model="password" name="password" type="password" class="form-control"
-                                               placeholder="Password" ng-maxlength="16" ng-minlength="3"
+                                               placeholder="Password" ng-maxlength="16" ng-minlength="4"
                                                required/>
                                     </div>
 
@@ -43,7 +43,7 @@
                                     </br>
                                     <div ng-messages="authForm.password.$error">
                                         <div ng-message="maxlength">Password must not exceed 16 characters</div>
-                                        <div ng-message="minlength">Password must be over 3 characters</div>
+                                        <div ng-message="minlength">Password must be over 4 characters</div>
                                     </div>
                                     <p>
                                     <p>
