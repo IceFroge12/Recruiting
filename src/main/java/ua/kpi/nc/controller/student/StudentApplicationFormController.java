@@ -301,7 +301,7 @@ public class StudentApplicationFormController {
 		applicationForm.setStatus(status);
 		applicationForm.setActive(true);
 		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-		if (!recruitment.getRegistrationDeadline().before(new Date())) {
+		if (recruitment != null && !recruitment.getRegistrationDeadline().before(new Date())) {
 			applicationForm.setRecruitment(recruitment);
 		}
 		return applicationForm;
