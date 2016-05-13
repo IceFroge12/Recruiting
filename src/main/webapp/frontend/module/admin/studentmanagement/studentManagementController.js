@@ -129,23 +129,10 @@ function studentManagementController($scope, studentManagementService) {
         $scope.amount = Math.ceil(data / $scope.pageItems);
     });
 
-
-    // function checkStatus(statusList,status) {
-    //     console.log("LOL");
-    //     angular.forEach(statusList, function (item, i) {
-    //         if(item.title === status){
-    //             console.log("ITEM"+item.title);
-    //            statusList.splice(i,1);
-    //         }
-    //     });
-    //     return statusList;
-    // }
-
+    
     $scope.showAllStudents = function showAllStudents(pageNum) {
         studentManagementService.showAllStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true).success(function (data) {
             $scope.allStudents = data;
-            var list = [];
-           checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
             console.log(data);
         }, function error() {
             console.log("error");

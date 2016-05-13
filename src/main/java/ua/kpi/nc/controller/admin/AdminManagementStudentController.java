@@ -37,29 +37,12 @@ public class AdminManagementStudentController {
         for (ApplicationForm applicationForm : applicationForms) {
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
-                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
-                    getPossibleStatus(applicationForm.getStatus())));
+                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle()));
             System.out.println(studentAppFormDtoList.get(studentAppFormDtoList.size()-1));
         }
-
         return studentAppFormDtoList;
     }
 
-    private List<Status> getPossibleStatus(Status status) {
-        List<Status> statusList = new ArrayList<>();
-
-        if (status.getTitle().equals(valueOf(IN_REVIEW))) {
-            statusList.add(new Status(valueOf(APPROVED)));
-            statusList.add(new Status(valueOf(REJECTED)));
-        }else {
-            statusList.add(new Status(valueOf(APPROVED)));
-            statusList.add(new Status(valueOf(REJECTED)));
-            statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));
-            statusList.add(new Status(valueOf(APPROVED_TO_GENERAL_COURSES)));
-            statusList.add(new Status(valueOf(APPROVED_TO_JOB)));
-        }
-        return statusList;
-    }
 
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)
     public Long getCountOfStudents() {

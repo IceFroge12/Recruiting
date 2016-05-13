@@ -1,9 +1,5 @@
 package ua.kpi.nc.persistence.dto;
 
-import ua.kpi.nc.persistence.model.Status;
-
-import java.util.List;
-
 /**
  * Created by Admin on 13.05.2016.
  */
@@ -14,28 +10,19 @@ public class StudentAppFormDto {
     private String firstName;
     private String lastName;
     private String status;
-    private List<Status> possibleStatus;
 
     public StudentAppFormDto() {
     }
 
     public StudentAppFormDto(Long id, Long appFormId, String firstName,
-                             String lastName, String status, List<Status> possibleStatus) {
+                             String lastName, String status) {
         this.id = id;
         this.appFormId = appFormId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.status = status;
-        this.possibleStatus = possibleStatus;
     }
 
-    public List<Status> getPossibleStatus() {
-        return possibleStatus;
-    }
-
-    public void setPossibleStatus(List<Status> possibleStatus) {
-        this.possibleStatus = possibleStatus;
-    }
 
     public Long getId() {
         return id;
@@ -85,7 +72,7 @@ public class StudentAppFormDto {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", status='" + status + '\'' +
-                ", possibleStatus=" + possibleStatus +
                 '}';
     }
+
 }
