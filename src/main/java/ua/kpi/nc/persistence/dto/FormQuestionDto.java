@@ -13,18 +13,20 @@ public class FormQuestionDto {
     private String question;
     private String type;
     private boolean enable;
+    private boolean mandatory;
     private List<String> formAnswerVariants;
     private String role;
 
     public FormQuestionDto() {
     }
 
-    public FormQuestionDto(String question, String type, boolean enable, List<String> formAnswerVariants, String role) {
+    public FormQuestionDto(String question, String type, boolean enable, List<String> formAnswerVariants, String role, boolean mandatory) {
         this.question = question;
         this.type = type;
         this.enable = enable;
         this.formAnswerVariants = formAnswerVariants;
         this.role = role;
+        this.mandatory = mandatory;
     }
 
     public Long getId() {
@@ -75,14 +77,24 @@ public class FormQuestionDto {
         this.role = role;
     }
 
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
     @Override
     public String toString() {
         return "FormQuestionDto{" +
-                "question='" + question + '\'' +
+                "id=" + id +
+                ", question='" + question + '\'' +
                 ", type='" + type + '\'' +
                 ", enable=" + enable +
+                ", mandatory=" + mandatory +
                 ", formAnswerVariants=" + formAnswerVariants +
-                ", role=" + role +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

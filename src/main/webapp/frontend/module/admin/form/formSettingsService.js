@@ -39,6 +39,17 @@ function formSettingsService(http) {
         });
         return ( request.then(handleSuccess) );
     };
+
+    service.changeQuestionMandatoryStatus = function (id) {
+        var request = http({
+            method: "GET",
+            url: "/admin/changeQuestionMandatoryStatus",
+            params: {
+                id: id
+            }
+        });
+        return ( request.then(handleSuccess) );
+    };
     
     service.addQuestion = function (question, type, enable, formAnswerVariants, role) {
         http({

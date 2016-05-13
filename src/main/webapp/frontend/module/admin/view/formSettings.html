@@ -23,6 +23,7 @@
                                 <th>Question</th>
                                 <th>Type</th>
                                 <th>Active</th>
+                                <th>Mandatory</th>
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
                             </tr>
@@ -32,6 +33,11 @@
                                 <td>
                                     <button ng-click="changeStatus(question)" class="btn btn-info" type="button">
                                         {{question.enable}}
+                                    </button>
+                                </td>
+                                <td>
+                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info" type="button">
+                                        {{question.mandatory}}
                                     </button>
                                 </td>
                                 <td>

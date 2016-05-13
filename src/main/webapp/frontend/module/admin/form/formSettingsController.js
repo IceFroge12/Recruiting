@@ -28,6 +28,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
                     && data[i].variants !== "undefined") {
                     data[i].variants = JSON.parse(data[i].variants);
                     $scope.questions = data;
+                    console.log($scope.questions);
                 }
             }
             console.log($scope.questions);
@@ -103,6 +104,11 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         formAppService.changeQuestionStatus(employee.id);
     };
 
+    $scope.changeMandatoryStatus = function (employee) {
+        console.log(employee);
+        formAppService.changeQuestionStatus(employee.id);
+    };
+    
     $scope.saveForm = function () {
         var comma = ',';
         if ($scope.addVariant != null) {

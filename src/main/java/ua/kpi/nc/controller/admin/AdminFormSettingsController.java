@@ -38,10 +38,10 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "getapplicationquestions", method = RequestMethod.POST)
     public List<String> getAppFormQuestions(@RequestParam String role) {
-        Role roleAdmin = roleService.getRoleByTitle(role);
+        Role roleTitle = roleService.getRoleByTitle(role);
 
-        System.out.println(roleAdmin);
-        List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleAdmin);
+        System.out.println(roleTitle);
+        List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
 
         List<String> adapterFormQuestionList = new ArrayList<>();
 
@@ -97,6 +97,14 @@ public class AdminFormSettingsController {
         formQuestion.setEnable(!formQuestion.isEnable());
         formQuestionService.updateFormQuestion(formQuestion);
         return formQuestion.isEnable();
+    }
+
+    @RequestMapping(value = "changeQuestionMandatoryStatus", method = RequestMethod.GET)
+    public boolean changeQuestionMandatoryStatus(@RequestParam Long id) {
+        FormQuestion formQuestion = formQuestionService.getById(id);
+        formQuestion.setMandatory(!formQuestion.isMandatory());
+        formQuestionService.updateFormQuestion(formQuestion);
+        return formQuestion.isMandatory();
     }
 
 }

@@ -17,6 +17,7 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
         jsonObject.addProperty("id", formQuestion.getId());
         jsonObject.addProperty("title", formQuestion.getTitle());
         jsonObject.addProperty("type", formQuestion.getQuestionType().getTypeTitle());
+        jsonObject.addProperty("mandatory", formQuestion.isMandatory());
         jsonObject.addProperty("enable", formQuestion.isEnable());
         JsonArray jsonAnswerVariants = new JsonArray();
         if (formQuestion.getFormAnswerVariants() != null) {
