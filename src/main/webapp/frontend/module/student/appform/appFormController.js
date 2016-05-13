@@ -10,6 +10,7 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
         $scope.user = data.user;
         $scope.status = data.status;
         $scope.data = data;
+        console.log($scope.data);
 
     }, function error() {
         console.log("error");
@@ -30,6 +31,8 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
        req.success(function(data) {
 			console.log(data);
 			$scope.resultMessage =  data;
+//			$scope.resultMessage
+			
 		});
        return response;
     };
@@ -86,6 +89,21 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
 		req.success(function(data) {
 			console.log(data);
 			$scope.resultMessage =  data;
+			var toastMessage = {
+	                content: $scope.resultMessage.message,
+	                timeout: 5000,  //TODO : Change color, position
+	                horizontalPosition: 'center',
+	                verticalPosition: 'bottom',
+	                dismissOnClick: true,
+	                combineDuplications: true,
+	                maxNumber: 2
+	            };
+			if ($scope.resultMessage.type == 'ERROR') {
+				var myToastMsg = ngToast.warning(toastMessage);
+			}
+			else if ($scope.resultMessage.type == 'SUCCESS') {
+				var myToastMsg = ngToast.success(toastMessage);
+			}
 		});
 
 	}

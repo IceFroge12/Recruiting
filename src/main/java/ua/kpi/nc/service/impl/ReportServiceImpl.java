@@ -12,6 +12,7 @@ import ua.kpi.nc.persistence.model.enums.ReportTypeEnum;
 import ua.kpi.nc.report.Line;
 import ua.kpi.nc.report.Report;
 import ua.kpi.nc.service.FormAnswerVariantService;
+import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ReportService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -54,7 +55,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public Report getReportOfAnswers(FormQuestion question) {
+	public Report getReportOfAnswers(Long idQuestion) {
 		RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
 		ReportInfo reportInfo = getByID(ReportTypeEnum.ANSWERS.getId());
 		Report report = new Report(reportInfo.getTitle());
@@ -64,9 +65,11 @@ public class ReportServiceImpl implements ReportService {
 		for (Recruitment recruitment : recruitments) {
 			report.getHeader().addCell(recruitment.getName());
 		}
-		List<FormAnswerVariant> variants = variantService.getAnswerVariantsByQuestion(question);
+		FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
+		FormQuestion formQuestion = formQuestionService.getById(idQuestion);
+		List<FormAnswerVariant> variants = variantService.getAnswerVariantsByQuestion(formQuestion);
 		for (FormAnswerVariant variant : variants) {
-			Line line = reportDao.getAnswerVariantLine(reportInfo, question, variant);
+			Line line = reportDao.getAnswerVariantLine(reportInfo, formQuestion, variant);
 			line.addFirstCell(variant.getAnswer());
 			report.addRow(line);
 		}

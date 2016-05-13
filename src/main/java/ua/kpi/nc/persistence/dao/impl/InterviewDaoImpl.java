@@ -48,6 +48,9 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 		interview.setAdequateMark(resultSet.getBoolean("adequate_mark"));
 		interview.setDate(resultSet.getTimestamp("date"));
 		interview.setMark(resultSet.getInt("mark"));
+		if(resultSet.wasNull()) {
+			interview.setMark(null);
+		}
 		interview.setRole(new RoleProxy(resultSet.getLong("interviewer_role")));
 		interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
 		interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));

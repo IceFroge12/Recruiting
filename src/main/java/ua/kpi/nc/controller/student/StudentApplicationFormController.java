@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 
+import ua.kpi.nc.config.PropertiesReader;
 import ua.kpi.nc.persistence.dto.ApplicationFormDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
@@ -67,8 +68,6 @@ public class StudentApplicationFormController {
 
 	private StatusService statusService = ServiceFactory.getStatusService();
 	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
-
-	private static final String PHOTO_DIR_NAME = "D:\\Java\\Tomcat 8.0\\wtpwebapps\\Recruiting\\photo\\";
 
 	public StudentApplicationFormController() {
 		formAnswerService = ServiceFactory.getFormAnswerService();
@@ -180,9 +179,10 @@ public class StudentApplicationFormController {
 				if (!hasPhotoValidFormat(fileExtension)) {
 					return gson.toJson(new MessageDto("Photo has wrong format", MessageDtoType.ERROR));
 				}
-
 				String photoScope = applicationForm.getId() + "." + fileExtension;
-				file.transferTo(new File(PHOTO_DIR_NAME + photoScope));
+				String photoDirPath = PropertiesReader.getInstance().propertiesReader("photodir.path");
+				File photoFile = new File(photoDirPath, photoScope);
+				file.transferTo(photoFile);
 				applicationForm.setPhotoScope(photoScope);
 				applicationFormService.updateApplicationForm(applicationForm);
 			} catch (IllegalStateException | IOException e) {
@@ -301,7 +301,7 @@ public class StudentApplicationFormController {
 		applicationForm.setStatus(status);
 		applicationForm.setActive(true);
 		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-		if (recruitment.getRegistrationDeadline().before(new Date())) {
+		if (!recruitment.getRegistrationDeadline().before(new Date())) {
 			applicationForm.setRecruitment(recruitment);
 		}
 		return applicationForm;

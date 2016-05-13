@@ -5,11 +5,8 @@
         <form name="myForm" data-toggle="validator" role="form">
             <button type="button" ng-if="id != null && id != 0" class="btn btn-sm btn-info search-element col-md-2 btn-left" ng-click="exportAppForm()">Export</button>
             <p ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS', 'text-info' : resultMessage.type == 'INFO'}">{{resultMessage.message}}</p>
+            <p class="text-warning" ng-if="data.recruitment == null">Your application form will bound to next recruitment.</p>
             <table class="table table-hover table-condensed">
-                <tr class="text-success" ng-if="id != null && id != 0">
-                    <td>Status</td>
-                    <td>{{status}}</td>
-                </tr>
                 <tr class="text-success" ng-if="id != null && id != 0">
                     <td>ID</td>
                     <td ng-model="id">{{id}}</td>
