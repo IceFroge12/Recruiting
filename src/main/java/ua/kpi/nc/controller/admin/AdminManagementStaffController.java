@@ -51,7 +51,7 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.GET)
     public List<User> showFilteredEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                             @RequestParam boolean increase, @RequestParam Long idStart, @RequestParam Long idFinish,
-                                            @RequestParam("rolesId[]") List<Long> rolesId, @RequestParam boolean interviewer, @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
+                                            @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer, @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
         List<Role> neededRoles = rolesId.stream().map(roleService::getRoleById).collect(Collectors.toList());
         System.out.println(increase + " " + pageNum + " " + interviewer + " " + rolesId);
         List<User> res = userService.getFilteredEmployees(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);

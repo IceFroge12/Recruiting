@@ -143,13 +143,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_DESC = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
             " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +
-            " AND u.id >= ? AND u.id <= ? AND ur.id_role::varchar IN (?) AND u.is_active::varchar IN (?))" +
+            " AND u.id >= ? AND u.id <= ? AND ur.id_role = ANY(?::int[]) AND u.is_active = ANY (?::boolean[]))" +
             " as uuiefnlnsnpctiard ORDER BY ? DESC OFFSET ? LIMIT ?;";
 
     private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_ASC = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
             " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +
-            " AND u.id >= ? AND u.id <= ? AND ur.id_role::varchar IN (?) AND u.is_active::varchar IN (?))" +
+            " AND u.id >= ? AND u.id <= ? AND ur.id_role = ANY(?::int[]) AND u.is_active = ANY (?::boolean[]))" +
             " as uuiefnlnsnpctiard ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
     private static final String SQL_GET_MAX_ID = "SELECT MAX(u.id) FROM \"user\" u;";
@@ -276,15 +276,17 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
         String sql = increase ? SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_ASC : SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_DESC;
         StringBuilder sb = new StringBuilder();
+        sb.append('{');
         for(Role role: roles) {
-            if (sb.length() == 0)
+            if (sb.length() == 1)
                 sb.append(Long.toString(role.getId()));
             else
-                sb.append("','" + role.getId());
+                sb.append("," + role.getId());
         }
+        sb.append('}');
         String inQuery = sb.toString();
 
-        String active = interviewer ? (notIntrviewer ? "true\\',\\'false" : "true") : (notIntrviewer ? "false" : "");
+        String active = interviewer ? (notIntrviewer ? "{true,false}" : "{true}") : (notIntrviewer ? "{false}" : "{}");
         return this.getJdbcTemplate().queryForList(sql, extractor, idStart, idFinish, inQuery, active, sortingCol,
                 fromRows, rowsNum);
     }
