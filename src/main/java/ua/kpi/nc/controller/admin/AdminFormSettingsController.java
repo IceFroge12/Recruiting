@@ -66,9 +66,8 @@ public class AdminFormSettingsController {
             FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(s);
             formAnswerVariantList.add(formAnswerVariant);
         }
-
         FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getQuestion(), questionType,
-                formQuestionDto.isEnable(), true, roleList, formAnswerVariantList);
+                formQuestionDto.isEnable(), formQuestionDto.isMandatory(), roleList, formAnswerVariantList);
         formQuestionService.insertFormQuestion(formQuestion, role, formAnswerVariantList);
     }
 

@@ -271,6 +271,15 @@
                             </td>
                         </tr>
                         <tr>
+                            <td> Mandatory</td>
+                            <td>
+                                <select ng-model="myMandatorySelect" ng-change="showSelectMandatoryValue(myMandatorySelect)">
+                                    <option selected>true</option>
+                                    <option>false</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <td> Answer variants</td>
                             <td><textarea ng-disabled="canMoveForward" ng-model="addVariant"></textarea></td>
                         </tr>

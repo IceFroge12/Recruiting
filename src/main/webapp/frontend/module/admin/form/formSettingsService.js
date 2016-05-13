@@ -51,7 +51,7 @@ function formSettingsService(http) {
         return ( request.then(handleSuccess) );
     };
     
-    service.addQuestion = function (question, type, enable, formAnswerVariants, role) {
+    service.addQuestion = function (question, type, enable,mandatory, formAnswerVariants, role) {
         http({
             method: 'POST',
             url: '/admin/addAppFormQuestion',
@@ -60,6 +60,7 @@ function formSettingsService(http) {
                 question: question,
                 type: type,
                 enable: enable,
+                mandatory: mandatory,
                 formAnswerVariants: formAnswerVariants,
                 role: role
             })
