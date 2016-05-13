@@ -129,29 +129,39 @@ function studentManagementController($scope,$filter, studentManagementService) {
         $scope.amount = Math.ceil(data / $scope.pageItems);
     });
 
+    $scope.statusIdArray = [];
+    $scope.checkStudentStatus = function (student) {
+        $scope.statusIdArray.push(student.appFormId);
+        console.log(student.appFormId);
+    };
 
-    function checkStatus(statusList,status) {
-        angular.forEach(statusList, function (item, i) {
-            if(item.title === status){
-                console.log("ITEM"+item.title);
-               statusList.splice(i,1);
-            }
-        });
-        return statusList;
-    }
-
+    $scope.statusTemp = [];
     $scope.showAllStudents = function showAllStudents(pageNum) {
         studentManagementService.showAllStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true).success(function (data) {
             $scope.allStudents = data;
-            var list = [];
-           checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
-            console.log(data);
-            // console.log(list);
+            $scope.statusTemp = $scope.allStudents[0].possibleStatus.slice(0);
         }, function error() {
             console.log("error");
         });
     };
+    var selectedValue;
+    $scope.showSelectStatusValue = function (statusSelect) {
+        console.log(statusSelect);
+        selectedValue = statusSelect;
+    };
     
+    $scope.applyStatus = function () {
+        console.log("Apply");
+        studentManagementService.changeSelectedStatuses(selectedValue, $scope.statusIdArray);
+        angular.forEach($scope.statusIdArray,function (item, i) {
+           // console.log("ITEMM"+item);
+            //console.log(selectedValue);
+        });
+    };
+
+    $scope.changeStatus = function (status,appFormId) {
+        studentManagementService.changeStatus(status,appFormId);
+    };
 
     $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
         studentManagementService.showFilteredStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true, $scope.restrictions).success(function (data) {
@@ -177,7 +187,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.range = function (size, start, end) {
         var ret = [];
-        console.log(size, start, end);
+        // console.log(size, start, end);
 
 
         if (size < end) {

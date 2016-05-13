@@ -89,6 +89,13 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         console.log(myActiveSelect);
         selectActiveValue = myActiveSelect;
     };
+
+    var selectMandatoryValue;
+    $scope.showSelectActiveValue = function (myMandatorySelect) {
+        console.log(myMandatorySelect);
+        selectMandatoryValue = myMandatorySelect;
+    };
+    
     var selectRoleValue;
     $scope.showSelectRoleValue = function (myRoleSelect) {
         console.log(myRoleSelect);
@@ -119,7 +126,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             
         var role = selectRoleValue;
         
-        formAppService.addQuestion($scope.addText, selectedValue, selectActiveValue, variantArray, role);
+        formAppService.addQuestion($scope.addText, selectedValue, selectMandatoryValue, selectActiveValue, variantArray, role);
     };
 
     $scope.editEmployee = function () {

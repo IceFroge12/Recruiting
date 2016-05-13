@@ -63,6 +63,15 @@ function staffStudentManagementController($scope, $http, staffStudentManagementS
         }
     };
 
+    $scope.hasStudentMark = function(student) {
+    	for(var i = 0; i < student.interviews.length; i++) {
+    		if(!student.interviews[i].hasMark) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
     $scope.roleNames = ['', 'Tech', '', '', 'Soft'];
 }
 

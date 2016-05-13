@@ -18,4 +18,6 @@ public interface StatusDao {
 
     int deleteStatus(Status status);
 
+    Status getByName(String name);
+
 }

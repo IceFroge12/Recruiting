@@ -20,7 +20,10 @@ public class FormQuestionImpl implements FormQuestion {
     private List<Role> roles;
     private List<FormAnswerVariant> formAnswerVariants;
 
-    public FormQuestionImpl() {
+    private int order;
+
+
+	public FormQuestionImpl() {
     }
 
     public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
@@ -106,7 +109,14 @@ public class FormQuestionImpl implements FormQuestion {
     public void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants) {
         this.formAnswerVariants = formAnswerVariants;
     }
+    
+    public int getOrder() {
+		return order;
+	}
 
+	public void setOrder(int order) {
+		this.order = order;
+	}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,6 +131,7 @@ public class FormQuestionImpl implements FormQuestion {
                 .append(id, that.id)
                 .append(title, that.title)
                 .append(questionType, that.questionType)
+                .append(order, that.order)
                 .isEquals();
     }
 
@@ -132,6 +143,7 @@ public class FormQuestionImpl implements FormQuestion {
                 .append(questionType)
                 .append(enable)
                 .append(mandatory)
+                .append(order)
                 .toHashCode();
     }
 
@@ -143,6 +155,7 @@ public class FormQuestionImpl implements FormQuestion {
                 ", questionType=" + questionType +
                 ", enable=" + enable +
                 ", mandatory=" + mandatory +
+                ", order=" + order +
                 ", formAnswerVariants=" + formAnswerVariants +
                 '}';
     }

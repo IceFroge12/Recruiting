@@ -23,14 +23,11 @@ import static ua.kpi.nc.persistence.model.enums.StatusEnum.*;
 public class AdminManagementStudentController {
 
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
-    private RoleService roleService = ServiceFactory.getRoleService();
     private UserService userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
     private StatusService statusService = ServiceFactory.getStatusService();
-
-    private static Gson gson = new Gson();
-
+    
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                                 @RequestParam boolean increase) {
@@ -42,9 +39,7 @@ public class AdminManagementStudentController {
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
                     getPossibleStatus(applicationForm.getStatus())));
-            System.out.println(studentAppFormDtoList.get(studentAppFormDtoList.size()-1));
         }
-
         return studentAppFormDtoList;
     }
 
@@ -74,9 +69,7 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "getapplicationquestionsnontext", method = RequestMethod.POST)
     public List<String> getAppFormQuestionsNonText(@RequestParam String role) {
-        Role roleTitle = roleService.getRoleByTitle(role);
 
-        System.out.println(roleTitle);
         List<FormQuestion> formQuestionList = formQuestionService.getByRoleNonText(roleTitle);
 
         List<String> adapterFormQuestionList = new ArrayList<>();
@@ -90,20 +83,44 @@ public class AdminManagementStudentController {
     }
 
 
+    @RequestMapping(value = "changeSelectedStatuses", method = RequestMethod.POST)
+    public void changeSelectedStatuses(@RequestParam String changeStatus,
+                                       @RequestParam List<Long>appFormIdList) {
+        System.out.println(changeStatus);
+        Status status = statusService.getByName(changeStatus);
+
+       for (Long id:appFormIdList){
+           ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
+           applicationForm.setStatus(status);
+           applicationFormService.updateApplicationForm(applicationForm);
+       }
+        
+    }
+
     private List<Status> getPossibleStatus(Status status) {
         List<Status> statusList = new ArrayList<>();
 
         if (status.getTitle().equals(valueOf(IN_REVIEW))) {
+            statusList.add(new Status(valueOf(IN_REVIEW)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(REJECTED)));
-        }else {
+        } else {
             statusList.add(new Status(valueOf(REJECTED)));
+            statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_GENERAL_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_JOB)));
         }
 
         return statusList;
+    }
+
+    @RequestMapping(value = "changeStatus", method = RequestMethod.POST)
+    public void changeStatuse(@RequestParam String changeStatus, @RequestParam Long appFormId) {
+        Status status = statusService.getByName(changeStatus);
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(appFormId);
+        applicationForm.setStatus(status);
+        applicationFormService.updateApplicationForm(applicationForm);
     }
 
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)

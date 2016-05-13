@@ -41,4 +41,9 @@ public class StatusServiceImpl implements StatusService {
     public List<Status> getAllStatuses() {
         return statusDao.getAllStatuses();
     }
+
+    @Override
+    public Status getByName(String name) {
+        return statusDao.getByName(name);
+    }
 }

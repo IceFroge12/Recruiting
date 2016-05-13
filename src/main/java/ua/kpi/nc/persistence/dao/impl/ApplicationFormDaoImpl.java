@@ -136,7 +136,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     @Override
     public ApplicationForm getById(Long id) {
-        log.info("Looking for application form with id = ", id);
+        log.info("Looking for application form with id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
@@ -154,7 +154,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     @Override
     public List<ApplicationForm> getByState(boolean state) {
-        log.info("Looking for application forms with is_active = ", state);
+        log.info("Looking for application forms with is_active = {}", state);
         return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATE, extractor, state);
     }
 
@@ -176,7 +176,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     @Override
     public int updateApplicationForm(ApplicationForm applicationForm) {
-        log.info("Updating application forms with id = " + applicationForm.getId());
+        log.info("Updating application forms with id = {}" + applicationForm.getId());
         return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
                 applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
                 applicationForm.getFeedback(), applicationForm.getId());

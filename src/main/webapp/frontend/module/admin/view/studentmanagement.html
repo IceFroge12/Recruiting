@@ -16,8 +16,14 @@
             </div>
             <div class="col-md-5">
                 <tr ng-repeat="student in allStudents">
-                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm selection</button>
+                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm
+                        selection
+                    </button>
                     <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
+                    <select  ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
+                        <option  ng-repeat="st in statusTemp">{{st.title}}</option>
+                    </select>
+                    <button type="button" ng-click="applyStatus()">Apply Status</button>
                 </tr>
             </div>
 
@@ -32,18 +38,21 @@
                 <thead>
                 <tr>
                     <th class="student-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
-                    <th class="student-name" custom-sort order="5" sort="sort">Name&nbsp;</th>
+                    <th class="student-name" custom-sort order="2" sort="sort">Name&nbsp;</th>
                     <th class="student-status">Status</th>
+                    <th class="" custom-sort>Check&nbsp;</th>
                 </thead>
                 <tbody>
                 <tr ng-repeat="student in allStudents">
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
-                        <select>
-                        <option selected>{{student.status}}</option>
-                        <option ng-repeat="stat in student.possibleStatus">{{stat.title}}</option>
-                    </select>
+                        <select ng-model="student.status"  ng-change ="changeStatus(student.status,student.appFormId)" >
+                            <option ng-repeat="stat in student.possibleStatus" ng-checked ="stat.title==student.status" >{{stat.title}}</option>
+                        </select>
+                    <td>
+                        <input type="checkbox" ng-click="checkStudentStatus(student)">
+                    </td>
                 </tr>
                 </tbody>
                 <tfoot>
@@ -105,10 +114,10 @@
                     </tbody>
                 </table>
             </div>
-        <div class="modal-footer">
-            <button class="btn btn-info" type="button" data-dismiss="modal" ng-click="filter()">Filter</button>
+            <div class="modal-footer">
+                <button class="btn btn-info" type="button" data-dismiss="modal" ng-click="filter()">Filter</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <div app-footer></div>

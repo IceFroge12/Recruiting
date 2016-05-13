@@ -48,6 +48,9 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 		interview.setAdequateMark(resultSet.getBoolean("adequate_mark"));
 		interview.setDate(resultSet.getTimestamp("date"));
 		interview.setMark(resultSet.getInt("mark"));
+		if(resultSet.wasNull()) {
+			interview.setMark(null);
+		}
 		interview.setRole(new RoleProxy(resultSet.getLong("interviewer_role")));
 		interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
 		interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));
@@ -113,7 +116,7 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 	public boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId) {
 		log.info("Getting NonAdequateMarks");
 		return this.getJdbcTemplate().queryWithParameters("select exists( select i.adequate_mark from " +
-				"interview i where i.adequate_mark=false and i.id_application_form = ? and i.id_interviewer <> ?) ",resultSet ->
+				"interview i where i.adequate_mark=true and i.id_application_form = ? and i.id_interviewer <> ?) ",resultSet ->
 		resultSet.getBoolean(1),applicationFormID, interviewerId);
 	}
 

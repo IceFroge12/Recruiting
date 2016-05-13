@@ -149,6 +149,7 @@ public class StaffStudentManagementController {
 				JsonObject jsonInterview = new JsonObject();
 				jsonInterview.addProperty("id", interview.getId());
 				jsonInterview.addProperty("role", interview.getRole().getId());
+				jsonInterview.addProperty("hasMark", interview.getMark() != null);
 				jsonInterviews.add(jsonInterview);
 			}
 		}
