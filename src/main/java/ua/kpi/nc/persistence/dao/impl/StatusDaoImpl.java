@@ -32,6 +32,8 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
         return status;
     };
 
+
+
     @Override
     public Status getById(Long id) {
         log.trace("Looking for user with id = ", id);
@@ -62,5 +64,11 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
     public int deleteStatus(Status status) {
         log.trace("Delete status with id = ", status.getId());
         return this.getJdbcTemplate().update("DELETE FROM public.status WHERE status.id = ?;", status.getId());
+    }
+
+    @Override
+    public Status getByName(String name) {
+        log.trace("Looking for user with name = ", name);
+        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.title = ?;",extractor, name);
     }
 }

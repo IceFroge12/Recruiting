@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Chalienko on 21.04.2016.
  */
 public interface StatusService {
+
     Status getStatusById(Long id);
 
     int insertStatus(Status status);
@@ -17,4 +18,6 @@ public interface StatusService {
     int deleteStatus(Status status);
 
     List<Status> getAllStatuses();
+
+    Status getByName(String name);
 }

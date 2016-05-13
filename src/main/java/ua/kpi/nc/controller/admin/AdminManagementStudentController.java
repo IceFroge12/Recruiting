@@ -22,7 +22,6 @@ import static ua.kpi.nc.persistence.model.enums.StatusEnum.*;
 public class AdminManagementStudentController {
 
     private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
-    private RoleService roleService = ServiceFactory.getRoleService();
     private UserService userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
@@ -43,6 +42,20 @@ public class AdminManagementStudentController {
         return studentAppFormDtoList;
     }
 
+    @RequestMapping(value = "changeSelectedStatuses", method = RequestMethod.POST)
+    public void changeSelectedStatuses(@RequestParam String changeStatus,
+                                       @RequestParam List<Long>appFormIdList) {
+        System.out.println(changeStatus);
+        Status status = statusService.getByName(changeStatus);
+
+       for (Long id:appFormIdList){
+           ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
+           applicationForm.setStatus(status);
+           applicationFormService.updateApplicationForm(applicationForm);
+       }
+        
+    }
+
     private List<Status> getPossibleStatus(Status status) {
         List<Status> statusList = new ArrayList<>();
 
@@ -50,7 +63,7 @@ public class AdminManagementStudentController {
             statusList.add(new Status(valueOf(IN_REVIEW)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(REJECTED)));
-        }else {
+        } else {
             statusList.add(new Status(valueOf(REJECTED)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));

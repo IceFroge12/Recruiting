@@ -16,8 +16,14 @@
             </div>
             <div class="col-md-5">
                 <tr ng-repeat="student in allStudents">
-                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm selection</button>
+                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm
+                        selection
+                    </button>
                     <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
+                    <select  ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
+                        <option  ng-repeat="st in statusTemp">{{st.title}}</option>
+                    </select>
+                    <button type="button" ng-click="applyStatus()">Apply Status</button>
                 </tr>
             </div>
 
@@ -34,6 +40,7 @@
                     <th class="student-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort order="5" sort="sort">Name&nbsp;</th>
                     <th class="student-status" custom-sort order="2" sort="sort">Status&nbsp;</th>
+                    <th class="" custom-sort>Check&nbsp;</th>
                 </thead>
                 <tbody>
                 <tr ng-repeat="student in allStudents">
@@ -41,11 +48,13 @@
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
                         <select>
-                        <!--<select data-ng-model="allStudents.possibleStatus"-->
-                                <!--data-ng-options="possibleStatus.title as product.type for product in products | unique:'type'">>-->
-                        <!--<option selected>{{student.status}}</option>-->
-                        <option ng-repeat="stat in student.possibleStatus" ng-selected="stat.title==student.status">{{stat.title}}</option>
-                    </select>
+                            <option ng-repeat="stat in student.possibleStatus" ng-selected="stat.title==student.status">
+                                {{stat.title}}
+                            </option>
+                        </select>
+                    <td>
+                        <input type="checkbox" ng-click="checkStudentStatus(student)">
+                    </td>
                 </tr>
                 </tbody>
                 <tfoot>
@@ -108,10 +117,10 @@
                     </tbody>
                 </table>
             </div>
-        <div class="modal-footer">
-            <button class="btn btn-info" type="button" data-dismiss="modal" ng-click="filter()">Filter</button>
+            <div class="modal-footer">
+                <button class="btn btn-info" type="button" data-dismiss="modal" ng-click="filter()">Filter</button>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <div app-footer></div>

@@ -16,13 +16,25 @@ function studentManagementService(http) {
         })
     };
 
+    service.changeSelectedStatuses = function (changeStatus, appFormIdList) {
+        console.log("STATUSE"+changeStatus+appFormIdList);
+        return http({
+            method: 'POST',
+            url: '/admin/changeSelectedStatuses',
+            params: {
+                changeStatus: changeStatus,
+                appFormIdList: appFormIdList
+            }
+        })
+    };
+
     service.getCountOfStudents = function () {
         return http({
             method: 'GET',
             url: '/admin/getCountOfStudents'
         })
     };
-    
+
     service.getRejectCount = function () {
         return http({
             method: 'GET',

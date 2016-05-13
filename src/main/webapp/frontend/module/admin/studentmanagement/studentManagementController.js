@@ -129,27 +129,33 @@ function studentManagementController($scope, studentManagementService) {
         $scope.amount = Math.ceil(data / $scope.pageItems);
     });
 
+    $scope.statusIdArray = [];
+    $scope.checkStudentStatus = function (student) {
+        $scope.statusIdArray.push(student.appFormId);
+        console.log(student.appFormId);
+    };
 
+    $scope.statusTemp = [];
     $scope.showAllStudents = function showAllStudents(pageNum) {
         studentManagementService.showAllStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true).success(function (data) {
-
             $scope.allStudents = data;
-
-            // angular.forEach($scope.allStudents, function (item, i) {
-            //     console.log("ITME0")
-            //     angular.forEach(item.possibleStatus, function (k, j) {
-            //        console.log(k.title);
-            //         if(k.title === item.status){
-            //             // var index = item.possibleStatus.indexOf(item.status);
-            //             // console.log("ITEM1"+index);
-            //             // item.possibleStatus.splice(index,1);
-            //         }
-            //     });
-            // });
-            
-            console.log($scope.allStudents);
+            $scope.statusTemp = $scope.allStudents[0].possibleStatus.slice(0);
         }, function error() {
             console.log("error");
+        });
+    };
+    var selectedValue;
+    $scope.showSelectStatusValue = function (statusSelect) {
+        console.log(statusSelect);
+        selectedValue = statusSelect;
+    };
+    
+    $scope.applyStatus = function () {
+        console.log("Apply");
+        studentManagementService.changeSelectedStatuses(selectedValue, $scope.statusIdArray);
+        angular.forEach($scope.statusIdArray,function (item, i) {
+            console.log("ITEMM"+item);
+            console.log(selectedValue);
         });
     };
     
@@ -166,7 +172,7 @@ function studentManagementController($scope, studentManagementService) {
 
     $scope.range = function (size, start, end) {
         var ret = [];
-        console.log(size, start, end);
+        // console.log(size, start, end);
 
 
         if (size < end) {
