@@ -154,11 +154,15 @@ function studentManagementController($scope, studentManagementService) {
         console.log("Apply");
         studentManagementService.changeSelectedStatuses(selectedValue, $scope.statusIdArray);
         angular.forEach($scope.statusIdArray,function (item, i) {
-            console.log("ITEMM"+item);
-            console.log(selectedValue);
+           // console.log("ITEMM"+item);
+            //console.log(selectedValue);
         });
     };
-    
+
+    $scope.changeStatus = function () {
+        var a = $("#cell option:selected").text();
+      console.log(a);
+    };
 
     $scope.searchStudent = function (studentName) {
         console.log(studentName);
