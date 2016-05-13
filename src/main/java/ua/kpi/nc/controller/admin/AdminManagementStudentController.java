@@ -2,12 +2,9 @@ package ua.kpi.nc.controller.admin;
 
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.model.*;
-import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.service.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by dima on 23.04.16.
@@ -21,22 +18,30 @@ public class AdminManagementStudentController {
     private UserService userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
-    private StatusService statusService=ServiceFactory.getStatusService();
+    private StatusService statusService = ServiceFactory.getStatusService();
 
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<User> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                    @RequestParam boolean increase) {
+                                   @RequestParam boolean increase) {
         Long fromRow = (pageNum - 1) * rowsNum;
-        return userService.getStudentsFromToRows(fromRow,rowsNum, sortingCol, increase);
+
+        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationForms(fromRow, rowsNum, sortingCol, increase);
+        System.out.println(applicationForms);
+        for (ApplicationForm applicationForm : applicationForms) {
+            System.out.println(applicationForm.toString());
+        }
+
+        return userService.getStudentsFromToRows(fromRow, rowsNum, sortingCol, increase);
     }
 
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)
     public Long getCountOfStudents() {
+
         return userService.getAllStudentCount();
     }
 
     @RequestMapping(value = "getAllStatuses", method = RequestMethod.GET)
-    public List<Status> getAllStatuses(){
+    public List<Status> getAllStatuses() {
         return statusService.getAllStatuses();
     }
 
@@ -62,28 +67,28 @@ public class AdminManagementStudentController {
     }
 
     @RequestMapping(value = "getRejectCount", method = RequestMethod.GET)
-    public Long getRejectCount(){
+    public Long getRejectCount() {
         return applicationFormService.getCountRejectedAppForm();
     }
 
     @RequestMapping(value = "getJobCount", method = RequestMethod.GET)
-    public Long getJobCount(){
+    public Long getJobCount() {
         return applicationFormService.getCountToWorkAppForm();
     }
 
     @RequestMapping(value = "getAdvancedCount", method = RequestMethod.GET)
-    public Long getAdvancedCount(){
+    public Long getAdvancedCount() {
         return applicationFormService.getCountAdvancedAppForm();
     }
 
     @RequestMapping(value = "getGeneralCount", method = RequestMethod.GET)
-    public Long getGeneralCount(){
+    public Long getGeneralCount() {
         return applicationFormService.getCountGeneralAppForm();
     }
 
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
-        System.out.println(id+"\n"+status);
+        System.out.println(id + "\n" + status);
 //        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
 //        af.setStatus(status);
         return true;
@@ -91,9 +96,9 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
     public List<User> searchStudentById(@RequestParam String lastName,
-                                        @RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol){
+                                        @RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol) {
         Long fromRow = (pageNum - 1) * rowsNum;
-        return userService.getStudentsByNameFromToRows(lastName,fromRow,rowsNum,sortingCol);
+        return userService.getStudentsByNameFromToRows(lastName, fromRow, rowsNum, sortingCol);
     }
 
 }

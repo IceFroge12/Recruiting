@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-5">
                 <tr ng-repeat="student in allStudents">
-                    <button type="button" class="btn btn-info btn-sm search-element">Confirm selection</button>
+                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm selection</button>
                     <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
                 </tr>
             </div>
@@ -28,8 +28,6 @@
                     Filter table
                 </button>
             </form>
-
-
             <table class="table table-condensed table-hover col-md-8">
                 <thead>
                 <tr>

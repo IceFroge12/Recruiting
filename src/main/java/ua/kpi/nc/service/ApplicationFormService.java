@@ -47,4 +47,6 @@ public interface ApplicationFormService {
 	int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus);
 
 	Long getCountRecruitmentStudents(Long id);
+
+	List<ApplicationForm> getCurrentsApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 }

@@ -45,4 +45,6 @@ public interface ApplicationFormDao {
 
     Long getCountRecruitmentStudents(Long id);
 
+    List<ApplicationForm> getCurrentApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
+
 }
