@@ -43,8 +43,8 @@
                         <select>
                         <!--<select data-ng-model="allStudents.possibleStatus"-->
                                 <!--data-ng-options="possibleStatus.title as product.type for product in products | unique:'type'">>-->
-                        <option selected>{{student.status}}</option>
-                        <option ng-repeat="stat in student.possibleStatus">{{stat.title}}</option>
+                        <!--<option selected>{{student.status}}</option>-->
+                        <option ng-repeat="stat in student.possibleStatus" ng-selected="stat.title==student.status">{{stat.title}}</option>
                     </select>
                 </tr>
                 </tbody>

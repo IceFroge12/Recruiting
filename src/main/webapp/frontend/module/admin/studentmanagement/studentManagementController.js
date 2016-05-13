@@ -129,24 +129,25 @@ function studentManagementController($scope, studentManagementService) {
         $scope.amount = Math.ceil(data / $scope.pageItems);
     });
 
-    
-    // function checkStatus(statusList,status) {
-    //     angular.forEach(statusList, function (item, i) {
-    //         if(item.title === status){
-    //             console.log("ITEM"+item.title);
-    //            statusList.splice(i,1);
-    //         }
-    //     });
-    //     return statusList;
-    // }
 
     $scope.showAllStudents = function showAllStudents(pageNum) {
         studentManagementService.showAllStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true).success(function (data) {
+
             $scope.allStudents = data;
-            // var list = [];
-           // checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
-            console.log(data);
-            // console.log(list);
+
+            // angular.forEach($scope.allStudents, function (item, i) {
+            //     console.log("ITME0")
+            //     angular.forEach(item.possibleStatus, function (k, j) {
+            //        console.log(k.title);
+            //         if(k.title === item.status){
+            //             // var index = item.possibleStatus.indexOf(item.status);
+            //             // console.log("ITEM1"+index);
+            //             // item.possibleStatus.splice(index,1);
+            //         }
+            //     });
+            // });
+            
+            console.log($scope.allStudents);
         }, function error() {
             console.log("error");
         });

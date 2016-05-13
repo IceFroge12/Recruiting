@@ -39,9 +39,7 @@ public class AdminManagementStudentController {
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
                     getPossibleStatus(applicationForm.getStatus())));
-            System.out.println(studentAppFormDtoList.get(studentAppFormDtoList.size()-1));
         }
-
         return studentAppFormDtoList;
     }
 
@@ -49,10 +47,12 @@ public class AdminManagementStudentController {
         List<Status> statusList = new ArrayList<>();
 
         if (status.getTitle().equals(valueOf(IN_REVIEW))) {
+            statusList.add(new Status(valueOf(IN_REVIEW)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(REJECTED)));
         }else {
             statusList.add(new Status(valueOf(REJECTED)));
+            statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_GENERAL_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_JOB)));
