@@ -53,7 +53,7 @@ public class AdminManagementStudentController {
            applicationForm.setStatus(status);
            applicationFormService.updateApplicationForm(applicationForm);
        }
-        
+
     }
 
     private List<Status> getPossibleStatus(Status status) {

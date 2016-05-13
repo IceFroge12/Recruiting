@@ -75,6 +75,7 @@ $(document).ready(function () {
                 status = data;
             }
         });
+
         if (data = true) {
             $(this).closest("tr").find('td:eq(4)').replaceWith("<td><button class='btn btn-info' " +
                 "type='button' id='delegate'><span class='glyphicon glyphicon-remove'></span></button></td>");
