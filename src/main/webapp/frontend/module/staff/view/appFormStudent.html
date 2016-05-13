@@ -5,12 +5,10 @@
         <div>
             <div class="row">
                 <div class="col-md-2">
-                    <h4>{{appForm.user.firstName}} {{appForm.user.lastName}}</h4>
+                    <h4>{{appForm.user.firstName}} {{appForm.user.lastName}} <p></p> <span ng-if="adequate" class="label label-danger">Not adequate</span></h4>
+
                 </div>
             </div>
-
-            <h4 ng-if="adequate" >NonRelevant</h4>
-
             <ul ng-init="tab = 1;showAppForm()" class="nav nav-tabs">
                 <li ng-class="{active:tab===1}" class="dropdown active">
                     <a  data-toggle="dropdown" class="dropdown-toggle"  href ng-click="tab = 1">
@@ -97,12 +95,8 @@
                                 Adequate Mark
                             </td>
                             <td>
-                                <p>
-                                    <input ng-model="interviewTech.adequateMark" type="radio" ng-value="true"> Adequate
-                                </p>
-                                <p>
-                                    <input ng-model="interviewTech.adequateMark" type="radio" ng-value="false"> NonAdequate
-                                </p>
+                                <input type="checkbox" ng-checked="interviewTech.adequateMark"
+                                       ng-click="toggleT(interviewTech.adequateMark)"> Not adequate
                             </td>
                         </tr>
                         <tr ng-repeat="question in interviewTech.questions">
@@ -165,12 +159,8 @@
                                 Adequate Mark
                             </td>
                             <td>
-                                <p>
-                                    <input ng-model="interviewSoft.adequateMark" type="radio" ng-value="true"> Adequate
-                                </p>
-                                <p>
-                                    <input ng-model="interviewSoft.adequateMark" type="radio" ng-value="false"> NonAdequate
-                                </p>
+                                <input type="checkbox" ng-checked="interviewSoft.adequateMark"
+                                       ng-click="toggleS(interviewSoft.adequateMark)"> Not adequate
                             </td>
                         </tr>
                         <tr ng-repeat="question in interviewSoft.questions">
