@@ -76,12 +76,21 @@ function studentManagementService(http) {
     service.getAllQuestions = function () {
         var request = http({
             method: "POST",
-            url: "/admin/getapplicationquestions",
+            url: "/admin/getapplicationquestionsnontext",
             params: {
                 role: "ROLE_STUDENT"
             }
         });
         return ( request.then(handleSuccess) );
+    };
+
+    service.showFilteredStudents = function (pageNum, rowsNum, sortingCol, increase, restrictions) {
+        console.log("Service showFilteredStudents");
+        return http({
+            method: 'GET',
+            url: '/admin/showFilteredStudents',
+            params: {pageNum: pageNum, rowsNum: rowsNum, sortingCol: sortingCol, increase: increase, restrictions: restrictions}
+        })
     };
 
     function handleSuccess(response) {

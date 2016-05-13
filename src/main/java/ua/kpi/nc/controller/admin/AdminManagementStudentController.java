@@ -1,12 +1,13 @@
 package ua.kpi.nc.controller.admin;
 
+import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
+import ua.kpi.nc.persistence.dto.FormQuestionDto;
 import ua.kpi.nc.persistence.dto.StudentAppFormDto;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Status;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
+import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class AdminManagementStudentController {
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
     private StatusService statusService = ServiceFactory.getStatusService();
 
+    private static Gson gson = new Gson();
+
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                                 @RequestParam boolean increase) {
@@ -44,6 +47,48 @@ public class AdminManagementStudentController {
 
         return studentAppFormDtoList;
     }
+
+    @RequestMapping(value = "showFilteredStudents", method = RequestMethod.GET)
+    public List<StudentAppFormDto> showFilteredStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+                                                @RequestParam boolean increase, @RequestParam("restrictions") String[] restrictions) {
+        Long fromRow = (pageNum - 1) * rowsNum;
+        List<FormQuestion> questions = new ArrayList<>();
+        Gson questionGson = GsonFactory.getFormQuestionGson();
+        for(String question: restrictions) {
+            questions.add(questionGson.fromJson(question, FormQuestionImpl.class));
+        }
+        System.out.println(questions);
+
+        List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
+        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationFormsFiltered(fromRow, rowsNum, sortingCol, increase, questions);
+        for (ApplicationForm applicationForm : applicationForms) {
+            studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
+                    applicationForm.getId(), applicationForm.getUser().getFirstName(),
+                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
+                    getPossibleStatus(applicationForm.getStatus())));
+            System.out.println(studentAppFormDtoList.get(studentAppFormDtoList.size()-1));
+        }
+
+        return studentAppFormDtoList;
+    }
+
+    @RequestMapping(value = "getapplicationquestionsnontext", method = RequestMethod.POST)
+    public List<String> getAppFormQuestionsNonText(@RequestParam String role) {
+        Role roleTitle = roleService.getRoleByTitle(role);
+
+        System.out.println(roleTitle);
+        List<FormQuestion> formQuestionList = formQuestionService.getByRoleNonText(roleTitle);
+
+        List<String> adapterFormQuestionList = new ArrayList<>();
+
+        for (FormQuestion formQuestion : formQuestionList) {
+            Gson questionGson = GsonFactory.getFormQuestionGson();
+            String jsonResult = questionGson.toJson(formQuestion);
+            adapterFormQuestionList.add(jsonResult);
+        }
+        return adapterFormQuestionList;
+    }
+
 
     private List<Status> getPossibleStatus(Status status) {
         List<Status> statusList = new ArrayList<>();

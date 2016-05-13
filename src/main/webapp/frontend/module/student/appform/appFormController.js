@@ -171,7 +171,7 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
 //    	 return;
     	file.upload = Upload.upload({
     	      url: '../student/upload',
-    	      data: {username: $scope.data.questions, file: file},
+    	      data: {username: $scope.data.questions, file: file}
     	    });
 
     	    file.upload.then(function (response) {

@@ -108,6 +108,18 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE ORDER BY ? DESC OFFSET ? LIMIT ?;";
 
+    private static final String SQL_GET_CURRENT_APP_FORMS_FILTERED = "Select DISTINCT a.id, a.id_status, a.is_active"
+            +"  ,a.id_recruitment, a.photo_scope, a.id_user, a."
+            +"date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id"
+            +"  INNER JOIN status s on a.id_status = s.id INNER JOIN form_answer fa on a.id = fa.id_application_form "
+            +" INNER JOIN form_answer_variant fav on fa.id_variant = fav.id"
+            +" INNER JOIN form_question fq on fav.id_question = fq.id"
+            +" WHERE r.end_date > CURRENT_DATE AND (";
+
+    private static final String SORT_PARAM_ASC = ") ORDER BY a.id ASC OFFSET ? LIMIT ?;";
+
+    private static final String SORT_PARAM_DESC = " ORDER BY ? DESC OFFSET ? LIMIT ?;";
+
     private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"approved_to_work\" from \"" + TABLE_NAME + "\" where id_status=?";
 
     private static final String SQL_CHANGE_STATUS = "UPDATE application_form SET id_status = ? where id_status = ?;";
@@ -275,4 +287,28 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         return this.getJdbcTemplate().queryForList(sql, extractor,sortingCol, fromRow, rowsNum );
     }
 
+    @Override
+    public List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions) {
+        log.info("Looking for current filtered application forms");
+        StringBuilder sbTotal = new StringBuilder();
+        for(FormQuestion question: questions){
+            StringBuilder sb = new StringBuilder("(fa.id_question = '");
+            sb.append(question.getId().toString() + "' AND fav.answer = ANY ('{");
+            List<FormAnswerVariant> variants = question.getFormAnswerVariants();
+            for(FormAnswerVariant answerVariant: variants){
+                sb.append(answerVariant.getAnswer()+",");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            ///to work correctly, change to AND
+            sb.append("}')) OR ");
+            sbTotal.append(sb.toString());
+        }
+        sbTotal.delete(sbTotal.length() - 4, sbTotal.length() - 1);
+        sbTotal.append(increase ? SORT_PARAM_ASC : SORT_PARAM_DESC);
+
+        String sql = SQL_GET_CURRENT_APP_FORMS_FILTERED + sbTotal.toString();
+
+        String order = sortingCol == 1 ? "a.id" : "a.id";
+        return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum );
+    }
 }

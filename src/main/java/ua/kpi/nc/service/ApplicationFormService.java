@@ -2,51 +2,50 @@ package ua.kpi.nc.service;
 
 import java.util.List;
 
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 
 /**
  * Created by Chalienko on 21.04.2016.
  */
 public interface ApplicationFormService {
 
-	ApplicationForm getApplicationFormById(Long id);
+    ApplicationForm getApplicationFormById(Long id);
 
-	ApplicationForm getCurrentApplicationFormByUserId(Long id);
+    ApplicationForm getCurrentApplicationFormByUserId(Long id);
 
-	ApplicationForm getLastApplicationFormByUserId(Long id);
+    ApplicationForm getLastApplicationFormByUserId(Long id);
 
-	List<ApplicationForm> getByUserId(Long id);
+    List<ApplicationForm> getByUserId(Long id);
 
-	List<ApplicationForm> getByStatus(String status);
+    List<ApplicationForm> getByStatus(String status);
 
-	List<ApplicationForm> getByState(boolean state);
+    List<ApplicationForm> getByState(boolean state);
 
-	Long getCountRejectedAppForm();
+    Long getCountRejectedAppForm();
 
-	Long getCountToWorkAppForm();
+    Long getCountToWorkAppForm();
 
-	Long getCountGeneralAppForm();
+    Long getCountGeneralAppForm();
 
-	Long getCountAdvancedAppForm();
+    Long getCountAdvancedAppForm();
 
-	int deleteApplicationForm(ApplicationForm applicationForm);
+    int deleteApplicationForm(ApplicationForm applicationForm);
 
-	boolean insertApplicationForm(ApplicationForm applicationForm);
+    boolean insertApplicationForm(ApplicationForm applicationForm);
 
-	int updateApplicationForm(ApplicationForm applicationForm);
+    int updateApplicationForm(ApplicationForm applicationForm);
 
-	List<ApplicationForm> getAll();
-	
-	List<ApplicationForm> getByInterviewer(User interviewer);
+    List<ApplicationForm> getAll();
 
-	boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
+    List<ApplicationForm> getByInterviewer(User interviewer);
 
-	int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus);
+    boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
 
-	Long getCountRecruitmentStudents(Long id);
+    int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus);
 
-	List<ApplicationForm> getCurrentsApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
+    Long getCountRecruitmentStudents(Long id);
+
+    List<ApplicationForm> getCurrentsApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
+
+    List<ApplicationForm> getCurrentsApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions);
 }

@@ -96,6 +96,11 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 	}
 
 	@Override
+	public List<FormQuestion> getByRoleNonText(Role role) {
+		return formQuestionDao.getByRoleNonText(role);
+	}
+
+	@Override
 	public List<FormQuestion> getAll() {
 		return formQuestionDao.getAll();
 	}

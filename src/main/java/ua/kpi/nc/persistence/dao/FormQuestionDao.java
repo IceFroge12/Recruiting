@@ -27,6 +27,8 @@ public interface FormQuestionDao {
 
     List<FormQuestion> getByRole(Role role);
 
+    List<FormQuestion> getByRoleNonText(Role role);
+
     List<FormQuestion> getAll();
 
 	int updateFormQuestion(FormQuestion formQuestion);

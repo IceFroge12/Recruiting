@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 
@@ -47,4 +48,5 @@ public interface ApplicationFormDao {
 
     List<ApplicationForm> getCurrentApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 
+    List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions);
 }
