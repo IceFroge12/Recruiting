@@ -75,10 +75,11 @@ public class AdminManagementStudentController {
     }
 
     @RequestMapping(value = "changeStatus", method = RequestMethod.POST)
-    public void changeStatuse(@RequestParam String changeStatus,
-                                       @RequestParam Long appFormId) {
-        System.out.println(changeStatus);
-        System.out.println(appFormId);
+    public void changeStatuse(@RequestParam String changeStatus, @RequestParam Long appFormId) {
+        Status status = statusService.getByName(changeStatus);
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(appFormId);
+        applicationForm.setStatus(status);
+        applicationFormService.updateApplicationForm(applicationForm);
     }
 
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)

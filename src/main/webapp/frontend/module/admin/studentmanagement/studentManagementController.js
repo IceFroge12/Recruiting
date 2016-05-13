@@ -159,9 +159,8 @@ function studentManagementController($scope, studentManagementService) {
         });
     };
 
-    $scope.changeStatus = function () {
-        var a = $("#cell option:selected").text();
-      console.log(a);
+    $scope.changeStatus = function (status,appFormId) {
+        studentManagementService.changeStatus(status,appFormId);
     };
 
     $scope.searchStudent = function (studentName) {

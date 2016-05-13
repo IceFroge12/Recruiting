@@ -29,13 +29,12 @@ function studentManagementService(http) {
     };
 
     service.changeStatus = function (changeStatus, appFormId) {
-        console.log("STATUS"+changeStatus+appFormId);
         return http({
             method: 'POST',
             url: '/admin/changeStatus',
             params: {
                 changeStatus: changeStatus,
-                appFormIdList: appFormId
+                appFormId: appFormId
             }
         })
     };
