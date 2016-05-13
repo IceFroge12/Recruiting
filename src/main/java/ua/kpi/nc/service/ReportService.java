@@ -2,7 +2,6 @@ package ua.kpi.nc.service;
 
 import java.util.Set;
 
-import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.ReportInfo;
 import ua.kpi.nc.report.Report;
 
@@ -15,7 +14,7 @@ public interface ReportService {
     
     Report getReportOfApproved();
     
-    Report getReportOfAnswers(FormQuestion question);
+    Report getReportOfAnswers(Long idQuestion);
 
     ReportInfo getByTitle(String title);
 

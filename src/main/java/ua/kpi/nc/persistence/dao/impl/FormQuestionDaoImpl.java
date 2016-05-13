@@ -29,6 +29,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
         formQuestion.setId(resultSet.getLong(ID_COL));
         formQuestion.setEnable(resultSet.getBoolean(ENABLE_COL));
         formQuestion.setMandatory(resultSet.getBoolean(MANDATORY_COL));
+        formQuestion.setOrder(resultSet.getInt(ORDER_COL));
         formQuestion.setRoles(getRoles(resultSet.getLong(ID_COL)));
         formQuestion.setTitle(resultSet.getString(TITLE_COL));
         formQuestion.setQuestionType(new QuestionType(resultSet.getLong(ID_QUESTION_TYPE_COL),
@@ -48,9 +49,10 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     static final String ID_QUESTION_TYPE_COL = "id_question_type";
     static final String ENABLE_COL = "enable";
     static final String MANDATORY_COL = "mandatory";
+    static final String ORDER_COL = "order";
 
     private static final String SQL_GET_ALL = "SELECT fq." + ID_COL + ", fq." + TITLE_COL + ", fq."
-            + ID_QUESTION_TYPE_COL + ", fq." + ENABLE_COL + ", fq." + MANDATORY_COL + ", fqt."
+            + ID_QUESTION_TYPE_COL + ", fq." + ENABLE_COL + ", fq." + MANDATORY_COL + ", fq." + ORDER_COL + ", fqt."
             + QuestionTypeDaoImpl.TYPE_TITLE_COL + " FROM " + TABLE_NAME + " fq INNER JOIN "
             + QuestionTypeDaoImpl.TABLE_NAME + " fqt ON fqt." + QuestionTypeDaoImpl.ID_COL + " = fq."
             + ID_QUESTION_TYPE_COL + "";
@@ -68,7 +70,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ") " + "VALUES (?,?,?,?);";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + TITLE_COL + " = ?, " + ENABLE_COL
-            + " = ?, " + MANDATORY_COL + " = ?" + " WHERE " + ID_COL + " = ?;";
+            + " = ?, " + MANDATORY_COL + " = ?, \"" + ORDER_COL + "\" = ? WHERE " + ID_COL + " = ?;";
 
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = ?";
 
@@ -172,7 +174,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             return 0;
         }
         return this.getJdbcTemplate().update(SQL_UPDATE, formQuestion.getTitle(), formQuestion.isEnable(),
-                formQuestion.isMandatory(), formQuestion.getId());
+                formQuestion.isMandatory(),formQuestion.getOrder(), formQuestion.getId());
     }
 
 	@Override

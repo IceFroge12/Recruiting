@@ -136,4 +136,16 @@ public class FormQuestionProxy implements FormQuestion {
                 .append(id)
                 .toHashCode();
     }
+
+	@Override
+	public int getOrder() {
+		 checkFormQuestion();
+		 return formQuestion.getOrder();
+	}
+
+	@Override
+	public void setOrder(int order) {
+		checkFormQuestion();
+		formQuestion.setOrder(order);
+	}
 }

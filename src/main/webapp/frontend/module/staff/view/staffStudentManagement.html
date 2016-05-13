@@ -9,6 +9,7 @@
 				Assign new student</button>
 			<p
 				ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS','text-warning' : resultMessage.type == 'WARNING',}">{{resultMessage.message}}</p>
+			<p></p>
 			<table id="students_table" class="table table-hover">
 				<thead>
 					<tr>
@@ -17,11 +18,12 @@
 						<th>Last Name</th>
 						<th>First Name</th>
 						<th>Second Name</th>
+						<th>Has mark</th>
 						<th>Deassign</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="student in assignedStudents">
+					<tr ng-repeat="student in assignedStudents" ng-class="{'success' : hasStudentMark(student), 'warning' : !hasStudentMark(student)}">
 						<td>
 							<a href="index.html#/staff/appformstudent/{{student.id}}">{{student.id}}</a></td>
 						<td><img ng-src="/photo/{{student.photoScope}}" width=30px ></td>
@@ -29,8 +31,12 @@
 						<td>{{student.firstName}}</td>
 						<td>{{student.secondName}}</td>
 						<td>
+						<span ng-if="hasStudentMark(student)">Has mark</span>
+						<span ng-if="!hasStudentMark(student)">NO MARK!</span>
+						</td>
+						<td>
 						<div ng-repeat="interview in student.interviews">
-						<button class="btn btn-sm btn-info"	ng-click="deassignApplicationForm(interview.id)" type="button">Deassign as {{roleNames[interview.role - 1]}}</button>
+						<button class="btn btn-sm btn-info"	ng-click="deassignApplicationForm(interview.id)" type="button">Unassign as {{roleNames[interview.role - 1]}}</button>
 								</div>
 								</td>
 					</tr>

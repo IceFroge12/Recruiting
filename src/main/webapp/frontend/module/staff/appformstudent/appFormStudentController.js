@@ -101,6 +101,23 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
         console.log(list);
     };
 
+    $scope.toggleT = function (item){
+        var i = item;
+        if (i == true){
+            $scope.interviewTech.adequateMark = false;
+        } else if (i == false){
+            $scope.interviewTech.adequateMark = true;
+        }
+    };
+    $scope.toggleS = function (item){
+        var i = item;
+        if (i == true){
+            $scope.interviewSoft.adequateMark = false;
+        } else if (i == false){
+            $scope.interviewSoft.adequateMark = true;
+        }
+    };
+
     $scope.exists = function (item, list){
         for(var i=0; i<list.length; i++){
             if(list[i].answer==item)

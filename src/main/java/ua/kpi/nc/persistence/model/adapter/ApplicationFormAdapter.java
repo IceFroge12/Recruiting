@@ -9,7 +9,8 @@ import java.util.Map;
 /**
  * Created by Chalienko on 24.04.2016.
  */
-public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter implements JsonSerializer<ApplicationForm> {
+public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter
+		implements JsonSerializer<ApplicationForm> {
 
 	@Override
 	public JsonElement serialize(ApplicationForm applicationForm, Type type,
@@ -18,10 +19,12 @@ public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter 
 		jsonObject.addProperty("id", applicationForm.getId());
 		jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
 		jsonObject.addProperty("active", applicationForm.isActive());
-		JsonObject jsonRecruitment = new JsonObject();
 		Recruitment recruitment = applicationForm.getRecruitment();
-		jsonRecruitment.addProperty("name", recruitment.getName());
-		jsonObject.add("recruitment", jsonRecruitment);
+		if (recruitment != null) {
+			JsonObject jsonRecruitment = new JsonObject();
+			jsonRecruitment.addProperty("name", recruitment.getName());
+			jsonObject.add("recruitment", jsonRecruitment);
+		}
 		jsonObject.addProperty("photoScope", applicationForm.getPhotoScope());
 		User user = applicationForm.getUser();
 		JsonObject jsonUser = new JsonObject();
