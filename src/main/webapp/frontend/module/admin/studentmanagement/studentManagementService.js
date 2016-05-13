@@ -10,95 +10,65 @@ function studentManagementService(http) {
     service.showAllStudents = function (pageNum, rowsNum, sortingCol, increase) {
         console.log("Service showAllStudents");
         return http({
-            method : 'GET',
-            url : '/admin/showAllStudents',
-            params : {pageNum:pageNum, rowsNum: rowsNum, sortingCol:sortingCol, increase: increase}
+            method: 'GET',
+            url: '/admin/showAllStudents',
+            params: {pageNum: pageNum, rowsNum: rowsNum, sortingCol: sortingCol, increase: increase}
         })
     };
 
-    service.getCountOfStudents= function () {
+    service.getCountOfStudents = function () {
         return http({
-            method : 'GET',
-            url : '/admin/getCountOfStudents'
-        })
-    };
-
-    service.getAllStatuses = function () {
-        return http({
-            method : 'GET',
-            url : '/admin/getAllStatuses'
+            method: 'GET',
+            url: '/admin/getCountOfStudents'
         })
     };
     
-    service.getStudentsUniversity = function (id) {
-        return http({
-            method : 'GET',
-            url : '/admin/getUniverse',
-            params:{id:id}
-        })
-    };
-
-    service.getStudentsCourse = function (id) {
-        return http({
-            method : 'GET',
-            url : '/admin/getCourse',
-            params:{id:id}
-        })
-    };
-
-    service.getStudentsStatus = function (id) {
-        return http({
-            method : 'GET',
-            url : '/admin/getStatus',
-            params:{id:id}
-        })
-    };
-
     service.getRejectCount = function () {
         return http({
-            method : 'GET',
-            url : '/admin/getRejectCount'
+            method: 'GET',
+            url: '/admin/getRejectCount'
         })
     };
 
     service.getJobCount = function () {
         return http({
-            method : 'GET',
-            url : '/admin/getJobCount'
+            method: 'GET',
+            url: '/admin/getJobCount'
         })
     };
 
     service.getAdvancedCount = function () {
         return http({
-            method : 'GET',
-            url : '/admin/getAdvancedCount'
+            method: 'GET',
+            url: '/admin/getAdvancedCount'
         })
     };
 
     service.getGeneralCount = function () {
         return http({
-            method : 'GET',
-            url : '/admin/getGeneralCount'
+            method: 'GET',
+            url: '/admin/getGeneralCount'
         })
     };
-    
+
     service.confirmSelection = function (id, status) {
         return http({
-            method : 'POST',
-            url : '/admin/confirmSelection',
-            params:{id:id},
+            method: 'POST',
+            url: '/admin/confirmSelection',
+            params: {id: id},
             data: status
         })
     };
 
     service.searchStudent = function (lastName) {
         return http({
-            method : 'POST',
-            url : '/admin/searchStudent',
-            params : {lastName : lastName,
-                pageNum:pageNum, 
-                rowsNum: rowsNum, 
-                sortingCol:sortingCol
+            method: 'POST',
+            url: '/admin/searchStudent',
+            params: {
+                lastName: lastName,
+                pageNum: pageNum,
+                rowsNum: rowsNum,
+                sortingCol: sortingCol
             }
         })
     };

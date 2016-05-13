@@ -154,6 +154,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_GET_MAX_ID = "SELECT MAX(u.id) FROM \"user\" u;";
 
+    private static final String SQL_GET_STUDENT_COUNT ="Select count(*) \"user\" FROM \"user\" u " +
+            "JOIN user_role ur on ur.id_user = u.id where ur.id_role = 3;";
+
 
     @Override
     public User getByID(Long id) {
@@ -335,7 +338,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public Long getStudentCount() {
-        return new Long(String.valueOf(getAllStudents().size()));
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_STUDENT_COUNT, resultSet ->
+           resultSet.getLong(1));
     }
 
     @Override

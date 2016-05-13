@@ -1,10 +1,18 @@
 package ua.kpi.nc.controller.admin;
 
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.dto.StudentAppFormDto;
+import ua.kpi.nc.persistence.model.ApplicationForm;
+import ua.kpi.nc.persistence.model.FormAnswer;
+import ua.kpi.nc.persistence.model.Status;
+import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static ua.kpi.nc.persistence.model.enums.StatusEnum.*;
 
 /**
  * Created by dima on 23.04.16.
@@ -21,17 +29,36 @@ public class AdminManagementStudentController {
     private StatusService statusService = ServiceFactory.getStatusService();
 
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
-    public List<User> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                   @RequestParam boolean increase) {
+    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+                                                @RequestParam boolean increase) {
         Long fromRow = (pageNum - 1) * rowsNum;
-
+        List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationForms(fromRow, rowsNum, sortingCol, increase);
-        System.out.println(applicationForms);
         for (ApplicationForm applicationForm : applicationForms) {
-            System.out.println(applicationForm.toString());
+            studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
+                    applicationForm.getId(), applicationForm.getUser().getFirstName(),
+                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
+                    getPossibleStatus(applicationForm.getStatus())));
+            System.out.println(studentAppFormDtoList.get(studentAppFormDtoList.size()-1));
         }
 
-        return userService.getStudentsFromToRows(fromRow, rowsNum, sortingCol, increase);
+        return studentAppFormDtoList;
+    }
+
+    private List<Status> getPossibleStatus(Status status) {
+        List<Status> statusList = new ArrayList<>();
+
+        if (status.getTitle().equals(valueOf(IN_REVIEW))) {
+            statusList.add(new Status(valueOf(APPROVED)));
+            statusList.add(new Status(valueOf(REJECTED)));
+        }else {
+            statusList.add(new Status(valueOf(APPROVED)));
+            statusList.add(new Status(valueOf(REJECTED)));
+            statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));
+            statusList.add(new Status(valueOf(APPROVED_TO_GENERAL_COURSES)));
+            statusList.add(new Status(valueOf(APPROVED_TO_JOB)));
+        }
+        return statusList;
     }
 
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)

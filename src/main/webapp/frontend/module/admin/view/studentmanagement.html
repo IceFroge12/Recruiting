@@ -41,8 +41,8 @@
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
                         <select>
-                        <option selected>{{status.title}}</option>
-                        <option ng-repeat="stat in statuses">{{stat.title}}</option>
+                        <option selected>{{student.status}}</option>
+                        <option  ng-repeat="stat in student.possibleStatus">{{stat.title}}</option>
                     </select>
                 </tr>
                 </tbody>
