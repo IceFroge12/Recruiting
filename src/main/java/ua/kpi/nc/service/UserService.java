@@ -62,4 +62,6 @@ public interface UserService {
     List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 
     Long getUserCount();
+
+    Long getActiveEmployees(Long idParam0, Long idParam1);
 }

@@ -171,4 +171,9 @@ public class UserServiceImpl implements UserService {
     public Long getUserCount() {
         return userDao.getUserCount();
     }
+
+    @Override
+    public Long getActiveEmployees(Long idParam0, Long idParam1) {
+        return userDao.getActiveEmployees(idParam0, idParam1);
+    }
 }

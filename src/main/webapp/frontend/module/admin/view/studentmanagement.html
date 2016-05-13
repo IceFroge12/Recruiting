@@ -47,7 +47,7 @@
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
-                        <select  id = "cell" ng-click="changeStatus()" >
+                        <select>
                             <option ng-repeat="stat in student.possibleStatus" ng-selected="stat.title==student.status" >
                                 {{stat.title}}
                             </option>

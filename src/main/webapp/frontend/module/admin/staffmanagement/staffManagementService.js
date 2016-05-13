@@ -156,7 +156,17 @@ function staffManagementService(http) {
             console.log(status);
         });
     };
-
+    
+    service.showActiveEmployee = function () {
+        console.log("getActiveEmployee");
+     return http({
+            method : 'GET',
+            url:'/admin/getActiveEmployee'
+        }).error(function (data, status, headers) {
+            console.log(status);
+        });
+    };
+    
     return service;
 }
 

@@ -65,6 +65,6 @@ public interface UserDao {
 
     Long getUserCount();
 
-
+    Long getActiveEmployees(Long idParam0,Long idParam1);
 
 }

@@ -1,5 +1,6 @@
 package ua.kpi.nc.controller.admin;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.UserDto;
@@ -8,6 +9,7 @@ import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.*;
@@ -150,8 +152,22 @@ public class AdminManagementStaffController {
         }else {
             interviewService.deleteInterview(interview);
         }
-
     }
+    @RequestMapping(value = "getActiveEmployee", method = RequestMethod.GET)
+    public List<String> getActiveEmployee(){
+
+        Long activeTech = userService.getActiveEmployees((long) RoleEnum.ROLE_TECH.getId(),
+                (long) RoleEnum.ROLE_SOFT.getId());
+
+        Long activeSoft = userService.getActiveEmployees((long) RoleEnum.ROLE_SOFT.getId(),
+                (long) RoleEnum.ROLE_TECH.getId());
+
+        List<String> activeEmployees = new  ArrayList<>();
+        activeEmployees.add(String.valueOf(activeTech));
+        activeEmployees.add(String.valueOf(activeSoft));
+        return activeEmployees;
+    }
+
 
     @RequestMapping(value = "getMaxId", method = RequestMethod.GET)
     public Long getMaxId() {

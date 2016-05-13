@@ -254,6 +254,8 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         var index = $scope.allEmployee.indexOf(currentEmployee);
         $scope.allEmployee.splice(index, 1);
     };
+
+
     
     $scope.deleteAssignedStudent = function () {
         console.log('deleteAssignedStudent');
@@ -333,6 +335,14 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.showFilteredEmployees($scope.currentPage);
         $scope.filtered = true;
     }
+
+    staffManagementService.showActiveEmployee().success(function (data) {
+        console.log("ACTIVE"+data);
+        $scope.activeTech = data[0];
+        $scope.activeSoft = data[1];
+    });
+
+
 
 }
 
