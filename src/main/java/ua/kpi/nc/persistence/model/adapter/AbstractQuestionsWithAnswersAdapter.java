@@ -6,7 +6,7 @@ import ua.kpi.nc.persistence.model.FormAnswer;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 public abstract class AbstractQuestionsWithAnswersAdapter {
 
     protected Map<FormQuestion, JsonObject> generateQuestionsAndAnswers(List<FormAnswer> formAnswers) {
-        Map<FormQuestion, JsonObject> questionsMap = new HashMap<>();
+        Map<FormQuestion, JsonObject> questionsMap = new TreeMap<FormQuestion, JsonObject>((o1, o2) -> {return Integer.compare(o1.getOrder(), o2.getOrder());});
         for (FormAnswer answer : formAnswers) {
             FormQuestion question = answer.getFormQuestion();
             JsonObject jsonQuestion = questionsMap.get(question);
