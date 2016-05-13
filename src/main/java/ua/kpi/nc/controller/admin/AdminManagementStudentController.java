@@ -27,6 +27,7 @@ public class AdminManagementStudentController {
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
     private StatusService statusService = ServiceFactory.getStatusService();
+    private RoleService roleService = ServiceFactory.getRoleService();
     
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -69,7 +70,7 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "getapplicationquestionsnontext", method = RequestMethod.POST)
     public List<String> getAppFormQuestionsNonText(@RequestParam String role) {
-
+        Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRoleNonText(roleTitle);
 
         List<String> adapterFormQuestionList = new ArrayList<>();
