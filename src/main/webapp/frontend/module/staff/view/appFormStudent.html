@@ -100,8 +100,7 @@
                             </td>
                         </tr>
                         <tr ng-repeat="question in interviewTech.questions">
-                            <td ng-if="question.isMandatory == true" class="mandatory"> {{question.questionTitle}}</td>
-                            <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
+                            <td > {{question.questionTitle}}</td>
                             <td ng-if="question.questionType == 'select'">
                                 <select class="form-control" ng-model="question.answers[0].answer">
                                     <option ng-repeat="variant in question.variants track by $index"
@@ -164,8 +163,7 @@
                             </td>
                         </tr>
                         <tr ng-repeat="question in interviewSoft.questions">
-                            <td ng-if="question.isMandatory == true" class="mandatory"> {{question.questionTitle}}</td>
-                            <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
+                            <td > {{question.questionTitle}}</td>
                             <td ng-if="question.questionType == 'select'">
                                 <select class="form-control" ng-model="question.answers[0].answer">
                                     <option ng-repeat="variant in question.variants track by $index"

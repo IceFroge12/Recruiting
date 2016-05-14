@@ -55,8 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/admin/report/*").anonymous()
+                .antMatchers("**/reports/**").hasRole("ADMIN")
 
                 .and()
                 .authorizeRequests()
@@ -76,7 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .servletApi().and()
                 .headers().cacheControl();
-
 
 //        http
 //                .authorizeRequests()

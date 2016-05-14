@@ -79,7 +79,7 @@ public class RegistrationController {
         }
     }
 
-
+    //TODO
     @RequestMapping(value = "/{token}", method = RequestMethod.GET)
     public String registrationConfirm(@PathVariable("token") String token) {
         User user = userService.getUserByToken(token);

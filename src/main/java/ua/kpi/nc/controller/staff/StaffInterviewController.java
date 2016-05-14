@@ -19,7 +19,10 @@ import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.service.*;
+import ua.kpi.nc.util.export.ExportApplicationForm;
+import ua.kpi.nc.util.export.ExportApplicationFormImp;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +59,15 @@ public class StaffInterviewController {
 		Gson applicationFormGson = GsonFactory.getApplicationFormGson();
 		String jsonResult = applicationFormGson.toJson(applicationForm);
 		return jsonResult;
+	}
+
+	@RequestMapping(value = "appForm{applicationFormId}", method = RequestMethod.GET)
+	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
+		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
+		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
+		response.setContentType("application/pdf");
+		ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
+		pdfAppForm.export(applicationForm, response);
 	}
 
 	@RequestMapping(value = "getInterview/{applicationFormId}/{role}", method = RequestMethod.POST)

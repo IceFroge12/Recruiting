@@ -126,6 +126,30 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
         return false;
     };
 
+    $scope.exportAppForm = function(AppForm){
+        var config = {
+            method: 'GET',
+            url: "/staff/appForm"+ AppForm.id,
+            headers: {
+                'Accept': 'application/pdf'
+            }
+        };
+        $http(config)
+            .success(function(){
+                window.location = "/staff/appForm"+ AppForm.id;
+            })
+            .error(function(){
+                var myToastMsg = ngToast.warning({
+                    content: 'Error exporting Application Form ',
+                    timeout: 5000,  //TODO : Change color, position
+                    horizontalPosition: 'center',
+                    verticalPosition: 'bottom',
+                    dismissOnClick: true,
+                    combineDuplications: true,
+                    maxNumber: 2
+                });
+            });
+    };
 
 
 }
