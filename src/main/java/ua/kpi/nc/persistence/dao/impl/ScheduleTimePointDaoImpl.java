@@ -60,6 +60,8 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
 	private static final String DELETE_SCHEDULE_TIME_POINT = "DELETE FROM schedule_time_point WHERE id = ?";
 
+	private static final String SQL_IS_SCHEDULE_EXISTS = "SELECT EXISTS (SELECT stp.id FROM schedule_time_point stp)";
+	
 	@Override
 	public ScheduleTimePoint getFinalTimePointById(Long id) {
 		log.trace("Looking for Schedule time Point with id = ", id);
@@ -124,5 +126,13 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 			log.trace("Looking for all Schedule time Points");
 		}
 		return this.getJdbcTemplate().queryForList(GET_ALL, extractor);
+	}
+
+	@Override
+	public boolean isScheduleExists() {
+		if (log.isTraceEnabled()) {
+			log.trace("Checking the the existence of schedule.");
+		}
+		return this.getJdbcTemplate().queryWithParameters(SQL_IS_SCHEDULE_EXISTS, resultSet -> resultSet.getBoolean(1));
 	}
 }

@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase){
+    public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
         return userDao.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
     }
 
@@ -150,6 +150,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getAllEmployeeCount() {
         return userDao.getEmployeeCount();
+    }
+
+    @Override
+    public Long getAllEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+        return userDao.getEmployeeCountFiltered(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer, notIntrviewer, notEvaluated);
     }
 
     @Override

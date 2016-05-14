@@ -6,22 +6,22 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
 
     $scope.sort = {
         sortingOrder: 1,
-        reverse: false
+        reverse: true
     };
     $scope.gap = 5;
     $scope.filtered = false;
     $scope.filteredItems = [];
     $scope.groupedItems = [];
-    $scope.itemsPerPage = 9;
+    $scope.itemsPerPage = 10;
     $scope.currentPage = 1;
     $scope.items = [];
     $scope.amount = 0;
     $scope.sortingDir = 1;
     $scope.startId = 0;
     $scope.finishId = 1000;
-    $scope.rolesChoosen = [1,2,5];
+    $scope.rolesChoosen = [1, 2, 5];
     $scope.interviewer = true;
-    $scope.notInterviewer = false;
+    $scope.notInterviewer = true;
     $scope.notEvaluated = true; //TODO
     $scope.assignedStudents = [];
 
@@ -43,6 +43,15 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             $scope.showAllEmployees($scope.currentPage);
     });
 
+    $scope.$watch("itemsPerPage", function () {
+        $scope.currentPage = 1;
+        $scope.getCountOfEmployee();
+        if ($scope.filtered)
+            $scope.showFilteredEmployees($scope.currentPage);
+        else
+            $scope.showAllEmployees($scope.currentPage);
+    });
+
     staffManagementService.showFilteredEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse,
         $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
         $scope.notEvaluated).success(function (data) { //TODO
@@ -56,7 +65,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             console.log("error");
         });
 
-    staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, true).success(function (data) { //TODO
+    staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
         angular.forEach(data, function (value1, key1) {
             angular.forEach(value1.roles, function (value2, key2) {
                 value2.roleName = value2.roleName.slice(5);
@@ -73,9 +82,14 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.amount = Math.ceil(data / $scope.itemsPerPage);
     });
 
+    $scope.getCountOfEmployee = function(){
+        staffManagementService.getCountOfEmployee().success(function (data) {
+            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        });
+    };
+
     $scope.showFilteredEmployees = function showFilteredEmployees(pageNum) {
-        var itemsByPage = 10;
-        staffManagementService.showFilteredEmployees(pageNum, itemsByPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+        staffManagementService.showFilteredEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
             $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
             $scope.notEvaluated).success(function (data) { //TODO
                 angular.forEach(data, function (value1, key1) {
@@ -83,6 +97,9 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
                         value2.roleName = value2.roleName.slice(5);
                     })
                 });
+                console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+                    $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+                    $scope.notEvaluated);
                 $scope.allEmployee = data;
                 console.log(data);
             }, function error() {
@@ -91,13 +108,16 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     };
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
-        var itemsByPage = 10;
-        staffManagementService.showAllEmployees(pageNum, itemsByPage, $scope.sort.sortingOrder, true).success(function (data) { //TODO
+
+        staffManagementService.showAllEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
             angular.forEach(data, function (value1, key1) {
                 angular.forEach(value1.roles, function (value2, key2) {
                     value2.roleName = value2.roleName.slice(5);
                 })
             });
+            console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+                $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+                $scope.notEvaluated);
             $scope.allEmployee = data;
             console.log(data);
 
@@ -230,9 +250,9 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
 
     $scope.showAssigned = function (employee) {
         $http({
-            method : 'POST',
-            url : '/admin/showAssignedStudent',
-            params : {email:employee.email}
+            method: 'POST',
+            url: '/admin/showAssignedStudent',
+            params: {email: employee.email}
         }).success(function (data, status, headers) {
             console.log(data);
             $scope.assignedStudents = data;
@@ -241,7 +261,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             console.log(status);
         });
     };
-    
+
     var currentEmployee;
     $scope.getEmployee = function (employee) {
         currentEmployee = employee;
@@ -254,8 +274,6 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.allEmployee.splice(index, 1);
     };
 
-
-    
     $scope.deleteAssignedStudent = function () {
         console.log('deleteAssignedStudent');
         console.log(currentEmployee)
@@ -332,6 +350,12 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.finishId = $scope.slider.maxValue;
         $scope.currentPage = 1;
         $scope.showFilteredEmployees($scope.currentPage);
+
+        staffManagementService.getCountOfEmployeeFiltered($scope.currentPage, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+            $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+            $scope.notEvaluated).success(function (data) {
+                $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+            });
         $scope.filtered = true;
     }
 
@@ -388,5 +412,5 @@ angular.module('appStaffManagement').directive("customSort", function () {
 });
 
 
-angular.module('appStaffManagement', ['rzModule'])
+angular.module('appStaffManagement', [])
     .controller('staffManagementController', ['$scope', '$filter', '$http', 'staffManagementService', staffManagementController]);

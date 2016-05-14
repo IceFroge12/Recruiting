@@ -2,7 +2,7 @@
  * Created by dima on 29.04.16.
  */
 
-function studentManagementController($scope, studentManagementService) {
+function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.pageItems = 9;
     $scope.showFiltration = function () {
@@ -163,6 +163,18 @@ function studentManagementController($scope, studentManagementService) {
         studentManagementService.changeStatus(status,appFormId);
     };
 
+    $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
+        studentManagementService.showFilteredStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true, $scope.restrictions).success(function (data) {
+            $scope.allStudents = data;
+            var list = [];
+           checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
+            console.log("restrictions:  "+data);
+        }, function error() {
+            console.log("error");
+        });
+    };
+
+
     $scope.searchStudent = function (studentName) {
         console.log(studentName);
         studentManagementService.searchStudent(studentName,pageNum,$scope.pageItems, $scope.sort.sortingOrder).success(function (data) {
@@ -210,15 +222,55 @@ function studentManagementController($scope, studentManagementService) {
     };
 
     $scope.filter= function (){
-        $scope.startId = $scope.slider.minValue;
-        $scope.finishId = $scope.slider.maxValue;
-        $scope.showAllEmployees($scope.currentPage);
+        $scope.showFilteredStudents($scope.currentPage);
     };
     
 }
 
+angular.module('appStudentManagement').$inject = ['$scope', '$filter'];
+
+angular.module('appStudentManagement').directive("customSort", function () {
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            order: '=',
+            sort: '='
+        },
+        template: ' <a ng-click="sort_by(order)" style="color: #555555;">' +
+        '    <span ng-transclude></span>' +
+        '    <i ng-class="selectedCls(order)"></i>' +
+        '</a>',
+        link: function (scope) {
+
+            // change sorting order
+            scope.sort_by = function (newSortingOrder) {
+                var sort = scope.sort;
+
+                if (sort.sortingOrder == newSortingOrder) {
+                    sort.reverse = !sort.reverse;
+                }
+
+                sort.sortingOrder = newSortingOrder;
+            };
+
+
+            scope.selectedCls = function (column) {
+                if (column == scope.sort.sortingOrder) {
+                    return (' glyphicon glyphicon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
+                }
+                else {
+                    return 'glyphicon glyphicon-sort'
+                }
+            };
+        }
+    }
+
+
+});
+
 
 angular.module('appStudentManagement')
-    .controller('studentManagementController', ['$scope', 'studentManagementService', studentManagementController]);
+    .controller('studentManagementController', ['$scope', '$filter','studentManagementService', studentManagementController]);
 
 

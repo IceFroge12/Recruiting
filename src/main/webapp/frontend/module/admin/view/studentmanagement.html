@@ -38,8 +38,8 @@
                 <thead>
                 <tr>
                     <th class="student-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
-                    <th class="student-name" custom-sort order="5" sort="sort">Name&nbsp;</th>
-                    <th class="student-status" custom-sort order="2" sort="sort">Status&nbsp;</th>
+                    <th class="student-name" custom-sort order="2" sort="sort">Name&nbsp;</th>
+                    <th class="student-status">Status</th>
                     <th class="" custom-sort>Check&nbsp;</th>
                 </thead>
                 <tbody>
@@ -100,8 +100,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="question in questions"
-                        ng-if="question.type == 'checkbox' || question.type == 'radio' || question.type == 'select'">
+                    <tr ng-repeat="question in questions">
                         <td>{{question.title}}</td>
                         <td>
                                 <span ng-repeat="variant in question.variants track by $index ">

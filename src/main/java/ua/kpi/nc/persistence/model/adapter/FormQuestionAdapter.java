@@ -1,11 +1,15 @@
 package ua.kpi.nc.persistence.model.adapter;
 
 import com.google.gson.*;
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 
 import java.lang.reflect.Type;
 
+/**
+ * Created by Chalienko on 03.05.2016.
+ */
 public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
     @Override
     public JsonElement serialize(FormQuestion formQuestion, Type type, JsonSerializationContext jsonSerializationContext) {
@@ -28,4 +32,21 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
         return jsonObject;
     }
 
+    @Override
+    public FormQuestion deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        FormQuestion formQuestion = new FormQuestionImpl();
+        JsonObject jsonObject = (JsonObject) jsonElement;
+        formQuestion.setId(jsonObject.get("id").getAsLong());
+        formQuestion.setTitle(jsonObject.get("title").getAsString());
+        formQuestion.setQuestionType(new QuestionType(jsonObject.get("type").getAsString()));
+        formQuestion.setMandatory(jsonObject.get("mandatory").getAsBoolean());
+        formQuestion.setEnable(jsonObject.get("enable").getAsBoolean());
+        List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
+        for(JsonElement arrayElement: jsonObject.get("variants").getAsJsonArray()){
+            JsonObject jsonVariant = (JsonObject) arrayElement;
+            formAnswerVariantList.add(new FormAnswerVariantImpl(jsonVariant.get("variant").getAsString()));
+        }
+        formQuestion.setFormAnswerVariants(formAnswerVariantList);
+        return formQuestion;
+    }
 }

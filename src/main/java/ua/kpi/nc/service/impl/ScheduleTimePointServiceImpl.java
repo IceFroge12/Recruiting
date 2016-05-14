@@ -52,4 +52,9 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	public List<ScheduleTimePoint> getAll() {
 		return scheduleTimePointDao.getAll();
 	}
+
+	@Override
+	public boolean isScheduleExists() {
+		return scheduleTimePointDao.isScheduleExists();
+	}
 }

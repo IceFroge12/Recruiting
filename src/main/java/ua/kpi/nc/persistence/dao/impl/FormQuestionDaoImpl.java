@@ -61,6 +61,11 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
     private static final String SQL_GET_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
             + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ?;";
+
+    private static final String SQL_GET_BY_ROLE_NONTEXT = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
+            + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ? AND (fq."
+            + ID_QUESTION_TYPE_COL + "= ANY('{2,3,4}'::int[]));";
+
     private static final String SQL_GET_ENABLE_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
             + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ? AND fq." + ENABLE_COL + " = true";
     
@@ -136,6 +141,12 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     public List<FormQuestion> getByRole(Role role) {
         log.info("Looking for form question by role = {}", role.getRoleName());
         return this.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE, extractor, role.getId());
+    }
+
+    @Override
+    public List<FormQuestion> getByRoleNonText(Role role) {
+        log.info("Looking for non text form question by role = {}", role.getRoleName());
+        return this.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE_NONTEXT, extractor, role.getId());
     }
 
     @Override

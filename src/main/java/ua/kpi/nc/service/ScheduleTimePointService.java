@@ -23,4 +23,6 @@ public interface ScheduleTimePointService {
 	ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
 
 	List<ScheduleTimePoint> getAll();
+
+	boolean isScheduleExists();
 }

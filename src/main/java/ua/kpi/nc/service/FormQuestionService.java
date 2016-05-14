@@ -31,6 +31,8 @@ public interface FormQuestionService {
 
 	List<FormQuestion> getByRole(Role role);
 
+	List<FormQuestion> getByRoleNonText(Role role);
+
 	List<FormQuestion> getAll();
 	
 	List<FormQuestion> getEnableByRole(Role role);

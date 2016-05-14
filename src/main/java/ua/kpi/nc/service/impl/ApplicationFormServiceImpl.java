@@ -11,10 +11,7 @@ import ua.kpi.nc.persistence.dao.ApplicationFormDao;
 import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
-import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
@@ -140,4 +137,18 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 		return applicationFormDao.getCurrentApplicationForms(fromRow, rowsNum, sortingCol, increase);
 	}
 
+	@Override
+	public List<ApplicationForm> getCurrentsApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions) {
+		return applicationFormDao.getCurrentApplicationFormsFiltered(fromRow, rowsNum, sortingCol, increase, questions);
+	}
+	
+	@Override
+	public Long getCountInReviewAppForm() {
+		return applicationFormDao.getCountInReviewAppForm();
+	}
+
+	@Override
+	public List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment) {
+		return applicationFormDao.getByStatusAndRecruitment(status, recruitment);
+	}
 }

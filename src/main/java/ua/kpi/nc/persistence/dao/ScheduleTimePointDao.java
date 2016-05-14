@@ -26,4 +26,6 @@ public interface ScheduleTimePointDao {
 
 	List<ScheduleTimePoint> getAll();
 
+	boolean isScheduleExists();
+
 }
