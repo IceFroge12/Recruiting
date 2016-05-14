@@ -3,26 +3,26 @@
 
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
-        <label class="col-md-6">Active Soft Employee: {{activeSoft}}</label>
-        <label class="col-md-6">Active Tech Employee: {{activeTech}}</label>
         <div>
             <div class="row">
-                <button id="add-empl" class="btn btn-info btn-sm col-md-2 " type="button"
+                <label class="col-md-2">Active Soft Employee: {{activeSoft}}</label>
+                <label class="col-md-2">Active Tech Employee: {{activeTech}}</label>
+                <button id="add-empl" class="btn btn-info btn-sm col-md-2 col-md-offset-6 " type="button"
                         data-toggle="modal"
                         data-target="#addEmployee">Add
                     employee
                 </button>
-                <button id="filter" class="btn btn-info btn-sm col-md-2 col-sm-offset-8" type="button"
+            </div>
+            <div class="row">
+                <button id="filter" class="btn btn-info btn-sm col-md-2" type="button"
                         data-toggle="modal"
                         data-target="#filterTable" ng-click="showFiltration()">Filter table
                 </button>
-            </div>
-            <div class="row">
-                <div class="col-md-3 info-text">Search:
+                <div class="col-md-3 info-text col-md-offset-2">Search:
                     <input ng-model-options="{ debounce: 1000 }"
                            ng-model="employeeName" ng-change="searchEmployee(employeeName)">
                 </div>
-                <div class="col-md-2 col-md-offset-7">Show
+                <div class="col-md-2 col-sm-offset-3">Show
                     <select ng-model="itemsPerPage">
                         <option value="5">5</option>
                         <option value="10">10</option>

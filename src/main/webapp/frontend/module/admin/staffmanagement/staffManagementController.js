@@ -186,7 +186,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     };
 
     $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.pagedItems.amount - 1) {
+        if ($scope.currentPage < $scope.pageItems.amount - 1) {
             $scope.currentPage++;
         }
     };
@@ -412,5 +412,5 @@ angular.module('appStaffManagement').directive("customSort", function () {
 });
 
 
-angular.module('appStaffManagement', [])
+angular.module('appStaffManagement')
     .controller('staffManagementController', ['$scope', '$filter', '$http', 'staffManagementService', staffManagementController]);

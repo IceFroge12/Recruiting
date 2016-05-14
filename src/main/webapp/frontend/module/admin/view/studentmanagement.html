@@ -9,36 +9,56 @@
                 <div class="col-md-2"><h6><i>Approved to advanced: {{approvedToAdvanced}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Approved to general: {{approvedToGeneral}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
-                <label class="col-md-6">Search:
+
+                <div class="col-md-4">
+                    <tr ng-repeat="student in allStudents">
+                        <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">
+                            Confirm
+                            selection
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results
+                        </button>
+                    </tr>
+                </div>
+            </div>
+            <div class="row">
+                    <button ng-click="showFiltration()" class="btn btn-info btn-sm col-md-2" type="button"
+                            data-toggle="modal"
+                            data-target="#filtration">
+                        Filter table
+                    </button>
+                <label class="col-md-3 info-text col-md-offset-2">Search:
                     <input ng-model-options="{ debounce: 1000 }"
                            ng-model="studentName" ng-change="searchStudent(studentName)">
                 </label>
-            </div>
-            <div class="col-md-5">
-                <tr ng-repeat="student in allStudents">
-                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm
-                        selection
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
-                    <select  ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
-                        <option  ng-repeat="st in statusTemp">{{st.title}}</option>
-                    </select>
-                    <button type="button" ng-click="applyStatus()">Apply Status</button>
-                </tr>
-            </div>
 
-            <form class="form-search inline-display col-md-2 col-md-offset-5">
-                <button ng-click="showFiltration()" class="btn btn-sm btn-info search-element" type="button"
-                        data-toggle="modal"
-                        data-target="#filtration">
-                    Filter table
-                </button>
-            </form>
+                <div class="col-md-2 col-sm-offset-3">Show
+                    <select ng-model="itemsPerPage">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                    </select>
+                    entries
+                </div>
+            </div>
             <table class="table table-condensed table-hover col-md-8">
                 <thead>
                 <tr>
-                    <th class="student-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
-                    <th class="student-name" custom-sort order="2" sort="sort">Name&nbsp;</th>
+                    <th></th>
+                    <th></th>
+                    <th><select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
+                        <option ng-repeat="st in statusTemp">{{st.title}}</option>
+                    </select>
+                        <button type="button" ng-click="applyStatus()" class="btn btn-sm btn-info search-element">Apply Status to checked</button>
+                    </th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>
+                    <th class="student-name" custom-sort-stud order="2" sort="sort">Name&nbsp;</th>
                     <th class="student-status">Status</th>
                     <th class="" custom-sort>Check&nbsp;</th>
                 </thead>
@@ -47,8 +67,10 @@
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
-                        <select ng-model="student.status"  ng-change ="changeStatus(student.status,student.appFormId)" >
-                            <option ng-repeat="stat in student.possibleStatus" ng-checked ="stat.title==student.status" >{{stat.title}}</option>
+                        <select ng-model="student.status" ng-change="changeStatus(student.status,student.appFormId)">
+                            <option ng-repeat="stat in student.possibleStatus" ng-checked="stat.title==student.status">
+                                {{stat.title}}
+                            </option>
                         </select>
                     <td>
                         <input type="checkbox" ng-click="checkStudentStatus(student)">

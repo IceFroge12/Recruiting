@@ -4,7 +4,6 @@
 
 function studentManagementController($scope,$filter, studentManagementService) {
 
-    $scope.pageItems = 9;
     $scope.showFiltration = function () {
         $scope.questions = [];
         $scope.restrictions = [];
@@ -20,9 +19,11 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.items = [];
     $scope.amount = 0;
     $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
     $scope.status;
     $scope.statuses = [];
     $scope.UnivList=[];
+    $scope.filtered = false;
 
     function getAllQuestions() {
         studentManagementService.getAllQuestions().then(function success(data) {
@@ -102,22 +103,32 @@ function studentManagementController($scope,$filter, studentManagementService) {
     
     $scope.$watch("sort.reverse", function () {
         $scope.currentPage = 1;
-        $scope.showAllStudents($scope.currentPage);
-        console.log($scope.currentPage);
-        console.log($scope.sort.reverse);
-        console.log($scope.sort.sortingOrder);
+        if ($scope.filtered)
+            $scope.showFilteredStudents($scope.currentPage);
+        else
+            $scope.showAllStudents($scope.currentPage);
+
     });
     
     $scope.$watch("sort.sortingOrder", function () {
         $scope.currentPage = 1;
-        $scope.showAllStudents($scope.currentPage);
-        console.log($scope.currentPage);
-        console.log($scope.sort.reverse);
-        console.log($scope.sort.sortingOrder);
+        if ($scope.filtered)
+            $scope.showFilteredStudents($scope.currentPage);
+        else
+            $scope.showAllStudents($scope.currentPage);
+
     });
 
+    $scope.$watch("itemsPerPage", function () {
+        $scope.currentPage = 1;
+        $scope.getCountOfStudents();
+        if ($scope.filtered)
+            $scope.showFilteredStudents($scope.currentPage);
+        else
+            $scope.showAllStudents($scope.currentPage);
+    });
 
-    studentManagementService.showAllStudents(1, $scope.pageItems, $scope.sort.sortingOrder,true).success(function (data) { 
+    studentManagementService.showAllStudents(1, $scope.itemsPerPage, $scope.sort.sortingOrder,$scope.sort.reverse).success(function (data) {
         $scope.allStudents= data;
         console.log("All students " + data)
     }, function error() {
@@ -126,8 +137,15 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     studentManagementService.getCountOfStudents().success(function (data) {
         console.log("Count of students" + data);
-        $scope.amount = Math.ceil(data / $scope.pageItems);
+        $scope.amount = Math.ceil(data / $scope.itemsPerPage);
     });
+
+    $scope.getCountOfStudents = function(){
+        studentManagementService.getCountOfStudents().success(function (data) {
+            console.log("Count of students" + data);
+            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        });
+    };
 
     $scope.statusIdArray = [];
     $scope.checkStudentStatus = function (student) {
@@ -137,7 +155,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.statusTemp = [];
     $scope.showAllStudents = function showAllStudents(pageNum) {
-        studentManagementService.showAllStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true).success(function (data) {
+        studentManagementService.showAllStudents(pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder,$scope.sort.reverse).success(function (data) {
             $scope.allStudents = data;
             $scope.statusTemp = $scope.allStudents[0].possibleStatus.slice(0);
         }, function error() {
@@ -164,7 +182,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     };
 
     $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
-        studentManagementService.showFilteredStudents(pageNum,$scope.pageItems, $scope.sort.sortingOrder,true, $scope.restrictions).success(function (data) {
+        studentManagementService.showFilteredStudents(pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder,$scope.sort.reverse, $scope.restrictions).success(function (data) {
             $scope.allStudents = data;
             var list = [];
            checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
@@ -177,7 +195,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.searchStudent = function (studentName) {
         console.log(studentName);
-        studentManagementService.searchStudent(studentName,pageNum,$scope.pageItems, $scope.sort.sortingOrder).success(function (data) {
+        studentManagementService.searchStudent(studentName,pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder).success(function (data) {
             console.log(data);
             $scope.allStudents = data;
         }, function error() {
@@ -210,7 +228,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     };
 
     $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.pageItems.amount - 1) {
+        if ($scope.currentPage < $scope.itemsPerPage.amount - 1) {
             $scope.currentPage++;
         }
     };
@@ -229,7 +247,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
 angular.module('appStudentManagement').$inject = ['$scope', '$filter'];
 
-angular.module('appStudentManagement').directive("customSort", function () {
+angular.module('appStudentManagement').directive("customSortStud", function () {
     return {
         restrict: 'A',
         transclude: true,
