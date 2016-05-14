@@ -25,4 +25,6 @@ public class AdminSchedulingController {
         return applicationFormService.getCountRecruitmentStudents(recruitment.getId());
     }
 
+
+
 }
