@@ -7,6 +7,7 @@ import java.util.Collections;
 /**
  * Created by natalya on 14.05.2016.
  */
+
 public class CreatingOfAllSchedules {
 
     // Необхідні параметри для класу AllActivityAboutFindingTeachers
@@ -24,14 +25,14 @@ public class CreatingOfAllSchedules {
     private ArrayList<User> undistributedStudents = new ArrayList<>(); // Список нерозподілених студентів
     private ArrayList<Integer> realNumberOfAvailableIntervForEachDay = new ArrayList<>(); // Список. Реальна к-сть співбесід в кожний день, що можуть відбутися
     private ArrayList<Integer> timesList = new ArrayList<>(); // Список. Перелік годин, з яких студенти вибирали собі підходящі
-    private ArrayList<ScheduleCell> studentsSchedule = new ArrayList<>(); // розклад для студентів
+    private ArrayList<StudentsScheduleCell> studentsSchedule = new ArrayList<>(); // розклад для студентів
     private boolean studentsScheduleIsAlreadyCreated = false; // чи вже побудований розклад для студентів
     private int numbOfSatisfiedStudents = 0; // К-сть студентів, кого розклад задовільнив
     private int numbOfStudWithScheduleOnAFewHourLater; // К-сть студентів, кого розклад не задовільнив, бо час співбесіди зсунувся на кілька годин ВПЕРЕД від бажаного
     private int numbOfStudWithScheduleOnAFewHourBefore; // К-сть студентів, кого розклад не задовільнив, бо час співбесіди зсунувся на кілька годин НАЗАд від бажаного
     private int numbOfStudWithScheduleOnAnotherDay; // К-сть студентів, кого розклад не задовільнив, бо день співбесіди - той, на який вони взагалі не вибирали години
 
-    private ArrayList<ScheduleCell> teachersSchedule = new ArrayList<>(); // розклад для викладачів
+    private ArrayList<TeachersScheduleCell> teachersSchedule = new ArrayList<>(); // розклад для викладачів
     private boolean teachersScheduleIsAlreadyCreated = false; // чи вже побудований розклад для викладачів
     private ArrayList<User> allLongTeachers = new ArrayList<>(); // список всі викладачів з довшою співбесідою
     private ArrayList<User> allShortTeachers = new ArrayList<>(); // список всі викладачів з коротшою співбесідою
@@ -77,7 +78,12 @@ public class CreatingOfAllSchedules {
         this.numbOfBookedPositionByShortTeacherForEachDay = numbOfBookedPositionByShortTeacherForEachDay;
 
         // todo Поки просто витягаю з класу AllActivityAboutFindingTeachers, а взагалі треба звіряти з БД (якщо буде доданий складніший функціонал для адміна)
-        this.realNumberOfAvailableIntervForEachDay = AllActivityAboutFindingTeachers.getNumbOfAvailableIntervForEachDayByRegisteredTeachers(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+        this.realNumberOfAvailableIntervForEachDay =
+                AllActivityAboutFindingTeachers.getNumbOfAvailableIntervForEachDayByRegisteredTeachers(numbOfStudents,
+                        durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing,
+                        numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv,
+                        totalNumbOfRegisteredTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                        numbOfBookedPositionByShortTeacherForEachDay);
 
         this.allLongTeachers = allLongTeachers;
         this.allShortTeachers = allShortTeachers;
@@ -86,7 +92,11 @@ public class CreatingOfAllSchedules {
     // todo Така перевірка неправильна, якщо адмін вирішив сам дознайти викладачів (якщо цей функціонла буде додано). Тоді треба перевіряти в БД, чи був такий запис.
     // Перевірка достатньості к-сті викладачів
     private boolean checkAdequacyOfNumberOfTeachers(){
-        double mainPercent = AllActivityAboutFindingTeachers.getTotalPercentageOfAvailableIntervByRegisteredTeachers(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+        double mainPercent = AllActivityAboutFindingTeachers.getTotalPercentageOfAvailableIntervByRegisteredTeachers(numbOfStudents,
+                durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing,
+                numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv,
+                totalNumbOfRegisteredTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return mainPercent >= 80.0;
     }
 
@@ -106,13 +116,13 @@ public class CreatingOfAllSchedules {
                 currentDay = datesAndTimes.getDay();
             }
 
-            ScheduleCell scheduleCell = new ScheduleCell();
-            scheduleCell.setDateAndHour(datesAndTimes);
+            StudentsScheduleCell studentsScheduleCell = new StudentsScheduleCell();
+            studentsScheduleCell.setDateAndHour(datesAndTimes);
 
             // Хоча й так має націло завжди ділитися
-            scheduleCell.setNumberOfFreePlace((int) Math.ceil(realNumberOfAvailableIntervForEachDay.get(iter) * 1.0 / numbOfHoursForIntervForDay));
+            studentsScheduleCell.setNumberOfFreePlace((int) Math.ceil(realNumberOfAvailableIntervForEachDay.get(iter) * 1.0 / numbOfHoursForIntervForDay));
 
-            studentsSchedule.add(scheduleCell);
+            studentsSchedule.add(studentsScheduleCell);
         }
 
         // Цикл 1:
@@ -330,18 +340,127 @@ public class CreatingOfAllSchedules {
             }
         }
 
+        // складаємо пустий розклад
+        int currentDay = datesAndTimesList.get(0).getDay(); // поточний день
+        TeachersScheduleCell teachersScheduleCell = new TeachersScheduleCell();
+        teachersScheduleCell.setDate(datesAndTimesList.get(0));
+        teachersSchedule.add(teachersScheduleCell);
+        for (Timestamp datesAndTimes : datesAndTimesList) {
+            if(datesAndTimes.getDay() != currentDay){ // якщо перейшли на наступний день
+                TeachersScheduleCell teachersScheduleCellNew = new TeachersScheduleCell();
+                teachersScheduleCellNew.setDate(datesAndTimes);
+                teachersSchedule.add(teachersScheduleCellNew);
+                currentDay = datesAndTimes.getDay();
+            }
+        }
 
-        // todo Написати складання розкладу для викладачів
+        // Рахую фактичну к-сть співбесід в день
+        ArrayList<Integer> realNumbOfIntervFromStudentsScheduleForEachDay = new ArrayList<>();
+        int curDay = studentsSchedule.get(0).getDateAndHour().getDay();
+        int numbOfInterv = 0;
+        for (int i = 1; i < studentsSchedule.size(); i++) {
+            if(studentsSchedule.get(i).getDateAndHour().getDay() != curDay){
+                realNumbOfIntervFromStudentsScheduleForEachDay.add(numbOfInterv);
+                curDay = studentsSchedule.get(i).getDateAndHour().getDay();
+                numbOfInterv = 0;
+            }
+            numbOfInterv += studentsSchedule.get(i).getStudents().size();
+        }
+        realNumbOfIntervFromStudentsScheduleForEachDay.add(numbOfInterv); // останній в циклі не запишеть, а лише нарахується
 
-        /*ArrayList<Integer> necessaryNumberOfLongTeacherForEachDay = new ArrayList<>();
-        ArrayList<Integer> necessaryNumberOfShortTeacherForEachDay = new ArrayList<>();
-        this.realNumberOfAvailableIntervForEachDay = AllActivityAboutFindingTeachers.getNumbOfAvailableIntervForEachDayByRegisteredTeachers(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);*/
+        // к-сть інтерв'ю групою викладачів в день
+        int numbOfIntervByGroupOfTeacherPerDay = AllActivityAboutFindingTeachers.getNumbOfIntervByGroupOfTeacherPerDay(numbOfStudents,
+                durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing,
+                numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv,
+                totalNumbOfRegisteredTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
+
+        // Рахую необхідну к-сть груп викладачів (округлити до більшого) на кожний день:
+        ArrayList<Integer> necessaryNumbOfGroupOfTeacherForEachDay = new ArrayList<>();
+        for (int i = 0; i < realNumbOfIntervFromStudentsScheduleForEachDay.size(); i++) {
+            necessaryNumbOfGroupOfTeacherForEachDay.add((int) Math.ceil(realNumbOfIntervFromStudentsScheduleForEachDay.get(i) * 1.0 /  numbOfIntervByGroupOfTeacherPerDay));
+        }
+
+        // відношення викладачів в групі
+        int N = AllActivityAboutFindingTeachers.getN(numbOfStudents, durationOfLongIntervInMinutes,
+                durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay,
+                totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv,
+                numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+
+        // Рахую к-сть викладчів з довшою й коротшою співбесідою на кожний день
+        ArrayList<Integer> necessaryNumbOfLongTeacherForEachday = new ArrayList<>();
+        ArrayList<Integer> necessaryNumbOfShortTeacherForEachday = new ArrayList<>();
+        for (int i = 0; i < necessaryNumbOfGroupOfTeacherForEachDay.size(); i++) {
+            necessaryNumbOfLongTeacherForEachday.add(necessaryNumbOfGroupOfTeacherForEachDay.get(i) * N);
+            necessaryNumbOfShortTeacherForEachday.add(necessaryNumbOfGroupOfTeacherForEachDay.get(i) * 1);
+        }
+
+        // додаю в розклад викладачів з довшою співбесідою
+        ArrayList<User> tmpLongTeachersList = new ArrayList<>();
+        tmpLongTeachersList.addAll(allLongTeachers);
+        for (int k = 0; k < teachersSchedule.size(); k++) { // проходжуся по розкладу
+            for (int i = 0; i < tmpLongTeachersList.size(); i++) { // по викладачам
+                // якщо поточний викладач вибрав собі цей день (перевірка року, місяя й дня)
+                ArrayList<Timestamp> timestampsCurTeacher = tmpLongTeachersList.get(i).getTimesAndDates();
+                for (int j = 0; j < timestampsCurTeacher.size(); j++) {
+                    if(timestampsCurTeacher.get(j).getYear() == teachersSchedule.get(k).getDate().getYear() &&
+                            timestampsCurTeacher.get(j).getMonth() == teachersSchedule.get(k).getDate().getMonth() &&
+                            timestampsCurTeacher.get(j).getDay() == teachersSchedule.get(k).getDate().getDay()){
+
+                        // і якщо в цей день ще потрібні викладачі
+                        if(necessaryNumbOfLongTeacherForEachday.get(k) > 0){
+                            // записую викладача в розклад
+                            teachersSchedule.get(k).getTeachers().add(tmpLongTeachersList.get(i));
+                            // зменшую к-сть необхідних викладачів в день
+                            necessaryNumbOfLongTeacherForEachday.set(k, necessaryNumbOfLongTeacherForEachday.get(k) -1);
+                        }
+
+                        // видаляю з тимчасового списку цей вибір викладача, бо якщо ми сюди дійшли, то вже перевірили його
+                        tmpLongTeachersList.get(i).getTimesAndDates().remove(j);
+                        j--;
+                        break;
+                    }
+
+                }
+            }
+        }
+
+        // додаю в розклад викладачів з коротшою співбесідою
+        ArrayList<User> tmpShortTeachersList = new ArrayList<>();
+        tmpShortTeachersList.addAll(allShortTeachers);
+
+        for (int k = 0; k < teachersSchedule.size(); k++) { // проходжуся по розкладу
+            for (int i = 0; i < tmpShortTeachersList.size(); i++) { // по викладачам
+                // якщо поточний викладач вибрав собі цей день (перевірка року, місяя й дня)
+                ArrayList<Timestamp> timestampsCurTeacher = tmpShortTeachersList.get(i).getTimesAndDates();
+                for (int j = 0; j < timestampsCurTeacher.size(); j++) {
+                    if(timestampsCurTeacher.get(j).getYear() == teachersSchedule.get(k).getDate().getYear() &&
+                            timestampsCurTeacher.get(j).getMonth() == teachersSchedule.get(k).getDate().getMonth() &&
+                            timestampsCurTeacher.get(j).getDay() == teachersSchedule.get(k).getDate().getDay()){
+
+                        // і якщо в цей день ще потрібні викладачі
+                        if(necessaryNumbOfShortTeacherForEachday.get(k) > 0){
+                            // записую викладача в розклад
+                            teachersSchedule.get(k).getTeachers().add(tmpShortTeachersList.get(i));
+                            // зменшую к-сть необхідних викладачів в день
+                            necessaryNumbOfShortTeacherForEachday.set(k, necessaryNumbOfShortTeacherForEachday.get(k) -1);
+                        }
+
+                        // видаляю з тимчасового списку цей вибір викладача, бо якщо ми сюди дійшли, то вже перевірили його
+                        tmpShortTeachersList.get(i).getTimesAndDates().remove(j);
+                        j--;
+                        break;
+                    }
+
+                }
+            }
+        }
 
         teachersScheduleIsAlreadyCreated = true;
         return true;
     }
 
-    public ArrayList<ScheduleCell> getStudentsSchedule() {
+    public ArrayList<StudentsScheduleCell> getStudentsSchedule() {
         if(!studentsScheduleIsAlreadyCreated){ // якщо розклад для студентів ще не створений
             if(!calcucateStudentsSchedule()){ // створюємо його й перевіряємо булівський результат
                 return null;
@@ -367,7 +486,7 @@ public class CreatingOfAllSchedules {
         return numbOfStudWithScheduleOnAnotherDay;
     }
 
-    public ArrayList<ScheduleCell> getTeachersSchedule() {
+    public ArrayList<TeachersScheduleCell> getTeachersSchedule() {
         if(!teachersScheduleIsAlreadyCreated){ // якщо розклад для викладачів ще не створений
             if(!calculateTeachersSchedule()){ // створюємо його й перевіряємо булівський результат
                 return null;

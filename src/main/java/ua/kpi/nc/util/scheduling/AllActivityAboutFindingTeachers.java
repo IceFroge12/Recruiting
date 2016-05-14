@@ -5,6 +5,8 @@ import java.util.ArrayList;
  * Created by natalya on 14.05.2016.
  */
 
+import java.util.ArrayList;
+
 public class AllActivityAboutFindingTeachers {
     // Пояснення параметрів, що передаємо в кожний метод:
     /*
@@ -53,8 +55,10 @@ public class AllActivityAboutFindingTeachers {
 
     // 1.1
     private static void calculationOfNecessaryNumbOfTeacher(int numbOfStudents, int durationOfLongIntervInMinutes,
-                                                            int durationOfShortIntervInMinutes, int numbOfAllDaysForInterviewing,
-                                                            int numbOfHoursForIntervForDay, int totalNumbOfRegistersdTeachersWithLongerInterv,
+                                                            int durationOfShortIntervInMinutes,
+                                                            int numbOfAllDaysForInterviewing,
+                                                            int numbOfHoursForIntervForDay,
+                                                            int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                             int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                             ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
                                                             ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
@@ -103,19 +107,23 @@ public class AllActivityAboutFindingTeachers {
         necessaryNumbOfShortTeachPerDay = necessaryNumbOfGroupOfTeachPerDay;
 
         // Адмін запрошує таку к-сть викладаіч (120% від обрахованої):
-        totalNumberOfNecessaryTeacherWithLongerInterview = (int) Math.ceil(1.2 * necessaryNumbOfLongTeachPerDay * numbOfAllDaysForInterviewing);
-        totalNumberOfNecessaryTeacherWithShorterInterview = (int) Math.ceil(1.2 * necessaryNumbOfShortTeachPerDay * numbOfAllDaysForInterviewing);
+        totalNumberOfNecessaryTeacherWithLongerInterview = (int) Math.ceil(1.2 * necessaryNumbOfLongTeachPerDay *  numbOfAllDaysForInterviewing);
+        totalNumberOfNecessaryTeacherWithShorterInterview = (int) Math.ceil(1.2 * necessaryNumbOfShortTeachPerDay *  numbOfAllDaysForInterviewing);
     }
 
     // 1.2
     private static void calculationForStatisticData(int numbOfStudents, int durationOfLongIntervInMinutes,
                                                     int durationOfShortIntervInMinutes, int numbOfAllDaysForInterviewing,
-                                                    int numbOfHoursForIntervForDay, int totalNumbOfRegistersdTeachersWithLongerInterv,
+                                                    int numbOfHoursForIntervForDay,
+                                                    int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                     int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                     ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                    ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
+                                                    ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
         // всі попередні розрахунки (там обраховується частина необхідних змінних)
-        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
 
         //  Відсоток набраних викладачів з довшою співбесідою в кожний день:
         percentageOfRegisteredTeacherWithLongIntervForEachDay = new ArrayList<>();
@@ -175,15 +183,16 @@ public class AllActivityAboutFindingTeachers {
         // К-сть можливих співбесід в і-й день з поточною к-стю викладачів
         numbOfAvailableIntervForEachDayByRegisteredTeachers = new ArrayList<>();
         for (int i = 0; i < numbOfAllDaysForInterviewing; i++) {
-            if (numbOfBookedPositionByLongTeacherForEachDay.get(i) * 1.0 % N != 0) { // якщо є неповна група
+            if(numbOfBookedPositionByLongTeacherForEachDay.get(i) * 1.0 % N != 0){ // якщо є неповна група
 
                 // якщо в неповній групі є, як мінімум, по одному викладачу кожного типу (тобто залишилося перевірити, чи є лишній короткий, бо довгий лишній вже точно є)
-                if (numbOfBookedPositionByShortTeacherForEachDay.get(i) > numbOfAvailableTeachGroupForEachDayByRegisteredTeachers.get(i)) {
+                if(numbOfBookedPositionByShortTeacherForEachDay.get(i) > numbOfAvailableTeachGroupForEachDayByRegisteredTeachers.get(i)){
                     numbOfAvailableIntervForEachDayByRegisteredTeachers.add(numbOfAvailableTeachGroupForEachDayByRegisteredTeachers.get(i) * numbOfIntervByGroupOfTeacherPerHour * numbOfHoursForIntervForDay + numbOfIntervByNOTFullGroupOfTeacherPerHour * numbOfHoursForIntervForDay);
                 } else {
                     numbOfAvailableIntervForEachDayByRegisteredTeachers.add(0);
                 }
-            } else { // якщо к-сть груп - ціла
+            }
+            else { // якщо к-сть груп - ціла
                 numbOfAvailableIntervForEachDayByRegisteredTeachers.add(numbOfAvailableTeachGroupForEachDayByRegisteredTeachers.get(i) * numbOfIntervByGroupOfTeacherPerHour * numbOfHoursForIntervForDay);
             }
         }
@@ -226,16 +235,18 @@ public class AllActivityAboutFindingTeachers {
             int dayWithMinNumber = 0;
             int min = tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.get(0);
             for (int j = 1; j < numbOfAllDaysForInterviewing; j++) {
-                if (tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.get(j) < min) {
+                if(tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.get(j) < min){
                     min = tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.get(j);
                     dayWithMinNumber = j;
                 }
             }
 
             // збільшую в цей день к-сть невистачаючих груп викладачів на одну
-            numberOfNecessaryGroupOfTeacherForEachDay.set(dayWithMinNumber, numberOfNecessaryGroupOfTeacherForEachDay.get(dayWithMinNumber) + 1);
+            numberOfNecessaryGroupOfTeacherForEachDay.set(dayWithMinNumber,
+                    numberOfNecessaryGroupOfTeacherForEachDay.get(dayWithMinNumber) + 1);
             // записую на цей день додаткову співбесіду
-            tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.set(dayWithMinNumber, tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.get(dayWithMinNumber) + 1);
+            tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.set(dayWithMinNumber,
+                    tmpCopyOfNumbOfAvailableIntervForEachDayByRegisteredTeachers.get(dayWithMinNumber) + 1);
         }
 
         // К-сть довших викладачів, яких ще треба запросити на і-й день
@@ -258,19 +269,21 @@ public class AllActivityAboutFindingTeachers {
     // 1.3
     public static int getNumberOfRedundantStudents(int numbOfStudents, int durationOfLongIntervInMinutes,
                                                    int durationOfShortIntervInMinutes, int numbOfAllDaysForInterviewing,
-                                                   int numbOfHoursForIntervForDay, int totalNumbOfRegistersdTeachersWithLongerInterv,
+                                                   int numbOfHoursForIntervForDay,
+                                                   int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                    int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                    ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                   ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
+                                                   ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
         calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
                 numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
                 totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
                 numbOfBookedPositionByShortTeacherForEachDay);
-        double percentage = 100.0; // На стільки відсотків має задовільняти наявна к-сть викладачів студентів, що залишаться після відінмання цих
-        return (int) (numbOfStudents - Math.ceil(1.0 * totalNumbOfAvailableIntervByRegisteredTeachers * percentage / totalPercentageOfAvailableIntervByRegisteredTeachers));
+        /*double percentage = 100.0; // На стільки відсотків має задовільняти наявна к-сть викладачів студентів, що залишаться після відінмання цих
+        return (int) (numbOfStudents - Math.ceil(1.0 * totalNumbOfAvailableIntervByRegisteredTeachers * percentage / totalPercentageOfAvailableIntervByRegisteredTeachers));*/
+        return (numbOfStudents - totalNumbOfAvailableIntervByRegisteredTeachers) >= 0 ? numbOfStudents - totalNumbOfAvailableIntervByRegisteredTeachers : 0;
     }
 
-    private static double roundTo2(double numb) {
+    private static double roundTo2(double numb){
         numb = (int) (numb * 100);
         numb = numb / 100.0;
         return numb;
@@ -279,30 +292,38 @@ public class AllActivityAboutFindingTeachers {
     // загальна необхідна к-сть викладачів з довшою співбесідою (не перераховується, а рахується лише на початку; 120%)
     // якщо студенти й викладачі вже почнуть набиратися, ці дані залишаться НЕЗМІННИМИ - скільки адміну треба було запросити відпочатку
     // Це інфа для першої розсилки запрошень викладачам
-    public static int getTotalNumberOfNecessaryTeacherWithLongerInterview(int numbOfStudents, int durationOfLongIntervInMinutes,
+    public static int getTotalNumberOfNecessaryTeacherWithLongerInterview(int numbOfStudents,
+                                                                          int durationOfLongIntervInMinutes,
                                                                           int durationOfShortIntervInMinutes,
                                                                           int numbOfAllDaysForInterviewing,
                                                                           int numbOfHoursForIntervForDay,
                                                                           int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                           int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                           ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                          ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                          ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return totalNumberOfNecessaryTeacherWithLongerInterview;
     }
 
     // загальна необхідна к-сть викладачів з коротшою співбесідою (не перераховується, а рахується лише на початку; 120%)
     // якщо студенти й викладачі вже почнуть набиратися, ці дані залишаться НЕЗМІННИМИ - скільки адміну треба було запросити відпочатку
     // Це інфа для першої розсилки запрошень викладачам
-    public static int getTotalNumberOfNecessaryTeacherWithShorterInterview(int numbOfStudents, int durationOfLongIntervInMinutes,
+    public static int getTotalNumberOfNecessaryTeacherWithShorterInterview(int numbOfStudents,
+                                                                           int durationOfLongIntervInMinutes,
                                                                            int durationOfShortIntervInMinutes,
                                                                            int numbOfAllDaysForInterviewing,
                                                                            int numbOfHoursForIntervForDay,
                                                                            int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                            int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                            ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                           ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                           ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return totalNumberOfNecessaryTeacherWithShorterInterview;
     }
 
@@ -315,8 +336,11 @@ public class AllActivityAboutFindingTeachers {
                                                                                              int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                                              int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                                              ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                                             ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                                             ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return percentageOfRegisteredTeacherWithLongIntervForEachDay;
     }
 
@@ -329,8 +353,11 @@ public class AllActivityAboutFindingTeachers {
                                                                                               int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                                               int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                                               ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                                              ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                                              ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return percentageOfRegisteredTeacherWithShortIntervForEachDay;
     }
     /*
@@ -354,8 +381,11 @@ public class AllActivityAboutFindingTeachers {
                                                                                             int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                                             int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                                             ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                                            ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                                            ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return numbOfAvailableIntervForEachDayByRegisteredTeachers;
     }
 
@@ -368,8 +398,11 @@ public class AllActivityAboutFindingTeachers {
                                                                                                  int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                                                  int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                                                  ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                                                 ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                                                 ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return percentageOfAvailableIntervForEachDayByRegisteredTeachers;
     }
 
@@ -382,8 +415,11 @@ public class AllActivityAboutFindingTeachers {
                                                                                  int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                                  int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                                  ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                                 ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                                 ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return totalPercentageOfAvailableIntervByRegisteredTeachers;
     }
 
@@ -395,34 +431,45 @@ public class AllActivityAboutFindingTeachers {
                                                                         int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                         int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                         ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                        ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                        ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return totalNumbOfAvailableIntervByRegisteredTeachers;
     }
 
     // К-сть довших викладачів, яких ще треба запросити на і-й день
-    public static ArrayList<Integer> getNecessaryNumbOfLongTeacherForEachDay(int numbOfStudents, int durationOfLongIntervInMinutes,
+    public static ArrayList<Integer> getNecessaryNumbOfLongTeacherForEachDay(int numbOfStudents,
+                                                                             int durationOfLongIntervInMinutes,
                                                                              int durationOfShortIntervInMinutes,
                                                                              int numbOfAllDaysForInterviewing,
                                                                              int numbOfHoursForIntervForDay,
                                                                              int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                              int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                              ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                             ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                             ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return necessaryNumbOfLongTeacherForEachDay;
     }
 
     // К-сть коротших викладачів, яких ще треба запросити на і-й день
-    public static ArrayList<Integer> getNecessaryNumbOfShortTeacherForEachDay(int numbOfStudents, int durationOfLongIntervInMinutes,
+    public static ArrayList<Integer> getNecessaryNumbOfShortTeacherForEachDay(int numbOfStudents,
+                                                                              int durationOfLongIntervInMinutes,
                                                                               int durationOfShortIntervInMinutes,
                                                                               int numbOfAllDaysForInterviewing,
                                                                               int numbOfHoursForIntervForDay,
                                                                               int totalNumbOfRegistersdTeachersWithLongerInterv,
                                                                               int totalNumbOfRegistersdTeachersWithShorterInterv,
                                                                               ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
-                                                                              ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
-        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+                                                                              ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay){
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
         return necessaryNumbOfShortTeacherForEachDay;
     }
 
@@ -432,4 +479,31 @@ public class AllActivityAboutFindingTeachers {
         calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv, totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
         return numbOfAdditionIntervForEachday;
     }*/
+
+    public static int getNumbOfIntervByGroupOfTeacherPerDay(int numbOfStudents, int durationOfLongIntervInMinutes,
+                                                            int durationOfShortIntervInMinutes, int numbOfAllDaysForInterviewing,
+                                                            int numbOfHoursForIntervForDay,
+                                                            int totalNumbOfRegistersdTeachersWithLongerInterv,
+                                                            int totalNumbOfRegistersdTeachersWithShorterInterv,
+                                                            ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
+                                                            ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
+        calculationForStatisticData(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
+        return numbOfIntervByGroupOfTeacherPerDay;
+    }
+
+    public static int getN(int numbOfStudents, int durationOfLongIntervInMinutes, int durationOfShortIntervInMinutes,
+                           int numbOfAllDaysForInterviewing, int numbOfHoursForIntervForDay,
+                           int totalNumbOfRegistersdTeachersWithLongerInterv,
+                           int totalNumbOfRegistersdTeachersWithShorterInterv,
+                           ArrayList<Integer> numbOfBookedPositionByLongTeacherForEachDay,
+                           ArrayList<Integer> numbOfBookedPositionByShortTeacherForEachDay) {
+        calculationOfNecessaryNumbOfTeacher(numbOfStudents, durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                numbOfAllDaysForInterviewing, numbOfHoursForIntervForDay, totalNumbOfRegistersdTeachersWithLongerInterv,
+                totalNumbOfRegistersdTeachersWithShorterInterv, numbOfBookedPositionByLongTeacherForEachDay,
+                numbOfBookedPositionByShortTeacherForEachDay);
+        return N;
+    }
 }
