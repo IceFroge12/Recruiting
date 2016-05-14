@@ -48,4 +48,8 @@ public interface ApplicationFormService {
     List<ApplicationForm> getCurrentsApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 
     List<ApplicationForm> getCurrentsApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions);
+
+	Long getCountInReviewAppForm();
+
+	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 }

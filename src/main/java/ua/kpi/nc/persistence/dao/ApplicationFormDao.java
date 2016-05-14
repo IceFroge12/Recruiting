@@ -2,7 +2,9 @@ package ua.kpi.nc.persistence.dao;
 
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.Status;
 import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Connection;
@@ -49,4 +51,8 @@ public interface ApplicationFormDao {
     List<ApplicationForm> getCurrentApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 
     List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions);
+
+	Long getCountInReviewAppForm();
+
+	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 }

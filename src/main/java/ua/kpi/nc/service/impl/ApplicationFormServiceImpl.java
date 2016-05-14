@@ -141,4 +141,14 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	public List<ApplicationForm> getCurrentsApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions) {
 		return applicationFormDao.getCurrentApplicationFormsFiltered(fromRow, rowsNum, sortingCol, increase, questions);
 	}
+	
+	@Override
+	public Long getCountInReviewAppForm() {
+		return applicationFormDao.getCountInReviewAppForm();
+	}
+
+	@Override
+	public List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment) {
+		return applicationFormDao.getByStatusAndRecruitment(status, recruitment);
+	}
 }

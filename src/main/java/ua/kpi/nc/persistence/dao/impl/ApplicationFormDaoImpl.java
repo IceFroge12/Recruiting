@@ -116,6 +116,12 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             +" INNER JOIN form_question fq on fav.id_question = fq.id"
             +" WHERE r.end_date > CURRENT_DATE AND (";
 
+    private static final String SQL_GET_BY_STATUS_RECRUITMENT = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
+            + IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
+            + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+            + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a." + ID_STATUS_COL + " = ? AND a." + ID_RECRUITMENT_COL + " = ?";
+			
+    
     private static final String SORT_PARAM_ASC = ") ORDER BY a.id ASC OFFSET ? LIMIT ?;";
 
     private static final String SORT_PARAM_DESC = " ORDER BY ? DESC OFFSET ? LIMIT ?;";
@@ -311,4 +317,18 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         String order = sortingCol == 1 ? "a.id" : "a.id";
         return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum );
     }
+    
+	@Override
+	public Long getCountInReviewAppForm() {
+		log.info("Looking for Count In review AppForm");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
+				resultSet -> resultSet.getLong(1), StatusEnum.IN_REVIEW.getId());
+	}
+
+	@Override
+	public List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment) {
+		return getJdbcTemplate().queryForList(SQL_GET_BY_STATUS_RECRUITMENT, extractor, status.getId(),
+				recruitment.getId());
+	}
+
 }

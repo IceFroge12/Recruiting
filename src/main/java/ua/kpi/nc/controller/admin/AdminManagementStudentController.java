@@ -3,15 +3,21 @@ package ua.kpi.nc.controller.admin;
 import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.FormQuestionDto;
+import ua.kpi.nc.persistence.dto.MessageDto;
+import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.dto.StudentAppFormDto;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
+import ua.kpi.nc.service.util.SenderService;
+import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import static ua.kpi.nc.persistence.model.enums.StatusEnum.*;
 
@@ -28,6 +34,9 @@ public class AdminManagementStudentController {
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
     private StatusService statusService = ServiceFactory.getStatusService();
     private RoleService roleService = ServiceFactory.getRoleService();
+    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
+    private SenderService senderService = SenderServiceImpl.getInstance();
+    private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
     
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -176,13 +185,64 @@ public class AdminManagementStudentController {
         return applicationFormService.getCountGeneralAppForm();
     }
 
+//    @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
+//    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
+//        System.out.println(id + "\n" + status);
+////        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
+////        af.setStatus(status);
+//        return true;
+//    }
+    
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
-    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
-        System.out.println(id + "\n" + status);
-//        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
-//        af.setStatus(status);
-        return true;
-    }
+  	public String confirmSelection() throws MessagingException {
+  		Gson gson = new Gson();
+  		Long appFormInReviewCount = applicationFormService.getCountInReviewAppForm();
+  		if (appFormInReviewCount != 0) {
+  			return gson.toJson(new MessageDto("You haven't reviewed all application forms. There are still "
+  					+ appFormInReviewCount + " unreviewed forms.", MessageDtoType.ERROR));
+  		}
+  		ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
+  		if (!timePointService.isScheduleExists()) {
+  			return gson.toJson(new MessageDto("You have to choose dates for schedule before confirming selection.",
+  					MessageDtoType.ERROR));
+  		}
+  		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+  		processApprovedStudents(recruitment);
+  		processRejectedStudents(recruitment);
+  		return gson.toJson(new MessageDto("Selection confirmed.",
+  				MessageDtoType.ERROR));
+  	}
+
+  	private void processApprovedStudents(Recruitment recruitment) throws MessagingException {
+  		Status approvedStatus = statusService.getStatusById(StatusEnum.APPROVED.getId());
+  		EmailTemplate approvedTemplate = emailTemplateService.getById(5L);
+  		List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
+  				recruitment);
+  		UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
+  		
+  		for (ApplicationForm applicationForm : approvedForms) {
+  			User student = applicationForm.getUser();
+  			String subject = approvedTemplate.getTitle();
+  			String text = emailTemplateService.showTemplateParams(approvedTemplate.getText(), student);
+  			senderService.send(student.getEmail(), subject, text);
+  			userTimePriorityService.createStudentTimePriotities(student);
+  		}
+  	}
+  	
+  	
+  	private void processRejectedStudents(Recruitment recruitment) throws MessagingException {
+  		Status rejectedStatus = statusService.getStatusById(StatusEnum.REJECTED.getId());
+  		EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);
+  		List<ApplicationForm> rejectedForms = applicationFormService.getByStatusAndRecruitment(rejectedStatus,
+  				recruitment);
+  		for (ApplicationForm applicationForm : rejectedForms) {
+  			User student = applicationForm.getUser();
+  			String subject = rejectedTemplate.getTitle();
+  			String text = emailTemplateService.showTemplateParams(rejectedTemplate.getText(), student);
+  			senderService.send(student.getEmail(), subject, text);
+  		}
+  	}
+	
 
     @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
     public List<User> searchStudentById(@RequestParam String lastName,
