@@ -6,7 +6,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
 
     $scope.sort = {
         sortingOrder: 1,
-        reverse: false
+        reverse: true
     };
     $scope.gap = 5;
     $scope.filtered = false;
@@ -21,7 +21,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.finishId = 1000;
     $scope.rolesChoosen = [1, 2, 5];
     $scope.interviewer = true;
-    $scope.notInterviewer = false;
+    $scope.notInterviewer = true;
     $scope.notEvaluated = true; //TODO
     $scope.assignedStudents = [];
 
@@ -65,7 +65,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             console.log("error");
         });
 
-    staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, true).success(function (data) { //TODO
+    staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
         angular.forEach(data, function (value1, key1) {
             angular.forEach(value1.roles, function (value2, key2) {
                 value2.roleName = value2.roleName.slice(5);
@@ -97,6 +97,9 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
                         value2.roleName = value2.roleName.slice(5);
                     })
                 });
+                console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+                    $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+                    $scope.notEvaluated);
                 $scope.allEmployee = data;
                 console.log(data);
             }, function error() {
@@ -106,14 +109,16 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
 
-        staffManagementService.showAllEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, true).success(function (data) { //TODO
+        staffManagementService.showAllEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
             angular.forEach(data, function (value1, key1) {
                 angular.forEach(value1.roles, function (value2, key2) {
                     value2.roleName = value2.roleName.slice(5);
                 })
             });
+            console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+                $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+                $scope.notEvaluated);
             $scope.allEmployee = data;
-            console.log(data);
 
         }, function error() {
             console.log("error");
