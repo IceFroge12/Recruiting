@@ -126,7 +126,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     private static final String SORT_PARAM_DESC = " ORDER BY ? DESC OFFSET ? LIMIT ?;";
 
-    private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"approved_to_work\" from \"" + TABLE_NAME + "\" where id_status=?";
+    private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"status_count\" from \"" + TABLE_NAME + "\" where id_status=? and is_active='true'";
 
     private static final String SQL_CHANGE_STATUS = "UPDATE application_form SET id_status = ? where id_status = ?;";
 
