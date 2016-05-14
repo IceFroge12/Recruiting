@@ -36,7 +36,8 @@ angular.module('app', [
         'appGetToCourses',
         'appRecoverRequestPage',
         'appRecoverPassword',
-        'appConfirmRegistration'
+        'appConfirmRegistration',
+        'appError'
     ])
 
         .factory('TokenStorage', function () {
@@ -222,6 +223,6 @@ angular.module('app', [
             })
             
             .otherwise({
-                redirectTo: '/'
+                redirectTo: '/home'
             });
     });
