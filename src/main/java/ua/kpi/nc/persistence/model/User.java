@@ -37,6 +37,10 @@ public interface User extends Serializable, UserDetails {
 
     void setRegistrationDate(Timestamp registrationDate);
 
+    List<UserTimePriority> getUserTimePriorities();
+
+    void setUserTimePriorities(List<UserTimePriority> userTimePriorities);
+
     String getSecondName();
 
     void setSecondName(String secondName);

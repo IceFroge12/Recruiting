@@ -4,6 +4,7 @@ import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.UserTimePriority;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,5 +20,5 @@ public interface UserTimePriorityDao {
 
     int deleteUserPriority(UserTimePriority userTimePriority);
 
-    Set<UserTimePriority> getAllUserTimePriorities();
+    List<UserTimePriority> getAllUserTimePriorities(Long userId);
 }

@@ -4,10 +4,7 @@ package ua.kpi.nc.persistence.dao.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.UserDao;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.ScheduleTimePoint;
-import ua.kpi.nc.persistence.model.SocialInformation;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.ScheduleTimePointProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
@@ -31,6 +28,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     private static final int ROLE_STUDENT = 3;
+    private static final int APPROVED_STATUS = 3;
 
     private static String direction;
 
@@ -58,6 +56,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n" +
             "WHERE u.id = ?;";
+
+    private static final String SQL_GET_ALL_NOT_SCHEDULE_STUDENTS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name,\n" +
+            "u.password, u.confirm_token, u.is_active, u.registration_date FROM \"user\" u\n" +
+            "  INNER JOIN application_form af ON u.id = af.id_user\n" +
+            "  INNER JOIN recruitment r ON af.id_recruitment = r.id\n" +
+            "  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE r.end_date > current_date AND af.id_status = " + APPROVED_STATUS + " AND ur.id_role = " + ROLE_STUDENT;
 
     private static final String SQL_GET_BY_EMAIL = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name," +
             " u.password,u.confirm_token, u.is_active, u.registration_date\n" +
@@ -158,7 +163,35 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_GET_ACTIVE_EMPLOYEES = "Select count(*)  FROM  \"user\" u JOIN user_role ur on ur.id_user = u.id where ur.id_role =? and\n" +
             "                                                                                  ur.id_role <>? AND u.is_active=true;";
 
+    private static final String SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE = "SELECT count(DISTINCT u.id), date_trunc('day', stp.time_point) AS day From \"user\" u\n" +
+            "  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "  INNER JOIN user_time_final utf ON u.id = utf.id_user\n" +
+            "  INNER JOIN  schedule_time_point stp ON utf.id_time_point = stp.id\n" +
+            "WHERE ur.id_role = ?\n" +
+            "GROUP BY day ORDER BY day";
 
+    private static final String SQL_GET_INTERVIEWS = "SELECT * FROM \"user\" u\n" +
+            "INNER JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role = ? AND u.is_active = TRUE;";
+
+    @Override
+    public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
+        log.info("Get count users on interview days for role {}", role.getId());
+        return this.getJdbcTemplate().queryForList(SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE,
+                resultSet -> resultSet.getInt("count"), role.getId());
+    }
+
+    @Override
+    public List<User> getActiveStaffByRole(Role role){
+        log.info("Get all active staffs with role {}", role.getId());
+        return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, extractor, role.getId());
+    }
+
+    @Override
+    public List<User> getAllNotScheduleStudents(){
+        log.info("Get all not schedule students");
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
+    }
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
@@ -262,8 +295,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
         log.info("Get Employees From To Rows");
         String sql = SQL_GET_ALL_EMPLOYEES_FOR_ROWS;
-        sql+=sortingCol.toString();
-        sql+= increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
+        sql += sortingCol.toString();
+        sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
         return this.getJdbcTemplate().queryForList(sql, extractor,
                 fromRows, rowsNum);
     }
@@ -280,8 +313,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
         log.info("Get Filtered Employees");
         String sql = SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS;
-        sql+=sortingCol.toString();
-        sql+= increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
+        sql += sortingCol.toString();
+        sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
         StringBuilder sb = new StringBuilder();
         sb.append('{');
         for (Role role : roles) {
@@ -334,6 +367,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             return set;
         }, userID);
     }
+
 
     @Override
     public Long getEmployeeCount() {

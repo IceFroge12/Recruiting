@@ -20,7 +20,7 @@ public interface UserTimePriorityService {
 
     int deleteUserPriority(UserTimePriority userTimePriority);
 
-    Set<UserTimePriority> getAllUserTimePriorities( );
+    List<UserTimePriority> getAllUserTimePriorities(Long userId);
     
     void createStudentTimePriotities(User student);
 }

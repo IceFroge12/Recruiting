@@ -27,6 +27,10 @@ public interface UserService {
 
     int deleteRole(User user, Role role);
 
+    List<User> getAllNotScheduleStudents();
+
+    List<User> getActiveStaffByRole(Role role);
+
     int deleteUser(User user);
 
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
@@ -46,6 +50,8 @@ public interface UserService {
     Set<User> getAllEmploees();
 
     Set<User> getAll();
+
+    List<Integer> getCountUsersOnInterviewDaysForRole(Role role);
 
     User getAuthorizedUser();
 
