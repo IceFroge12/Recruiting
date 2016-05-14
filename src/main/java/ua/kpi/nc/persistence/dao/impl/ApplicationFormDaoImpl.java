@@ -103,6 +103,20 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
+    private static final String SQL_GET_All_APP_FORMS_SORTED = "Select DISTINCT u.id, u.first_name, s1.id_status, s1.is_active," +
+            "s1.id_recruitment, s1.photo_scope, s1.id_user, s1.date_create, s1.feedback, s.title" +
+            " from \"user\" u LEFT JOIN (SELECT * FROM application_form a1" +
+            " INNER JOIN recruitment r1 on a1.id_recruitment = r1.id) s1 on u.id = s1.id_user" +
+            " LEFT JOIN (SELECT * FROM application_form a2 " +
+            " INNER JOIN recruitment r2 on a2.id_recruitment = r2.id) s2" +
+            " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date" +
+            " INNER JOIN status s on s1.id_status = s.id" +
+            " ORDER BY ";
+
+    private static final String SQL_QUERY_ENDING_ASC = " ASC OFFSET ? LIMIT ?;";
+
+    private static final String SQL_QUERY_ENDING_DESC = " DESC OFFSET ? LIMIT ?;";
+
     private static final String SQL_GET_CURRENT_APP_FORMS_DESC = "Select a.id, a.id_status, a.is_active\n" +
             "  ,a.id_recruitment, a.photo_scope, a.id_user, a.\n" +
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
@@ -291,6 +305,15 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         log.info("Looking for current application  forms");
         String sql = increase ? SQL_GET_CURRENT_APP_FORMS_ASC : SQL_GET_CURRENT_APP_FORMS_DESC;
         return this.getJdbcTemplate().queryForList(sql, extractor,sortingCol, fromRow, rowsNum );
+    }
+
+    @Override
+    public List<ApplicationForm> getApplicationFormsSorted(Long fromRow, Long rowsNum, Long sortingCol, boolean increase) {
+        log. info("Looking for current application  forms sorted");
+        String sql = SQL_GET_All_APP_FORMS_SORTED;
+        sql+=sortingCol.toString();
+        sql+= increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
+        return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum );
     }
 
     @Override
