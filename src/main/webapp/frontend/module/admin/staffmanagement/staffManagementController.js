@@ -357,7 +357,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
                 $scope.amount = Math.ceil(data / $scope.itemsPerPage);
             });
         $scope.filtered = true;
-    }
+    };
 
     staffManagementService.showActiveEmployee().success(function (data) {
         console.log("ACTIVE"+data);

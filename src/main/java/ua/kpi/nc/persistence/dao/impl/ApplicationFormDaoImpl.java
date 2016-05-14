@@ -306,7 +306,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             }
             sb.deleteCharAt(sb.length()-1);
             ///to work correctly, change to AND
-            sb.append("}')) OR ");
+            sb.append("}')) AND ");
             sbTotal.append(sb.toString());
         }
         sbTotal.delete(sbTotal.length() - 4, sbTotal.length() - 1);

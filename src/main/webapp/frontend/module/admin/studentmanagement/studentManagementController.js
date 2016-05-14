@@ -235,11 +235,15 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.setPage = function () {
         $scope.currentPage = this.n;
-        $scope.showAllStudents($scope.currentPage);
-        //TODO
+        if ($scope.filtered)
+            $scope.showFilteredStudents($scope.currentPage);
+        else
+            $scope.showAllStudents($scope.currentPage);
     };
 
     $scope.filter= function (){
+        $scope.filtered = true;
+        $scope.currentPage = 1;
         $scope.showFilteredStudents($scope.currentPage);
     };
     
