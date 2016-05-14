@@ -2,7 +2,10 @@ package ua.kpi.nc.persistence.model.impl.real;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.FormAnswerVariant;
+import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.QuestionType;
+import ua.kpi.nc.persistence.model.Role;
 
 import java.util.List;
 
@@ -19,11 +22,10 @@ public class FormQuestionImpl implements FormQuestion {
     private boolean mandatory;
     private List<Role> roles;
     private List<FormAnswerVariant> formAnswerVariants;
-
     private int order;
 
 
-	public FormQuestionImpl() {
+    public FormQuestionImpl() {
     }
 
     public FormQuestionImpl(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
@@ -36,20 +38,22 @@ public class FormQuestionImpl implements FormQuestion {
         this.formAnswerVariants = formAnswerVariants;
     }
 
-    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
+    public FormQuestionImpl(String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants, int order) {
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
         this.roles = roles;
         this.formAnswerVariants = formAnswerVariants;
+        this.order = order;
     }
 
-    public FormQuestionImpl(Long id, String title, QuestionType questionType, List<FormAnswerVariant> formAnswerVariants) {
+    public FormQuestionImpl(Long id, String title, QuestionType questionType, List<FormAnswerVariant> formAnswerVariants, int order) {
         this.id = id;
         this.title = title;
         this.questionType = questionType;
         this.formAnswerVariants = formAnswerVariants;
+        this.order = order;
     }
 
     public Long getId() {
@@ -109,14 +113,15 @@ public class FormQuestionImpl implements FormQuestion {
     public void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants) {
         this.formAnswerVariants = formAnswerVariants;
     }
-    
-    public int getOrder() {
-		return order;
-	}
 
-	public void setOrder(int order) {
-		this.order = order;
-	}
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

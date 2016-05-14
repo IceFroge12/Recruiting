@@ -3,7 +3,7 @@
  */
 
 function formSettingsController($scope, ngToast, $sce, formAppService) {
-    
+
     $scope.getMandatory = function () {
         var role = "ROLE_STUDENT";
         $scope.questions = [];
@@ -44,12 +44,14 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
 
     $scope.showQuestion = function (question) {
-        
+
         $scope.question = question;
-        
+
         $scope.text = question.title;
 
         $scope.type = question.type;
+
+        $scope.questionOrder = question.order;
 
         $scope.editVariant = [];
         angular.forEach(question.variants, function (item, i) {
@@ -95,7 +97,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         console.log(myMandatorySelect);
         selectMandatoryValue = myMandatorySelect;
     };
-    
+
     var selectRoleValue;
     $scope.showSelectRoleValue = function (myRoleSelect) {
         console.log(myRoleSelect);
@@ -113,36 +115,47 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     $scope.changeMandatoryStatus = function (employee) {
         console.log(employee);
-        formAppService.changeQuestionStatus(employee.id);
+        formAppService.changeQuestionMandatoryStatus(employee.id);
     };
-    
+
     $scope.saveForm = function () {
         var comma = ',';
         if ($scope.addVariant != null) {
             var variantArray = splitString($scope.addVariant, comma);
+       
         } else {
             variantArray = [];
         }
-            
+
         var role = selectRoleValue;
-        
-        formAppService.addQuestion($scope.addText, selectedValue, selectMandatoryValue, selectActiveValue, variantArray, role);
+
+        formAppService.addQuestion($scope.addText, selectedValue, selectMandatoryValue, selectActiveValue, variantArray, role, $scope.addOrder);
     };
 
     $scope.editEmployee = function () {
-        
+
         $scope.question.title = $scope.text;
-        
+
         $scope.question.type = $scope.type;
-        
+
         var comma = ',';
-        var variantArray = splitString($scope.editVariant, comma);
+        if ($scope.question.type == "input" || $scope.question.type == "textarea") {
+            console.log("input Error")
+        } else {
+            var variantArray = splitString($scope.editVariant, comma);
+        }
+
         var variants = [];
         angular.forEach(variantArray, function (item, i) {
-            variants.push({variant: item});
+            variants.push(item);
         });
+
+        $scope.question.order = $scope.questionOrder;
+        console.log("ORDER" + $scope.question.order);
+
         $scope.question.variants = variants;
-        formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variantArray, "ROLE_ADMIN");
+        console.log($scope.question.variants)
+        formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variants, "ROLE_STUDENT", $scope.question.order);
     }
 
 

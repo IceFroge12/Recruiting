@@ -51,7 +51,7 @@ function formSettingsService(http) {
         return ( request.then(handleSuccess) );
     };
     
-    service.addQuestion = function (question, type, enable,mandatory, formAnswerVariants, role) {
+    service.addQuestion = function (question, type, enable,mandatory, formAnswerVariants, role, order) {
         http({
             method: 'POST',
             url: '/admin/addAppFormQuestion',
@@ -62,12 +62,15 @@ function formSettingsService(http) {
                 enable: enable,
                 mandatory: mandatory,
                 formAnswerVariants: formAnswerVariants,
-                role: role
+                role: role,
+                order: order
             })
         });
     };
 
-    service.editQuestion = function (id, question, type, enable, formAnswerVariants, role) {
+    service.editQuestion = function (id, question, type, enable, formAnswerVariants, role, order) {
+        console.log(formAnswerVariants);
+        console.log(order);
         http({
             method: 'POST',
             url: '/admin/updateAppFormQuestion',
@@ -78,7 +81,8 @@ function formSettingsService(http) {
                 type: type,
                 enable: enable,
                 formAnswerVariants: formAnswerVariants,
-                role: role
+                role: role,
+                order: order
             })
         });
     };

@@ -8,8 +8,10 @@
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
+            <label>Search Question: <input ng-model="searchQuestion"></label>
             <ul class="nav nav-tabs">
-                <li ng-init="getMandatory()" ng-click="getMandatory()" class="active"><a data-toggle="tab" data-target="#applic-form1">Application
+                <li ng-init="getMandatory()" ng-click="getMandatory()" class="active"><a data-toggle="tab"
+                                                                                         data-target="#applic-form1">Application
                     form</a></li>
                 <li ng-click="getSoft()"><a data-toggle="tab" data-target="#applic-soft1">Soft form</a></li>
                 <li ng-click="getTech()"><a data-toggle="tab" data-target="#applic-tech1">Tech form</a></li>
@@ -20,6 +22,7 @@
                     <form>
                         <table class="table table-hover table-condensed">
                             <tr>
+                                <th>Order</th>
                                 <th>Question</th>
                                 <th>Type</th>
                                 <th>Active</th>
@@ -27,7 +30,8 @@
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
                             </tr>
-                            <tr ng-repeat="question in questions">
+                            <tr ng-repeat="question in questions | filter:searchQuestion">
+                                <td>{{question.order}}</td>
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
@@ -36,7 +40,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info" type="button">
+                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info"
+                                            type="button">
                                         {{question.mandatory}}
                                     </button>
                                 </td>
@@ -64,6 +69,7 @@
                     <form>
                         <table class="table table-hover table-condensed">
                             <tr>
+                                <th>Order</th>
                                 <th>Question</th>
                                 <th>Type</th>
                                 <th>Active</th>
@@ -71,7 +77,8 @@
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
                             </tr>
-                            <tr ng-repeat="question in questions">
+                            <tr ng-repeat="question in questions | filter:searchQuestion">
+                                <td>{{question.order}}</td>
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
@@ -80,7 +87,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info" type="button">
+                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info"
+                                            type="button">
                                         {{question.mandatory}}
                                     </button>
                                 </td>
@@ -108,6 +116,7 @@
                     <form>
                         <table class="table table-hover table-condensed">
                             <tr>
+                                <th>Order</th>
                                 <th>Question</th>
                                 <th>Type</th>
                                 <th>Active</th>
@@ -115,7 +124,8 @@
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
                             </tr>
-                            <tr ng-repeat="question in questions">
+                            <tr ng-repeat="question in questions | filter:searchQuestion">
+                                <td>{{question.order}}</td>
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
@@ -124,7 +134,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info" type="button">
+                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info"
+                                            type="button">
                                         {{question.mandatory}}
                                     </button>
                                 </td>
@@ -254,6 +265,10 @@
                 <div>
                     <table class="table">
                         <tr>
+                            <td> Order</td>
+                            <td><input type="text" ng-model="addOrder"></td>
+                        </tr>
+                        <tr>
                             <td> Text Question</td>
                             <td><input type="text" ng-model="addText"></td>
                         </tr>
@@ -285,7 +300,8 @@
                         <tr>
                             <td> Mandatory</td>
                             <td>
-                                <select ng-model="myMandatorySelect" ng-change="showSelectMandatoryValue(myMandatorySelect)">
+                                <select ng-model="myMandatorySelect"
+                                        ng-change="showSelectMandatoryValue(myMandatorySelect)">
                                     <option selected>true</option>
                                     <option>false</option>
                                 </select>
@@ -319,12 +335,24 @@
                 <div>
                     <table class="table">
                         <tr>
+                            <td> Order</td>
+                            <td><input type="text" ng-model="questionOrder"></td>
+                        </tr>
+                        <tr>
                             <td> Text</td>
                             <td><input type="text" ng-model="text"></td>
                         </tr>
                         <tr>
                             <td> Type</td>
-                            <td><input type="text" ng-model="type"></td>
+                            <!--<td><input type="text" ng-model="type"></td>-->
+                            <td>
+                                <select>
+                                    <option ng-repeat="type in types" ng-checked ="type==type" >{{type}}</option>
+                                </select>
+                            </td>
+                            <!--<select ng-model="student.status"  ng-change ="changeStatus(student.status,student.appFormId)" >-->
+                            <!--<option ng-repeat="stat in student.possibleStatus" ng-checked ="stat.title==student.status" >{{stat.title}}</option>-->
+                            <!--</select>-->
                         </tr>
                         <tr>
                             <td> Answer Variant</td>

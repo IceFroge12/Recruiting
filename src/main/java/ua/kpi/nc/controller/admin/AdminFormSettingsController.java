@@ -7,9 +7,12 @@ import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
+import ua.kpi.nc.persistence.util.FormQuestionComparator;
 import ua.kpi.nc.service.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -43,6 +46,8 @@ public class AdminFormSettingsController {
         System.out.println(roleTitle);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
 
+        Collections.sort(formQuestionList, new FormQuestionComparator());
+
         List<String> adapterFormQuestionList = new ArrayList<>();
 
         for (FormQuestion formQuestion : formQuestionList) {
@@ -50,6 +55,7 @@ public class AdminFormSettingsController {
             String jsonResult = questionGson.toJson(formQuestion);
             adapterFormQuestionList.add(jsonResult);
         }
+
         return adapterFormQuestionList;
     }
 
@@ -67,13 +73,13 @@ public class AdminFormSettingsController {
             formAnswerVariantList.add(formAnswerVariant);
         }
         FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getQuestion(), questionType,
-                formQuestionDto.isEnable(), formQuestionDto.isMandatory(), roleList, formAnswerVariantList);
+                formQuestionDto.isEnable(), formQuestionDto.isMandatory(), roleList, formAnswerVariantList, formQuestionDto.getOrder());
         formQuestionService.insertFormQuestion(formQuestion, role, formAnswerVariantList);
     }
 
     @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
-
+        System.out.println("ALE"+formQuestionDto.toString());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         for (String s : formQuestionDto.getFormAnswerVariants()) {
@@ -81,7 +87,7 @@ public class AdminFormSettingsController {
             formAnswerVariantList.add(formAnswerVariant);
         }
 
-        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(), formQuestionDto.getQuestion(), questionType, formAnswerVariantList);
+        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(), formQuestionDto.getQuestion(), questionType, formAnswerVariantList,formQuestionDto.getOrder());
         formQuestionService.updateFormQuestion(formQuestion);
     }
 
