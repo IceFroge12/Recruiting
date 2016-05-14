@@ -152,14 +152,14 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
     $scope.exportAppForm = function(){
         var config = {
             method: 'GET',
-            url: "/student/appform"+ $scope.id,
+            url: "./../student/appform/"+ $scope.id,
             headers: {
                 'Accept': 'application/pdf'
             }
         };
         $http(config)
             .success(function(){
-                window.location = "/student/appform"+ $scope.id;
+                window.location = "./../student/appform/"+ $scope.id;
             })
             .error(function(){
                 var myToastMsg = ngToast.warning({
