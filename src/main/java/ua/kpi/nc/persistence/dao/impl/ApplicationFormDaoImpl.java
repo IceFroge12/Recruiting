@@ -74,8 +74,8 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + " \n;";
     private static final String SQL_UPDATE = "UPDATE \"" + TABLE_NAME + "\" SET " + ID_STATUS_COL + " = ?, "
-            + IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ?, " + FEEDBACK + " = ?"
-            + "WHERE " + ID_COL + " = ?";
+            + IS_ACTIVE_COL + "  = ?, " + PHOTO_SCOPE_COL + " = ?, " + DATE_CREATE_COL + " = ?, " + FEEDBACK + " = ?, " + ID_RECRUITMENT_COL + " = ?" 
+            + " WHERE " + ID_COL + " = ?";   
     private static final String SQL_GET_INTERVIEWS = "SELECT i.id\n" + "FROM \"interview\" i\n"
             + "WHERE i.id_application_form = ?";
     private static final String SQL_GET_CURRENT = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
@@ -194,12 +194,13 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
                 applicationForm.getFeedback());
     }
 
-    @Override
+	@Override
     public int updateApplicationForm(ApplicationForm applicationForm) {
-        log.info("Updating application forms with id = {}" + applicationForm.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
-                applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
-                applicationForm.getFeedback(), applicationForm.getId());
+		log.info("Updating application forms with id = {}" + applicationForm.getId());
+		Recruitment recruitment = applicationForm.getRecruitment();
+		return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
+				applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
+				applicationForm.getFeedback(), recruitment != null ? recruitment.getId() : null, applicationForm.getId());
     }
 
     @Override

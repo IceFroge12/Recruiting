@@ -39,5 +39,7 @@ public interface FormQuestionDao {
 
 	Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
 
+	List<FormQuestion> getEnableUnconnectedQuestion(Role role, ApplicationForm applicationForm);
+
 
 }

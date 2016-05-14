@@ -71,6 +71,11 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     
     private static final String SQL_GET_BY_APPLICATION_FORM = SQL_GET_ALL + " INNER JOIN form_answer fa ON fa.id_question = fq.id WHERE fa.id_application_form = ?;";
 
+    private static final String SQL_ENABLE_GET_BY_APPLICATION_FORM = SQL_GET_ALL + " INNER JOIN form_answer fa ON fa.id_question = fq.id WHERE fa.id_application_form = ? AND fq.enable = true;";
+
+    private static final String SQL_UNCONNECTED = SQL_GET_ALL + " INNER JOIN form_question_role fqr ON fqr.id_form_question = fq.id" + 
+ " WHERE fqr.id_role = 3 AND NOT EXISTS(SELECT fa.id from form_answer fa WHERE fa.id_question = fq.id AND fa.id_application_form = ?)" ;
+    
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " ( " + TITLE_COL + ", " + ENABLE_COL + ", "
             + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ", \"" + ORDER_COL +"\") " + "VALUES (?,?,?,?,?)";
 
@@ -202,7 +207,12 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
 	@Override
 	public Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm) {
-		return this.getJdbcTemplate().queryForSet(SQL_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
+		return this.getJdbcTemplate().queryForSet(SQL_ENABLE_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
+	}
+
+	@Override
+	public List<FormQuestion> getEnableUnconnectedQuestion(Role role, ApplicationForm applicationForm) {
+		return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED, extractor, applicationForm.getId());
 	}
 
 }
