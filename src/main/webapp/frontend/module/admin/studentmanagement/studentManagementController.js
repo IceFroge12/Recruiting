@@ -4,6 +4,7 @@
 
 function studentManagementController($scope,$filter, studentManagementService) {
 
+    $scope.pageItems = 9;
     $scope.showFiltration = function () {
         $scope.questions = [];
         $scope.restrictions = [];
@@ -20,10 +21,17 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.amount = 0;
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
-    $scope.status;
     $scope.statuses = [];
     $scope.UnivList=[];
     $scope.filtered = false;
+
+
+    studentManagementService.getAllStatuses().success(function (data) {
+        $scope.statuses = data;
+        console.log($scope.statuses);
+    }, function error() {
+        console.log("error with getting allStatus");
+    });
 
     function getAllQuestions() {
         studentManagementService.getAllQuestions().then(function success(data) {
@@ -246,6 +254,13 @@ function studentManagementController($scope,$filter, studentManagementService) {
         $scope.currentPage = 1;
         $scope.showFilteredStudents($scope.currentPage);
     };
+    
+    $scope.confirmSelection = function() {
+    	studentManagementService.confirmSelection().success(function(data) {
+    		console.log('Confirm selection');
+    		console.log(data);
+    	})
+    }
     
 }
 

@@ -16,6 +16,13 @@ function studentManagementService(http) {
         })
     };
 
+    service.getAllStatuses = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getAllStatuses'
+        })
+    };
+
     service.changeSelectedStatuses = function (changeStatus, appFormIdList) {
         console.log("STATUSE"+changeStatus+appFormIdList);
         return http({
@@ -74,12 +81,10 @@ function studentManagementService(http) {
         })
     };
 
-    service.confirmSelection = function (id, status) {
+    service.confirmSelection = function () {
         return http({
             method: 'POST',
-            url: '/admin/confirmSelection',
-            params: {id: id},
-            data: status
+            url: '/admin/confirmSelection'
         })
     };
 

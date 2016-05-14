@@ -11,7 +11,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
     $scope.authsuccess = false;
 
     $scope.login = function () {
-        
+
         if($scope.password === undefined){
             console.log("Auth error");
         }else{
@@ -26,7 +26,6 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             $rootScope.id = data.id;
             $rootScope.role = data.role;
             $location.path(data.redirectURL);
-            $rootScope.authenticated = true;
         }).error(function (data, status, headers) {
             console.log(data);
             if(status===401){
@@ -35,13 +34,13 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
         });
         }
     };
-    
+
     $scope.registration = function () {
         console.log("registation");
         $location.path('/registration');
     };
 
-    
+
     $scope.recoverPassword = function () {
         console.log("recoverPassword");
         $location.path('/recoverPasswordRequest');

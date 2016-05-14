@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.kpi.nc.config.PropertiesReader;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
 import ua.kpi.nc.service.ApplicationFormService;
@@ -23,7 +24,7 @@ import java.net.URL;
 public class ExportApplicationFormImp implements ExportApplicationForm {
     private final static int FONT_SIZE_BIG = 20;
 
-    private final static String URL_PHOTO = "C:\\Users\\Vova\\IdeaProjects\\Recruting13\\target\\recruitingSystem\\photo\\";
+    //private final static String URL_PHOTO = "C:\\Users\\Vova\\IdeaProjects\\Recruting13\\target\\recruitingSystem\\photo\\";
     private UserService  userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
     public ExportApplicationFormImp() {
@@ -54,7 +55,8 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         PdfPTable table = new PdfPTable(3);
         insertBaseStudentData(table,user);
         /** Inserting Image in document **/
-        URL url1 = new File(URL_PHOTO + applicationForm.getPhotoScope()).toURI().toURL();
+        String photoDirPath = PropertiesReader.getInstance().propertiesReader("photodir.path");
+        URL url1 = new File(photoDirPath + applicationForm.getPhotoScope()).toURI().toURL();
         insertImage(table,url1);
         /** Image inserted**/
         table.setHorizontalAlignment(Element.ALIGN_LEFT);
