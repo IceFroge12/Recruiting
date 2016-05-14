@@ -81,12 +81,10 @@ function studentManagementService(http) {
         })
     };
 
-    service.confirmSelection = function (id, status) {
+    service.confirmSelection = function () {
         return http({
             method: 'POST',
-            url: '/admin/confirmSelection',
-            params: {id: id},
-            data: status
+            url: '/admin/confirmSelection'
         })
     };
 

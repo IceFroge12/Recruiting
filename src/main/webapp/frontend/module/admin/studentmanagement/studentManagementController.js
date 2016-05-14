@@ -232,6 +232,13 @@ function studentManagementController($scope,$filter, studentManagementService) {
         $scope.showFilteredStudents($scope.currentPage);
     };
     
+    $scope.confirmSelection = function() {
+    	studentManagementService.confirmSelection().success(function(data) {
+    		console.log('Confirm selection');
+    		console.log(data);
+    	})
+    }
+    
 }
 
 angular.module('appStudentManagement').$inject = ['$scope', '$filter'];
