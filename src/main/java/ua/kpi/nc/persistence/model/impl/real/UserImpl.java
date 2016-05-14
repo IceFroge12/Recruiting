@@ -5,10 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import ua.kpi.nc.controller.auth.UserAuthority;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.ScheduleTimePoint;
-import ua.kpi.nc.persistence.model.SocialInformation;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 
 import java.sql.Timestamp;
@@ -50,6 +47,8 @@ public class UserImpl implements User {
 
     private Set<UserAuthority> userAuthorities;
 
+    private List<UserTimePriority> userTimePriorities;
+
 
     /******************** UserDetails */
     private Long expireDate;
@@ -74,6 +73,10 @@ public class UserImpl implements User {
 
     public UserImpl() {
 
+    }
+
+    public UserImpl(Long id) {
+        this.id = id;
     }
 
     public UserImpl(String email, String firstName, String secondName, String lastName, String password, boolean isActive,
@@ -109,6 +112,13 @@ public class UserImpl implements User {
         this.password = password;
     }
 
+    public List<UserTimePriority> getUserTimePriorities() {
+        return userTimePriorities;
+    }
+
+    public void setUserTimePriorities(List<UserTimePriority> userTimePriorities) {
+        this.userTimePriorities = userTimePriorities;
+    }
     @Override
     public Long getId() {
         return id;

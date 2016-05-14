@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Chalienko on 03.05.2016.
  */
-public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
+public class FormQuestionAdapter implements JsonSerializer<FormQuestion>,JsonDeserializer<FormQuestion> {
     @Override
     public JsonElement serialize(FormQuestion formQuestion, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();

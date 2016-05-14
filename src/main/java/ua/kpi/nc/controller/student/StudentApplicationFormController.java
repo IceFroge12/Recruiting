@@ -81,7 +81,7 @@ public class StudentApplicationFormController {
 	private static Gson gson = new Gson();
 
 	private static final String JSON_WRONG_INPUT_MESSAGE = gson
-			.toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
+			.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
 
 	private static final String[] AVAILABLE_PHOTO_EXTENSIONS = { "jpg", "jpeg", "png" };
 
@@ -89,30 +89,47 @@ public class StudentApplicationFormController {
 	public String getApplicationForm() {
 		User student = userService.getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
+		boolean newForm = false;
 		if (applicationForm == null) {
+			applicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
+			if (applicationForm == null || !applicationForm.isActive()) {
+				newForm = true;
+				ApplicationForm oldApplicationForm = applicationForm;
+				applicationForm = createApplicationForm(student);
 
-			applicationForm = createApplicationForm(student);
+				List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
 
-			List<FormAnswer> formAnswers = new ArrayList<FormAnswer>();
-			ApplicationForm oldApplicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
-			List<FormQuestion> formQuestions = formQuestionService
-					.getEnableByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
-			for (FormQuestion formQuestion : formQuestions) {
-				boolean wasInOldForm = false;
-				if (oldApplicationForm != null) {
-					List<FormAnswer> oldAnswers = formAnswerService.getByApplicationFormAndQuestion(oldApplicationForm,
-							formQuestion);
-					wasInOldForm = formAnswers.addAll(oldAnswers);
+				List<FormQuestion> formQuestions = formQuestionService
+						.getEnableByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+				for (FormQuestion formQuestion : formQuestions) {
+					boolean wasInOldForm = false;
+					if (oldApplicationForm != null) {
+						List<FormAnswer> oldAnswers = formAnswerService
+								.getByApplicationFormAndQuestion(oldApplicationForm, formQuestion);
+						wasInOldForm = formAnswers.addAll(oldAnswers);
+					}
+					if (!wasInOldForm) {
+						FormAnswer formAnswer = new FormAnswerImpl();
+						formAnswer.setFormQuestion(formQuestion);
+						formAnswer.setApplicationForm(applicationForm);
+						formAnswers.add(formAnswer);
+					}
 				}
-				if (!wasInOldForm) {
-					FormAnswer formAnswer = new FormAnswerImpl();
-					formAnswer.setFormQuestion(formQuestion);
-					formAnswer.setApplicationForm(applicationForm);
-					formAnswers.add(formAnswer);
-				}
+				applicationForm.setAnswers(formAnswers);
+			} else {
+				connectCurrentRecruitment(applicationForm);
 			}
-			applicationForm.setAnswers(formAnswers);
+		} else {
+			connectCurrentRecruitment(applicationForm);
 		}
+		if (!newForm) {
+			List<FormQuestion> unconnectedQuestion = formQuestionService.getEnableUnconnectedQuestion(applicationForm);
+			for (FormQuestion formQuestion : unconnectedQuestion) {
+				FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
+				applicationForm.getAnswers().add(formAnswer);
+			}
+		}
+		
 		Gson applicationFormGson = GsonFactory.getApplicationFormGson();
 		String jsonResult = applicationFormGson.toJson(applicationForm);
 		return jsonResult;
@@ -127,26 +144,47 @@ public class StudentApplicationFormController {
 		user.setFirstName(applicationFormDto.getUser().getFirstName());
 		user.setSecondName(applicationFormDto.getUser().getSecondName());
 		userService.updateUser(user);
+		Recruitment currentRecruitment = recruitmentService.getCurrentRecruitmnet();
 		ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(user.getId());
-		Set<FormQuestion> remainedQuestions;
-
-		List<FormAnswer> answers = null;
 		boolean newForm = false;
 		if (applicationForm == null) {
-			if (file.isEmpty()) {
-				return gson.toJson(new MessageDto("You must upload photo.", MessageDtoType.ERROR));
+			applicationForm = applicationFormService.getLastApplicationFormByUserId(user.getId());
+			if (applicationForm == null) {
+				newForm = true;
+				if (file.isEmpty()) {
+					return gson.toJson(new MessageDto("You must upload photo.", MessageDtoType.ERROR));
+				}
+				applicationForm = createApplicationForm(user);
+
+			} else {
+				Recruitment recruitment = applicationForm.getRecruitment();
+				if (recruitment != null && currentRecruitment != null
+						&& currentRecruitment.getId() != recruitment.getId()) {
+					newForm = true;
+				}
 			}
-			applicationForm = createApplicationForm(user);
-			newForm = true;
+		}
+		Set<FormQuestion> remainedQuestions;
+		List<FormAnswer> answers = null;
+	
+	
+		if(newForm) {
+			applicationForm.setRecruitment(currentRecruitment);
 			answers = new ArrayList<FormAnswer>();
 			remainedQuestions = formQuestionService
 					.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 		} else {
-			if (applicationForm.getRecruitment().getRegistrationDeadline().before(new Date())) {
-				return gson.toJson(new MessageDto(
-						"You cannot update your application form after registration deadline.", MessageDtoType.ERROR));
+			Recruitment recruitment = applicationForm.getRecruitment();
+			if(recruitment != null) {
+				if (isRegistrationDeadlineEnded(recruitment)) {
+					return gson.toJson(new MessageDto(
+							"You cannot update your application form after registration deadline.", MessageDtoType.ERROR));
+				}
+				remainedQuestions = formQuestionService.getByApplicationFormAsSet(applicationForm);
+			} else {
+				remainedQuestions = formQuestionService
+						.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
 			}
-			remainedQuestions = formQuestionService.getByApplicationFormAsSet(applicationForm);
 		}
 		for (StudentAppFormQuestionDto questionDto : applicationFormDto.getQuestions()) {
 			FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
@@ -159,11 +197,16 @@ public class StudentApplicationFormController {
 			if (!remainedQuestions.remove(formQuestion)) {
 				return JSON_WRONG_INPUT_MESSAGE;
 			}
-			if (!newForm) {
+			if (!newForm && containsQuestionWithId(applicationForm.getQuestions(),formQuestion.getId())) {
 				answers = formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion);
 				updateAnswers(formQuestion, answers, questionDto.getAnswers(), applicationForm);
 			} else {
-				answers.addAll(insertNewAnswers(formQuestion, questionDto.getAnswers(), applicationForm));
+				if (!newForm) {
+					FormAnswer answer = insertNewAnswers(formQuestion, questionDto.getAnswers(), applicationForm).get(0);
+					formAnswerService.insertBlankFormAnswerForApplicationForm(answer);
+				} else {
+					answers.addAll(insertNewAnswers(formQuestion, questionDto.getAnswers(), applicationForm));
+				}
 			}
 		}
 		if (!remainedQuestions.isEmpty()) {
@@ -172,6 +215,11 @@ public class StudentApplicationFormController {
 		if (newForm) {
 			applicationForm.setAnswers(answers);
 			applicationFormService.insertApplicationForm(applicationForm);
+		} else {
+			
+			if(connectCurrentRecruitment(applicationForm)) {
+				applicationFormService.updateApplicationForm(applicationForm);
+			}
 		}
 		if (!file.isEmpty()) {
 			try {
@@ -245,7 +293,7 @@ public class StudentApplicationFormController {
 		}
 	}
 
-	private Collection<? extends FormAnswer> insertNewAnswers(FormQuestion formQuestion,
+	private List<? extends FormAnswer> insertNewAnswers(FormQuestion formQuestion,
 			List<StudentAnswerDto> answersDto, ApplicationForm applicationForm) {
 		String questionType = formQuestion.getQuestionType().getTypeTitle();
 		if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
@@ -258,6 +306,9 @@ public class StudentApplicationFormController {
 					formAnswer.setFormAnswerVariant(variant);
 					answers.add(formAnswer);
 				}
+			}
+			if(answers.isEmpty()) {
+				answers.add(createFormAnswer(applicationForm, formQuestion));
 			}
 			return answers;
 		} else {
@@ -301,7 +352,7 @@ public class StudentApplicationFormController {
 		applicationForm.setStatus(status);
 		applicationForm.setActive(true);
 		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-		if (recruitment != null && !recruitment.getRegistrationDeadline().before(new Date())) {
+		if (recruitment != null && !isRegistrationDeadlineEnded(recruitment)) {
 			applicationForm.setRecruitment(recruitment);
 		}
 		return applicationForm;
@@ -337,4 +388,32 @@ public class StudentApplicationFormController {
 		return false;
 	}
 
+	private boolean containsQuestionWithId(List<FormQuestion> questions,Long id) {
+		for (FormQuestion formQuestion : questions) {
+			if(formQuestion.getId().equals(id)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isRegistrationDeadlineEnded(Recruitment recruitment) {
+		Timestamp deadline = recruitment.getRegistrationDeadline();
+		if (deadline == null) {
+			return false;
+		}
+		return deadline.before(new Date());
+	}
+	
+	private boolean connectCurrentRecruitment(ApplicationForm applicationForm) {
+		if(applicationForm.getRecruitment() == null) {
+			Recruitment currentRecruitment = recruitmentService.getCurrentRecruitmnet();
+			if(currentRecruitment != null && !isRegistrationDeadlineEnded(currentRecruitment)) {
+				applicationForm.setRecruitment(currentRecruitment);
+				applicationFormService.updateApplicationForm(applicationForm);
+				return true;
+			}
+		}
+		return false;
+	}
 }

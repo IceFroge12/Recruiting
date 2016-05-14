@@ -16,6 +16,7 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,7 +44,7 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     private static final String UPDATE_USER_TIME_PRIORITY = "UPDATE user_time_priority p set id_priority_type = ? WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String DELETE_USER_TIME_PRIORITY = "DELETE FROM public.user_time_priority p WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
-            "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id);";
+            "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) Where p.id_user = ?;";
 
     @Override
     public UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint) {
@@ -78,9 +79,9 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     }
 
     @Override
-    public Set<UserTimePriority> getAllUserTimePriorities() {
+    public List<UserTimePriority> getAllUserTimePriorities(Long userId) {
         log.trace("Getting all User time priorities ");
-        return this.getJdbcTemplate().queryForSet(GET_ALL_USER_TIME_PRIORITY, extractor);
+        return this.getJdbcTemplate().queryForList(GET_ALL_USER_TIME_PRIORITY, extractor, userId);
     }
 
 }

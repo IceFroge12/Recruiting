@@ -45,8 +45,8 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	}
 
 	@Override
-	public Set<UserTimePriority> getAllUserTimePriorities() {
-		return userTimePriorityDao.getAllUserTimePriorities();
+	public List<UserTimePriority> getAllUserTimePriorities(Long userId) {
+		return userTimePriorityDao.getAllUserTimePriorities(userId);
 	}
 
 	@Override

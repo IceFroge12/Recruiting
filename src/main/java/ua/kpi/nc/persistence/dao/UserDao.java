@@ -23,6 +23,8 @@ public interface UserDao {
 
     Long insertUser(User user, Connection connection);
 
+    List<User> getAllNotScheduleStudents();
+
     int updateUser(User user);
 
     boolean addRole(User user, Role role);
@@ -48,6 +50,10 @@ public interface UserDao {
     List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
     Set<User> getAllEmploees();
+
+    List<Integer> getCountUsersOnInterviewDaysForRole(Role role);
+
+    List<User> getActiveStaffByRole(Role role);
 
     Set<User> getAll();
 

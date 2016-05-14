@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.ScheduleTimePoint;
-import ua.kpi.nc.persistence.model.SocialInformation;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
@@ -110,6 +107,18 @@ public class UserProxy implements User {
         checkUserForExist();
         user.setRegistrationDate(registrationDate);
 
+    }
+
+    @Override
+    public List<UserTimePriority> getUserTimePriorities() {
+        checkUserForExist();
+        return user.getUserTimePriorities();
+    }
+
+    @Override
+    public void setUserTimePriorities(List<UserTimePriority> userTimePriorities) {
+        checkUserForExist();
+        user.setUserTimePriorities(userTimePriorities);
     }
 
     @Override

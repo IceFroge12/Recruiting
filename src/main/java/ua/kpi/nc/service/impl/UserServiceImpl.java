@@ -81,6 +81,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllNotScheduleStudents() {
+        return userDao.getAllNotScheduleStudents();
+    }
+
+    public List<User> getActiveStaffByRole(Role role){
+        return userDao.getActiveStaffByRole(role);
+    }
+
+    @Override
     public int deleteUser(User user) {
         return userDao.deleteUser(user);
     }
@@ -140,6 +149,11 @@ public class UserServiceImpl implements UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         return getUserByUsername(name);
+    }
+
+    @Override
+    public List<Integer> getCountUsersOnInterviewDaysForRole(Role role){
+        return userDao.getCountUsersOnInterviewDaysForRole(role);
     }
 
     @Override
