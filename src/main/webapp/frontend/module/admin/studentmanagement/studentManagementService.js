@@ -16,6 +16,13 @@ function studentManagementService(http) {
         })
     };
 
+    service.getAllStatuses = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/getAllStatuses'
+        })
+    };
+
     service.changeSelectedStatuses = function (changeStatus, appFormIdList) {
         console.log("STATUSE"+changeStatus+appFormIdList);
         return http({
