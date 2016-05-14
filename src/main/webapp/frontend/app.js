@@ -39,40 +39,6 @@ angular.module('app', [
         'appConfirmRegistration',
         'appError'
     ])
-
-        .factory('TokenStorage', function () {
-        var storageToken = 'auth_token';
-        return {
-            store: function (token) {
-                return localStorage.setItem(storageToken, token);
-            },
-            retrieve: function () {
-                return localStorage.getItem(storageToken);
-            },
-            clear: function () {
-                return localStorage.removeItem(storageToken);
-            }
-        };
-    }).factory('TokenAuthInterceptor', function ($q, TokenStorage) {
-        return {
-            request: function (config) {
-                var authToken = TokenStorage.retrieve();
-                if (authToken) {
-                    config.headers['X-AUTH-TOKEN'] = authToken;
-                }
-                return config;
-            },
-            responseError: function (error) {
-                if (error.status === 401 || error.status === 403) {
-                    TokenStorage.clear();
-                }
-                return $q.reject(error);
-            }
-        };
-    })
-    
-
-
     .controller('appController', function ($scope, $http, $rootScope) {
         $scope.init = function () {
             $http.get('/currentUser')

@@ -6,11 +6,11 @@
 function authorizationService($http) {
 
     var service = {};
-    
+
     service.loginIn = function (email, password) {
 
     };
-    
+
     return service;
 }
 

@@ -20,9 +20,16 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.items = [];
     $scope.amount = 0;
     $scope.currentPage = 1;
-    $scope.status;
     $scope.statuses = [];
     $scope.UnivList=[];
+
+
+    studentManagementService.getAllStatuses().success(function (data) {
+        $scope.statuses = data;
+        console.log($scope.statuses);
+    }, function error() {
+        console.log("error with getting allStatus");
+    });
 
     function getAllQuestions() {
         studentManagementService.getAllQuestions().then(function success(data) {

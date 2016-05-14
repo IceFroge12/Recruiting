@@ -32,7 +32,6 @@ angular.module('appAuthorization', [])
         },
         responseError: function (error) {
             if (error.status === 401 || error.status === 403) {
-                TokenStorage.clear();
                 $location.path('/accessDenied');
             }
             //TODO error page

@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -39,5 +40,6 @@ public interface FormQuestion extends Serializable {
     public int getOrder();
 
 	public void setOrder(int order);
-    
+
+
 }
