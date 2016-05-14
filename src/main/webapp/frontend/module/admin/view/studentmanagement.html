@@ -47,10 +47,8 @@
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
-                        <select>
-                            <option ng-repeat="stat in student.possibleStatus" ng-selected="stat.title==student.status" >
-                                {{stat.title}}
-                            </option>
+                        <select ng-model="student.status"  ng-change ="changeStatus(student.status,student.appFormId)" >
+                            <option ng-repeat="stat in student.possibleStatus" ng-checked ="stat.title==student.status" >{{stat.title}}</option>
                         </select>
                     <td>
                         <input type="checkbox" ng-click="checkStudentStatus(student)">

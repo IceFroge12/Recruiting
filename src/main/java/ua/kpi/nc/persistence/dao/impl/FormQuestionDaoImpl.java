@@ -67,7 +67,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     private static final String SQL_GET_BY_APPLICATION_FORM = SQL_GET_ALL + " INNER JOIN form_answer fa ON fa.id_question = fq.id WHERE fa.id_application_form = ?;";
 
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " ( " + TITLE_COL + ", " + ENABLE_COL + ", "
-            + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ") " + "VALUES (?,?,?,?);";
+            + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ", \"" + ORDER_COL +"\") " + "VALUES (?,?,?,?,?)";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + TITLE_COL + " = ?, " + ENABLE_COL
             + " = ?, " + MANDATORY_COL + " = ?, \"" + ORDER_COL + "\" = ? WHERE " + ID_COL + " = ?;";
@@ -82,10 +82,10 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
     @Override
     public Long insertFormQuestion(FormQuestion formQuestion, Connection connection) {
-        log.info("Insert question with title, enable, mandatory =", formQuestion.getTitle(),
+        log.info("Insert question with title, enable, mandatory = {}, {}, {}", formQuestion.getTitle(),
                 formQuestion.isEnable(), formQuestion.isMandatory());
         return this.getJdbcTemplate().insert(SQL_INSERT, formQuestion.getTitle(), formQuestion.isEnable(),
-                formQuestion.isMandatory(), formQuestion.getQuestionType().getId());
+                formQuestion.isMandatory(), formQuestion.getQuestionType().getId(), formQuestion.getOrder());
     }
 
     @Override

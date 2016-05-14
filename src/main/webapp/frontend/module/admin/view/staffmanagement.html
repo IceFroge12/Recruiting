@@ -45,18 +45,9 @@
                         </ul>
                     </td>
                     <td>
-                        <div ng-if="employee.active">
-                            <button style="width:80px;height:35px" ng-click="changeEmployeeStatus(employee)"
-                                    ng-class="myClass" class="btn btn-success"
-                                    type="button">Active
+                            <button style="width:80px;height:35px" ng-click="changeEmployeeStatus(employee)" ng-class="{'btn btn-success' : employee.active, 'btn btn-danger' : !employee.active}"
+                                    type="button">{{employee.active? 'Active': 'UnActive'}}
                             </button>
-                        </div>
-                        <div ng-if="!employee.active">
-                            <button style="width:80px; height:35px" ng-click="changeEmployeeStatus(employee)"
-                                    ng-class="myClass" class="btn btn-danger"
-                                    type="button">UnActive
-                            </button>
-                        </div>
                     </td>
                     <td>
 
@@ -125,8 +116,7 @@
                 <button class="close" type="button" data-dismiss="modal"><span
                         class="glyphicon glyphicon-remove"></span></button>
                 <h4 class="modal-title">Are you sure?</h4>
-                <button ng-click="deleteAssignedStudent(employee)" data-dismiss="modal" class="btn btn-link">Yes
-                </button>
+                <button ng-click="deleteAssignedStudent(employee)" data-dismiss="modal" class="btn btn-link">Yes</button>
                 <button class="btn btn-link" data-dismiss="modal">NO</button>
             </div>
         </div>
@@ -169,8 +159,7 @@
                         <td>
                             <span ng-repeat="role in existingRoles">
                            <p>
-                               <input type="checkbox" ng-checked="rolesChoosen.indexOf(role.id)>-1"
-                                      ng-click="toggle(role.id, rolesChoosen)"> {{role.roleName}}
+                               <input type="checkbox" ng-checked="rolesChoosen.indexOf(role.id)>-1" ng-click="toggle(role.id, rolesChoosen)"> {{role.roleName}}
                            </p>
                        </span>
                         </td>
@@ -178,8 +167,8 @@
                     <tr>
                         <td>Status</td>
                         <td>
-                            <input type="checkbox" ng-model="interviewer"> interviewers
-                            <input type="checkbox" ng-model="notInterviewer"> not interviewers
+                               <input type="checkbox" ng-model="interviewer"> interviewers
+                               <input type="checkbox" ng-model="notInterviewer"> not interviewers
                         </td>
                     </tr>
                     <tr>
@@ -338,8 +327,7 @@
                             <td>{{student.interviewType}}</td>
                             <td>
                                 <button data-toggle="modal"
-                                        data-target="#deleteAssignedStudent" ng-click="getEmployee(student)"
-                                        class="btn btn-danger"
+                                        data-target="#deleteAssignedStudent" ng-click="getEmployee(student)" class="btn btn-danger"
                                         type="button">Delete
                                 </button>
                             </td>

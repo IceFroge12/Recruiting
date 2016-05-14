@@ -216,17 +216,16 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             $scope.lastNameEdit, $scope.emailEdit, editRoles);
     };
 
-
     $scope.changeEmployeeStatus = function (employee) {
         staffManagementService.changeEmployeeStatus(employee.email).success(function (data) {
             console.log(data);
+            employee.active = data;
         });
-
-        console.log($scope.dat);
-        if ($scope.myClass === "btn-danger")
-            $scope.myClass = "btn btn-info";
-        else
-            $scope.myClass = "btn-danger";
+        // console.log($scope.data);
+        // if ($scope.myClass === "btn-danger")
+        //     $scope.myClass = "btn btn-info";
+        // else
+        //     $scope.myClass = "btn-danger";
     };
 
     $scope.showAssigned = function (employee) {
