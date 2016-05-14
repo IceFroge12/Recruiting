@@ -27,23 +27,22 @@
                             data-target="#filtration">
                         Filter table
                     </button>
-                <label class="col-md-3 info-text col-md-offset-2">Search:
+                <div class="col-md-3 info-text col-md-offset-2">Search:
                     <input ng-model-options="{ debounce: 1000 }"
                            ng-model="studentName" ng-change="searchStudent(studentName)">
-                </label>
-            </div>
-            <div class="col-md-5">
-                <tr ng-repeat="student in allStudents">
-                    <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">Confirm
-                        selection
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results</button>
-                    <select  ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
-                        <option  ng-repeat="st in statusTemp">{{st.title}}</option>
+                </div>
+                <div class="col-md-2 col-sm-offset-3">Show
+                    <select ng-model="itemsPerPage">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
                     </select>
                     entries
                 </div>
-            </div>
+                </div>
             <table class="table table-condensed table-hover col-md-8">
                 <thead>
                 <tr>
