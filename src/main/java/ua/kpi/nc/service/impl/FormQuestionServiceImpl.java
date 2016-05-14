@@ -16,7 +16,10 @@ import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.FormQuestionService;
+import ua.kpi.nc.service.RoleService;
+import ua.kpi.nc.service.ServiceFactory;
 
 /**
  * @author Korzh
@@ -123,5 +126,12 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 	@Override
 	public Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm) {
 		return formQuestionDao.getByApplicationFormAsSet(applicationForm);
+	}
+
+	@Override
+	public List<FormQuestion> getEnableUnconnectedQuestion(ApplicationForm applicationForm) {
+		RoleService roleService = ServiceFactory.getRoleService();
+		Role role = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
+		return formQuestionDao.getEnableUnconnectedQuestion(role, applicationForm);
 	}
 }

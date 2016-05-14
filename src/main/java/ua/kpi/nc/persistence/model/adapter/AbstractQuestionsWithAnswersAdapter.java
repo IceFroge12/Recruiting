@@ -19,6 +19,9 @@ public abstract class AbstractQuestionsWithAnswersAdapter {
         Map<FormQuestion, JsonObject> questionsMap = new TreeMap<FormQuestion, JsonObject>((o1, o2) -> {return Integer.compare(o1.getOrder(), o2.getOrder());});
         for (FormAnswer answer : formAnswers) {
             FormQuestion question = answer.getFormQuestion();
+            if(!question.isEnable()) {
+            	continue;
+            }
             JsonObject jsonQuestion = questionsMap.get(question);
             if (jsonQuestion == null) {
                 jsonQuestion = new JsonObject();
