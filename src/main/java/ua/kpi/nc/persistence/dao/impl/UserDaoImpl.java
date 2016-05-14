@@ -137,7 +137,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "WHERE (ur.id_role = 3) AND u.last_name LIKE ? ) as uuiefnlnsnpctiard ORDER BY ? OFFSET ? LIMIT ?";
 
 
-    private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_DESC = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
     private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
             " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +

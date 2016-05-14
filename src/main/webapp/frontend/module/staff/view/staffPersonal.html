@@ -7,19 +7,19 @@
                 <h3>Change password</h3>
 
                 <div class="row">
-                    <input type="password" placeholder="old password">
+                    <input ng-model="oldPassword" type="password" placeholder="old password">
                 </div>
                 <br>
 
                 <div class="row">
-                    <input type="password" placeholder="new password">
+                    <input ng-model="newPassword" type="password" placeholder="new password">
                 </div>
                 <br>
 
                 <div class="row">
-                    <input type="password" placeholder="new password">
+                    <input ng-model="confirmNewPassword" type="password" placeholder="new password">
                 </div>
-                <button type="submit" class="btn btn-info search-element btn-left">Confirm</button>
+                <button type="submit" ng-click="changePassword()" class="btn btn-info search-element btn-left">Confirm</button>
             </form>
         </div>
     </div>

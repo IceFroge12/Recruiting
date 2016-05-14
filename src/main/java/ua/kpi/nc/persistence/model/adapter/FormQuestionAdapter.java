@@ -4,8 +4,13 @@ import com.google.gson.*;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
+import ua.kpi.nc.persistence.model.QuestionType;
+import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
+import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Chalienko on 03.05.2016.
@@ -32,7 +37,7 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion> {
         return jsonObject;
     }
 
-    @Override
+
     public FormQuestion deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         FormQuestion formQuestion = new FormQuestionImpl();
         JsonObject jsonObject = (JsonObject) jsonElement;

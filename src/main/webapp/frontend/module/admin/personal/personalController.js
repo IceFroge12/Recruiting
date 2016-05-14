@@ -5,7 +5,6 @@
 function personalController($scope, personalService) {
     
     $scope.changePassword = function () {
-
         $scope.oldPassword;
         $scope.newPassword;
         $scope.confirmNewPassword;
@@ -15,7 +14,6 @@ function personalController($scope, personalService) {
         personalService.changePassword($scope.oldPassword, $scope.newPassword).then(function success(data) {
             console.log(data.data);
         });
-
     };
 }
 

@@ -3,55 +3,12 @@
 
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
+        <label class="col-md-6">Active Soft Employee: {{activeSoft}}</label>
+        <label class="col-md-6">Active Tech Employee: {{activeTech}}</label>
         <div>
-            <label class="col-md-6">Active Soft Employee: {{activeSoft}}</label>
-            <label class="col-md-6">Active Tech Employee: {{activeTech}}</label>
-
-            <button id="add-empl" class="btn btn-info btn-sm col-md-2" type="button" data-toggle="modal"
-                    data-target="#addEmployee">Add
-                employee
-            </button>
-            <label class="col-md-6">Search:
-                <input ng-model-options="{ debounce: 1000 }"
-                       ng-model="employeeName" ng-change="searchEmployee(employeeName)">
-            </label>
-            <button id="filter" class="btn btn-info btn-sm col-md-2" type="button" data-toggle="modal"
-                    data-target="#filterTable" ng-click="showFiltration()">Filter
-            </button>
-
-            <table class="table table-condensed table-hover col-md-8">
-                <thead>
-                <tr>
-                    <th class="staff-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
-                    <th class="staff-name" custom-sort order="5" sort="sort">Name&nbsp;</th>
-                    <th class="staff-email" custom-sort order="2" sort="sort">E-mail&nbsp;</th>
-                    <th class="staff-role">Role</th>
-                    <th class="staff-status">Status</th>
-                    <th class="staff-assigned">Assigned students</th>
-                    <th class="staff-edit">Edit</th>
-                    <th class="staff-delete">Delete</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="employee in allEmployee">
-                    <td>{{employee.id}}</td>
-                    <td>{{employee.firstName}}</td>
-                    <td>{{employee.email}}</td>
-                    <td>
-                        <ul>
-                            <li ng-repeat="role in employee.roles">
-                                {{role.roleName}}
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                            <button style="width:80px;height:35px" ng-click="changeEmployeeStatus(employee)" ng-class="{'btn btn-success' : employee.active, 'btn btn-danger' : !employee.active}"
-                                    type="button">{{employee.active? 'Active': 'UnActive'}}
-                            </button>
-                    </td>
-                    <td>
             <div class="row">
-                <button id="add-empl" class="btn btn-info btn-sm col-md-2 " type="button" data-toggle="modal"
+                <button id="add-empl" class="btn btn-info btn-sm col-md-2 " type="button"
+                        data-toggle="modal"
                         data-target="#addEmployee">Add
                     employee
                 </button>
@@ -111,19 +68,22 @@
                 </td>
                 <td>
 
-                    <button class="btn btn-info" ng-click="showAssigned(employee)" type="button" data-toggle="modal"
+                    <button class="btn btn-info" ng-click="showAssigned(employee)" type="button"
+                            data-toggle="modal"
                             data-target="#assignedList">Show list
                     </button>
                 </td>
                 <td>
-                    <button ng-click="showUserData(employee)" class="btn btn-link" type="button" data-toggle="modal"
+                    <button ng-click="showUserData(employee)" class="btn btn-link" type="button"
+                            data-toggle="modal"
                             data-target="#editEmployee">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                 </td>
                 <td>
                     <button data-toggle="modal"
-                            data-target="#deleteEmployee" ng-click="getEmployee(employee)" class="btn btn-danger"
+                            data-target="#deleteEmployee" ng-click="getEmployee(employee)"
+                            class="btn btn-danger"
                             type="button">Delete
                     </button>
                 </td>
@@ -162,7 +122,8 @@
                 <button class="close" type="button" data-dismiss="modal"><span
                         class="glyphicon glyphicon-remove"></span></button>
                 <h4 class="modal-title">Are you sure?</h4>
-                <button ng-click="deleteEmployee(employee)" data-dismiss="modal" class="btn btn-link">Yes</button>
+                <button ng-click="deleteEmployee(employee)" data-dismiss="modal" class="btn btn-link">Yes
+                </button>
                 <button class="btn btn-link" data-dismiss="modal">NO</button>
             </div>
         </div>
@@ -335,12 +296,12 @@
                             <td> Role</td>
                             <td>
                                 <div ng-repeat="employee in employees">
-                                       <input id="{{employee.roleName}}" type="checkbox"
-                                              value="{{employee.roleName}}"
-                                              ng-click="toggleSelection(employee.roleName)"
-                                              ng-checked="selection.indexOf(employee.roleName) > -1"
-                                />
-                                       {{employee.roleName}}
+                                    <input id="{{employee.roleName}}" type="checkbox"
+                                           value="{{employee.roleName}}"
+                                           ng-click="toggleSelection(employee.roleName)"
+                                           ng-checked="selection.indexOf(employee.roleName) > -1"
+                                    />
+                                    {{employee.roleName}}
                                 </div>
                             </td>
                         </tr>
