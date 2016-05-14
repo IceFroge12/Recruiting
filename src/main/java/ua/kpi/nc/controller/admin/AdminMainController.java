@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import ua.kpi.nc.controller.auth.UserAuthentication;
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ServiceFactory;
 
@@ -20,6 +22,7 @@ import ua.kpi.nc.service.ServiceFactory;
 public class AdminMainController {
 
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+    private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     public Recruitment getRecruitmentData() {
@@ -27,4 +30,11 @@ public class AdminMainController {
         System.out.println(recruitment.toString());
         return recruitment;
     }
+
+    @RequestMapping(value = "getCurrentRecruitmentStudents", method = RequestMethod.GET)
+    public Long getCurrentRecruitmentStudents() {
+        Long studentCount = applicationFormService.getCountRecruitmentStudents(recruitmentService.getCurrentRecruitmnet().getId());
+        return studentCount;
+    }
+
 }

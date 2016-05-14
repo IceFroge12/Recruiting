@@ -13,6 +13,12 @@ function mainService(http) {
         });
     };
 
+    service.getCurrentRecruitmentStudents = function () {
+        return http.get('/admin/getCurrentRecruitmentStudents').then(function (response) {
+            return response;
+        });
+    };
+
     return service;
 }
 
