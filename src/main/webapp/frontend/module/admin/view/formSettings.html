@@ -35,12 +35,13 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button ng-click="changeStatus(question)" class="btn btn-info" type="button">
+                                    <button ng-click="changeStatus(question)" ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
+                                            type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info"
+                                    <button ng-click="changeMandatoryStatus(question)" ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
                                             type="button">
                                         {{question.mandatory}}
                                     </button>
@@ -82,12 +83,13 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button ng-click="changeStatus(question)" class="btn btn-info" type="button">
+                                    <button ng-click="changeStatus(question)" ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
+                                            type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info"
+                                    <button ng-click="changeMandatoryStatus(question)" ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
                                             type="button">
                                         {{question.mandatory}}
                                     </button>
@@ -129,12 +131,13 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button ng-click="changeStatus(question)" class="btn btn-info" type="button">
+                                    <button ng-click="changeStatus(question)" ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
+                                            type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" class="btn btn-info"
+                                    <button ng-click="changeMandatoryStatus(question)" ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
                                             type="button">
                                         {{question.mandatory}}
                                     </button>

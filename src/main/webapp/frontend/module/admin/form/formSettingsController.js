@@ -108,14 +108,20 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         return stringToSplit.split(separator);
     };
 
-    $scope.changeStatus = function (employee) {
-        console.log(employee);
-        formAppService.changeQuestionStatus(employee.id);
+    $scope.changeStatus = function (question) {
+        console.log(question);
+        formAppService.changeQuestionStatus(question.id).success(function(data){
+            console.log(data);
+            question.enable = data;
+        })
     };
 
-    $scope.changeMandatoryStatus = function (employee) {
-        console.log(employee);
-        formAppService.changeQuestionMandatoryStatus(employee.id);
+    $scope.changeMandatoryStatus = function (question) {
+        console.log(question);
+        formAppService.changeQuestionMandatoryStatus(question.id).success(function(data){
+            console.log(data);
+            question.mandatory=data;
+        })
     };
 
     $scope.saveForm = function () {

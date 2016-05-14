@@ -30,25 +30,27 @@ function formSettingsService(http) {
     };
     
     service.changeQuestionStatus = function (id) {
-        var request = http({
+       // var request = http({
+        return http({
             method: "GET",
             url: "/admin/changeQuestionStatus",
             params: {
                 id: id
             }
         });
-        return ( request.then(handleSuccess) );
+       // return ( request.then(handleSuccess) );
     };
 
     service.changeQuestionMandatoryStatus = function (id) {
-        var request = http({
+        //var request = http({
+        return http({
             method: "GET",
             url: "/admin/changeQuestionMandatoryStatus",
             params: {
                 id: id
             }
         });
-        return ( request.then(handleSuccess) );
+        //return ( request.then(handleSuccess) );
     };
     
     service.addQuestion = function (question, type, enable,mandatory, formAnswerVariants, role, order) {
