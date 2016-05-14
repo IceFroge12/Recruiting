@@ -52,7 +52,9 @@ public interface ApplicationFormDao {
 
     List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions);
 
-	Long getCountInReviewAppForm();
+    List<ApplicationForm> getApplicationFormsSorted(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
+
+    Long getCountInReviewAppForm();
 
 	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 }

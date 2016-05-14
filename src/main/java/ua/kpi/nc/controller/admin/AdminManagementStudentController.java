@@ -38,12 +38,27 @@ public class AdminManagementStudentController {
     private SenderService senderService = SenderServiceImpl.getInstance();
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
     
+//    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
+//    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+//                                                @RequestParam boolean increase) {
+//        Long fromRow = (pageNum - 1) * rowsNum;
+//        List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
+//        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationForms(fromRow, rowsNum, sortingCol, increase);
+//        for (ApplicationForm applicationForm : applicationForms) {
+//            studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
+//                    applicationForm.getId(), applicationForm.getUser().getFirstName(),
+//                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
+//                    getPossibleStatus(applicationForm.getStatus())));
+//        }
+//        return studentAppFormDtoList;
+//    }
+
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                                 @RequestParam boolean increase) {
         Long fromRow = (pageNum - 1) * rowsNum;
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
-        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationForms(fromRow, rowsNum, sortingCol, increase);
+        List<ApplicationForm> applicationForms = applicationFormService.getApplicationFormsSorted(fromRow, rowsNum, sortingCol, increase);
         for (ApplicationForm applicationForm : applicationForms) {
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
