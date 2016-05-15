@@ -8,8 +8,6 @@ import java.util.List;
 
 public class StudentAppFormDto {
 
-
-
     private Long id;
     private Long appFormId;
     private String firstName;

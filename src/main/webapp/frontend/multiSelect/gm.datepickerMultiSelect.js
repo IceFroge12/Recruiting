@@ -135,10 +135,10 @@ SOFTWARE.
 						});
 					}
 				}
-			}
+			};
 
 			return $delegate;
-		}
+		};
 
 		if ($injector.has('daypickerDirective'))
 			$provide.decorator('daypickerDirective', ['$delegate', daypickerDelegate]);
