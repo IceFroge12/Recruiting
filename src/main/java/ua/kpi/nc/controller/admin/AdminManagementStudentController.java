@@ -8,6 +8,7 @@ import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.dto.StudentAppFormDto;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
@@ -37,6 +38,7 @@ public class AdminManagementStudentController {
     private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
     private SenderService senderService = SenderServiceImpl.getInstance();
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+    private InterviewService interviewService = ServiceFactory.getInterviewService();
     
 //    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
 //    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -60,9 +62,14 @@ public class AdminManagementStudentController {
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         List<ApplicationForm> applicationForms = applicationFormService.getApplicationFormsSorted(fromRow, rowsNum, sortingCol, increase);
         for (ApplicationForm applicationForm : applicationForms) {
+            Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, RoleEnum.ROLE_SOFT.getId());
+            Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,RoleEnum.ROLE_TECH.getId());
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
+                    null == interviewSoft ? 0 : interviewSoft.getMark(),
+                    null == interviewTech ? 0 : interviewTech.getMark(),
+                    null,//TODO:Final Mark Via decision Matrix
                     getPossibleStatus(applicationForm.getStatus())));
         }
         return studentAppFormDtoList;
