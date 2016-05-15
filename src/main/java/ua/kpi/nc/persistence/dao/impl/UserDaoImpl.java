@@ -174,6 +174,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE ur.id_role = ? AND u.is_active = TRUE;";
 
+    private static final String SQL_DISABLE_STAFF = "UPDATE \"user\" SET is_active = FALSE WHERE \"user\".id IN (SELECT ur.id_user FROM \"user_role\" ur WHERE ur.id_role <> 1 AND ur.id_role <> 3);";
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -437,5 +439,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         String active = interviewer ? (notIntrviewer ? "{true,false}" : "{true}") : (notIntrviewer ? "{false}" : "{}");
         return this.getJdbcTemplate().queryWithParameters(sql, resultSet -> resultSet.getLong(1), idStart, idFinish, inQuery, active, sortingCol,
                 fromRows, rowsNum);
+    }
+
+    @Override
+    public int disableAllStaff() {
+        return this.getJdbcTemplate().update(SQL_DISABLE_STAFF);
     }
 }

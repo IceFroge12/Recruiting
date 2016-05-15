@@ -160,6 +160,8 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =?";
 
 
+
+
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     public ApplicationFormDaoImpl(DataSource dataSource) {

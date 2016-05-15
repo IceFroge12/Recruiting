@@ -73,6 +73,7 @@ public interface UserDao {
 
     Long getActiveEmployees(Long idParam0,Long idParam1);
 
-
     Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
+
+    int disableAllStaff();
 }

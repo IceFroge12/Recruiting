@@ -6,6 +6,7 @@ import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.service.UserService;
 
 import java.sql.Timestamp;
 import java.util.concurrent.Executors;
@@ -25,6 +26,7 @@ public class DeadlineController {
     private static final ScheduledExecutorService endOfRecruitingDeadLine = Executors.newScheduledThreadPool(1);
     private static final ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
     private static final RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+    private static final UserService userService = ServiceFactory.getUserService();
 
     private DeadlineController() {
         Recruitment recruitment = recruitmentService.getLastRecruitment();
@@ -79,6 +81,7 @@ public class DeadlineController {
 //            applicationFormService.updateApplicationForm(applicationForm);
             System.out.println(applicationForm.toString());
         }
+        userService.disableAllStaff();
     }
 
     private void actionForEndOfRecruitingDeadLne(){
@@ -88,6 +91,7 @@ public class DeadlineController {
 //            applicationFormService.updateApplicationForm(applicationForm);
             System.out.println(applicationForm.toString());
         }
+        userService.disableAllStaff();
     }
 
     private Long calculateDate(Timestamp date){
