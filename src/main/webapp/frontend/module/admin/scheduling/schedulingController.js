@@ -8,6 +8,12 @@ function schedulingController($scope, schedulingService) {
     $scope.type = 'individual';
 
     $scope.removeFromSelected = function(dt) {
+        angular.forEach($scope.selectedDates, function (value, key) {
+            console.log(new Date().setHours(12,12,12,12));
+            console.log($scope.selectedDates);
+            console.log(value);
+            console.log(value);
+        });
         $scope.selectedDates.splice(this.selectedDates.indexOf(dt), 1);
     };
 
