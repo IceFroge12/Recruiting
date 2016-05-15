@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appScheduling', []);
+angular.module('appScheduling', ['ui.bootstrap', 'gm.datepickerMultiSelect']);

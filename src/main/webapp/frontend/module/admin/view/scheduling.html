@@ -1,75 +1,100 @@
 <div app-header></div>
 <div app-menu-admin></div>
-<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+<div ng-controller="schedulingController" id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
             <div id="calendar-sizing" class="col-md-5">
-                <div id='calendar'></div>
-            </div>
-            <div class="col-md-6">
-                <form>
-                    <h4>
-                        Amount of students:
-                        {{countStudent}}
-                    </h4>
-
-                    <h4>
-                        Amount of tech:
-
-                        100
-                    </h4>
-
-                    <h4>
-                        Amount of soft:
-                        100
-                    </h4>
-                    <h4>Enter duration for each intervew:</h4>
-
-                    <div class="col-md-12 menu-text">
-                        <div class="col-md-6">
-                            Tech duration:
-                            <input class="input-nums" type="text" placeholder="minutes">
-                        </div>
-                        <div class="col-md-6">
-                            Soft duration:
-                            <input class="input-nums" type="text" placeholder="minutes">
-                        </div>
+                <div class='panel'><h3>Selection Type:</h3>
+                    <div class='btn-group'>
+                        <button class='btn btn-primary' ng-model='type' uib-btn-radio='"individual"'>Individual</button>
+                        <button class='btn btn-primary' ng-model='type' uib-btn-radio='"range"'>Range</button>
                     </div>
-                    <br>
-                    <button type="submit" class="btn btn-sm btn-info search-element col-md-5 btn-left">
-                        Calculate required hours
-                    </button>
+                </div>
+                <table>
+                    <tr>
+                        <td>
+                            <uib-datepicker ng-model='activeDate' multi-select='selectedDates' type=="range"></uib-datepicker>
+                        </td>
+                        <td style='width:50px'>
+                        </td>
+                        <td>
+                            <div>
+                                Selected Dates:
+                                <div class='well well-sm'>
+                                    <div ng-repeat='d in selectedDates'>
+                                        {{d | date : 'fullDate'}}
+                                        <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='removeFromSelected(d)'>Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--<div class="col-md-6">-->
+                <!--<form>-->
+                    <!--<h4>-->
+                        <!--Amount of students:-->
+                        <!--{{countStudent}}-->
+                    <!--</h4>-->
 
-                    <div class="col-md-12 menu-text">
-                        <p>
-                            Amount of hours:
-                            100
-                        </p>
-                    </div>
-                    <button type="submit" class="btn btn-sm btn-info search-element col-md-5 btn-left">
-                        Save intervew parameters
-                    </button>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <h4>Select dates on calendar</h4>
-                <p class="marks-cell"><b>0/30</b> hours selected</p>
-                <button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Submit
-                    dates
-                </button>
-            </div>
-            <div class="col-md-6">
-                <h4>Generate schedule</h4>
-                <button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Generate
-                    schedule
-                </button>
-                <button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Submit
-                </button>
-            </div>
-            <div class="col-md-6">
-                <button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Export
-                </button>
-            </div>
+                    <!--<h4>-->
+                        <!--Amount of tech:-->
+
+                        <!--100-->
+                    <!--</h4>-->
+
+                    <!--<h4>-->
+                        <!--Amount of soft:-->
+                        <!--100-->
+                    <!--</h4>-->
+                    <!--<h4>Enter duration for each intervew:</h4>-->
+
+                    <!--<div class="col-md-12 menu-text">-->
+                        <!--<div class="col-md-6">-->
+                            <!--Tech duration:-->
+                            <!--<input class="input-nums" type="text" placeholder="minutes">-->
+                        <!--</div>-->
+                        <!--<div class="col-md-6">-->
+                            <!--Soft duration:-->
+                            <!--<input class="input-nums" type="text" placeholder="minutes">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<br>-->
+                    <!--<button type="submit" class="btn btn-sm btn-info search-element col-md-5 btn-left">-->
+                        <!--Calculate required hours-->
+                    <!--</button>-->
+
+                    <!--<div class="col-md-12 menu-text">-->
+                        <!--<p>-->
+                            <!--Amount of hours:-->
+                            <!--100-->
+                        <!--</p>-->
+                    <!--</div>-->
+                    <!--<button type="submit" class="btn btn-sm btn-info search-element col-md-5 btn-left">-->
+                        <!--Save intervew parameters-->
+                    <!--</button>-->
+                <!--</form>-->
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+                <!--<h4>Select dates on calendar</h4>-->
+                <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
+                <!--<button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Submit-->
+                    <!--dates-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+                <!--<h4>Generate schedule</h4>-->
+                <!--<button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Generate-->
+                    <!--schedule-->
+                <!--</button>-->
+                <!--<button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Submit-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+                <!--<button type="submit" class="btn btn-sm btn-info search-element col-md-3 btn-left" disabled>Export-->
+                <!--</button>-->
+            <!--</div>-->
         </div>
     </div>
 </div>

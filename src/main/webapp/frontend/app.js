@@ -4,41 +4,43 @@
 'use strict';
 
 angular.module('app', [
-        'ngMessages',
-        'ngRoute',
-        'appFormStudents',
-        'ngFileUpload',
-        'appHome',
-        'appMain',
-        'appFeedback',
-        'appStaffMain',
-        'appStaffPersonal',
-        'appStaffScheduling',
-        'appStaffStudentManagement',
-        'appStaffManagement',
-        'appStaffAppForm',
-        'appInterview',
-        'appStudentManagement',
-        'appReport',
-        'appScheduling',
-        'appAdminForm',
-        'appRecruitment',
-        'appNotification',
-        'appPersonal',
-        'appStudentForm',
-        'appStudentMenu',
-        'studentScheduling',
-        'appStudentSettings',
-        'appAuthorization',
-        'appRegistration',
-        'appMenuMain',
-        'appEducationNC',
-        'appGetToCourses',
-        'appRecoverRequestPage',
-        'appRecoverPassword',
-        'appConfirmRegistration',
-        'appError'
-    ])
+    'ngMessages',
+    'ngRoute',
+    'appFormStudents',
+    'ngFileUpload',
+    'gm.datepickerMultiSelect',
+    'ui.bootstrap',
+    'appHome',
+    'appMain',
+    'appFeedback',
+    'appStaffMain',
+    'appStaffPersonal',
+    'appStaffScheduling',
+    'appStaffStudentManagement',
+    'appStaffManagement',
+    'appStaffAppForm',
+    'appInterview',
+    'appStudentManagement',
+    'appReport',
+    'appScheduling',
+    'appAdminForm',
+    'appRecruitment',
+    'appNotification',
+    'appPersonal',
+    'appStudentForm',
+    'appStudentMenu',
+    'studentScheduling',
+    'appStudentSettings',
+    'appAuthorization',
+    'appRegistration',
+    'appMenuMain',
+    'appEducationNC',
+    'appGetToCourses',
+    'appRecoverRequestPage',
+    'appRecoverPassword',
+    'appConfirmRegistration',
+    'appError'
+])
     .controller('appController', function ($scope, $http, $rootScope) {
         $scope.init = function () {
             $http.get('/currentUser')
@@ -66,11 +68,11 @@ angular.module('app', [
                 templateUrl: 'module/home/educationnc/educationNC.html',
                 controller: 'educationNCController'
             })
-             .when('/accessDenied', {
+            .when('/accessDenied', {
                 templateUrl: 'module/error/accessdenied.html',
                 controller: 'accessdeniedController'
             })
-            .when('/registrationStudent/:token',{
+            .when('/registrationStudent/:token', {
                 templateUrl: 'module/home/confirmregistration/confirmregistration.html',
                 controller: 'confirmRegistrationController'
             })
@@ -111,11 +113,11 @@ angular.module('app', [
                 templateUrl: 'module/admin/view/personal.html',
                 controller: 'personalController'
             })
-            .when('/admin/studentform/:id',{
+            .when('/admin/studentform/:id', {
                 templateUrl: 'module/admin/view/studentappform.html',
                 controller: 'adminStudentFormController'
             })
-                
+
             //STAFF
             .when('/staff/main', {
                 templateUrl: 'module/staff/view/staffMain.html',
@@ -187,7 +189,7 @@ angular.module('app', [
                 templateUrl: 'module/home/recoverPasswordPage/recoverPasswordPage.html',
                 controller: 'recoverPasswordPageController'
             })
-            
+
             .otherwise({
                 redirectTo: '/home'
             });
