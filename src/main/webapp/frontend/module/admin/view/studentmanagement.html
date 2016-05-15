@@ -55,23 +55,26 @@
                     </th>
                     <th></th>
                 </tr>
-                <tr>
+                <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok" ></span>&nbsp;</th>
                     <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort-stud order="2" sort="sort">Name&nbsp;</th>
                     <th class="student-status">Status</th>
-                    <th class="" custom-sort>Check&nbsp;</th>
+                    <th class="student-softMark">Soft Mark</th>
+                    <th class="student-techMark">Tech Mark</th>
+                    <th class="student-techMark">Final Mark</th>
                 </thead>
                 <tbody>
                 <tr ng-repeat="student in allStudents">
+                    <td><input type="checkbox" ng-click="checkStudentStatus(student)"></td>
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
                         <select ng-model="student.status" ng-change="changeStatus(student.status,student.appFormId)">
                             <option ng-repeat="stat in student.possibleStatus" ng-checked="stat.title==student.status">{{stat.title}}</option> <!--Don`t touch This  !!!!! -->
                         </select>
-                    <td>
-                        <input type="checkbox" ng-click="checkStudentStatus(student)">
-                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 </tbody>
                 <tfoot>

@@ -5,11 +5,9 @@
         <div >
             <div class="row">
                 <div class="col-md-2">
-                    <h4>{{appForm.user.firstName}} {{appForm.user.lastName}}</h4>
+                    <h4>{{appForm.user.firstName}} {{appForm.user.lastName}} <p></p> <span ng-if="adequate" class="label label-danger">Not adequate</span></h4>
                 </div>
             </div>
-
-            <h4 ng-if="adequate" >NonRelevant</h4>
 
             <ul ng-init="tab = 1;showAppForm()" class="nav nav-tabs">
                 <li ng-class="{active:tab===1}" class="dropdown active">
@@ -76,7 +74,7 @@
                                 </td>
                             </tr>
                     </table>
-                    <button type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
+                    <button ng-click = "exportAppForm(appForm)" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
                 </div>
                 <div ng-show="tab === 2"  class="tab-pane fade in active">
                     <table class="table table-hover table-condensed">

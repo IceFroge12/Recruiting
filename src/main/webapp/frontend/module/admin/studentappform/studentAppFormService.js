@@ -19,14 +19,22 @@ function studentAppFormService(http) {
         console.log("Service getRoles");
         return http({
             method: 'GET',
-            url: '/staff/getRolesInterview/'+ appFormId
+            url: '/admin/getRolesInterview/'+ appFormId
         })
     };
     service.getInterview = function (appFormId, role) {
         console.log("Service getInterview");
         return http({
             method: 'POST',
-            url: '/staff/getInterview/' + appFormId + '/' + role
+            url: '/admin/getInterview/' + appFormId + '/' + role
+        })
+    };
+
+    service.getNonAdequateMark = function (appFormId) {
+        console.log("Service getAdequateMark");
+        return http({
+            method: 'GET',
+            url: '/admin/getAdequateMark/'+ appFormId
         })
     };
     return service;

@@ -40,7 +40,6 @@ public class StaffInterviewController {
 	private UserService userService;
 	private FormQuestionService formQuestionService;
 	private FormAnswerVariantService formAnswerVariantService;
-	private RoleService roleService;
 	private InterviewService interviewService;
 
 	public StaffInterviewController() {
@@ -49,7 +48,6 @@ public class StaffInterviewController {
 		userService = ServiceFactory.getUserService();
 		formQuestionService = ServiceFactory.getFormQuestionService();
 		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-		roleService = ServiceFactory.getRoleService();
 		interviewService = ServiceFactory.getInterviewService();
 	}
 
@@ -61,7 +59,7 @@ public class StaffInterviewController {
 		return jsonResult;
 	}
 
-	@RequestMapping(value = "appForm{applicationFormId}", method = RequestMethod.GET)
+	@RequestMapping(value = "appForm/{applicationFormId}", method = RequestMethod.GET)
 	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
 		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
@@ -122,17 +120,6 @@ public class StaffInterviewController {
 			}
 		}
 		return interviwerRoles;
-	}
-
-	@RequestMapping(value = "getRolesInterview/{applicationFormId}", method = RequestMethod.GET)
-	public Set<Role> getInterviewRoles(@PathVariable Long applicationFormId) {
-		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
-		List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
-		Set<Role> interviewRoles = new HashSet<>();
-		for( Interview interview : interviews){
-			interviewRoles.add(interview.getRole());
-		}
-		return interviewRoles;
 	}
 
     @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)

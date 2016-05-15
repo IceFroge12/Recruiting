@@ -327,7 +327,7 @@ public class StudentApplicationFormController {
 		}
 	}
 
-	@RequestMapping(value = "appform{applicationFormId}", method = RequestMethod.GET)
+	@RequestMapping(value = "appform/{applicationFormId}", method = RequestMethod.GET)
 	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
 		response.setContentType("application/pdf");
