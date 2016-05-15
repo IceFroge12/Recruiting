@@ -23,4 +23,6 @@ public interface UserTimePriorityService {
     List<UserTimePriority> getAllUserTimePriorities(Long userId);
     
     void createStudentTimePriotities(User student);
+    
+    boolean isSchedulePrioritiesExist();
 }

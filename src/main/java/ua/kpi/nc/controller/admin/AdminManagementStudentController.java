@@ -39,6 +39,7 @@ public class AdminManagementStudentController {
     private SenderService senderService = SenderServiceImpl.getInstance();
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
     private InterviewService interviewService = ServiceFactory.getInterviewService();
+    private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
     
 //    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
 //    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -218,21 +219,25 @@ public class AdminManagementStudentController {
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
   	public String confirmSelection() throws MessagingException {
   		Gson gson = new Gson();
+  		if(userTimePriorityService.isSchedulePrioritiesExist()) {
+  	  		return gson.toJson(new MessageDto("Selection is already confirmed.",
+  	  				MessageDtoType.ERROR));
+  		}
   		Long appFormInReviewCount = applicationFormService.getCountInReviewAppForm();
   		if (appFormInReviewCount != 0) {
   			return gson.toJson(new MessageDto("You haven't reviewed all application forms. There are still "
   					+ appFormInReviewCount + " unreviewed forms.", MessageDtoType.ERROR));
   		}
   		ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
-  		if (!timePointService.isScheduleExists()) {
+  		if (!timePointService.isScheduleDatesExists()) {
   			return gson.toJson(new MessageDto("You have to choose dates for schedule before confirming selection.",
   					MessageDtoType.ERROR));
   		}
   		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
   		processApprovedStudents(recruitment);
-  		processRejectedStudents(recruitment);
+  		processRejectedStudentsSelection(recruitment);
   		return gson.toJson(new MessageDto("Selection confirmed.",
-  				MessageDtoType.ERROR));
+  				MessageDtoType.SUCCESS));
   	}
 
   	private void processApprovedStudents(Recruitment recruitment) throws MessagingException {
@@ -240,7 +245,7 @@ public class AdminManagementStudentController {
   		EmailTemplate approvedTemplate = emailTemplateService.getById(5L);
   		List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
   				recruitment);
-  		UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
+  		
   		
   		for (ApplicationForm applicationForm : approvedForms) {
   			User student = applicationForm.getUser();
@@ -252,7 +257,7 @@ public class AdminManagementStudentController {
   	}
   	
   	
-  	private void processRejectedStudents(Recruitment recruitment) throws MessagingException {
+  	private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
   		Status rejectedStatus = statusService.getStatusById(StatusEnum.REJECTED.getId());
   		EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);
   		List<ApplicationForm> rejectedForms = applicationFormService.getByStatusAndRecruitment(rejectedStatus,
