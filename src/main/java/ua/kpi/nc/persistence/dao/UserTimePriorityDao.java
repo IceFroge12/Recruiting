@@ -21,4 +21,6 @@ public interface UserTimePriorityDao {
     int deleteUserPriority(UserTimePriority userTimePriority);
 
     List<UserTimePriority> getAllUserTimePriorities(Long userId);
+
+	boolean isSchedulePrioritiesExist();
 }

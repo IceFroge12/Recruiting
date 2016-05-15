@@ -19,7 +19,7 @@ angular.module('appStudentForm', [])
                     var formData = new FormData();
                     formData.append('file', element[0].files[0]);
 
-                    // optional front-end logging
+                    
                     var fileObject = element[0].files[0];
                     scope.fileLog = {
                         'lastModified': fileObject.lastModified,
@@ -30,11 +30,6 @@ angular.module('appStudentForm', [])
                     };
                     scope.$apply();
 
-                    /*  ---> post request to your php file and use $_FILES in your php file   < ----
-                     httpPostFactory('your_upload_image_php_file.php', formData, function (callback) {
-                     console.log(callback);
-                     });
-                     */
                 });
 
             }

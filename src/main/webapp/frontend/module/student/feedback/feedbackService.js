@@ -1,35 +1,30 @@
 'use strict';
 
-function feedbackService(http) {
+function feedbackService($http) {
     var service = {};
 
-    service.saveFeedback = function (feedback) {
-         http({
-            method : 'POST',
-            url : '/student/feedback',
-            params : {feedback:feedback}
-        })
 
+    service.getFeedBack = function (id) {
+        return $http({
+            method: 'GET',
+            url: '/student/getFeedBack',
+            params: {id: id}
+        }).error(function (data, status, headers) {
+            console.log(status);
+        });
     };
-    
+
+    service.saveFeedBack = function (feedBack) {
+        $http({
+            method: 'POST',
+            url: '/student/saveFeedBack',
+            contentType: 'application/json',
+            params: {feedBack: feedBack}
+        })
+    };
+
     return service;
 }
 
 angular.module('appFeedback')
     .service('feedbackService', ['$http', feedbackService]);
-
-// angular.module('appFeedback').factory('feedbackService',['$http', '$q', function($http, $q){
-//     return {
-//         setFeedback :function(id, feedback){
-//             return('/student/feedback/'+id, feedback).then(function(response){
-//                    // return response.data;
-//                 },
-//                 function(errResponse){
-//                     console.error('Error while set Feedback : Service');
-//                     return $q.reject(errResponse);
-//                 });
-//         }
-//
-//     };
-//
-// }]);

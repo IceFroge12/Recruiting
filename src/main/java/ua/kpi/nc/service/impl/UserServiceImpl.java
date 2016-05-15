@@ -195,4 +195,10 @@ public class UserServiceImpl implements UserService {
     public Long getActiveEmployees(Long idParam0, Long idParam1) {
         return userDao.getActiveEmployees(idParam0, idParam1);
     }
+
+    @Override
+    public int disableAllStaff() {
+        return userDao.disableAllStaff();
+    }
 }
+

@@ -56,4 +56,6 @@ public interface ApplicationFormService {
     List<ApplicationForm>getCurrentApplicationForms();
 
 	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
+
+    List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 }

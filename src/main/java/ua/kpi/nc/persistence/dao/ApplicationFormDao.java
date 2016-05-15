@@ -59,4 +59,6 @@ public interface ApplicationFormDao {
     Long getCountInReviewAppForm();
 
 	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
+
+    List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 }

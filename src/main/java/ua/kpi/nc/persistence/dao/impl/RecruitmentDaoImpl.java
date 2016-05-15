@@ -90,6 +90,8 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
     private static final String SQL_GET_REGISTERED_COUNT = "SELECT COUNT(*) FROM \"application_form\" + apl\n" +
             "WHERE apl.id_recruitment=?";
 
+    private static final String SQL_GET_LAST_N_RECRUITMENT = "SELECT * FROM public.recruitment ORDER BY recruitment.id DESC LIMIT ?;";
+
     @Override
     public Recruitment getRecruitmentById(Long id) {
         log.info("Looking for recruitment with id = {}", id);
@@ -150,5 +152,11 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 	public List<Recruitment> getAllSorted() {
 		return this.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
 	}
+
+    @Override
+    public Recruitment getLastRecruitment() {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST_N_RECRUITMENT, extractor, 1);
+    }
+
 
 }

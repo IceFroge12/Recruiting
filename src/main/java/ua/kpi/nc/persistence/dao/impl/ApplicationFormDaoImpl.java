@@ -140,7 +140,12 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             + IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a." + ID_STATUS_COL + " = ? AND a." + ID_RECRUITMENT_COL + " = ?";
-			
+
+    private static final String SQL_GET_RECRUITMENT = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
+            + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
+            + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+            + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id_recruitment = ?;";
+
     
     private static final String SORT_PARAM_ASC = ") ORDER BY a.id ASC OFFSET ? LIMIT ?;";
 
@@ -153,6 +158,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
 
     private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =?";
+
+
+
 
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
@@ -368,4 +376,8 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 				recruitment.getId());
 	}
 
+    @Override
+    public List<ApplicationForm> getByRecruitment(Recruitment recruitment) {
+        return getJdbcTemplate().queryForList(SQL_GET_RECRUITMENT, extractor, recruitment.getId());
+    }
 }

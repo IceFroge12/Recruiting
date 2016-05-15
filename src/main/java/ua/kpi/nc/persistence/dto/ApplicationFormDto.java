@@ -1,19 +1,28 @@
 package ua.kpi.nc.persistence.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Korzh
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationFormDto {
+
 
     private long id;
     private String status;
     private UserDto user;
     private List<StudentAppFormQuestionDto> questions = new ArrayList<>();
+    private String feedBack;
 
     public ApplicationFormDto() {
+    }
+
+    public ApplicationFormDto(String feedBack) {
+        this.feedBack = feedBack;
     }
 
     public long getId() {
@@ -47,9 +56,22 @@ public class ApplicationFormDto {
         this.user = user;
     }
 
-	@Override
-	public String toString() {
-		return "ApplicationFormDto [id=" + id + ", status=" + status + ", user=" + user + ", questions=" + questions
-				+ "]";
-	}
+    public String getFeedBack() {
+        return feedBack;
+    }
+
+    public void setFeedBack(String feedBack) {
+        this.feedBack = feedBack;
+    }
+
+    @Override
+    public String toString() {
+        return "ApplicationFormDto{" +
+                "id=" + id +
+                ", status='" + status + '\'' +
+                ", user=" + user +
+                ", questions=" + questions +
+                ", feedBack='" + feedBack + '\'' +
+                '}';
+    }
 }

@@ -4,7 +4,7 @@
 'use strict';
 
 function schedulingService(http) {
-    
+
     var service = {};
     service.getCurrentRecruitmentCountStudents = function () {
         return http.post('/scheduling/getStudentCount').then(function (response) {
