@@ -41,6 +41,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         applicationForm.setFeedback(resultSet.getString(FEEDBACK));
         applicationForm.setId(id);
         applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
+        if(resultSet.wasNull()) {
+        	applicationForm.setRecruitment(null);
+        }
         applicationForm.setInterviews(getInterviews(id));
         applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
         applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));

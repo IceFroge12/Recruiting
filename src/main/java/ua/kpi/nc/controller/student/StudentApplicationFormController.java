@@ -116,20 +116,17 @@ public class StudentApplicationFormController {
 					}
 				}
 				applicationForm.setAnswers(formAnswers);
-			} else {
-				connectCurrentRecruitment(applicationForm);
-			}
-		} else {
-			connectCurrentRecruitment(applicationForm);
-		}
-		if (!newForm) {
+			} 
+		} 
+		connectCurrentRecruitment(applicationForm);
+		if (!newForm && applicationForm.getRecruitment() == null) {
 			List<FormQuestion> unconnectedQuestion = formQuestionService.getEnableUnconnectedQuestion(applicationForm);
 			for (FormQuestion formQuestion : unconnectedQuestion) {
 				FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
 				applicationForm.getAnswers().add(formAnswer);
 			}
 		}
-		
+
 		Gson applicationFormGson = GsonFactory.getApplicationFormGson();
 		String jsonResult = applicationFormGson.toJson(applicationForm);
 		return jsonResult;
@@ -161,6 +158,7 @@ public class StudentApplicationFormController {
 				if (recruitment != null && currentRecruitment != null
 						&& currentRecruitment.getId() != recruitment.getId()) {
 					newForm = true;
+					connectCurrentRecruitment(applicationForm);
 				}
 			}
 		}
@@ -169,7 +167,7 @@ public class StudentApplicationFormController {
 	
 	
 		if(newForm) {
-			applicationForm.setRecruitment(currentRecruitment);
+			
 			answers = new ArrayList<FormAnswer>();
 			remainedQuestions = formQuestionService
 					.getByEnableRoleAsSet(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
@@ -352,9 +350,7 @@ public class StudentApplicationFormController {
 		applicationForm.setStatus(status);
 		applicationForm.setActive(true);
 		applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-		if (recruitment != null && !isRegistrationDeadlineEnded(recruitment)) {
-			applicationForm.setRecruitment(recruitment);
-		}
+		connectCurrentRecruitment(applicationForm);
 		return applicationForm;
 	}
 
