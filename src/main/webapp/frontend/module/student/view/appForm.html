@@ -112,13 +112,9 @@
                        </span>
                     </td>
                     <td ng-if="question.questionType == 'radio'">
-                       <span ng-repeat="variant in question.variants track by $index">
-                           <p>
-                               <input type="radio" ng-required="question.isMandatory && !checkAnswersSelected(question)"
-                               ng-model="question.answers[0].answer" name="question.questionTitle"
-                                      ng-value="variant.variant"> {{variant.variant}}
-                           </p>
-                       </span>
+                       <div ng-repeat="variant in question.variants">
+                               <input type="radio" name="{{$parent.question.title}}" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="$parent.question.answers[0].answer" name="question.questionTitle" ng-value="variant.variant"> {{variant.variant}}</input>
+					 </div>
                     </td>
                     <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                         <p>
