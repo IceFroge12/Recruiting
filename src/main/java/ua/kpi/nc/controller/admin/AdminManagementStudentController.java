@@ -69,8 +69,11 @@ public class AdminManagementStudentController {
     }
 
     @RequestMapping(value = "showFilteredStudents", method = RequestMethod.GET)
-    public List<StudentAppFormDto> showFilteredStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                                @RequestParam boolean increase, @RequestParam("restrictions") String[] restrictions) {
+    public List<StudentAppFormDto> showFilteredStudents(@RequestParam int pageNum, @RequestParam Long rowsNum,
+                                                        @RequestParam Long sortingCol, @RequestParam boolean increase,
+                                                        @RequestParam("restrictions") String[] restrictions,
+                                                        @RequestParam("statuses") List<String> statuses) {
+        System.out.println(statuses);
         Long fromRow = (pageNum - 1) * rowsNum;
         List<FormQuestion> questions = new ArrayList<>();
         Gson questionGson = GsonFactory.getFormQuestionGson();
@@ -80,7 +83,8 @@ public class AdminManagementStudentController {
         System.out.println(questions);
 
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
-        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationFormsFiltered(fromRow, rowsNum, sortingCol, increase, questions);
+        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationFormsFiltered(fromRow,
+                rowsNum, sortingCol, increase, questions, statuses);
         for (ApplicationForm applicationForm : applicationForms) {
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),

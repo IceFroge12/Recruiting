@@ -122,6 +122,19 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>
+                            Status
+                        </td>
+                        <td>
+                            <span ng-repeat="st in statusTemp track by $index">
+                                <p>
+                                    <input type="checkbox" ng-checked="existsItem(st, statusesChoosen)"
+                                           ng-click="toggleItem(st, statusesChoosen)">{{st.title}}
+                                </p>
+                            </span>
+                        </td>
+                    </tr>
                     <tr ng-repeat="question in questions">
                         <td>{{question.title}}</td>
                         <td>

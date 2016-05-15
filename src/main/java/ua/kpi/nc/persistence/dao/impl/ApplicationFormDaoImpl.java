@@ -318,7 +318,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     }
 
     @Override
-    public List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions) {
+    public List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions, List<String> statuses) {
         log.info("Looking for current filtered application forms");
         StringBuilder sbTotal = new StringBuilder();
         for(FormQuestion question: questions){
@@ -339,7 +339,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         String sql = SQL_GET_CURRENT_APP_FORMS_FILTERED + sbTotal.toString();
 
         String order = sortingCol == 1 ? "a.id" : "a.id";
-        return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum );
+        return this.getJdbcTemplate().queryForList(sql, extractor, order, fromRow, rowsNum );
     }
     
 	@Override
