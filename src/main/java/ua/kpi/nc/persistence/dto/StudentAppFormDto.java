@@ -1,6 +1,5 @@
 package ua.kpi.nc.persistence.dto;
 
-import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Status;
 
 import java.util.List;
@@ -15,9 +14,6 @@ public class StudentAppFormDto {
     private String firstName;
     private String lastName;
     private String status;
-    private Integer softMark;
-    private Integer techMark;
-    private Integer finalMark;
     private List<Status> possibleStatus;
 
     public StudentAppFormDto() {
@@ -30,20 +26,6 @@ public class StudentAppFormDto {
         this.firstName = firstName;
         this.lastName = lastName;
         this.status = status;
-        this.possibleStatus = possibleStatus;
-
-    }
-
-    public StudentAppFormDto(Long id, Long appFormId, String firstName, String lastName, String status,
-                             Integer softMark, Integer techMark, Integer finalMark, List<Status> possibleStatus) {
-        this.id = id;
-        this.appFormId = appFormId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.status = status;
-        this.softMark = softMark;
-        this.techMark = techMark;
-        this.finalMark = finalMark;
         this.possibleStatus = possibleStatus;
     }
 
@@ -95,30 +77,6 @@ public class StudentAppFormDto {
         this.status = status;
     }
 
-    public Integer getSoftMark() {
-        return softMark;
-    }
-
-    public void setSoftMark(Integer softMark) {
-        this.softMark = softMark;
-    }
-
-    public Integer getTechMark() {
-        return techMark;
-    }
-
-    public void setTechMark(Integer techMark) {
-        this.techMark = techMark;
-    }
-
-    public Integer getFinalMark() {
-        return finalMark;
-    }
-
-    public void setFinalMark(Integer finalMark) {
-        this.finalMark = finalMark;
-    }
-
     @Override
     public String toString() {
         return "StudentAppFormDto{" +
@@ -127,9 +85,6 @@ public class StudentAppFormDto {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", status='" + status + '\'' +
-                ", softMark=" + softMark +
-                ", techMark=" + techMark +
-                ", finalMark=" + finalMark +
                 ", possibleStatus=" + possibleStatus +
                 '}';
     }
