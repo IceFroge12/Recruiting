@@ -14,7 +14,7 @@ function schedulingController($scope, schedulingService) {
             console.log(value);
             console.log(value);
         });
-        $scope.selectedDates.splice(this.selectedDates.indexOf(dt), 1);
+        $scope.selectedDates.splice(this.selectedDates.indexOf(dt), 1   );
     };
 
     schedulingService.getCurrentRecruitmentCountStudents().then(function success(data) {
