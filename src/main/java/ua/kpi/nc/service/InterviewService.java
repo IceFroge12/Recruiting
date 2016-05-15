@@ -19,6 +19,8 @@ public interface InterviewService {
 
 	List<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
+	Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, int interviewerRoleId );
+
 	Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
 
 	boolean insertInterviewWithAnswers(Interview interview, List<FormAnswer> formAnswers);

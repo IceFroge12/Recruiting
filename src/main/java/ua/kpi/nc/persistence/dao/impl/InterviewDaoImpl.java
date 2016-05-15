@@ -35,6 +35,9 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 	private static final String SQL_DELETE = "DELETE FROM interview WHERE interview.id = ?;";
 	private static final String SQL_UPDATE = "UPDATE interview SET mark = ?, date= ?,"
 			+ " id_interviewer = ?, interviewer_role= ?, adequate_mark= ?, id_application_form= ? WHERE id = ?";
+	private static final String SQL_GET_BY_APPLICATION_FORM_AND_INTERVIEWER_ROLE_ID = "SELECT i.id, i.mark, i.date," +
+			" i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form FROM interview i " +
+			"WHERE i.id_application_form = ? and i.interviewer_role=?;";
 
 	private static Logger log = LoggerFactory.getLogger(InterviewDaoImpl.class.getName());
 
@@ -75,6 +78,12 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 		log.info("Looking for interview with application form id = ", applicationForm.getId());
 		return this.getJdbcTemplate().queryForList(SQL_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
 
+	}
+
+	@Override
+	public Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, int interviewerRoleId) {
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_APPLICATION_FORM_AND_INTERVIEWER_ROLE_ID,extractor,
+				applicationForm.getId(),interviewerRoleId);
 	}
 
 	@Override
