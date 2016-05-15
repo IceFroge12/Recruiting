@@ -161,4 +161,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	public List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment) {
 		return applicationFormDao.getByStatusAndRecruitment(status, recruitment);
 	}
+
+	@Override
+	public List<ApplicationForm> getByRecruitment(Recruitment recruitment) {
+		return applicationFormDao.getByRecruitment(recruitment);
+	}
 }

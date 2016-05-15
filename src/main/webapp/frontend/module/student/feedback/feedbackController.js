@@ -1,9 +1,15 @@
+function feedbackController($scope, $rootScope, feedbackService) {
 
-function feedbackController($scope, feedbackService, feedback) {
+    $scope.init = function () {
+        feedbackService.getFeedBack($rootScope.id).success(function (data) {
+            $scope.feedBackText = data.feedBack;
+        })
+    };
 
-    feedbackService.saveFeedback(feedback);
-
+    $scope.saveFeedBack = function (feedBack) {
+        feedbackService.saveFeedBack(feedBack);
+    };
 }
 
 
-angular.module('appFeedback').controller('feedbackController', ['$scope', 'feedbackService', feedbackController]);
+angular.module('appFeedback').controller('feedbackController', ['$scope', '$rootScope', 'feedbackService', feedbackController]);

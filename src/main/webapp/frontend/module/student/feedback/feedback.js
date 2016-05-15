@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('appFeedback', ['appHeader', 'appFooter']);
+angular.module('appFeedback', []);

@@ -8,11 +8,11 @@
 			<h5>Your opinion about interview</h5>
 			<div class="row">
 				<div class="col-md-12">
-					<textarea rows="7" class="wide-not"></textarea>
+					<textarea ng-model="feedBackText" ng-init="init()" rows="7" class="wide-not"></textarea>
 				</div>
 			</div>
 			</br>
-			<button type="submit" class="btn btn-sm btn-info search-element">Send</button>
+			<button type="submit" class="btn btn-sm btn-info search-element" ng-click="saveFeedBack(feedBackText)">Send</button>
 		</div>
 	</div>
 </div>
