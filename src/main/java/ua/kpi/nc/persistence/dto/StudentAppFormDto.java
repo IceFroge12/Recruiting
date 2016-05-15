@@ -4,9 +4,7 @@ import ua.kpi.nc.persistence.model.Status;
 
 import java.util.List;
 
-/**
- * Created by Admin on 13.05.2016.
- */
+
 public class StudentAppFormDto {
 
 
