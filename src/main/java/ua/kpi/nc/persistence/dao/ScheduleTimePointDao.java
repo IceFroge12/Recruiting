@@ -28,4 +28,6 @@ public interface ScheduleTimePointDao {
 
 	boolean isScheduleExists();
 
+	boolean isScheduleDatesExists();
+
 }
