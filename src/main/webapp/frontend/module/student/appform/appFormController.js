@@ -63,6 +63,14 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
     	return document.getElementById(id);
     }
     $scope.saveForm = function() {
+    	if($scope.myForm.$invalid) {
+    		return;
+    	}
+    	for(var i = 0; i < $scope.questions.length; i++) {
+    		if(!checkAnswersSelected($scope.questions[i])) {
+    			return;
+    		}
+    	}
 		var fileInp = ge('file');
 		var fd = new FormData();
 		var fileVal = document.getElementById("file");
@@ -204,14 +212,16 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
     	      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
     	    });
     }
-    $scope.checkAnswersSelected = function(question) {
+    checkAnswersSelected = function(question) {
     	for(var i = 0; i < question.answers.length; i++) {
-    		if(question.answers[i].answer != null) {
+    		if(question.answers[i].answer != null && question.answers[i].answer != '') {
     			return true;
     		}
     	}
     	return false;
     }
+    
+    $scope.checkAnswersSelected = checkAnswersSelected;
 
 }
 
