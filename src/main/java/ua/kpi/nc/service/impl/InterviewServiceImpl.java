@@ -86,4 +86,9 @@ public class InterviewServiceImpl implements InterviewService {
     public boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId) {
         return interviewDao.haveNonAdequateMark(applicationFormID,interviewerId);
     }
+
+    @Override
+    public boolean haveNonAdequateMarkForAdmin(Long applicationFormID) {
+        return interviewDao.haveNonAdequateMarkForAdmin(applicationFormID);
+    }
 }

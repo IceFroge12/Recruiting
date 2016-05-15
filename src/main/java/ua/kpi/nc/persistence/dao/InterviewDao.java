@@ -29,4 +29,6 @@ public interface InterviewDao {
     List<Interview> getAll();
 
     boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
+
+    boolean haveNonAdequateMarkForAdmin (Long applicationFormID);
 }

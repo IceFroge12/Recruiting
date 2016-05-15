@@ -1,7 +1,7 @@
 /**
  * Created by Alona on 06.05.2016.
  */
-function appFormStudentController($scope,$http, appFormStudentService,$routeParams) {
+function appFormStudentController($scope,$http,ngToast, appFormStudentService,$routeParams) {
 
     $scope.showAppForm = function showAppForm() {
         var id = $routeParams.id;
@@ -129,14 +129,14 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
     $scope.exportAppForm = function(AppForm){
         var config = {
             method: 'GET',
-            url: "/staff/appForm"+ AppForm.id,
+            url: "/staff/appForm/"+ AppForm.id,
             headers: {
                 'Accept': 'application/pdf'
             }
         };
         $http(config)
             .success(function(){
-                window.location = "/staff/appForm"+ AppForm.id;
+                window.location = "/staff/appForm/"+ AppForm.id;
             })
             .error(function(){
                 var myToastMsg = ngToast.warning({
@@ -157,4 +157,4 @@ function appFormStudentController($scope,$http, appFormStudentService,$routePara
 
 
 angular.module('appStaffAppForm')
-    .controller('appFormStudentController', ['$scope','$http','appFormStudentService', '$routeParams', appFormStudentController]);
+    .controller('appFormStudentController', ['$scope','$http','ngToast','appFormStudentService', '$routeParams', appFormStudentController]);

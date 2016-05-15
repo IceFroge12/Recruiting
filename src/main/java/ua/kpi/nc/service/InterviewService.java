@@ -30,4 +30,6 @@ public interface InterviewService {
 	List<Interview> getAll();
 
 	boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
+
+	boolean haveNonAdequateMarkForAdmin (Long applicationFormID);
 }
