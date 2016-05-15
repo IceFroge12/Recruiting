@@ -17,12 +17,9 @@
                         <td>Registration deadline</td>
                         <td>
                             <div class="form-group">
-                                <div class="input-group date">
-                                    <input  class="form-control" ng-model="date1" datetime-picker
-                                           date-format="yyyy-MM-dd HH:mm:ss"/>
-									<span class="input-group-addon">
-									<span class="glyphicon glyphicon-calendar"></span>
-									</span>
+                                <div>
+                                    <input id="datepicker" class="form-control" ng-model="date1"
+                                           date-format="yyyy-mm-dd hh:mm:ss[.fffffffff]"/>
                                 </div>
                             </div>
                         </td>
@@ -30,15 +27,23 @@
                     <tr>
                         <td>Choosing schedule time deadline</td>
                         <td>
-                        <div class="form-group">
-                            <div class="input-group date">
-                                <input class="form-control" ng-model="date2" datetime-picker
-                                       date-format="yyyy-MM-dd HH:mm:ss"/>
-									<span class="input-group-addon">
-									<span class="glyphicon glyphicon-calendar"></span>
-									</span>
+                            <div class="form-group">
+                                <div>
+                                    <input id="datepicker1" class="form-control" ng-model="date2"
+                                           date-format="yyyy-mm-dd hh:mm:ss[.fffffffff]"/>
+                                </div>
                             </div>
-                        </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>End of recruitment</td>
+                        <td>
+                            <div class="form-group">
+                                <div>
+                                    <input id="datepicker2" class="form-control" ng-model="date3"
+                                           date-format="yyyy-mm-dd hh:mm:ss[.fffffffff]"/>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -55,8 +60,12 @@
                         </td>
                     </tr>
                 </table>
-                <button type="button" class="btn btn-info btn-sm search-element" disabled>End of recruitment</button>
-                <button ng-click="save()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Save</button>
+                <button ng-click="save()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Add new
+                    Recruitment
+                </button>
+                <button ng-click="edit()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Edit
+                    Recruitment
+                </button>
             </form>
         </div>
     </div>
