@@ -35,10 +35,15 @@ public class StudentFeedbackController {
     @RequestMapping(value = "getFeedBack", method = RequestMethod.GET)
     public ApplicationFormDto getFeedBack(@RequestParam String id){
         User user = userService.getUserByID(Long.parseLong(id));
-        if (null != user){
-            return new ApplicationFormDto(applicationFormService.getLastApplicationFormByUserId(user.getId()).getFeedback());
-        }else {
-            return null;
+        try{
+            if (null != user){
+                return new ApplicationFormDto(applicationFormService.getLastApplicationFormByUserId(user.getId()).getFeedback());
+            }else {
+                return null;
+            }
+        }catch (NullPointerException e){
+            //TODO log
         }
+        return null;
     }
 }

@@ -13,12 +13,12 @@
                     <h4>
                         Amount of tech:
 
-                        100
+                        {{amountOfTech}}
                     </h4>
 
                     <h4>
                         Amount of soft:
-                        100
+                        {{amountOfSoft}}
                     </h4>
                     <h4>Enter duration for each intervew:</h4>
 
@@ -89,7 +89,7 @@
                                 <div ng-repeat='d in selectedDates'>
                                     {{d | date : 'fullDate'}}
                                     <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='removeFromSelected(d)'>Remove</button>
-                                    <uib-timepicker ng-model="startTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>
+                                    <uib-timepicker ng-model="startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>
                                     <uib-timepicker ng-model="endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>
                                     <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='setTime(startTime, endTime, d)'>Test</button>
                                 </div>

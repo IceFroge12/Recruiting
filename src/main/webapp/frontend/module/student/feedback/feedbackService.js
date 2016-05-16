@@ -15,14 +15,14 @@ function feedbackService($http) {
     };
 
     service.saveFeedBack = function (feedBack) {
-        $http({
+        return $http({
             method: 'POST',
             url: '/student/saveFeedBack',
             contentType: 'application/json',
             params: {feedBack: feedBack}
         })
     };
-
+    
     return service;
 }
 

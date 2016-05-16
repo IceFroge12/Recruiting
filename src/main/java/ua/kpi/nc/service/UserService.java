@@ -23,6 +23,8 @@ public interface UserService {
 
     int updateUser(User user);
 
+    boolean updateUserWithRole(User user);
+
     boolean addRole(User user, Role role);
 
     int deleteRole(User user, Role role);

@@ -349,8 +349,8 @@
                             <td> Type</td>
                             <!--<td><input type="text" ng-model="type"></td>-->
                             <td>
-                                <select>
-                                    <option ng-repeat="type in types" ng-checked ="type==type" >{{type}}</option>
+                                <select ng-model="type">
+                                    <option ng-repeat="typee in types" ng-checked ="typee==type" value="{{typee}}">{{typee}}</option>
                                 </select>
                             </td>
                             <!--<select ng-model="student.status"  ng-change ="changeStatus(student.status,student.appFormId)" >-->

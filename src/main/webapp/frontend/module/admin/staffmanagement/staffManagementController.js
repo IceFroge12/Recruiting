@@ -199,8 +199,8 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             $scope.showAllEmployees($scope.currentPage);
     };
 
-    var editRoles = [];
-
+    //var editRoles = [];
+    $scope.editRoles=[];
     $scope.showUserData = function (employee) {
         $scope.adminEdit = false;
         $scope.softEdit = false;
@@ -214,26 +214,33 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         angular.forEach(employee.roles, function (item, i) {
             if (item.roleName == "ADMIN") {
                 $scope.adminEdit = true;
-                editRoles.push({roleName: item.roleName});
+                //$scope.editRoles.push({roleName: item.roleName});
             }
             if (item.roleName == "SOFT") {
                 $scope.softEdit = true;
-                editRoles.push({roleName: item.roleName});
+               // $scope.editRoles.push({roleName: item.roleName});
             }
             if (item.roleName == "TECH") {
                 $scope.techEdit = true;
-                editRoles.push({roleName: item.roleName});
+                //$scope.editRoles.push({roleName: item.roleName});
             }
             //TODO change logic
         });
 
-        editRoles = [];
+       // editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 
+    $scope.checkRole = function(){
+      if($scope.adminEdit) $scope.editRoles.push({roleName: "ADMIN"});
+        if($scope.softEdit)$scope.editRoles.push({roleName: "SOFT"});
+            if($scope.techEdit)$scope.editRoles.push({roleName: "TECH"});
+    };
+    
     $scope.editEmployee = function () {
+        $scope.checkRole();
         staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
-            $scope.lastNameEdit, $scope.emailEdit, editRoles);
+            $scope.lastNameEdit, $scope.emailEdit, $scope.editRoles);
     };
 
     $scope.changeEmployeeStatus = function (employee) {

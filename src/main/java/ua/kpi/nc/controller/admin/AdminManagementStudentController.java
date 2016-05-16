@@ -62,15 +62,25 @@ public class AdminManagementStudentController {
         Long fromRow = (pageNum - 1) * rowsNum;
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         List<ApplicationForm> applicationForms = applicationFormService.getApplicationFormsSorted(fromRow, rowsNum, sortingCol, increase);
+        DecisionService decisionService = ServiceFactory.getDecisionService();
         for (ApplicationForm applicationForm : applicationForms) {
             Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, RoleEnum.ROLE_SOFT.getId());
             Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,RoleEnum.ROLE_TECH.getId());
+            Integer softMark = null;
+            Integer techMark = null;
+            Integer finalMark = null;
+            if (interviewSoft != null && interviewSoft.getMark() != null && interviewTech != null
+					&& interviewTech.getMark() != null) {
+	            softMark = interviewSoft.getMark();
+				techMark = interviewTech.getMark();
+				finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
+            }
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
-                    null == interviewSoft ? 0 : interviewSoft.getMark(),
-                    null == interviewTech ? 0 : interviewTech.getMark(),
-                    null,//TODO:Final Mark Via decision Matrix
+                    softMark,
+                    techMark,
+                    finalMark,//TODO:Final Mark Via decision Matrix
                     getPossibleStatus(applicationForm.getStatus())));
         }
         return studentAppFormDtoList;

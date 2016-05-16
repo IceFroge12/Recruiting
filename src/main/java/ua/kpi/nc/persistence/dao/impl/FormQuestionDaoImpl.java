@@ -80,7 +80,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ", \"" + ORDER_COL +"\") " + "VALUES (?,?,?,?,?)";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + TITLE_COL + " = ?, " + ENABLE_COL
-            + " = ?, " + MANDATORY_COL + " = ?, \"" + ORDER_COL + "\" = ? WHERE " + ID_COL + " = ?;";
+            + " = ?, " + ID_QUESTION_TYPE_COL + " = ?, " + MANDATORY_COL + " = ?, \"" + ORDER_COL + "\" = ? WHERE " + ID_COL + " = ?;";
 
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = ?";
 
@@ -190,7 +190,8 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             return 0;
         }
         return this.getJdbcTemplate().update(SQL_UPDATE, formQuestion.getTitle(), formQuestion.isEnable(),
-                formQuestion.isMandatory(),formQuestion.getOrder(), formQuestion.getId());
+                formQuestion.getQuestionType().getId(), formQuestion.isMandatory(),formQuestion.getOrder(),
+                formQuestion.getId());
     }
 
 	@Override

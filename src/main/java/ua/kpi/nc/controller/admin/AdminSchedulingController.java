@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.nc.persistence.dto.SchedulingSettingDto;
 import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -23,10 +24,21 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "getStudentCount", method = RequestMethod.GET)
     public SchedulingSettingDto getCountStudents() {
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        return new SchedulingSettingDto(applicationFormService.getCountRecruitmentStudents(recruitment.getId()));
 
+        Long activeTech = userService.getActiveEmployees((long) RoleEnum.ROLE_TECH.getId(),
+                (long) RoleEnum.ROLE_SOFT.getId());
+
+        Long activeSoft = userService.getActiveEmployees((long) RoleEnum.ROLE_SOFT.getId(),
+                (long) RoleEnum.ROLE_TECH.getId());
+
+        return new SchedulingSettingDto(
+                applicationFormService.getCountRecruitmentStudents(recruitmentService.getCurrentRecruitmnet().getId()),
+                activeSoft,
+                activeTech
+        );
     }
+
+
 
 
 }
