@@ -88,6 +88,20 @@ function studentManagementService(http) {
         })
     };
 
+    service.announceResults = function() {
+    	 return http({
+             method: 'POST',
+             url: '/admin/announceResults'
+         })
+    }
+    
+    service.calculateStatuses = function() {
+   	 return http({
+            method: 'POST',
+            url: '/admin/calculateStatuses'
+        })
+   }
+    
     service.searchStudent = function (lastName) {
         return http({
             method: 'POST',

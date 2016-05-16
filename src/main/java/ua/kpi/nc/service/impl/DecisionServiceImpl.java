@@ -4,14 +4,20 @@ import java.util.List;
 
 import ua.kpi.nc.persistence.dao.DecisionDao;
 import ua.kpi.nc.persistence.model.Decision;
+import ua.kpi.nc.persistence.model.Status;
+import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.service.DecisionService;
+import ua.kpi.nc.service.ServiceFactory;
+import ua.kpi.nc.service.StatusService;
 
 public class DecisionServiceImpl implements DecisionService {
 
 	private DecisionDao decisionDao;
-
+	private StatusService statusService;
+	
 	public DecisionServiceImpl(DecisionDao decisionDao) {
 		this.decisionDao = decisionDao;
+		statusService = ServiceFactory.getStatusService();
 	}
 
 	@Override
@@ -42,6 +48,19 @@ public class DecisionServiceImpl implements DecisionService {
 	@Override
 	public int truncateDecisionTable() {
 		return decisionDao.truncateDecisionTable();
+	}
+
+	@Override
+	public Status getStatusByFinalMark(int finalMark) {
+		switch(finalMark) {
+		case 3:
+			return statusService.getStatusById(StatusEnum.APPROVED_TO_JOB.getId());
+		case 2:
+			return statusService.getStatusById(StatusEnum.APPROVED_TO_GENERAL_COURSES.getId());
+		case 1:
+			return statusService.getStatusById(StatusEnum.REJECTED.getId());
+		}
+		return null;
 	}
 
 }

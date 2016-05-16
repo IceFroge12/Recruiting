@@ -218,6 +218,71 @@ public class AdminManagementStudentController {
 //        return true;
 //    }
     
+    @RequestMapping(value = "calculateStatuses", method = RequestMethod.POST)
+    public void calulateStatuses() {
+    	Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+    	Status approvedStatus = statusService.getStatusById(StatusEnum.APPROVED.getId());
+  		List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus, recruitment);
+  		DecisionService decisionService = ServiceFactory.getDecisionService();
+		for (ApplicationForm applicationForm : approvedForms) {
+			Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
+					RoleEnum.ROLE_SOFT.getId());
+			Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
+					RoleEnum.ROLE_TECH.getId());
+			if (interviewSoft != null && interviewSoft.getMark() != null && interviewTech != null
+					&& interviewTech.getMark() != null) {
+				Integer softMark = interviewSoft.getMark();
+				Integer techMark = interviewTech.getMark();
+				int finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
+				Status finalStatus = decisionService.getStatusByFinalMark(finalMark);
+				applicationForm.setStatus(finalStatus);
+				applicationFormService.updateApplicationForm(applicationForm);
+			}
+		}
+    }
+    
+    
+    @RequestMapping(value = "announceResults", method = RequestMethod.POST)
+    public String announceResults() throws MessagingException {
+    	Gson gson = new Gson();
+    	Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+  		EmailTemplate rejectedTemplate = emailTemplateService.getById(8L);
+  		List<ApplicationForm> rejectedForms = applicationFormService.getRejectedAfterInterview(recruitment);
+  		sendMessage(rejectedForms, rejectedTemplate);
+  		
+  		Status approvedToJobStatus = statusService.getStatusById(StatusEnum.APPROVED_TO_JOB.getId());
+  		List<ApplicationForm> approvedToJobForms = applicationFormService.getByStatusAndRecruitment(approvedToJobStatus, recruitment);
+  		EmailTemplate approvedToJobTemplate = emailTemplateService.getById(10L);
+  		sendMessage(approvedToJobForms, approvedToJobTemplate);
+  		
+  		Status approvedToAdvancedStatus = statusService.getStatusById(StatusEnum.APPROVED_TO_ADVANCED_COURSES.getId());
+  		List<ApplicationForm> approvedToAdvancedForms = applicationFormService.getByStatusAndRecruitment(approvedToAdvancedStatus, recruitment);
+  		EmailTemplate approvedToAdvancedTemplate = emailTemplateService.getById(11L);
+  		sendMessage(approvedToAdvancedForms, approvedToAdvancedTemplate);
+  		
+  		Status approvedToGeneralStatus = statusService.getStatusById(StatusEnum.APPROVED_TO_GENERAL_COURSES.getId());
+  		List<ApplicationForm> approvedToGeneralForms = applicationFormService.getByStatusAndRecruitment(approvedToGeneralStatus, recruitment);
+  		EmailTemplate approvedToGeneralTemplate = emailTemplateService.getById(9L);
+  		sendMessage(approvedToGeneralForms, approvedToGeneralTemplate);
+    	return gson.toJson(new MessageDto("Results were announced.",
+  				MessageDtoType.SUCCESS));
+    }
+    
+    
+    private void sendMessage(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
+    	for (ApplicationForm applicationForm : applicationForms) {
+  			User student = applicationForm.getUser();
+  			String subject = emailTemplate.getTitle();
+  			String text = emailTemplateService.showTemplateParams(emailTemplate.getText(), student);
+  			senderService.send(student.getEmail(), subject, text);
+  		}
+    }
+    
+    @RequestMapping(value = "scheduleDatesExist", method = RequestMethod.GET)
+    public boolean isScheduleDatesExist() {
+    	return ServiceFactory.getScheduleTimePointService().isScheduleDatesExists();
+    }
+    
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
   	public String confirmSelection() throws MessagingException {
   		Gson gson = new Gson();

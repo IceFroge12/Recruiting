@@ -176,6 +176,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_DISABLE_STAFF = "UPDATE \"user\" SET is_active = FALSE WHERE \"user\".id IN (SELECT ur.id_user FROM \"user_role\" ur WHERE ur.id_role <> 1 AND ur.id_role <> 3);";
 
+    private static final String SQL_UNCONNECTED_FORMS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
+            "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
+            "FROM \"user\" u INNER JOIN application_form a ON a.id_user = u.id  WHERE a.id_recruitment IS NULL";
+    
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -454,4 +458,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public int disableAllStaff() {
         return this.getJdbcTemplate().update(SQL_DISABLE_STAFF);
     }
+
+	@Override
+	public List<User> getStudentsWithNotconnectedForms() {
+		return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
+	}
 }

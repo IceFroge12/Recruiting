@@ -78,4 +78,6 @@ public interface UserDao {
     Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 
     int disableAllStaff();
+
+	List<User> getStudentsWithNotconnectedForms();
 }
