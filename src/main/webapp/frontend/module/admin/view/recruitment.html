@@ -17,9 +17,12 @@
                         <td>Registration deadline</td>
                         <td>
                             <div class="form-group">
-                                <div>
-                                    <input id="datepicker" class="form-control" ng-model="date1"
-                                           date-format="yyyy-mm-dd hh:mm:ss[.fffffffff]"/>
+                                <div class="input-group date">
+                                    <input datetimepicker date-only class="form-control" ng-model="date1"
+                                           datetime-picker date-format="yyyy-MM-dd hh:mm:ss"/>
+									<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+									</span>
                                 </div>
                             </div>
                         </td>
@@ -27,21 +30,27 @@
                     <tr>
                         <td>Choosing schedule time deadline</td>
                         <td>
-                            <div class="form-group">
-                                <div>
-                                    <input id="datepicker1" class="form-control" ng-model="date2"
-                                           date-format="yyyy-mm-dd hh:mm:ss[.fffffffff]"/>
+
+                                <div class="input-group">
+                                    <input datetimepicker date-only class="form-control" ng-model="date2"
+                                           datetime-picker date-format="yyyy-MM-dd hh:mm:ss"/>
+									<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+									</span>
                                 </div>
-                            </div>
+
                         </td>
                     </tr>
                     <tr>
                         <td>End of recruitment</td>
                         <td>
                             <div class="form-group">
-                                <div>
-                                    <input id="datepicker2" class="form-control" ng-model="date3"
-                                           date-format="yyyy-mm-dd hh:mm:ss[.fffffffff]"/>
+                                <div class="input-group date">
+                                    <input datetimepicker date-only class="form-control" ng-model="date3"
+                                           datetime-picker date-format="yyyy-MM-dd hh:mm:ss"/>
+									<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+									</span>
                                 </div>
                             </div>
                         </td>

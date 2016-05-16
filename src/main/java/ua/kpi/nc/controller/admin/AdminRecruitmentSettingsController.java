@@ -29,17 +29,29 @@ public class AdminRecruitmentSettingsController {
 
     @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     private void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) {
+        if (null == recruitmentService.getCurrentRecruitmnet()){
+
         System.out.println(recruitmentDto);
         Recruitment recruitment = new RecruitmentImpl(recruitmentDto.getName(), new Timestamp(System.currentTimeMillis()), recruitmentDto.getMaxAdvancedGroup(), recruitmentDto.getMaxGeneralGroup(),
                 Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()), Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
+        recruitment.setEndDate(Timestamp.valueOf(recruitmentDto.getEndDate()));
         recruitmentService.addRecruitment(recruitment);
         deadlineController.setRegisteredDeadline(recruitment.getRegistrationDeadline());
         deadlineController.setEndOfRecruitingDeadLine(recruitment.getEndDate());
+        }
+
     }
     @RequestMapping(value = "/editRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void editRecruitment(@RequestBody RecruitmentSettingsDto recruitmentDto){
-        Recruitment recruitment = new RecruitmentImpl(recruitmentDto.getName(), new Timestamp(System.currentTimeMillis()), recruitmentDto.getMaxAdvancedGroup(), recruitmentDto.getMaxGeneralGroup(),
-                Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()), Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
+        Recruitment recruitment = recruitmentService.getRecruitmentByName(recruitmentDto.getName());
+        System.out.println(recruitment);
+        recruitment.setName(recruitmentDto.getName());
+        recruitment.setRegistrationDeadline(Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()));
+        recruitment.setScheduleChoicesDeadline(Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
+        recruitment.setEndDate(Timestamp.valueOf(recruitmentDto.getEndDate()));
+        recruitment.setMaxGeneralGroup(recruitmentDto.getMaxGeneralGroup());
+        recruitment.setMaxAdvancedGroup(recruitmentDto.getMaxAdvancedGroup());
+        System.out.println(recruitment);
         recruitmentService.updateRecruitment(recruitment);
     }
 
