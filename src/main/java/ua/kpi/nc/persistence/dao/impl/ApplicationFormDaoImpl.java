@@ -131,10 +131,12 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static final String SQL_GET_CURRENT_APP_FORMS_FILTERED = "Select DISTINCT a.id, a.id_status, a.is_active"
             +"  ,a.id_recruitment, a.photo_scope, a.id_user, a."
             +"date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id"
-            +"  INNER JOIN status s on a.id_status = s.id INNER JOIN form_answer fa on a.id = fa.id_application_form "
-            +" INNER JOIN form_answer_variant fav on fa.id_variant = fav.id"
-            +" INNER JOIN form_question fq on fav.id_question = fq.id"
-            +" WHERE r.end_date > CURRENT_DATE AND (";
+            +"  INNER JOIN status s on a.id_status = s.id WHERE ";
+
+    private static final String SQL_GET_APP_FORMS_FILTERED_CONDITION = "WHERE exists(SELECT 1 FROM form_answer fa\n" +
+            "                INNER JOIN form_answer_variant fav on fa.id_variant = fav.id\n" +
+            "                WHERE fav.answer = '?' and fa.id_question='?' and fa.id_application_form=a.id)\n" +
+            "                AND";
 
     private static final String SQL_GET_BY_STATUS_RECRUITMENT = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
             + IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
@@ -146,10 +148,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id_recruitment = ?;";
 
-    
-    private static final String SORT_PARAM_ASC = ") ORDER BY a.id ASC OFFSET ? LIMIT ?;";
-
-    private static final String SORT_PARAM_DESC = " ORDER BY ? DESC OFFSET ? LIMIT ?;";
+    private static final String SQL_SORT = ") ORDER BY ";
 
     private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"status_count\" from \"" + TABLE_NAME + "\" where id_status=? and is_active='true'";
 
@@ -158,9 +157,6 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
 
     private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =?";
-
-
-
 
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
@@ -213,8 +209,8 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 		log.info("Updating application forms with id = {}" + applicationForm.getId());
 		Recruitment recruitment = applicationForm.getRecruitment();
 		return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
-				applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
-				applicationForm.getFeedback(), recruitment != null ? recruitment.getId() : null, applicationForm.getId());
+                applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
+                applicationForm.getFeedback(), recruitment != null ? recruitment.getId() : null, applicationForm.getId());
     }
 
     @Override
@@ -343,24 +339,37 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         log.info("Looking for current filtered application forms");
         StringBuilder sbTotal = new StringBuilder();
         for(FormQuestion question: questions){
-            StringBuilder sb = new StringBuilder("(fa.id_question = '");
-            sb.append(question.getId().toString() + "' AND fav.answer = ANY ('{");
-            List<FormAnswerVariant> variants = question.getFormAnswerVariants();
-            for(FormAnswerVariant answerVariant: variants){
+            if(!question.getFormAnswerVariants().isEmpty()) {
+                List<FormAnswerVariant> variants = question.getFormAnswerVariants();
+                StringBuilder sb = new StringBuilder("(");
+                sb.append("exists(SELECT 1 FROM form_answer fa " +
+                        " INNER JOIN form_answer_variant fav on fa.id_variant = fav.id" +
+                                " WHERE fa.id_application_form=a.id AND fa.id_question='"+question.getId()
+                        +"' AND fav.answer = ANY ('{");
+                for (FormAnswerVariant answerVariant : variants) {
                 sb.append(answerVariant.getAnswer()+",");
+                }
+                sb.deleteCharAt(sb.length()-1);
+                sb.append("}'))) AND ");
+                sbTotal.append(sb.toString());
             }
-            sb.deleteCharAt(sb.length()-1);
-            ///to work correctly, change to AND
-            sb.append("}')) AND ");
-            sbTotal.append(sb.toString());
         }
-        sbTotal.delete(sbTotal.length() - 4, sbTotal.length() - 1);
-        sbTotal.append(increase ? SORT_PARAM_ASC : SORT_PARAM_DESC);
+        if(!statuses.isEmpty()) {
+            sbTotal.append("(s.title = ANY ('{");
+            for (String status : statuses) {
+                sbTotal.append(status + ",");
+            }
+            sbTotal.deleteCharAt(sbTotal.length()-1);
+            sbTotal.append("}') ");
+        }
+
+        sbTotal.append(SQL_SORT);
 
         String sql = SQL_GET_CURRENT_APP_FORMS_FILTERED + sbTotal.toString();
+        sql += sortingCol.toString();
+        sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
 
-        String order = sortingCol == 1 ? "a.id" : "a.id";
-        return this.getJdbcTemplate().queryForList(sql, extractor, order, fromRow, rowsNum );
+        return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum );
     }
     
 	@Override

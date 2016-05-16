@@ -12,6 +12,8 @@ function studentManagementController($scope,$filter, studentManagementService) {
         console.log($scope.statusesChoosen);
         console.log("Finding questions");
         getAllQuestions();
+        console.log($scope.restrictions);
+        console.log($scope.questions);
     };
     
     $scope.sort = {
@@ -45,8 +47,11 @@ function studentManagementController($scope,$filter, studentManagementService) {
                 }
             }
             $scope.restrictions = angular.copy($scope.questions);
-            console.log($scope.restrictions);
-            console.log($scope.questions);
+            //for(var i=0; i<$scope.restrictions.length; i++){
+            //    for(var j=0; j<$scope.restrictions.variants[i].length(); j++){
+            //        $scope.restrictions.variants[i];
+            //    }
+            //}
         });
     }
 
@@ -84,14 +89,18 @@ function studentManagementController($scope,$filter, studentManagementService) {
     };
 
     $scope.toggleItem = function (item, list) {
-        var idx = list.indexOf(item);
+        var idx=-1;
+        for(var i = 0; i<list.length; i++){
+            if(list[i].title == item.title)
+            idx=i;
+        }
+        console.log("idx="+idx);
         if (idx > -1) {
             list.splice(idx, 1);
         }
         else {
             list.push(item);
         }
-        console.log(idx);
         console.log($scope.statusTemp);
         console.log($scope.statusesChoosen);
     };

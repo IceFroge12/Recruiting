@@ -48,12 +48,12 @@
                 <tr>
                     <th></th>
                     <th></th>
-                    <th><select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
+                    <th></th>
+                    <th colspan="3"><select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
                         <option ng-repeat="st in statusTemp">{{st.title}}</option>
                     </select>
                         <button type="button" ng-click="applyStatus()" class="btn btn-sm btn-info search-element">Apply Status to checked</button>
                     </th>
-                    <th></th>
                 </tr>
                 <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok" ></span>&nbsp;</th>
                     <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>

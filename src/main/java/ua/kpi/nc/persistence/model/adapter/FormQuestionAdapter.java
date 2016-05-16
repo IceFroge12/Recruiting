@@ -47,9 +47,11 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion>,JsonDes
         formQuestion.setMandatory(jsonObject.get("mandatory").getAsBoolean());
         formQuestion.setEnable(jsonObject.get("enable").getAsBoolean());
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
-        for(JsonElement arrayElement: jsonObject.get("variants").getAsJsonArray()){
-            JsonObject jsonVariant = (JsonObject) arrayElement;
-            formAnswerVariantList.add(new FormAnswerVariantImpl(jsonVariant.get("variant").getAsString()));
+        for(JsonElement arrayElement: jsonObject.get("variants").getAsJsonArray()) {
+                JsonObject jsonVariant = (JsonObject) arrayElement;
+            if (!jsonVariant.get("variant").getAsString().isEmpty()) {
+                formAnswerVariantList.add(new FormAnswerVariantImpl(jsonVariant.get("variant").getAsString()));
+            }
         }
         formQuestion.setFormAnswerVariants(formAnswerVariantList);
         return formQuestion;
