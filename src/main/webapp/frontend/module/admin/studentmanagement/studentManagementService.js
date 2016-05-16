@@ -95,6 +95,13 @@ function studentManagementService(http) {
          })
     }
     
+    service.calculateStatuses = function() {
+   	 return http({
+            method: 'POST',
+            url: '/admin/calculateStatuses'
+        })
+   }
+    
     service.searchStudent = function (lastName) {
         return http({
             method: 'POST',
