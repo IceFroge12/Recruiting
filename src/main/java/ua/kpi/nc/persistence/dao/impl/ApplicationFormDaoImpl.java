@@ -116,6 +116,17 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date" +
             " INNER JOIN status s on s1.id_status = s.id" +
             " ORDER BY ";
+    private static final String SQL_GET_SEARCH_APP_FORMS = "Select DISTINCT s1.id , u.first_name, s1.id_status, s1.is_active,\n" +
+            "s1.id_recruitment, s1.photo_scope, s1.id_user, s1.date_create, s1.feedback, s.title\n" +
+            " from \"user\" u LEFT JOIN (SELECT a1.id id, id_status, is_active,\n" +
+            "id_recruitment, photo_scope, id_user, date_create,end_date, feedback FROM application_form a1\n" +
+            " INNER JOIN recruitment r1 on a1.id_recruitment = r1.id) s1 on u.id = s1.id_user\n" +
+            " LEFT JOIN (SELECT * FROM application_form a2 \n" +
+            " INNER JOIN recruitment r2 on a2.id_recruitment = r2.id) s2\n" +
+            " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date\n" +
+            " INNER JOIN status s on s1.id_status = s.id\n" +
+            "INNER JOIN user_role ur ON u.id = ur.id_user\n"+
+            "WHERE (ur.id_role = 3) AND  ((s1.id = ?) OR (u.last_name LIKE ?)) ORDER BY 2 OFFSET ? LIMIT ?;";
 
     private static final String SQL_QUERY_ENDING_ASC = " ASC OFFSET ? LIMIT ?;";
 
@@ -170,6 +181,18 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     public ApplicationFormDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
+    }
+
+    @Override
+    public List<ApplicationForm> getSearchAppFormByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
+        Long id = null;
+        try {
+            id = Long.parseLong(lastName);
+        }catch (NumberFormatException e){
+            log.info("Search. Search field don`t equals id");
+        }
+        return this.getJdbcTemplate().queryForList(SQL_GET_SEARCH_APP_FORMS, extractor,id, "%" + lastName + "%",
+                fromRows, rowsNum);
     }
 
     @Override
