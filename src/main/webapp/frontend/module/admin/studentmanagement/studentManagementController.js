@@ -307,6 +307,14 @@ function studentManagementController($scope,$filter, studentManagementService) {
     	})
     }
     
+    $scope.calculateStatuses = function() {
+    	studentManagementService.calculateStatuses().success(function(data) {
+    		console.log('Confirm selection');
+    		console.log(data);
+    	})
+    }
+    
+    
 }
 
 angular.module('appStudentManagement').$inject = ['$scope', '$filter'];

@@ -218,6 +218,30 @@ public class AdminManagementStudentController {
 //        return true;
 //    }
     
+    @RequestMapping(value = "calculateStatuses", method = RequestMethod.POST)
+    public void calulateStatuses() {
+    	Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+    	Status approvedStatus = statusService.getStatusById(StatusEnum.APPROVED.getId());
+  		List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus, recruitment);
+  		DecisionService decisionService = ServiceFactory.getDecisionService();
+		for (ApplicationForm applicationForm : approvedForms) {
+			Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
+					RoleEnum.ROLE_SOFT.getId());
+			Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
+					RoleEnum.ROLE_TECH.getId());
+			if (interviewSoft != null && interviewSoft.getMark() != null && interviewTech != null
+					&& interviewTech.getMark() != null) {
+				Integer softMark = interviewSoft.getMark();
+				Integer techMark = interviewTech.getMark();
+				int finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
+				Status finalStatus = decisionService.getStatusByFinalMark(finalMark);
+				applicationForm.setStatus(finalStatus);
+				applicationFormService.updateApplicationForm(applicationForm);
+			}
+		}
+    }
+    
+    
     @RequestMapping(value = "announceResults", method = RequestMethod.POST)
     public String announceResults() throws MessagingException {
     	Gson gson = new Gson();
