@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('appStaffMain', [])
+angular.module('appStaffMain', ['angular-loading-bar'])
     .directive('appStaffMenu', function () {
         return {
             templateUrl: 'module/staff/view/staffMenu.html',

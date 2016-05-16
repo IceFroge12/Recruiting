@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appRecruitment', ['kendo.directives']);
+angular.module('appRecruitment', ['kendo.directives','angular-loading-bar']);

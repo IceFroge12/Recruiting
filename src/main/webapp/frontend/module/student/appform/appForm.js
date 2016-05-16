@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('appStudentForm', [])
+angular.module('appStudentForm', ['angular-loading-bar'])
     .directive('appMenuStudent', function () {
         return {
             templateUrl: 'module/student/view/studentMenu.html',

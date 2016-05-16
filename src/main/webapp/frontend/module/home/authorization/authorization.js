@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('appAuthorization', [])
+angular.module('appAuthorization', ['angular-loading-bar'])
     .factory('TokenStorage', function ($rootScope) {
         var storageToken = 'auth_token';
         return {

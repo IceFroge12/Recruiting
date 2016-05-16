@@ -4,4 +4,4 @@
 
 'use strict';
 
-var app = angular.module('appStaffStudentManagement', []);
+var app = angular.module('appStaffStudentManagement', ['angular-loading-bar']);

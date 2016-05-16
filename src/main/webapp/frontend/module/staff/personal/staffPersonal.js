@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appStaffPersonal', ['appStaffMenu','appHeader','appFooter']);
+angular.module('appStaffPersonal', ['appStaffMenu','appHeader','appFooter','angular-loading-bar']);

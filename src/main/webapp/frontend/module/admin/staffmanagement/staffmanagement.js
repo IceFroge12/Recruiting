@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appStaffManagement', ['appMenu','appHeader','appFooter','rzModule']);
+angular.module('appStaffManagement', ['appMenu','appHeader','appFooter','rzModule','angular-loading-bar']);

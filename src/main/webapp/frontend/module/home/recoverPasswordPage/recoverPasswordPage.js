@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appRecoverPassword', []);
+angular.module('appRecoverPassword', ['angular-loading-bar']);

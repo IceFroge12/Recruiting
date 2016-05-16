@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('appFeedback', []);
+angular.module('appFeedback', ['angular-loading-bar']);
