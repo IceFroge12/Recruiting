@@ -4,12 +4,18 @@
 	class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
 	<form name="feedbackForm">
 	<div class="col-md-12 col-sm-12 left-info-col">
+
 		<div>
 			<h3>Feedback</h3>
 			<h5>Your opinion about interview</h5>
+
 			<div class="row" name="myForm">
 				<div class="col-md-12">
-					<textarea ng-model="feedBackText" id="feedback" ng-init="init()" rows="7" class="wide-not" required ng-minlength="5"></textarea>
+					<textarea ng-model="feedBackText" id="feedback" name="feedback" ng-init="init()" rows="7" class="wide-not" required ng-minlength="5" ng-maxlength="5000"></textarea>
+				</div>
+				<div ng-messages="feedbackForm.feedback.$error">
+					<div ng-message="maxlength"><span class="text-danger">Feedback must not exceed 5000 characters</span></div>
+					<div ng-message="minlength"><span class="text-danger">Feedback must be over 5 characters</span></div>
 				</div>
 			</div>
 			</br>

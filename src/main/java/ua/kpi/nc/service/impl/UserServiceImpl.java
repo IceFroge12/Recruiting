@@ -201,8 +201,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
-        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum, sortingCol);
+    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
+        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum);
     }
 
     @Override

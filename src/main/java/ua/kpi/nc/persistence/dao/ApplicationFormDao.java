@@ -26,6 +26,8 @@ public interface ApplicationFormDao {
 
     int updateApplicationForm(ApplicationForm applicationForm);
 
+    List<ApplicationForm> getSearchAppFormByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
+
     List<ApplicationForm> getAll();
 
     Long getCountRejectedAppForm();
