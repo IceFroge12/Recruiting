@@ -102,15 +102,14 @@ function studentManagementService(http) {
         })
    }
     
-    service.searchStudent = function (lastName) {
+    service.searchStudent = function (lastName,pageNum,rowsNum) {
         return http({
             method: 'POST',
             url: '/admin/searchStudent',
             params: {
                 lastName: lastName,
                 pageNum: pageNum,
-                rowsNum: rowsNum,
-                sortingCol: sortingCol
+                rowsNum: rowsNum
             }
         })
     };

@@ -82,7 +82,6 @@ public class JdbcTemplate {
                 statement.setObject(rowNum++, object);
             }
             ResultSet resultSet = statement.executeQuery();
-            System.out.println(statement.toString());
             while (resultSet.next()){
                 collection.add(resultSetExtractor.extractData(resultSet));
             }

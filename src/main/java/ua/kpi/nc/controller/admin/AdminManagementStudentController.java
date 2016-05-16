@@ -2,10 +2,7 @@ package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.dto.FormQuestionDto;
-import ua.kpi.nc.persistence.dto.MessageDto;
-import ua.kpi.nc.persistence.dto.MessageDtoType;
-import ua.kpi.nc.persistence.dto.StudentAppFormDto;
+import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
@@ -14,6 +11,7 @@ import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
+import ua.kpi.nc.util.scheduling.StudentsScheduleCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,22 +58,41 @@ public class AdminManagementStudentController {
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                                 @RequestParam boolean increase) {
         Long fromRow = (pageNum - 1) * rowsNum;
+        List<ApplicationForm> applicationForms = applicationFormService.getApplicationFormsSorted(fromRow, rowsNum,
+                sortingCol, increase);
+        return getAllStudent(applicationForms);
+    }
+
+    private List<StudentAppFormDto> getAllStudent(List<ApplicationForm> applicationForms){
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
-        List<ApplicationForm> applicationForms = applicationFormService.getApplicationFormsSorted(fromRow, rowsNum, sortingCol, increase);
+        DecisionService decisionService = ServiceFactory.getDecisionService();
         for (ApplicationForm applicationForm : applicationForms) {
             Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, RoleEnum.ROLE_SOFT.getId());
             Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,RoleEnum.ROLE_TECH.getId());
+            Integer softMark = null;
+            Integer techMark = null;
+            Integer finalMark = null;
+            if (interviewSoft != null ) {
+            	softMark = interviewSoft.getMark();
+            }
+            if(interviewTech != null) {
+            	techMark = interviewTech.getMark();
+            }
+            if (softMark != null && techMark != null) {
+	            softMark = interviewSoft.getMark();
+				techMark = interviewTech.getMark();
+				finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
+            }
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
-                    null == interviewSoft ? 0 : interviewSoft.getMark(),
-                    null == interviewTech ? 0 : interviewTech.getMark(),
-                    null,//TODO:Final Mark Via decision Matrix
+                    softMark,
+                    techMark,
+                    finalMark,//TODO:Final Mark Via decision Matrix
                     getPossibleStatus(applicationForm.getStatus())));
         }
         return studentAppFormDtoList;
     }
-
     @RequestMapping(value = "showFilteredStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showFilteredStudents(@RequestParam int pageNum, @RequestParam Long rowsNum,
                                                         @RequestParam Long sortingCol, @RequestParam boolean increase,
@@ -339,10 +356,12 @@ public class AdminManagementStudentController {
 	
 
     @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
-    public List<User> searchStudentById(@RequestParam String lastName,
-                                        @RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol) {
+    public List<StudentAppFormDto> searchStudentById(@RequestParam String lastName,
+                                                      @RequestParam int pageNum, @RequestParam Long rowsNum) {
         Long fromRow = (pageNum - 1) * rowsNum;
-        return userService.getStudentsByNameFromToRows(lastName, fromRow, rowsNum, sortingCol);
+        List<ApplicationForm> applicationForms = applicationFormService.getSearchAppFormByNameFromToRows(lastName,
+                fromRow, rowsNum);
+        return getAllStudent(applicationForms);
     }
 
 }
