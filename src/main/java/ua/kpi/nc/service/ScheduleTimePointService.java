@@ -24,5 +24,7 @@ public interface ScheduleTimePointService {
 
 	List<ScheduleTimePoint> getAll();
 
+	boolean isScheduleDatesExists();
+	
 	boolean isScheduleExists();
 }

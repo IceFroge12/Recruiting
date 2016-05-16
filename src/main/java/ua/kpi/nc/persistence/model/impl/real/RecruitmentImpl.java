@@ -84,8 +84,9 @@ public class RecruitmentImpl implements Recruitment {
         this.numberOfDays = numberOfDays;
     }
 
-    public RecruitmentImpl(String name, int maxAdvancedGroup, int maxGeneralGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline) {
+    public RecruitmentImpl(String name, Timestamp startDate, int maxAdvancedGroup, int maxGeneralGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline) {
         this.name = name;
+        this.startDate = startDate;
         this.maxGeneralGroup = maxGeneralGroup;
         this.maxAdvancedGroup = maxAdvancedGroup;
         this.registrationDeadline = registrationDeadline;

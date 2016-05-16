@@ -66,15 +66,15 @@
                 <tbody>
                 <tr ng-repeat="student in allStudents">
                     <td><input type="checkbox" ng-click="checkStudentStatus(student)"></td>
-                    <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.id}}</a></td>
+                    <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.appFormId}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
                         <select ng-model="student.status" ng-change="changeStatus(student.status,student.appFormId)">
                             <option ng-repeat="stat in student.possibleStatus" ng-checked="stat.title==student.status">{{stat.title}}</option> <!--Don`t touch This  !!!!! -->
-                        </select>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                        </select> </td>
+                    <td>{{student.softMark}}</td>
+                    <td>{{student.techMark}}</td>
+                    <td>{{student.finalMark}}</td>
                 </tr>
                 </tbody>
                 <tfoot>

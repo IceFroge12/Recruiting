@@ -7,7 +7,7 @@ function recruitmentService(http) {
 
     var service = {};
 
-    service.addRecruitment  = function (name,registrationDeadline, scheduleChoicesDeadline, maxGeneralGroup, maxAdvancedGroup) {
+    service.addRecruitment  = function (name,registrationDeadline, scheduleChoicesDeadline, endDate,maxGeneralGroup, maxAdvancedGroup) {
         console.log(registrationDeadline+scheduleChoicesDeadline+maxAdvancedGroup);
         http({
             method : 'POST',
@@ -17,10 +17,40 @@ function recruitmentService(http) {
                 name:name,
                 registrationDeadline: registrationDeadline,
                 scheduleChoicesDeadline: scheduleChoicesDeadline,
+                endDate: endDate,
                 maxGeneralGroup: maxGeneralGroup,
                 maxAdvancedGroup: maxAdvancedGroup
             })
-            // data: {data:'test'}
+        });
+    };
+
+    service.editRecruitment  = function (name,registrationDeadline, scheduleChoicesDeadline, endDate,maxGeneralGroup, maxAdvancedGroup) {
+        http({
+            method : 'POST',
+            url : '/admin/editRecruitment',
+            contentType: 'application/json',
+            data : JSON.stringify({
+                name:name,
+                registrationDeadline: registrationDeadline,
+                scheduleChoicesDeadline: scheduleChoicesDeadline,
+                endDate: endDate,
+                maxGeneralGroup: maxGeneralGroup,
+                maxAdvancedGroup: maxAdvancedGroup
+            })
+        });
+    };
+ 
+    service.endRecruitment = function () {
+        console.log("End Recruitment");
+         http.get('/admin/endRecruitment').then(function (response) {
+            return response;
+        });
+    };
+
+    service.getCurrentRecruitment = function () {
+       return  http.get('/admin/getCurrentRecruitment').then(function (response) {
+            console.log(response.data);
+            return response.data;
         });
     };
         

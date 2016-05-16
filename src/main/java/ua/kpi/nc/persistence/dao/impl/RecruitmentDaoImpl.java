@@ -69,7 +69,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             "SET name = ? , start_date = ?,\n" +
             "end_date = ?, max_general_group = ?, max_advanced_group = ?, registration_deadline = ?," +
             "schedule_choices_deadline = ?, students_on_interview = ?, time_interview_tech = ?, " +
-            "time_interview_soft = ?, number_tech_interviews = ?, number_soft_interview = ?, number_of_hours = ?\n" +
+            "time_interview_soft = ?, number_tech_interviewers = ?, number_soft_interviewers = ?, number_of_hours = ?\n" +
             "WHERE recruitment.id = ?;";
 
     private static final String SQL_INSERT = "INSERT INTO \"recruitment\"(name, start_date," +
@@ -89,6 +89,8 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 
     private static final String SQL_GET_REGISTERED_COUNT = "SELECT COUNT(*) FROM \"application_form\" + apl\n" +
             "WHERE apl.id_recruitment=?";
+
+    private static final String SQL_GET_LAST_N_RECRUITMENT = "SELECT * FROM public.recruitment ORDER BY recruitment.id DESC LIMIT ?;";
 
     @Override
     public Recruitment getRecruitmentById(Long id) {
@@ -150,5 +152,11 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
 	public List<Recruitment> getAllSorted() {
 		return this.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
 	}
+
+    @Override
+    public Recruitment getLastRecruitment() {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST_N_RECRUITMENT, extractor, 1);
+    }
+
 
 }

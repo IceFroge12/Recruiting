@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appRecruitment', ['angularjs-datetime-picker']);
+angular.module('appRecruitment', ['kendo.directives']);

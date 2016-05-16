@@ -57,4 +57,8 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 		return recruitmentDAO.getAllSorted();
 	}
 
+    @Override
+    public Recruitment getLastRecruitment() {
+        return recruitmentDAO.getLastRecruitment();
+    }
 }

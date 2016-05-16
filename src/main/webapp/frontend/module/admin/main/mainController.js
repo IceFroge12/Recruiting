@@ -25,7 +25,7 @@ function mainController($scope, mainService) {
 
     mainService.getCurrentRecruitmentStudents().then(function success(data) {
         $scope.newRegistrations = data.data;
-    })
+    });
 
 }
 

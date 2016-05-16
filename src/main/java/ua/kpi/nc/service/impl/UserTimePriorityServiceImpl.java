@@ -60,4 +60,9 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 			insertUserPriority(userTimePriority);
 		}
 	}
+
+	@Override
+	public boolean isSchedulePrioritiesExist() {
+		return userTimePriorityDao.isSchedulePrioritiesExist();
+	}
 }

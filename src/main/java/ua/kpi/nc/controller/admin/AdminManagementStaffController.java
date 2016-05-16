@@ -107,6 +107,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void editEmployeeParams(@RequestBody UserDto userDto) {
+        System.out.println(userDto);
 
         User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
@@ -115,6 +116,7 @@ public class AdminManagementStaffController {
         Set<Role> userRoles = new HashSet<>();
         for (Role role : userDto.getRoleList()) {
             userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
+            System.out.println(role);
         }
         user.setRoles(userRoles);
 

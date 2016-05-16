@@ -53,5 +53,9 @@ public interface ApplicationFormService {
 
 	Long getCountInReviewAppForm();
 
+    List<ApplicationForm>getCurrentApplicationForms();
+
 	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
+
+    List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 }

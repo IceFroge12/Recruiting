@@ -54,6 +54,11 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	}
 
 	@Override
+	public boolean isScheduleDatesExists() {
+		return scheduleTimePointDao.isScheduleDatesExists();
+	}
+
+	@Override
 	public boolean isScheduleExists() {
 		return scheduleTimePointDao.isScheduleExists();
 	}
