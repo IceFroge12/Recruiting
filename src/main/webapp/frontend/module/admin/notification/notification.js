@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appNotification', []);
+angular.module('appNotification', ['angular-loading-bar']);

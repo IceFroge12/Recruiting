@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appRegistration', []);
+angular.module('appRegistration', ['angular-loading-bar']);

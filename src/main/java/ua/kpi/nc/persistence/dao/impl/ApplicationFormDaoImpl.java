@@ -146,6 +146,11 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a." + ID_STATUS_COL + " = ? AND a." + ID_RECRUITMENT_COL + " = ?";
 
+    private static final String SQL_GET_REJECTED_AFTER_INTERVIEW = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
+            + IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
+            + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
+            + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a." + ID_RECRUITMENT_COL + " = ? AND (SELECT COUNT(*) FROM interview i WHERE i.id_application_form = a.id) = 2 AND a.id_status = 8";
+    
     private static final String SQL_GET_RECRUITMENT = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
             + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
@@ -392,4 +397,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     public List<ApplicationForm> getByRecruitment(Recruitment recruitment) {
         return getJdbcTemplate().queryForList(SQL_GET_RECRUITMENT, extractor, recruitment.getId());
     }
+
+	@Override
+	public List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment) {
+		return getJdbcTemplate().queryForList(SQL_GET_REJECTED_AFTER_INTERVIEW, extractor, recruitment.getId());
+	}
 }

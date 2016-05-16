@@ -4,4 +4,4 @@
 
 'use strict';
 
-var app = angular.module('appInterview', ['appHeader','appFooter']);
+var app = angular.module('appInterview', ['appHeader','appFooter','angular-loading-bar']);

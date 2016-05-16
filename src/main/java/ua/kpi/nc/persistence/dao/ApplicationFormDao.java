@@ -61,4 +61,6 @@ public interface ApplicationFormDao {
 	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 
     List<ApplicationForm> getByRecruitment(Recruitment recruitment);
+
+	List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
 }

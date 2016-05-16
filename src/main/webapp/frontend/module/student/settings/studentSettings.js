@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appStudentSettings', []);
+angular.module('appStudentSettings', ['angular-loading-bar']);

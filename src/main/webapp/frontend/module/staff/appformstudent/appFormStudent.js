@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appStaffAppForm',[]);
+angular.module('appStaffAppForm',['angular-loading-bar']);

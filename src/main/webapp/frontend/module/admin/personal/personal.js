@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appPersonal', []);
+angular.module('appPersonal', ['angular-loading-bar']);

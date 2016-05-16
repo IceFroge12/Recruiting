@@ -11,6 +11,8 @@ public class RecruitmentSettingsDto {
 
     private String scheduleChoicesDeadline;
 
+    private String endDate;
+
     private int maxGeneralGroup;
 
     private int maxAdvancedGroup;
@@ -18,11 +20,12 @@ public class RecruitmentSettingsDto {
     public RecruitmentSettingsDto() {
     }
 
-    public RecruitmentSettingsDto(String name, String registrationDeadline, String scheduleChoicesDeadline,
-                                  int maxGeneralGroup, int maxAdvancedGroup) {
+
+    public RecruitmentSettingsDto(String name, String registrationDeadline, String scheduleChoicesDeadline, String endDate, int maxGeneralGroup, int maxAdvancedGroup) {
         this.name = name;
         this.registrationDeadline = registrationDeadline;
         this.scheduleChoicesDeadline = scheduleChoicesDeadline;
+        this.endDate = endDate;
         this.maxGeneralGroup = maxGeneralGroup;
         this.maxAdvancedGroup = maxAdvancedGroup;
     }
@@ -67,13 +70,23 @@ public class RecruitmentSettingsDto {
         this.maxAdvancedGroup = maxAdvancedGroup;
     }
 
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     @Override
     public String toString() {
         return "RecruitmentSettingsDto{" +
-                "maxAdvancedGroup=" + maxAdvancedGroup +
+                "name='" + name + '\'' +
+                ", registrationDeadline='" + registrationDeadline + '\'' +
+                ", scheduleChoicesDeadline='" + scheduleChoicesDeadline + '\'' +
+                ", endDate='" + endDate + '\'' +
                 ", maxGeneralGroup=" + maxGeneralGroup +
-                ", scheduleChoicesDeadline=" + scheduleChoicesDeadline +
-                ", registrationDeadline=" + registrationDeadline +
+                ", maxAdvancedGroup=" + maxAdvancedGroup +
                 '}';
     }
 }

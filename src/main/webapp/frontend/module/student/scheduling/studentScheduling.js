@@ -4,4 +4,4 @@
 
 'use strict'
 
-angular.module('studentScheduling', ['appHeader', 'appFooter']);
+angular.module('studentScheduling', ['appHeader', 'appFooter','angular-loading-bar']);

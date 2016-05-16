@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appAdminForm', ['ngToast']);
+angular.module('appAdminForm', ['ngToast','angular-loading-bar']);

@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appScheduling', ['gm.datepickerMultiSelect']);
+angular.module('appScheduling', ['gm.datepickerMultiSelect','angular-loading-bar']);

@@ -4,4 +4,4 @@
 
 'use strict';
 
-angular.module('appReport', []);
+angular.module('appReport', ['angular-loading-bar']);

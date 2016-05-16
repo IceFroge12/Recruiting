@@ -4,5 +4,5 @@
 
 'use strict';
 
-angular.module('appRecoverRequestPage', []);
+angular.module('appRecoverRequestPage', ['angular-loading-bar']);
 

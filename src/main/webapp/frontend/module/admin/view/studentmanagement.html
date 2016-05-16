@@ -12,11 +12,11 @@
 
                 <div class="col-md-4">
                     <tr ng-repeat="student in allStudents">
-                        <button type="button" ng-click="confirmSelection" class="btn btn-info btn-sm search-element">
+                        <button type="button" ng-click="confirmSelection()" class="btn btn-info btn-sm search-element">
                             Confirm
                             selection
                         </button>
-                        <button type="button" class="btn btn-info btn-sm search-element" disabled>Announce results
+                        <button type="button" ng-click="announceResults()" class="btn btn-info btn-sm search-element">Announce results
                         </button>
                     </tr>
                 </div>

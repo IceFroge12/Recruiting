@@ -4,4 +4,4 @@
 
 'use strict';
 
-var app = angular.module('appStaffScheduling', ['appStaffMenu','appHeader','appFooter']);
+var app = angular.module('appStaffScheduling', ['appStaffMenu','appHeader','appFooter','angular-loading-bar']);

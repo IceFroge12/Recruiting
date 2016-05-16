@@ -300,6 +300,13 @@ function studentManagementController($scope,$filter, studentManagementService) {
     	})
     }
     
+    $scope.announceResults = function() {
+    	studentManagementService.announceResults().success(function(data) {
+    		console.log('Confirm selection');
+    		console.log(data);
+    	})
+    }
+    
 }
 
 angular.module('appStudentManagement').$inject = ['$scope', '$filter'];

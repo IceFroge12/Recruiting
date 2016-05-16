@@ -3,4 +3,4 @@
  */
 'use strict';
 
-angular.module('appConfirmRegistration', []);
+angular.module('appConfirmRegistration', ['angular-loading-bar']);
