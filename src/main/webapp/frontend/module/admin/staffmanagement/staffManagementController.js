@@ -24,7 +24,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.notInterviewer = true;
     $scope.notEvaluated = true; //TODO
     $scope.assignedStudents = [];
-
+    $scope.notMarked = [];
 
     // init the sorted items
     $scope.$watch("sort.reverse", function () {
@@ -110,16 +110,26 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
 
         staffManagementService.showAllEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
+            $scope.users = [];
             angular.forEach(data, function (value1, key1) {
                 angular.forEach(value1.roles, function (value2, key2) {
                     value2.roleName = value2.roleName.slice(5);
-                })
+                });
+                console.log(value1);
+                $scope.users.push(value1.email);
             });
             console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
                 $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
                 $scope.notEvaluated);
             $scope.allEmployee = data;
             console.log(data);
+
+            staffManagementService.hasNotMarked($scope.users).success(function(data){
+                $scope.notMarked = data;
+                console.log($scope.notMarked);
+            }, function error() {
+                console.log("error");
+            });
 
         }, function error() {
             console.log("error");
@@ -372,6 +382,14 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.activeSoft = data[1];
     });
 
+    $scope.exists = function(item,list){
+        console.log(item+" === "+list);
+        for(var i = 0; i<list.length; i++){
+            if (list[i] === item)
+            return true;
+        }
+        return false;
+    }
 
 
 }

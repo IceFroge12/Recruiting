@@ -9,31 +9,25 @@
                 <div class="col-md-2"><h6><i>Approved to advanced: {{approvedToAdvanced}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Approved to general: {{approvedToGeneral}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
-
-                <div class="col-md-4">
-                    <tr ng-repeat="student in allStudents">
-                        <button type="button" ng-click="confirmSelection()" class="btn btn-info btn-sm search-element">
-                            Confirm
-                            selection
-                        </button>
-                        <button type="button" ng-click="announceResults()" class="btn btn-info btn-sm search-element">Announce results
-                        </button>
-                        <button type="button" ng-click="calculateStatuses()" class="btn btn-info btn-sm search-element">Calculate statuses
-                        </button>
-                    </tr>
-                </div>
             </div>
             <div class="row">
-                    <button ng-click="showFiltration()" class="btn btn-info btn-sm col-md-2" type="button"
-                            data-toggle="modal"
-                            data-target="#filtration">
-                        Filter table
-                    </button>
-                <div class="col-md-3 info-text col-md-offset-2">Search:
-                    <input ng-model-options="{ debounce: 1000 }"
-                           ng-model="studentName" ng-change="searchStudent(studentName)">
-                </div>
-                <div class="col-md-2 col-sm-offset-3">Show
+                <button type="button" ng-click="confirmSelection()" class="btn btn-info btn-sm search-element col-md-1">
+                    Confirm
+                    selection
+                </button>
+                <button type="button" ng-click="announceResults()" class="btn btn-info btn-sm search-element col-md-1">Announce results
+                </button>
+                <button type="button" ng-click="calculateStatuses()" class="btn btn-info btn-sm search-element col-md-1">Calculate statuses
+                </button>
+            <button ng-click="showFiltration()" class="btn btn-info btn-sm col-md-1 col-md-offset-7" type="button"
+                    data-toggle="modal"
+                    data-target="#filtration">
+                Filter table
+            </button>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-2 info-text">Show
                     <select ng-model="itemsPerPage">
                         <option value="5">5</option>
                         <option value="10">10</option>
@@ -44,19 +38,20 @@
                     </select>
                     entries
                 </div>
+                <div class="col-md-5 col-md-offset-2">
+                <select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
+                    <option ng-repeat="st in statusTemp">{{st.title}}</option>
+                </select>
+                    <button type="button" ng-click="applyStatus()" class="btn btn-sm btn-info search-element">Apply Status to checked</button>
+                    </div>
+                    <div class="col-md-3 info-text search-block">Search:
+                    <input ng-model-options="{ debounce: 1000 }"
+                           ng-model="studentName" ng-change="searchStudent(studentName)">
+                    </div>
+                    </div>
                 </div>
             <table class="table table-condensed table-hover col-md-8">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th colspan="3"><select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
-                        <option ng-repeat="st in statusTemp">{{st.title}}</option>
-                    </select>
-                        <button type="button" ng-click="applyStatus()" class="btn btn-sm btn-info search-element">Apply Status to checked</button>
-                    </th>
-                </tr>
+                <thead class="table-head">
                 <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok" ></span>&nbsp;</th>
                     <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort-stud order="2" sort="sort">Name&nbsp;</th>
