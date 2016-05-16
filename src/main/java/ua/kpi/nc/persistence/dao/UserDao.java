@@ -33,6 +33,8 @@ public interface UserDao {
 
     int deleteRole(User user, Role role);
 
+    int deleteAllRoles(User user);
+
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);

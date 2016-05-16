@@ -263,6 +263,15 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
+    public int deleteAllRoles(User user) {
+        if (user.getId() == null) {
+            log.warn("User: don`t have id, {}", user.getEmail());
+            return 0;
+        }
+        return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", user.getId());
+    }
+
+    @Override
     public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
         log.info("Insert Final Time Point");
         return this.getJdbcTemplate().insert(INSERT_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
