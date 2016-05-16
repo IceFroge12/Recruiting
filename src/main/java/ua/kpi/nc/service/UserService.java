@@ -74,4 +74,6 @@ public interface UserService {
     Long getActiveEmployees(Long idParam0, Long idParam1);
 
     int disableAllStaff();
+    
+    List<User> getStudentsWithNotconnectedForms();
 }

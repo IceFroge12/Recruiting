@@ -166,4 +166,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	public List<ApplicationForm> getByRecruitment(Recruitment recruitment) {
 		return applicationFormDao.getByRecruitment(recruitment);
 	}
+
+	@Override
+	public List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment) {
+		return applicationFormDao.getRejectedAfterInterview(recruitment);
+	}
 }

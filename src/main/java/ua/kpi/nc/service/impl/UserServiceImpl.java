@@ -200,5 +200,10 @@ public class UserServiceImpl implements UserService {
     public int disableAllStaff() {
         return userDao.disableAllStaff();
     }
+
+	@Override
+	public List<User> getStudentsWithNotconnectedForms() {
+		return userDao.getStudentsWithNotconnectedForms();
+	}
 }
 
