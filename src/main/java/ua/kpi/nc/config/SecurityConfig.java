@@ -68,8 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
                 .and()
 
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+
+
 
                 .exceptionHandling().and()
                 .csrf().disable()

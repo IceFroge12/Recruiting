@@ -39,6 +39,8 @@ function schedulingController($scope, schedulingService) {
     
     schedulingService.getCurrentRecruitmentCountStudents().then(function success(data) {
         $scope.countStudent = data.amountOfStudents;
+        $scope.amountOfTech = data.amountOfTech;
+        $scope.amountOfSoft = data.amountOfSoft;
     });
     
     
