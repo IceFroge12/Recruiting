@@ -72,8 +72,13 @@ public class AdminManagementStudentController {
             Integer softMark = null;
             Integer techMark = null;
             Integer finalMark = null;
-            if (interviewSoft != null && interviewSoft.getMark() != null && interviewTech != null
-					&& interviewTech.getMark() != null) {
+            if (interviewSoft != null ) {
+            	softMark = interviewSoft.getMark();
+            }
+            if(interviewTech != null) {
+            	techMark = interviewTech.getMark();
+            }
+            if (softMark != null && techMark != null) {
 	            softMark = interviewSoft.getMark();
 				techMark = interviewTech.getMark();
 				finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
