@@ -7,7 +7,7 @@ function schedulingService(http) {
 
     var service = {};
     service.getCurrentRecruitmentCountStudents = function () {
-        return http.post('/scheduling/getStudentCount').then(function (response) {
+        return http.get('/scheduling/getStudentCount').then(function (response) {
             console.log(response.data);
             return response.data;
         });

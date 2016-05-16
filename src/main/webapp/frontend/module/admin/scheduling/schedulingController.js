@@ -4,22 +4,44 @@
 function schedulingController($scope, schedulingService) {
 
     $scope.activeDate;
-    $scope.selectedDates = [new Date().setHours(0, 0, 0, 0)];
+    $scope.selectedDates = [];
+    $scope.timeResult = [];
     $scope.type = 'individual';
 
     $scope.removeFromSelected = function(dt) {
-        angular.forEach($scope.selectedDates, function (value, key) {
-            console.log(new Date().setHours(12,12,12,12));
-            console.log($scope.selectedDates);
-            console.log(value);
-            console.log(value);
+        $scope.selectedDates.splice(this.selectedDates.indexOf(dt), 1);
+        angular.forEach($scope.timeResult, function (value, key) {
+            if (value.data === dt.val){
+                $scope.timeResult.splice(key, 1);
+            }
         });
-        $scope.selectedDates.splice(this.selectedDates.indexOf(dt), 1   );
     };
-
+    
+    $scope.setTime = function (starTime, endTime, date) {
+        var temp = {
+            date : date,
+            hourStart : starTime.getHours(),
+            minutesStart : starTime.getMinutes(),
+            hoursEnd : endTime.getHours(),
+            minutesEnd : endTime.getMinutes()
+        };
+        if (!$scope.timeResult.length > 0){
+            $scope.timeResult.push(temp);
+        }
+        angular.forEach($scope.timeResult, function (value, key) {
+            if (value.data === date.val){
+                $scope.timeResult[key] = temp;
+            }else {
+                $scope.timeResult.push(temp);
+            }
+        });
+    };
+    
     schedulingService.getCurrentRecruitmentCountStudents().then(function success(data) {
-        $scope.countStudent = data;
+        $scope.countStudent = data.amountOfStudents;
     });
+    
+    
 
 }
 

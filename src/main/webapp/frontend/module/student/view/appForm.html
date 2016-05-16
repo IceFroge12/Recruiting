@@ -42,28 +42,43 @@
                 </tr>
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputLast" class="control-label">Last name</label></td>
-                    <td><input ng-model="user.lastName" type="text" id="inputLast"
+                    <td><input ng-model="user.lastName" type="text" id="inputLast" name="" ng-maxlength="77"  ng-minlength="1"
                                oninvalid="this.setCustomValidity('Please fill out this field')" class="form-control"
                                required/>
 
-                        <div class="help-block with-errors"></div>
-                    </td>
+						<div class="help-block with-errors">
+							<div ng-messages="myForm.lastName.$error">
+								<div ng-message="maxlength">Last name must not exceed 77
+									characters</div>
+								<div ng-message="minlength">Last name must be over 1
+									characters</div>
+							</div>
+						</div>
+					</td>
                 </tr>
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputFirst" class="control-label">First name</label></td>
-                    <td><input ng-model="user.firstName" type="text" id="inputFirst"
-                               oninvalid="this.setCustomValidity('Please fill out this field')" class="form-control"
+                    <td><input name="firstName" ng-model="user.firstName" type="text" id="inputFirst" ng-maxlength="77"  ng-minlength="1" 
+                               oninvalid="this.setCustomValidity('Please fill out this field')"  class="form-control"
                                required/>
+                                        
 
-                        <div class="help-block with-errors"></div>
+                        <div class="help-block with-errors"><div ng-messages="myForm.firstName.$error">
+                                            <div ng-message="maxlength">First name must not exceed 77 characters</div>
+                                            <div ng-message="minlength">First name must be over 1 characters</div>
+                                        </div></div>
                     </td>
                 </tr>
                 <tr class="form-group">
                     <td class="mandatory"><label for="inputSecond" class="control-label">Second name</label></td>
-                    <td><input ng-model="user.secondName" type="text" id="inputSecond"
+                    <td><input ng-model="user.secondName" type="text" id="inputSecond" ng-maxlength="77"  ng-minlength="1" 
+                    			name="secondName"
                                oninvalid="this.setCustomValidity('Please fill out this field')" class="form-control"
                                required/>
-
+										<div ng-messages="myForm.secondName.$error">
+                                            <div ng-message="maxlength">Second name must not exceed 77 characters</div>
+                                            <div ng-message="minlength">Second name must be over 1 characters</div>
+                                        </div>
                         <div class="help-block with-errors"></div>
                     </td>
                 </tr>
@@ -83,7 +98,7 @@
                         </select>
                     </td>
                     <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
-                        <input ng-model="answer.answer" ng-model="answer.ID" ng-required="question.isMandatory" type="text" value="{{answer.answer}}"
+                        <input ng-model="answer.answer" maxlength="70" ng-model="answer.ID" ng-required="question.isMandatory" type="text" value="{{answer.answer}}"
                                class="form-control">
                     </td>
                     <td ng-if="question.questionType == 'checkbox'">
@@ -97,13 +112,9 @@
                        </span>
                     </td>
                     <td ng-if="question.questionType == 'radio'">
-                       <span ng-repeat="variant in question.variants track by $index">
-                           <p>
-                               <input type="radio" ng-required="question.isMandatory && !checkAnswersSelected(question)"
-                               ng-model="question.answers[0].answer" name="question.questionTitle"
-                                      ng-value="variant.variant"> {{variant.variant}}
-                           </p>
-                       </span>
+                       <div ng-repeat="variant in question.variants">
+                               <input type="radio" name="{{$parent.question.title}}" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="$parent.question.answers[0].answer" name="question.questionTitle" ng-value="variant.variant"> {{variant.variant}}</input>
+					 </div>
                     </td>
                     <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                         <p>

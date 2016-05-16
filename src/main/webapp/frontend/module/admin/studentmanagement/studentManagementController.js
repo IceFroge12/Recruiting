@@ -8,8 +8,12 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.showFiltration = function () {
         $scope.questions = [];
         $scope.restrictions = [];
+        $scope.statusesChoosen = angular.copy($scope.statusTemp);
+        console.log($scope.statusesChoosen);
         console.log("Finding questions");
         getAllQuestions();
+        console.log($scope.restrictions);
+        console.log($scope.questions);
     };
     
     $scope.sort = {
@@ -43,8 +47,11 @@ function studentManagementController($scope,$filter, studentManagementService) {
                 }
             }
             $scope.restrictions = angular.copy($scope.questions);
-            console.log($scope.restrictions);
-            console.log($scope.questions);
+            //for(var i=0; i<$scope.restrictions.length; i++){
+            //    for(var j=0; j<$scope.restrictions.variants[i].length(); j++){
+            //        $scope.restrictions.variants[i];
+            //    }
+            //}
         });
     }
 
@@ -77,6 +84,31 @@ function studentManagementController($scope,$filter, studentManagementService) {
                     if ($scope.restrictions[i].variants[j].variant == variant.variant)
                         return true;
             }
+        }
+        return false;
+    };
+
+    $scope.toggleItem = function (item, list) {
+        var idx=-1;
+        for(var i = 0; i<list.length; i++){
+            if(list[i].title == item.title)
+            idx=i;
+        }
+        console.log("idx="+idx);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        }
+        else {
+            list.push(item);
+        }
+        console.log($scope.statusTemp);
+        console.log($scope.statusesChoosen);
+    };
+
+    $scope.existsItem = function (item, list){
+        for(var i=0; i<list.length; i++){
+            if(list[i].title==item.title)
+                return true;
         }
         return false;
     };
@@ -190,10 +222,11 @@ function studentManagementController($scope,$filter, studentManagementService) {
     };
 
     $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
-        studentManagementService.showFilteredStudents(pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder,$scope.sort.reverse, $scope.restrictions).success(function (data) {
+        studentManagementService.showFilteredStudents(pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder,
+            $scope.sort.reverse, $scope.restrictions, $scope.statusesTitle).success(function (data) {
             $scope.allStudents = data;
             var list = [];
-           checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
+            //checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
             console.log("restrictions:  "+data);
         }, function error() {
             console.log("error");
@@ -252,6 +285,11 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.filter= function (){
         $scope.filtered = true;
         $scope.currentPage = 1;
+        $scope.statusesTitle = [];
+        angular.forEach($scope.statusesChoosen,function (item, i) {
+            $scope.statusesTitle.push(item.title);
+        });
+        console.log($scope.statusesTitle);
         $scope.showFilteredStudents($scope.currentPage);
     };
     
