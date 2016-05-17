@@ -225,16 +225,16 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public int[] batchUpdate(List<User> users){
-        Object[][] objects = {};
+    public int[] batchUpdate(List<User> users) {
+        Object[][] objects = new Object[users.size()][];
         int count = 0;
-        for (User user : users){
+        for (User user : users) {
             objects[count] = new Object[]{user.getEmail(), user.getFirstName(), user.getSecondName(), user.getLastName(),
                     user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                     user.getId()};
             count++;
         }
-        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE,objects);
+        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
     }
 
     @Override
