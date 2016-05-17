@@ -1,0 +1,21 @@
+package ua.kpi.nc.persistence.dao;
+
+import ua.kpi.nc.persistence.model.SchedulingSettings;
+
+import java.util.List;
+
+/**
+ * @author Korzh
+ */
+public interface SchedulingSettingsDao {
+
+    SchedulingSettings getById(Long id);
+
+    Long insertTimeRange(SchedulingSettings schedulingSettings);
+
+    int updateTimeRange(SchedulingSettings schedulingSettings);
+
+    int deleteTimeRange(SchedulingSettings schedulingSettings);
+
+    List<SchedulingSettings> getAll();
+ }
