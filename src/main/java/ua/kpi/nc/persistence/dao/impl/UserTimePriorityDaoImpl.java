@@ -86,6 +86,21 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     }
 
     @Override
+    public int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities) {
+        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = {}");
+        Object[][] objects = {};
+        int count = 0;
+        for (UserTimePriority userTimePriority : userTimePriorities){
+            objects[count] = new Object[]{
+                    userTimePriority.getTimePriorityType().getId(),
+                    userTimePriority.getUser().getId(),
+                    userTimePriority.getScheduleTimePoint().getId()};
+            count++;
+        }
+        return this.getJdbcTemplate().batchUpdate(UPDATE_USER_TIME_PRIORITY, objects);
+    }
+
+    @Override
     public int deleteUserPriority(UserTimePriority userTimePriority) {
         log.trace("Deleting User time priority  with id user,  id  scheduleTimePoint = ",
                 userTimePriority.getUser().getId(), userTimePriority.getScheduleTimePoint().getId());
