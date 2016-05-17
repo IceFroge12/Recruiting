@@ -13,7 +13,6 @@ import ua.kpi.nc.service.TimePriorityTypeService;
 import ua.kpi.nc.service.UserTimePriorityService;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Korzh
@@ -48,6 +47,11 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	@Override
 	public List<UserTimePriority> getAllUserTimePriorities(Long userId) {
 		return userTimePriorityDao.getAllUserTimePriorities(userId);
+	}
+
+	@Override
+	public int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities) {
+		return userTimePriorityDao.batchUpdateUserPriority(userTimePriorities);
 	}
 
 	@Override
