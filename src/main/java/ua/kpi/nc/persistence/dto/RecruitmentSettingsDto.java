@@ -5,6 +5,8 @@ package ua.kpi.nc.persistence.dto;
  */
 public class RecruitmentSettingsDto {
 
+    private Long id;
+
     private String name;
 
     private String registrationDeadline;
@@ -21,7 +23,8 @@ public class RecruitmentSettingsDto {
     }
 
 
-    public RecruitmentSettingsDto(String name, String registrationDeadline, String scheduleChoicesDeadline, String endDate, int maxGeneralGroup, int maxAdvancedGroup) {
+    public RecruitmentSettingsDto(Long id, String name, String registrationDeadline, String scheduleChoicesDeadline, String endDate, int maxGeneralGroup, int maxAdvancedGroup) {
+        this.id = id;
         this.name = name;
         this.registrationDeadline = registrationDeadline;
         this.scheduleChoicesDeadline = scheduleChoicesDeadline;
@@ -78,10 +81,19 @@ public class RecruitmentSettingsDto {
         this.endDate = endDate;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "RecruitmentSettingsDto{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", registrationDeadline='" + registrationDeadline + '\'' +
                 ", scheduleChoicesDeadline='" + scheduleChoicesDeadline + '\'' +
                 ", endDate='" + endDate + '\'' +

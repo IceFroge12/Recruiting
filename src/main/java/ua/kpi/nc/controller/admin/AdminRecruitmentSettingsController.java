@@ -61,7 +61,7 @@ public class AdminRecruitmentSettingsController {
     }
     @RequestMapping(value = "/editRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void editRecruitment(@RequestBody RecruitmentSettingsDto recruitmentDto){
-        Recruitment recruitment = recruitmentService.getRecruitmentByName(recruitmentDto.getName());
+        Recruitment recruitment = recruitmentService.getRecruitmentById(recruitmentDto.getId());
         System.out.println(recruitment);
         recruitment.setName(recruitmentDto.getName());
         recruitment.setRegistrationDeadline(Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()));
