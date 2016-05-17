@@ -73,6 +73,8 @@ public class AdminRecruitmentSettingsController {
         recruitmentService.updateRecruitment(recruitment);
     }
 
+
+
 //    @RequestMapping(value = "/endRecruitment", method = RequestMethod.GET)
 //    private void endRecruitment() {
 //        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
