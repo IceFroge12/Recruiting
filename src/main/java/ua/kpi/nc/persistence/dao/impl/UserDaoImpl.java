@@ -180,7 +180,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_UNCONNECTED_FORMS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u INNER JOIN application_form a ON a.id_user = u.id  WHERE a.id_recruitment IS NULL";
-    
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -189,16 +189,17 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public List<User> getActiveStaffByRole(Role role){
+    public List<User> getActiveStaffByRole(Role role) {
         log.info("Get all active staffs with role {}", role.getId());
         return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, extractor, role.getId());
     }
 
     @Override
-    public List<User> getAllNotScheduleStudents(){
+    public List<User> getAllNotScheduleStudents() {
         log.info("Get all not schedule students");
         return this.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
     }
+
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
@@ -221,6 +222,19 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         log.info("Insert user with email = {}", user.getEmail());
         return this.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
+    }
+
+    @Override
+    public int[] batchUpdate(List<User> users) {
+        Object[][] objects = new Object[users.size()][];
+        int count = 0;
+        for (User user : users) {
+            objects[count] = new Object[]{user.getEmail(), user.getFirstName(), user.getSecondName(), user.getLastName(),
+                    user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
+                    user.getId()};
+            count++;
+        }
+        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
     }
 
     @Override
@@ -418,7 +432,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         Long id = null;
         try {
             id = Long.parseLong(lastName);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
         return this.getJdbcTemplate().queryForList(SQL_SEARCH_EMPLOYEE_BY_NAME, extractor, id, "%" + lastName + "%");
@@ -429,10 +443,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         Long id = null;
         try {
             id = Long.parseLong(lastName);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor,id, "%" + lastName + "%",
+        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, id, "%" + lastName + "%",
                 fromRows, rowsNum);
     }
 
@@ -472,8 +486,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         return this.getJdbcTemplate().update(SQL_DISABLE_STAFF);
     }
 
-	@Override
-	public List<User> getStudentsWithNotconnectedForms() {
-		return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
-	}
+    @Override
+    public List<User> getStudentsWithNotconnectedForms() {
+        return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
+    }
 }

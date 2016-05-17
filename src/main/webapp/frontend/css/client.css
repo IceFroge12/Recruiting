@@ -366,6 +366,9 @@ h4 {
 .table-head{
     background:#d4d4d4
 }
+.time-result{
+    text-align: left;
+}
 
 /*.table-condensed{*/
     /*table-layout: fixed;*/

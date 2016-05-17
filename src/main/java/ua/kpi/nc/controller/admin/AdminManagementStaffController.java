@@ -137,7 +137,6 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
     public List<UserRateDto> showAssignedStudent(@RequestParam String email) {
-
         User user = userService.getUserByUsername(email);
         List<UserRateDto> userRateDtos = new ArrayList<>();
         for (Interview interview : interviewService.getByInterviewer(user)) {
@@ -147,7 +146,6 @@ public class AdminManagementStaffController {
                     interview.getId());
             userRateDtos.add(userRateDto);
         }
-
         return userRateDtos;
     }
 
@@ -187,6 +185,24 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "getMaxId", method = RequestMethod.GET)
     public Long getMaxId() {
         return userService.getUserCount();
+    }
+
+    @RequestMapping(value = "hasNotMarked", method = RequestMethod.GET)
+    public List<String> hasNotMarked(@RequestParam List<String> emails) {
+        List<String> notMarkedAll = new ArrayList<>();
+        for(String email:emails){
+            User user = userService.getUserByUsername(email);
+            List<Interview> interviews = interviewService.getByInterviewer(user);
+            boolean foundNotMarked = false;
+            for(Interview interview: interviews){
+                if(interview.getMark() == null)
+                    foundNotMarked = true;
+            }
+            if(foundNotMarked)
+                notMarkedAll.add(email);
+        }
+
+        return notMarkedAll;
     }
 
 }

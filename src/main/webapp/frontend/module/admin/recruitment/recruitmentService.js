@@ -24,12 +24,13 @@ function recruitmentService(http) {
         });
     };
 
-    service.editRecruitment  = function (name,registrationDeadline, scheduleChoicesDeadline, endDate,maxGeneralGroup, maxAdvancedGroup) {
+    service.editRecruitment  = function (id, name,registrationDeadline, scheduleChoicesDeadline, endDate,maxGeneralGroup, maxAdvancedGroup) {
         http({
             method : 'POST',
             url : '/admin/editRecruitment',
             contentType: 'application/json',
             data : JSON.stringify({
+                id: id,
                 name:name,
                 registrationDeadline: registrationDeadline,
                 scheduleChoicesDeadline: scheduleChoicesDeadline,

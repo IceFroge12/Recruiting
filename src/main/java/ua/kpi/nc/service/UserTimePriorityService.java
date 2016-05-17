@@ -1,5 +1,6 @@
 package ua.kpi.nc.service;
 
+import ua.kpi.nc.persistence.dto.UserTimePriorityDto;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.UserTimePriority;
@@ -21,8 +22,13 @@ public interface UserTimePriorityService {
     int deleteUserPriority(UserTimePriority userTimePriority);
 
     List<UserTimePriority> getAllUserTimePriorities(Long userId);
-    
+
+    int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities);
+
     void createStudentTimePriotities(User student);
     
     boolean isSchedulePrioritiesExist();
+
+    public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId);
+
 }

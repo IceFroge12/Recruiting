@@ -1,6 +1,7 @@
 package ua.kpi.nc.service.impl;
 
 import ua.kpi.nc.persistence.dao.UserTimePriorityDao;
+import ua.kpi.nc.persistence.dto.UserTimePriorityDto;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.TimePriorityType;
 import ua.kpi.nc.persistence.model.User;
@@ -12,7 +13,6 @@ import ua.kpi.nc.service.TimePriorityTypeService;
 import ua.kpi.nc.service.UserTimePriorityService;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Korzh
@@ -50,6 +50,11 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	}
 
 	@Override
+	public int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities) {
+		return userTimePriorityDao.batchUpdateUserPriority(userTimePriorities);
+	}
+
+	@Override
 	public void createStudentTimePriotities(User student) {
 		ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
 		TimePriorityTypeService priorityTypeService = ServiceFactory.getTimePriorityTypeService();
@@ -61,8 +66,15 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 		}
 	}
 
+
+
 	@Override
 	public boolean isSchedulePrioritiesExist() {
 		return userTimePriorityDao.isSchedulePrioritiesExist();
+	}
+
+	@Override
+	public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId) {
+		return userTimePriorityDao.getAllTimePriorityForUserById(userId);
 	}
 }

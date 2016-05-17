@@ -1,11 +1,11 @@
 package ua.kpi.nc.persistence.util;
 
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 
@@ -41,7 +41,7 @@ public class JdbcTemplate {
             }
             return statement.executeUpdate();
         } catch (SQLException e) {
-            log.error("Cannot read objects", e);
+            log.error("Cannot read objects ", e);
             return 0;
         }
     }
@@ -54,7 +54,7 @@ public class JdbcTemplate {
             log.trace("Get result");
             return insert(statement, objects);
         } catch (SQLException e) {
-            log.error("Cannot read objects", e);
+            log.error("Cannot read objects ", e);
             return 0L;
         }
     }
@@ -62,18 +62,18 @@ public class JdbcTemplate {
     public Long insert(String sql, Connection connection, Object... objects) {
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             log.trace("Create prepared statement");
-            return insert(statement,objects);
+            return insert(statement, objects);
         } catch (SQLException e) {
-            log.error("Cannot read objects", e);
+            log.error("Cannot read objects ", e);
             return 0L;
         }
     }
 
-    public <T> List<T> queryForList(String sql,ResultSetExtractor<T> resultSetExtractor, Object... objects){
-        return (List<T>) queryForCollection(new ArrayList<>(),sql,  resultSetExtractor, (Object[]) objects);
+    public <T> List<T> queryForList(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
+        return (List<T>) queryForCollection(new ArrayList<>(), sql, resultSetExtractor, (Object[]) objects);
     }
 
-    private <T> Collection<T> queryForCollection(Collection<T> collection,String sql,
+    private <T> Collection<T> queryForCollection(Collection<T> collection, String sql,
                                                  ResultSetExtractor<T> resultSetExtractor, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -82,21 +82,21 @@ public class JdbcTemplate {
                 statement.setObject(rowNum++, object);
             }
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 collection.add(resultSetExtractor.extractData(resultSet));
             }
             return collection;
         } catch (SQLException e) {
-            log.error("Cannot read object",e);
+            log.error("Cannot read object ", e);
         }
         return collection;
     }
 
-    public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects){
-        return (Set<T>) queryForCollection(new HashSet<>(),sql,  resultSetExtractor, (Object[]) objects);
+    public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
+        return (Set<T>) queryForCollection(new HashSet<>(), sql, resultSetExtractor, (Object[]) objects);
     }
 
-    private Long insert(PreparedStatement statement,Object... objects) {
+    private Long insert(PreparedStatement statement, Object... objects) {
         log.trace("Get result");
         int rowNum = 1;
         try {
@@ -109,9 +109,28 @@ public class JdbcTemplate {
                 return resultSet.getLong(1);
             }
         } catch (SQLException e) {
-            log.error("Cannot insert objects", e);
+            log.error("Cannot insert objects ", e);
         }
         return null;
+    }
+
+    public int[] batchUpdate(String sql, Object[][] objects) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            log.trace("Open connection");
+            int rowNum = 1;
+            for (Object[] objectsForSql : objects) {
+                for (Object object : objectsForSql) {
+                    statement.setObject(rowNum++, object);
+                }
+                statement.addBatch();
+                rowNum = 1;
+            }
+            return statement.executeBatch();
+        } catch (SQLException e) {
+            log.error("Cannot make bunch update {}", e);
+            return new int[]{};
+        }
     }
 
     public <T> T queryWithParameters(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
@@ -125,11 +144,11 @@ public class JdbcTemplate {
             log.trace("Open connection");
             log.trace("Create prepared statement");
             log.trace("Get result");
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 return resultSetExtractor.extractData(resultSet);
             }
         } catch (SQLException e) {
-            log.error("Cannot read objects", e);
+            log.error("Cannot read objects ", e);
         }
         return null;
     }

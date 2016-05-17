@@ -3,19 +3,18 @@
  */
 function recruitmentController($scope, recruitmentService) {
 
-
-    //$("#datepicker , #datepicker1, #datepicker2").kendoDatePicker({
-    //    format: "yyyy-mm-dd hh:mm:ss[.fffffffff]"
-    //});
     
     recruitmentService.getCurrentRecruitment().then(function success(data) {
+        $scope.recId = data.id;
         console.log(data.data);
+
+        var dateFormar = 'yyyy-MM-dd hh:mm';
+
+        $scope.date1 = new Date(parseInt(data.registrationDeadline)).toString(dateFormar);
         
-        $scope.date1 = new Date(parseInt(data.registrationDeadline)).toString('yyyy-MM-dd hh:mm:ss');
+        $scope.date2 = new Date(parseInt(data.scheduleChoicesDeadline)).toString(dateFormar);
         
-        $scope.date2 = new Date(parseInt(data.scheduleChoicesDeadline)).toString('yyyy-MM-dd hh:mm:ss');
-        
-        $scope.date3 = new Date(parseInt(data.endDate)).toString('yyyy-MM-dd hh:mm:ss');
+        $scope.date3 = new Date(parseInt(data.endDate)).toString(dateFormar);
    
         $scope.general = data.maxGeneralGroup;
         $scope.advanced = data.maxAdvancedGroup;
@@ -30,12 +29,14 @@ function recruitmentController($scope, recruitmentService) {
     
 
     $scope.edit = function () {
+        var zeroSeconds = ':00';
         console.log($scope.date1);
         console.log($scope.date2);
         console.log($scope.date3);
         console.log($scope.general);
         console.log($scope.advanced);
-        recruitmentService.editRecruitment($scope.recruitmentName, $scope.date1, $scope.date2, $scope.date3, $scope.general, $scope.advanced);
+        recruitmentService.editRecruitment($scope.recId, $scope.recruitmentName, $scope.date1 + zeroSeconds, $scope.date2 + zeroSeconds,
+            $scope.date3+ zeroSeconds, $scope.general, $scope.advanced);
     };
     $scope.save = function () {
         console.log($scope.date1);

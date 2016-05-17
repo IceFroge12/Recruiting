@@ -25,6 +25,10 @@ public class TimePriorityType implements Serializable {
 		this.priority = priority;
 	}
 
+	public TimePriorityType(Long id) {
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}
