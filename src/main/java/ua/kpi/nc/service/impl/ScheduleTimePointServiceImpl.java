@@ -7,6 +7,7 @@ import ua.kpi.nc.service.ScheduleTimePointService;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Korzh
@@ -61,5 +62,10 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	@Override
 	public boolean isScheduleExists() {
 		return scheduleTimePointDao.isScheduleExists();
+	}
+
+	@Override
+	public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint) {
+		return scheduleTimePointDao.getUsersNumberInFinalTimePoint(timePoint);
 	}
 }

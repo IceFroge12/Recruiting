@@ -2,6 +2,7 @@ package ua.kpi.nc.persistence.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -34,6 +35,7 @@ public class UserTimePriority implements Serializable {
 		this.user = user;
 	}
 
+	@JsonIgnore
 	public ScheduleTimePoint getScheduleTimePoint() {
 		return scheduleTimePoint;
 	}

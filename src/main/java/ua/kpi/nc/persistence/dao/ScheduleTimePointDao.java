@@ -5,6 +5,7 @@ import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,5 +30,7 @@ public interface ScheduleTimePointDao {
 	boolean isScheduleExists();
 
 	boolean isScheduleDatesExists();
+
+    public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
 
 }

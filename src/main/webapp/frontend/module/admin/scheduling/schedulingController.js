@@ -42,6 +42,20 @@ function schedulingController($scope, schedulingService) {
         $scope.amountOfTech = data.amountOfTech;
         $scope.amountOfSoft = data.amountOfSoft;
     });
+
+    schedulingService.getCurrentSchedule().then(function success(data) {
+        console.log(data);
+        $scope.schedulePoints = data.data;
+        $scope.collapsed = [];
+        $scope.collapsed[1] = [];
+        $scope.collapsed[2] = [];
+        $scope.collapsed[3] = [];
+        for(var i=0; i<$scope.schedulePoints.length; i++){
+            $scope.collapsed[1][i] = false;
+            $scope.collapsed[2][i] = false;
+            $scope.collapsed[3][i] = false;
+        }
+    })
     
     
 

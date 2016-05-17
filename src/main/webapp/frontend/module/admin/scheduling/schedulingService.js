@@ -12,6 +12,15 @@ function schedulingService(http) {
             return response.data;
         });
     };
+
+    service.getCurrentSchedule = function () {
+        console
+        return http({
+            method : 'GET',
+            url : '/scheduling/getCurrentSchedule'
+        })
+    };
+
     return service;
 }
 

@@ -1,9 +1,7 @@
 package ua.kpi.nc.persistence.dao.impl;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.sql.DataSource;
 
@@ -63,7 +61,11 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 	private static final String SQL_IS_SCHEDULE_DATES_EXIST = "SELECT EXISTS (SELECT 1 FROM schedule_time_point stp)";
 	
 	private static final String SQL_IS_SCHEDULE_EXISTS = "SELECT EXISTS (SELECT 1 FROM user_time_final utf)";
-	
+
+	private static final String USERS_COUNT_IN_FINAL_TIME = "SELECT sel.num as number, sel.role FROM ( SELECT ur.id_role as role, count(ur.id_role) as num FROM \"user\" u INNER JOIN user_role ur\n" +
+			"    on ur.id_user=u.id INNER JOIN user_time_final f on u.id=f.id_user INNER JOIN schedule_time_point s \n" +
+			"    on s.id = f.id_time_point WHERE s.time_point = ? GROUP BY ur.id_role) sel;";
+
 	@Override
 	public ScheduleTimePoint getFinalTimePointById(Long id) {
 		log.trace("Looking for Schedule time Point with id = ", id);
@@ -145,4 +147,15 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 		}
 		return this.getJdbcTemplate().queryWithParameters(SQL_IS_SCHEDULE_DATES_EXIST, resultSet -> resultSet.getBoolean(1));
 	}
+
+	@Override
+	public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint){
+		log.trace("Getting number of users in time point");
+		return this.getJdbcTemplate().queryWithParameters(USERS_COUNT_IN_FINAL_TIME, resultSet -> {
+			Map<Long,Long> set = new HashMap<Long, Long>();
+			do set.put(resultSet.getLong(2),resultSet.getLong(1)); while (resultSet.next());
+			return set;
+		}, timePoint);
+	}
+
 }

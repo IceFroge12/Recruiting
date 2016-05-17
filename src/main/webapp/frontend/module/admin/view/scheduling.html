@@ -97,6 +97,68 @@
                 <h4>
                     Current schedule:
                 </h4>
+                <table class="table table-condensed table-hover col-md-8">
+                    <thead class="table-head">
+                    <tr>
+                        <th>Date</th>
+                        <th>Soft</th>
+                        <th>Tech</th>
+                        <th>Students</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="timePoint in schedulePoints">
+                        <td>
+                            {{timePoint.timePoint}}
+                        </td>
+                        <td>
+                            <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]" ng-click="collapsed[1][schedulePoints.indexOf(timePoint)]=!collapsed[1][schedulePoints.indexOf(timePoint)]">
+                                {{timePoint.amountOfSoft}}<span class="glyphicon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </a>
+                            <div ng-show="collapsed[1][schedulePoints.indexOf(timePoint)]">
+                                <div class="col-md-8">id:2020 Vasya Pupkin</div>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
+                                </button>
+                                <div class="col-md-8">id:2020 Vasya Pupkin</div>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
+                                </button>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <a ng-model="collapsed[2][schedulePoints.indexOf(timePoint)]" ng-click="collapsed[2][schedulePoints.indexOf(timePoint)]=!collapsed[2][schedulePoints.indexOf(timePoint)]">
+                            {{timePoint.amountOfTech}}<span class="glyphicon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </a>
+                            <div ng-show="collapsed[2][schedulePoints.indexOf(timePoint)]">
+                                <div class="col-md-8">id:2020 Vasya Pupkin</div>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
+                                </button>
+                                <div class="col-md-8">id:2020 Vasya Pupkin</div>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
+                                </button>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <a ng-model="collapsed[3][schedulePoints.indexOf(timePoint)]" ng-click="collapsed[3][schedulePoints.indexOf(timePoint)]=!collapsed[3][schedulePoints.indexOf(timePoint)]">
+                            {{timePoint.amountOfStudents}}<span class="glyphicon glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            </a>
+                            <div ng-show="collapsed[3][schedulePoints.indexOf(timePoint)]">
+                                <div class="col-md-8">id:2020 Vasya Pupkin</div>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
+                                </button>
+                                <div class="col-md-8">id:2020 Vasya Pupkin</div>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
+                                </button>
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="row info-text">
                 <button type="submit" class="btn btn-info search-element btn-left" disabled>Save
