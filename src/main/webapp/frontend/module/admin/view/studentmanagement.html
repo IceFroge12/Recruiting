@@ -52,7 +52,8 @@
                 </div>
             <table class="table table-condensed table-hover col-md-8">
                 <thead class="table-head">
-                <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok" ></span>&nbsp;</th>
+                <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok">
+                    <input type="checkbox" ng-model="all"></span>&nbsp;</th>
                     <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort-stud order="2" sort="sort">Name&nbsp;</th>
                     <th class="student-status">Status</th>
@@ -62,7 +63,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="student in allStudents">
-                    <td><input type="checkbox" ng-click="checkStudentStatus(student)"></td>
+                    <td><input type="checkbox" ng-click="checkStudentStatus(student)" ng-checked="all"></td>
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.appFormId}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
