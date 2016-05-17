@@ -71,6 +71,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean updateUserWithRole(User user) {
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+            connection.setAutoCommit(false);
+            userDao.updateUser(user);
+            userDao.deleteAllRoles(user);
+            for (Role role : user.getRoles())
+                userDao.addRole(user, role, connection);
+            connection.commit();
+        } catch (SQLException e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Cannot update user", e);
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
     public boolean addRole(User user, Role role) {
         return userDao.addRole(user, role);
     }
@@ -85,7 +104,7 @@ public class UserServiceImpl implements UserService {
         return userDao.getAllNotScheduleStudents();
     }
 
-    public List<User> getActiveStaffByRole(Role role){
+    public List<User> getActiveStaffByRole(Role role) {
         return userDao.getActiveStaffByRole(role);
     }
 
@@ -152,7 +171,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Integer> getCountUsersOnInterviewDaysForRole(Role role){
+    public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         return userDao.getCountUsersOnInterviewDaysForRole(role);
     }
 
@@ -182,8 +201,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol) {
-        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum, sortingCol);
+    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
+        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum);
     }
 
     @Override

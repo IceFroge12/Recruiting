@@ -16,6 +16,15 @@ function staffManagementService(http) {
         })
     };
 
+    service.hasNotMarked = function (emails) {
+        console.log("Service hasNotMarked");
+        return http({
+            method : 'GET',
+            url : '/admin/hasNotMarked',
+            params : {emails:emails}
+        })
+    };
+
     service.showFilteredEmployees = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
                                          notInterviewer, notEvaluated) {
         console.log("Service showFilteredEmployees");

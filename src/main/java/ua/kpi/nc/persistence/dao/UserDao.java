@@ -33,6 +33,8 @@ public interface UserDao {
 
     int deleteRole(User user, Role role);
 
+    int deleteAllRoles(User user);
+
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
@@ -67,7 +69,7 @@ public interface UserDao {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
-    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol);
+    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
 
     Long getUserCount();
 

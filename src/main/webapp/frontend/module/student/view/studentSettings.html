@@ -3,23 +3,27 @@
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
-            <form>
+            <form name="recoverPassword">
                 <h3>Change password</h3>
 
                 <div class="row">
-                    <input ng-model="oldPassword" type="password" placeholder="old password">
+                    <input ng-model="oldPassword" type="password" placeholder="old password" id="oldPassword" name="oldPassword" required ng-minlength="4" ng-maxlength="16">
                 </div>
                 <br>
 
                 <div class="row">
-                    <input ng-model="newPassword" type="password" placeholder="new password">
+                    <input ng-model="newPassword" type="password" placeholder="new password" id="newPassword" name="newPassword" required ng-minlength="4" ng-maxlength="16">
                 </div>
                 <br>
 
                 <div class="row">
-                    <input ng-model="confirmNewPassword" type="password"  placeholder="new password">
+                    <input ng-model="confirmNewPassword" type="password"  placeholder="new password" id="confirmNewPassword" name="confirmNewPassword" required ng-minlength="4" ng-maxlength="16">
                 </div>
-                <button type="submit" ng-click="changePassword()" class="btn btn-info search-element btn-left">Confirm</button>
+                <div ng-messages="recoverPassword.oldPassword.$error">
+                    <div ng-message="maxlength"><span class="text-danger">Password must not exceed 16 characters</span></div>
+                    <div ng-message="minlength"><span class="text-danger">Password must be over 4 characters</span></div>
+                </div>
+                <button type="submit" ng-click="changePassword()" class="btn btn-info search-element btn-left" ng-disabled="recoverPassword.$invalid">Confirm</button>
             </form>
         </div>
     </div>

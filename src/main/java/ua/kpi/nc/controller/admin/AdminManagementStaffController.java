@@ -107,20 +107,24 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void editEmployeeParams(@RequestBody UserDto userDto) {
-        System.out.println(userDto);
+//        System.out.println("Зашли в контроллер");
+//        System.out.println(userDto);
 
         User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());
+        user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         Set<Role> userRoles = new HashSet<>();
         for (Role role : userDto.getRoleList()) {
-            userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
-            System.out.println(role);
+            userRoles.add(roleService.getRoleByTitle("ROLE_" + role.getRoleName()));
         }
         user.setRoles(userRoles);
-
-        userService.updateUser(user);
+       //System.out.println(user);
+        //userService.updateUser(user);
+        userService.updateUserWithRole(user);
+//        User userl = userService.getUserByID(2536L);
+//        for(Role role:userl.getRoles())System.out.println(role.getRoleName());
     }
 
     @RequestMapping(value = "changeEmployeeStatus", method = RequestMethod.GET)

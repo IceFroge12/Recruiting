@@ -23,6 +23,8 @@ public interface UserService {
 
     int updateUser(User user);
 
+    boolean updateUserWithRole(User user);
+
     boolean addRole(User user, Role role);
 
     int deleteRole(User user, Role role);
@@ -65,7 +67,7 @@ public interface UserService {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
-    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum, Long sortingCol);
+    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
 
     List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 

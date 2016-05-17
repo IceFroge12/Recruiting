@@ -24,7 +24,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.items = [];
     $scope.amount = 0;
     $scope.currentPage = 1;
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 15;
     $scope.statuses = [];
     $scope.UnivList=[];
     $scope.filtered = false;
@@ -236,7 +236,8 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.searchStudent = function (studentName) {
         console.log(studentName);
-        studentManagementService.searchStudent(studentName,pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder).success(function (data) {
+        var pageNum = 1;
+        studentManagementService.searchStudent(studentName,pageNum,$scope.itemsPerPage).success(function (data) {
             console.log(data);
             $scope.allStudents = data;
         }, function error() {

@@ -80,6 +80,7 @@ public class AdminFormSettingsController {
     @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
         System.out.println("ALE"+formQuestionDto.toString());
+        System.out.println(formQuestionDto.getType());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         for (String s : formQuestionDto.getFormAnswerVariants()) {

@@ -24,7 +24,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.notInterviewer = true;
     $scope.notEvaluated = true; //TODO
     $scope.assignedStudents = [];
-
+    $scope.notMarked = [];
 
     // init the sorted items
     $scope.$watch("sort.reverse", function () {
@@ -110,16 +110,26 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
 
         staffManagementService.showAllEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
+            $scope.users = [];
             angular.forEach(data, function (value1, key1) {
                 angular.forEach(value1.roles, function (value2, key2) {
                     value2.roleName = value2.roleName.slice(5);
-                })
+                });
+                console.log(value1);
+                $scope.users.push(value1.email);
             });
             console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
                 $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
                 $scope.notEvaluated);
             $scope.allEmployee = data;
             console.log(data);
+
+            staffManagementService.hasNotMarked($scope.users).success(function(data){
+                $scope.notMarked = data;
+                console.log($scope.notMarked);
+            }, function error() {
+                console.log("error");
+            });
 
         }, function error() {
             console.log("error");
@@ -199,8 +209,8 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             $scope.showAllEmployees($scope.currentPage);
     };
 
-    var editRoles = [];
-
+    //var editRoles = [];
+    $scope.editRoles=[];
     $scope.showUserData = function (employee) {
         $scope.adminEdit = false;
         $scope.softEdit = false;
@@ -214,26 +224,33 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         angular.forEach(employee.roles, function (item, i) {
             if (item.roleName == "ADMIN") {
                 $scope.adminEdit = true;
-                editRoles.push({roleName: item.roleName});
+                //$scope.editRoles.push({roleName: item.roleName});
             }
             if (item.roleName == "SOFT") {
                 $scope.softEdit = true;
-                editRoles.push({roleName: item.roleName});
+               // $scope.editRoles.push({roleName: item.roleName});
             }
             if (item.roleName == "TECH") {
                 $scope.techEdit = true;
-                editRoles.push({roleName: item.roleName});
+                //$scope.editRoles.push({roleName: item.roleName});
             }
             //TODO change logic
         });
 
-        editRoles = [];
+       // editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 
+    $scope.checkRole = function(){
+      if($scope.adminEdit) $scope.editRoles.push({roleName: "ADMIN"});
+        if($scope.softEdit)$scope.editRoles.push({roleName: "SOFT"});
+            if($scope.techEdit)$scope.editRoles.push({roleName: "TECH"});
+    };
+    
     $scope.editEmployee = function () {
+        $scope.checkRole();
         staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
-            $scope.lastNameEdit, $scope.emailEdit, editRoles);
+            $scope.lastNameEdit, $scope.emailEdit, $scope.editRoles);
     };
 
     $scope.changeEmployeeStatus = function (employee) {
@@ -365,6 +382,14 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.activeSoft = data[1];
     });
 
+    $scope.exists = function(item,list){
+        console.log(item+" === "+list);
+        for(var i = 0; i<list.length; i++){
+            if (list[i] === item)
+            return true;
+        }
+        return false;
+    }
 
 
 }
