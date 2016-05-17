@@ -22,7 +22,9 @@ public interface UserTimePriorityService {
     int deleteUserPriority(UserTimePriority userTimePriority);
 
     List<UserTimePriority> getAllUserTimePriorities(Long userId);
-    
+
+    int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities);
+
     void createStudentTimePriotities(User student);
     
     boolean isSchedulePrioritiesExist();
