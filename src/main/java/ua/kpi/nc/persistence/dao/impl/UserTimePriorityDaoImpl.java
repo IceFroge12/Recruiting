@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.UserTimePriorityDao;
+import ua.kpi.nc.persistence.dto.UserTimePriorityDto;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.TimePriorityType;
 import ua.kpi.nc.persistence.model.User;
@@ -14,10 +15,7 @@ import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Korzh
@@ -37,6 +35,14 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
         return userTimePriority;
     };
 
+    private ResultSetExtractor<UserTimePriorityDto> extractorDto = resultSet -> {
+        UserTimePriorityDto userTimePriorityDto = new UserTimePriorityDto();
+        userTimePriorityDto.setTimePoint(resultSet.getTimestamp("time_point"));
+        userTimePriorityDto.setTimeStampId(resultSet.getLong("id_time_point"));
+        userTimePriorityDto.setIdPriorityType(resultSet.getLong("id_priority_type"));
+        return userTimePriorityDto;
+    };
+
     private static final String GET_BY_USER_ID_TIME_POINT_ID = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
             "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) " +
             "WHERE p.id_user= ? and  p.id_time_point=? ;";
@@ -46,6 +52,14 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
             "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) Where p.id_user = ?;";
     private static final String IS_PRIORITIES_EXIST = "SELECT EXISTS (SELECT 1 FROM user_time_priority)";
+
+    private static final String GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID = "SELECT\n" +
+            "  p.id_priority_type,\n" +
+            "  p.id_time_point,"+
+            "  stp.time_point\n" +
+            "FROM public.user_time_priority p join public.time_priority_type pt\n" +
+            "    on (p.id_priority_type= pt.id) JOIN schedule_time_point stp ON  " +
+            "(stp.id = p.id_time_point) Where p.id_user = ? ORDER BY stp.time_point";
 
     @Override
     public UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint) {
@@ -65,7 +79,7 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
 
     @Override
     public int updateUserPriority(UserTimePriority userTimePriority) {
-        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = ",
+        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = {}",
                 userTimePriority.getUser().getId(), userTimePriority.getScheduleTimePoint().getId());
         return this.getJdbcTemplate().update(UPDATE_USER_TIME_PRIORITY, userTimePriority.getTimePriorityType().getId(), userTimePriority.getUser().getId(),
                 userTimePriority.getScheduleTimePoint().getId());
@@ -83,6 +97,12 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     public List<UserTimePriority> getAllUserTimePriorities(Long userId) {
         log.trace("Getting all User time priorities ");
         return this.getJdbcTemplate().queryForList(GET_ALL_USER_TIME_PRIORITY, extractor, userId);
+    }
+
+    @Override
+    public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId){
+        log.trace("Getting all time priorities for user with id ={} ", userId);
+        return this.getJdbcTemplate().queryForList(GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID, extractorDto,userId);
     }
 
 	@Override

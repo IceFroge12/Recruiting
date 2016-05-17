@@ -1,6 +1,7 @@
 package ua.kpi.nc.service.impl;
 
 import ua.kpi.nc.persistence.dao.UserTimePriorityDao;
+import ua.kpi.nc.persistence.dto.UserTimePriorityDto;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.TimePriorityType;
 import ua.kpi.nc.persistence.model.User;
@@ -61,8 +62,15 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 		}
 	}
 
+
+
 	@Override
 	public boolean isSchedulePrioritiesExist() {
 		return userTimePriorityDao.isSchedulePrioritiesExist();
+	}
+
+	@Override
+	public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId) {
+		return userTimePriorityDao.getAllTimePriorityForUserById(userId);
 	}
 }

@@ -133,7 +133,6 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
     public List<UserRateDto> showAssignedStudent(@RequestParam String email) {
-
         User user = userService.getUserByUsername(email);
         List<UserRateDto> userRateDtos = new ArrayList<>();
         for (Interview interview : interviewService.getByInterviewer(user)) {
@@ -143,7 +142,6 @@ public class AdminManagementStaffController {
                     interview.getId());
             userRateDtos.add(userRateDto);
         }
-
         return userRateDtos;
     }
 
