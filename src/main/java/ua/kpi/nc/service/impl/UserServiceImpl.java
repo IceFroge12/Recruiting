@@ -149,6 +149,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int[] batchUpdate(List<User> users) {
+        return userDao.batchUpdate(users);
+    }
+
+    @Override
     public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
         return userDao.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
     }
@@ -220,9 +225,9 @@ public class UserServiceImpl implements UserService {
         return userDao.disableAllStaff();
     }
 
-	@Override
-	public List<User> getStudentsWithNotconnectedForms() {
-		return userDao.getStudentsWithNotconnectedForms();
-	}
+    @Override
+    public List<User> getStudentsWithNotconnectedForms() {
+        return userDao.getStudentsWithNotconnectedForms();
+    }
 }
 

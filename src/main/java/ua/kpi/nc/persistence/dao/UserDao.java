@@ -25,6 +25,8 @@ public interface UserDao {
 
     List<User> getAllNotScheduleStudents();
 
+    int[] batchUpdate(List<User> users);
+
     int updateUser(User user);
 
     boolean addRole(User user, Role role);
