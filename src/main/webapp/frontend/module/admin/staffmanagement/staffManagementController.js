@@ -158,7 +158,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         }
         console.log($scope.selection);
     };
-
+    
     $scope.addEmployee = function () {
 
         var roleArray = [];

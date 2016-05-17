@@ -277,22 +277,37 @@
                 <h4 class="modal-title">New employee</h4>
 
                 <div>
+                    <form name="addEmployeeForm">
                     <table class="table">
                         <tr>
                             <td>First Name</td>
-                            <td><input ng-model="firstName" type="text"></td>
+                            <td><input ng-model="firstName" type="text" name="firstName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9]+$/"></td>
+                            <td><span ng-show="addEmployeeForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="addEmployeeForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                            <span ng-show="addEmployeeForm.firstName.$error.pattern" class="text-danger">Can contain only numbers and letters.</span></td>
                         </tr>
                         <tr>
                             <td>Second Name</td>
-                            <td><input ng-model="secondName" id="secondName" type="text"></td>
+                            <td><input ng-model="secondName" id="secondName" type="text" name="secondName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9]+$/"></td>
+                            <td><span ng-show="addEmployeeForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="addEmployeeForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                            <span ng-show="addEmployeeForm.secondName.$error.pattern" class="text-danger">Can contain only numbers and letters.</span></td>
                         </tr>
                         <tr>
                             <td>Last Name</td>
-                            <td><input ng-model="lastName" id="lastName" type="text"></td>
+                            <td><input ng-model="lastName" id="lastName" type="text" name="lastName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9]+$/"></td>
+                            <td><span ng-show="addEmployeeForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="addEmployeeForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                            <span ng-show="addEmployeeForm.lastName.$error.pattern" class="text-danger">Can contain only numbers and letters.</span></td>
                         </tr>
                         <tr>
                             <td> Email</td>
-                            <td><input ng-model="email" id="email" type="text"></td>
+                            <td><input ng-model="email" id="email" type="text" name="email" required ng-pattern="/^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/"></td>
+                            <td><span ng-show="addEmployeeForm.email.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.email.$error.pattern" class="text-danger">Invalid email.</span></td>
                         </tr>
                         <tr>
                             <td> Role</td>
@@ -302,17 +317,19 @@
                                            value="{{employee.roleName}}"
                                            ng-click="toggleSelection(employee.roleName)"
                                            ng-checked="selection.indexOf(employee.roleName) > -1"
+                                           ng-required="selection.length==0"
                                     />
                                     {{employee.roleName}}
                                 </div>
                             </td>
                         </tr>
                     </table>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" id="saveEmployee" type="button" data-dismiss="modal"
-                        ng-click="addEmployee()">Add
+                        ng-click="addEmployee()" ng-disabled="addEmployeeForm.$invalid">Add
                 </button>
             </div>
         </div>
