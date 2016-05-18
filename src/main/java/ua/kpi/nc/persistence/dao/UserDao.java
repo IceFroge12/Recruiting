@@ -82,4 +82,7 @@ public interface UserDao {
     int disableAllStaff();
 
 	List<User> getStudentsWithNotconnectedForms();
+
+    List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId);
+
 }

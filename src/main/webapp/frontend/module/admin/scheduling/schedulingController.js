@@ -10,8 +10,15 @@ function schedulingController($scope, schedulingService) {
 
     $scope.softAmountSet;
     $scope.techAmountSet;
+    
+    // $scope.softArray = {};
+    // $scope.techArray = {};
+    // $scope.studentArray = {};
 
     $scope.map = {};
+    $scope.softMap = {};
+    $scope.techMap = {};
+    $scope.studentMap = {};
 
 
     $scope.removeFromSelected = function (dt) {
@@ -109,9 +116,25 @@ function schedulingController($scope, schedulingService) {
             $scope.collapsed[2][i] = false;
             $scope.collapsed[3][i] = false;
         }
-    })
-    
-    
+    });
+
+    $scope.getSoft = function (idTimePoint) {
+        schedulingService.getSoftService(idTimePoint).then(function (response) {
+            $scope.softMap[idTimePoint] = response.data;
+        })
+    };
+
+    $scope.getTech = function (idTimePoint) {
+        schedulingService.getTechService(idTimePoint).then(function (response) {
+            $scope.techMap[idTimePoint] = response.data;
+        })
+    };
+
+    $scope.getStudent = function (idTimePoint) {
+        schedulingService.getStudentService(idTimePoint).then(function (response) {
+            $scope.studentMap[idTimePoint] = response.data;
+        })
+    };
 
 }
 

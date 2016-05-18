@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.nc.persistence.dto.ScheduleOverallDto;
 import ua.kpi.nc.persistence.dto.SchedulingSettingDto;
+import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.SchedulingSettings;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.*;
 
@@ -25,6 +27,7 @@ import ua.kpi.nc.service.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by dima on 23.04.16.
@@ -66,18 +69,6 @@ public class AdminSchedulingController {
         ));
         return ResponseEntity.ok(id);
     }
-    @RequestMapping(value = "getCurrentSchedule", method = RequestMethod.GET)
-    public List<ScheduleOverallDto> getCurrentSchedule() {
-        List<ScheduleOverallDto> scheduleOverall = new ArrayList<>();
-        List<ScheduleTimePoint> allTimePoints = timePointService.getAll();
-        for (ScheduleTimePoint timePoint : allTimePoints) {
-            ScheduleOverallDto oneTimePoint = new ScheduleOverallDto(timePoint.getTimePoint().toString());
-            Map<Long,Long> numberForEachRole = timePointService.getUsersNumberInFinalTimePoint(timePoint.getTimePoint());
-            setUsersNumberToEachRole(numberForEachRole, oneTimePoint);
-            scheduleOverall.add(oneTimePoint);
-        }
-        return scheduleOverall;
-    }
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
     public List<SchedulingSettings> getSelectedDays(){
@@ -87,7 +78,6 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "deleteSelectedDay", method = RequestMethod.GET)
     public ResponseEntity deleteSelectedDay(@RequestParam Long id){
-        //TODO create dao method "delete by id"
         int amount =  schedulingSettingsService.deleteTimeRange(id);
         if (amount != 0){
             return ResponseEntity.ok(null);
@@ -95,6 +85,40 @@ public class AdminSchedulingController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
+
+    @RequestMapping(value = "editSelectedDay", method = RequestMethod.POST)
+    public ResponseEntity editSelectedDay(@RequestBody SchedulingDaysDto schedulingDaysDto){
+        int amount = schedulingSettingsService.updateTimeRange(new SchedulingSettings(
+                schedulingDaysDto.getId(),
+                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
+                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
+        ));
+        if (amount != 0){
+            return ResponseEntity.ok(null);
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
+
+    @RequestMapping(value = "getCurrentSchedule", method = RequestMethod.GET)
+    public List<ScheduleOverallDto> getCurrentSchedule() {
+        List<ScheduleOverallDto> scheduleOverall = new ArrayList<>();
+        List<ScheduleTimePoint> allTimePoints = timePointService.getAll();
+        for (ScheduleTimePoint timePoint : allTimePoints) {
+            ScheduleOverallDto oneTimePoint = new ScheduleOverallDto(timePoint.getTimePoint());
+            oneTimePoint.setId(timePoint.getId());
+            Map<Long,Long> numberForEachRole = timePointService.getUsersNumberInFinalTimePoint(timePoint.getTimePoint());
+            setUsersNumberToEachRole(numberForEachRole, oneTimePoint);
+            scheduleOverall.add(oneTimePoint);
+        }
+        return scheduleOverall;
+    }
+
+    @RequestMapping(value = "getUsersByTimePoint",method = RequestMethod.GET)
+    public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint){
+        return userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
     private void setUsersNumberToEachRole(Map<Long,Long> numberForEachRole, ScheduleOverallDto timePoint) {
         if (numberForEachRole == null) {
             timePoint.setAmountOfStudents(0);
@@ -116,20 +140,6 @@ public class AdminSchedulingController {
             } else {
                 timePoint.setAmountOfTech(numberForEachRole.get((long)RoleEnum.ROLE_TECH.getId()));
             }
-        }
-    }
-
-    @RequestMapping(value = "editSelectedDay", method = RequestMethod.POST)
-    public ResponseEntity editSelectedDay(@RequestBody SchedulingDaysDto schedulingDaysDto){
-        int amount = schedulingSettingsService.updateTimeRange(new SchedulingSettings(
-                schedulingDaysDto.getId(),
-                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
-                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
-        ));
-        if (amount != 0){
-            return ResponseEntity.ok(null);
-        }else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 }
