@@ -8,11 +8,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -40,11 +39,9 @@ import ua.kpi.nc.service.UserTimePriorityService;
  * Created by dima on 26.04.16.
  */
 @RequestMapping("/student")
-@Controller
+@RestController
 public class StudentScheduleController {
 
-	private static Gson gson = new Gson();
-	private static final String NOT_INVITED_MESSAGE = gson.toJson(new MessageDto("You weren't invited to interview.", MessageDtoType.INFO));;
 	private static Logger log = LoggerFactory.getLogger(StudentScheduleController.class);
 	private UserService userService = ServiceFactory.getUserService();
 	private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
@@ -53,23 +50,36 @@ public class StudentScheduleController {
 	private TimePriorityTypeService timePriorityTypeService = ServiceFactory.getTimePriorityTypeService();
 	private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 
+	private static Gson gson = new Gson();
+	private static final String NOT_INVITED_MESSAGE = gson
+			.toJson(new MessageDto("You weren't invited to interview.", MessageDtoType.INFO));
+	private static final String NO_RECRUITMENT_MESSAGE = gson
+			.toJson(new MessageDto("There is no recruitment now.", MessageDtoType.INFO));
+	private static final String NO_USER_PRIOTIES_MESSAGE = gson
+			.toJson(new MessageDto("You cannot choice schedule now.", MessageDtoType.INFO));
+	private static final String PRIOTIES_UPDATED_MESSAGE = gson
+			.toJson(new MessageDto("Your priorities were updated.", MessageDtoType.SUCCESS));
+	private static final String PRIOTIES_NOT_UPDATED_MESSAGE = gson
+			.toJson(new MessageDto("Your priorities weren't updated.", MessageDtoType.ERROR));
+	private static final String SCHEDULE_CHOICES_DEADLINE_MESSAGE = gson.toJson(
+			new MessageDto("You cannot update priorities after schedule choices deadline.", MessageDtoType.ERROR));
+
 	private static final String DATE_FORMAT = "dd/MM/yyyy hh:mm";
 
 	@RequestMapping(value = "schedule", method = RequestMethod.GET)
-	@ResponseBody
 	public String getStudentSchedule() {
 		User student = userService.getAuthorizedUser();
 		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
 		if (recruitment == null) {
-			return gson.toJson(new MessageDto("There is no recruitment now.", MessageDtoType.INFO));
+			return NO_RECRUITMENT_MESSAGE;
 		}
-		if(userTimePriorityService.isSchedulePrioritiesExist()) {
+		if (userTimePriorityService.isSchedulePrioritiesExist()) {
 			ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
-			if(applicationForm == null) {
+			if (applicationForm == null) {
 				return NOT_INVITED_MESSAGE;
 			}
-			if(scheduleTimePointService.isScheduleExists()) {
-				if(applicationForm.getStatus().getId().equals(StatusEnum.REJECTED.getId())) {
+			if (scheduleTimePointService.isScheduleExists()) {
+				if (applicationForm.getStatus().getId().equals(StatusEnum.REJECTED.getId())) {
 					return NOT_INVITED_MESSAGE;
 				}
 				return gson.toJson(finalTimePointToJson(student));
@@ -79,7 +89,7 @@ public class StudentScheduleController {
 			}
 			return NOT_INVITED_MESSAGE;
 		} else {
-			return gson.toJson(new MessageDto("You cannot choice schedule now.", MessageDtoType.INFO));
+			return NO_USER_PRIOTIES_MESSAGE;
 		}
 	}
 
@@ -116,8 +126,11 @@ public class StudentScheduleController {
 	}
 
 	@RequestMapping(value = "updateSchedule", method = RequestMethod.POST)
-	@ResponseBody
 	public String updateStudentSchedule(@RequestBody StudentSchedulePriorityDto[] dtoPriorities) {
+		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+		if (recruitment.getScheduleChoicesDeadline().before(new Date())) {
+			return SCHEDULE_CHOICES_DEADLINE_MESSAGE;
+		}
 		try {
 			User user = userService.getAuthorizedUser();
 			for (StudentSchedulePriorityDto priorityDto : dtoPriorities) {
@@ -132,12 +145,12 @@ public class StudentScheduleController {
 					userTimePriorityService.updateUserPriority(userTimePriority);
 				}
 			}
-			return gson.toJson(new MessageDto("Your priorities were updated.", MessageDtoType.SUCCESS));
+			return PRIOTIES_UPDATED_MESSAGE;
 		} catch (ParseException e) {
 			if (log.isErrorEnabled()) {
 				log.error("Cannot parse timepoint.");
 			}
-			return gson.toJson(new MessageDto("Your priorities weren't updated.", MessageDtoType.ERROR));
+			return PRIOTIES_NOT_UPDATED_MESSAGE;
 		}
 
 	}

@@ -40,7 +40,7 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
 	private static final String GET_BY_ID = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.id = ?;";
 	private static final String GET_BY_TIMEPOINT = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.time_point = ?;";
-	private static final String GET_ALL = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s";
+	private static final String GET_ALL = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s ORDER BY s.time_point";
 	private static final String USERS_FINAL_TIME_QUERY = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name,"
 			+ " u.password, u.confirm_token, u.is_active, u.registration_date "
 			+ "FROM public.user u join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where s.id=?;";
