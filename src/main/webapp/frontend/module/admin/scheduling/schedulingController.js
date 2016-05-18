@@ -15,8 +15,15 @@ function schedulingController($scope, schedulingService) {
     $scope.roleStudent = 3;
     $scope.roleToShow = 2;
     $scope.timePointToChange;
+    
+    // $scope.softArray = {};
+    // $scope.techArray = {};
+    // $scope.studentArray = {};
 
     $scope.map = {};
+    $scope.softMap = {};
+    $scope.techMap = {};
+    $scope.studentMap = {};
 
 
     $scope.removeFromSelected = function (dt) {
@@ -43,7 +50,7 @@ function schedulingController($scope, schedulingService) {
 
     $scope.setTime = function (object, date) {
         if (object.id === -1){
-            var temp = {
+            var temp = {    
                 day: date,
                 hourStart: object.startTime,
                 hourEnd: object.endTime,
@@ -115,6 +122,24 @@ function schedulingController($scope, schedulingService) {
             $scope.collapsed[3][i] = false;
         }
     });
+
+    $scope.getSoft = function (idTimePoint) {
+        schedulingService.getSoftService(idTimePoint).then(function (response) {
+            $scope.softMap[idTimePoint] = response.data;
+        })
+    };
+
+    $scope.getTech = function (idTimePoint) {
+        schedulingService.getTechService(idTimePoint).then(function (response) {
+            $scope.techMap[idTimePoint] = response.data;
+        })
+    };
+
+    $scope.getStudent = function (idTimePoint) {
+        schedulingService.getStudentService(idTimePoint).then(function (response) {
+            $scope.studentMap[idTimePoint] = response.data;
+        })
+    };
 
     $scope.possibleToAdd = [];
 

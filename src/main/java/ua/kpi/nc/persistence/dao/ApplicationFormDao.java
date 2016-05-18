@@ -65,4 +65,6 @@ public interface ApplicationFormDao {
     List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 
 	List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
+
+	Long getCountApprovedAppForm();
 }

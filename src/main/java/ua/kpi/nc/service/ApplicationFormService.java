@@ -28,6 +28,8 @@ public interface ApplicationFormService {
     Long getCountGeneralAppForm();
 
     Long getCountAdvancedAppForm();
+    
+    Long getCountApprovedAppForm();
 
     int deleteApplicationForm(ApplicationForm applicationForm);
 

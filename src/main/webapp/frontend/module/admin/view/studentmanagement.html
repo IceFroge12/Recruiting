@@ -11,13 +11,13 @@
                 <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
             </div>
             <div class="row">
-                <button type="button" ng-click="confirmSelection()" class="btn btn-info btn-sm search-element col-md-1">
-                    Confirm
-                    selection
+                <button type="button"  ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists" ng-click="confirmSelectionInfo()" class="btn btn-info btn-sm search-element col-md-1" data-toggle="modal" data-target="#confirmSelection">
+                    Confirm selection
                 </button>
-                <button type="button" ng-click="announceResults()" class="btn btn-info btn-sm search-element col-md-1">Announce results
+                
+                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="announceResults()" class="btn btn-info btn-sm search-element col-md-1">Announce results
                 </button>
-                <button type="button" ng-click="calculateStatuses()" class="btn btn-info btn-sm search-element col-md-1">Calculate statuses
+                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="calculateStatuses()" class="btn btn-info btn-sm search-element col-md-1">Calculate statuses
                 </button>
             <button ng-click="showFiltration()" class="btn btn-info btn-sm col-md-1 col-md-offset-7" type="button"
                     data-toggle="modal"
@@ -52,7 +52,8 @@
                 </div>
             <table class="table table-condensed table-hover col-md-8">
                 <thead class="table-head">
-                <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok" ></span>&nbsp;</th>
+                <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok">
+                    <input type="checkbox" ng-model="allSelected" ng-click="checkAll()" ng-model-options="{getterSetter: true}"></span>&nbsp;</th>
                     <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort-stud order="2" sort="sort">Name&nbsp;</th>
                     <th class="student-status">Status</th>
@@ -62,7 +63,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="student in allStudents">
-                    <td><input type="checkbox" ng-click="checkStudentStatus(student)"></td>
+                    <td><input type="checkbox" ng-click="checkStudentStatus(student)"  ng-model="student.Selected"></td>
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.appFormId}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>
@@ -87,7 +88,6 @@
                                 ng-click="setPage()">
                                 <a href ng-bind="n">1</a>
                             </li>
-
                             <li ng-class="{disabled: currentPage == amount}">
                                 <a href ng-click="nextPage()">Next »</a>
                             </li>
@@ -152,4 +152,30 @@
         </div>
     </div>
 </div>
+<div id="confirmSelection" class="modal fade">
+<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+				<h4 class="modal-title">Confirming selection</h4></div>
+				<div class="modal-body">
+				 	<h2>Confirm selection of {{approved}} students.</h2>
+				 	<h3>You have chosen next time points in schedule:</h3>
+				 	<div style="padding-left:50px">
+				 	<ul>
+				 	<li  ng-repeat="timePoint in timePoints">{{timePoint.timePoint | date:'yyyy-MM-dd HH:mm'}}</li>
+				 	</ul></div>
+					<button type="button"
+						ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists"
+						ng-click="confirmSelection()"
+						class="btn btn-info btn-sm search-element">
+						Confirm</button>
+				</div>
+			
+		</div>
+	</div>
+</div>
+
 <div app-footer></div>

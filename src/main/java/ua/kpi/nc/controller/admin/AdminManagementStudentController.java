@@ -38,6 +38,7 @@ public class AdminManagementStudentController {
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
     private InterviewService interviewService = ServiceFactory.getInterviewService();
     private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
+    private ScheduleTimePointService scheduleTimePointService = ServiceFactory.getScheduleTimePointService();
     
 //    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
 //    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -222,18 +223,14 @@ public class AdminManagementStudentController {
         return applicationFormService.getCountAdvancedAppForm();
     }
 
+    @RequestMapping(value = "getApprovedCount", method = RequestMethod.GET)
+    public Long getApprovedCount() {
+        return applicationFormService.getCountApprovedAppForm();
+    }
     @RequestMapping(value = "getGeneralCount", method = RequestMethod.GET)
     public Long getGeneralCount() {
         return applicationFormService.getCountGeneralAppForm();
     }
-
-//    @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
-//    public boolean changeStatus(@RequestParam Long id, @RequestBody Status status) {
-//        System.out.println(id + "\n" + status);
-////        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
-////        af.setStatus(status);
-//        return true;
-//    }
     
     @RequestMapping(value = "calculateStatuses", method = RequestMethod.POST)
     public void calulateStatuses() {
@@ -364,4 +361,20 @@ public class AdminManagementStudentController {
         return getAllStudent(applicationForms);
     }
 
+    @RequestMapping(value = "getRecruitmentStatus", method = RequestMethod.GET)
+    public String getRecruitmentStatus() {
+    	Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+    	if(recruitment != null) {
+    		RecruitmentStatusDto recruitmentStatusDto = new RecruitmentStatusDto();
+    		recruitmentStatusDto.setRecruitmentExists(true);
+    		recruitmentStatusDto.setScheduleExists(scheduleTimePointService.isScheduleExists());
+    		return new Gson().toJson(recruitmentStatusDto);
+    	}
+    	return null;
+    }
+    
+    @RequestMapping(value = "getTimePoints", method = RequestMethod.GET)
+    public List<ScheduleTimePoint> getTimePoints() {
+    	return scheduleTimePointService.getAll();
+    }
 }

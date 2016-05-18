@@ -15,6 +15,14 @@ function studentManagementController($scope,$filter, studentManagementService) {
         console.log($scope.restrictions);
         console.log($scope.questions);
     };
+
+    $scope.calculateStatuses = function() {
+        studentManagementService.calculateStatuses().success(function(data) {
+            console.log('Confirm selection');
+            console.log(data);
+        })
+    };
+    
     
     $scope.sort = {
         sortingOrder: 1,
@@ -133,6 +141,8 @@ function studentManagementController($scope,$filter, studentManagementService) {
     }, function error() {
         console.log("error");
     });
+    
+    
     
     studentManagementService.getJobCount().success(function(data){
         $scope.approvedToWork = data;
@@ -294,26 +304,47 @@ function studentManagementController($scope,$filter, studentManagementService) {
         $scope.showFilteredStudents($scope.currentPage);
     };
     
+    
+    $scope.confirmSelectionInfo = function() {
+    	studentManagementService.getApprovedCount().success(function(data){
+            $scope.approved = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
+    	
+    	studentManagementService.getTimePoints().success(function(data){
+            $scope.timePoints = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
+    }
+    
     $scope.confirmSelection = function() {
     	studentManagementService.confirmSelection().success(function(data) {
     		console.log('Confirm selection');
     		console.log(data);
     	})
-    }
+    };
     
     $scope.announceResults = function() {
     	studentManagementService.announceResults().success(function(data) {
     		console.log('Confirm selection');
     		console.log(data);
     	})
-    }
+    };
     
-    $scope.calculateStatuses = function() {
-    	studentManagementService.calculateStatuses().success(function(data) {
-    		console.log('Confirm selection');
-    		console.log(data);
-    	})
-    }
+  
+    
+ 
+    
+    studentManagementService.getRecruitmentStatus().then(function success(data) {
+        $scope.recruitmentStatus = data.data;
+        console.log('Recruitment status:');
+        console.log($scope.recruitmentStatus);
+    });
+   
     
     
 }
@@ -355,7 +386,9 @@ angular.module('appStudentManagement').directive("customSortStud", function () {
                 }
             };
         }
-    }
+    };
+
+ 
 
 
 });

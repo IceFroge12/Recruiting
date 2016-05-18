@@ -5,6 +5,10 @@
 
 function schedulingService($http) {
 
+    var ROLE_SOTF = "5";
+    var ROLE_TECH = "2";
+    var ROLE_STUDENT = "3";
+
     var service = {};
     service.getCurrentRecruitmentCountStudents = function () {
         return $http.get('/scheduling/getStudentCount').then(function (response) {
@@ -68,6 +72,39 @@ function schedulingService($http) {
         })
     };
 
+    service.getSoftService = function (idTimePoint) {
+        return $http({
+            method: 'GET',
+            url : '/scheduling/getUsersByTimePoint',
+            params : {
+                idRole : ROLE_SOTF,
+                idTimePoint : idTimePoint
+            }
+        })
+    };
+
+    service.getTechService = function (idTimePoint) {
+        return $http({
+            method: 'GET',
+            url : '/scheduling/getUsersByTimePoint',
+            params : {
+                idRole : ROLE_TECH,
+                idTimePoint : idTimePoint
+            }
+        })
+    };
+
+    service.getStudentService = function (idTimePoint) {
+        return $http({
+            method: 'GET',
+            url : '/scheduling/getUsersByTimePoint',
+            params : {
+                idRole : ROLE_STUDENT,
+                idTimePoint : idTimePoint
+            }
+        })
+    };
+    
     return service;
 }
 

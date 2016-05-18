@@ -3,21 +3,26 @@
  */
 
 function formSettingsController($scope, ngToast, $sce, formAppService) {
-
+    
+    $scope.questionRole;
+    
     $scope.getMandatory = function () {
         var role = "ROLE_STUDENT";
+        $scope.questionRole = "Student question";
         $scope.questions = [];
         getAllQuestion(role);
     };
 
     $scope.getSoft = function () {
         var role = "ROLE_SOFT";
+        $scope.questionRole = "Soft question";
         $scope.questions = [];
         getAllQuestion(role);
     };
 
     $scope.getTech = function () {
         var role = "ROLE_TECH";
+        $scope.questionRole = "Tech question";
         getAllQuestion(role);
     };
 
@@ -70,11 +75,12 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
     $scope.showSelectValue = function (mySelect) {
         console.log(mySelect);
         selectedValue = mySelect;
-        if (selectedValue == "input" || selectActiveValue == "textarea") {
+        if (selectedValue == "input" || selectedValue == "textarea") {
             $scope.canMoveForward = true;
+            $scope.addVariant = null;
         } else {
             var myToastMsg = ngToast.info({
-                content: 'a bla bla bla',//TODO
+                content: 'You have to input variants separated by comma',
                 timeout: 5000,
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
@@ -110,7 +116,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     $scope.changeStatus = function (question) {
         console.log(question);
-        formAppService.changeQuestionStatus(question.id).success(function(data){
+        formAppService.changeQuestionStatus(question.id).success(function (data) {
             console.log(data);
             question.enable = data;
         })
@@ -118,27 +124,98 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     $scope.changeMandatoryStatus = function (question) {
         console.log(question);
-        formAppService.changeQuestionMandatoryStatus(question.id).success(function(data){
+        formAppService.changeQuestionMandatoryStatus(question.id).success(function (data) {
             console.log(data);
-            question.mandatory=data;
+            question.mandatory = data;
         })
     };
+    
+    
+    $scope.changeOrder = function (addOrder) {
+
+        var x = 0;
+        var length = $scope.questions.length;
+        while (x < length) {
+            console.log($scope.questions[x].order);
+
+            if (addOrder == $scope.questions[x].order) {
+                console.log("error");
+                var myToastMsg = ngToast.info({
+                    content: 'Duplicate order number',
+                    timeout: 5000,
+                    horizontalPosition: 'center',
+                    verticalPosition: 'bottom',
+                    dismissOnClick: true,
+                    combineDuplications: true,
+                    maxNumber: 2
+                });
+                $scope.cantAddQuestion = true;
+                break;
+            } else {
+                $scope.cantAddQuestion = false;
+                x++;
+            }
+            console.log("break");
+        }
+    };
+
+    $scope.changeEditOrder = function (questionOrder) {
+
+        var x = 0;
+        var length = $scope.questions.length;
+        while (x < length) {
+            console.log($scope.questions[x].order);
+
+            if (questionOrder == $scope.questions[x].order) {
+                console.log("error");
+                var myToastMsg = ngToast.info({
+                    content: 'Duplicate order number',
+                    timeout: 5000,
+                    horizontalPosition: 'center',
+                    verticalPosition: 'bottom',
+                    dismissOnClick: true,
+                    combineDuplications: true,
+                    maxNumber: 2
+                });
+                $scope.cantEditQuestion = true;
+                break;
+            } else {
+                $scope.cantEditQuestion = false;
+                x++;
+            }
+            console.log("break");
+        }
+    };
+
+    $scope.changeEditType = function (type) {
+        if (type == "input" || type == "textarea") {
+            console.log("input Error");
+            $scope.cantEditVariant = true;
+            $scope.editVariant = null;
+        } else {
+            $scope.cantEditVariant = false;
+        }
+        
+    };
+
 
     $scope.saveForm = function () {
         var comma = ',';
         if ($scope.addVariant != null) {
             var variantArray = splitString($scope.addVariant, comma);
-       
+
         } else {
             variantArray = [];
         }
-
+        
         var role = selectRoleValue;
+
 
         formAppService.addQuestion($scope.addText, selectedValue, selectMandatoryValue, selectActiveValue, variantArray, role, $scope.addOrder);
     };
 
-    $scope.editEmployee = function () {
+
+    $scope.saveEditQuestion = function () {
 
         $scope.question.title = $scope.text;
 
@@ -146,23 +223,16 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
         var comma = ',';
         if ($scope.question.type == "input" || $scope.question.type == "textarea") {
-            console.log("input Error")
+            console.log("input Error");
         } else {
+            $scope.cantEditVariant = false;
             var variantArray = splitString($scope.editVariant, comma);
         }
-
-        var variants = [];
-        angular.forEach(variantArray, function (item, i) {
-            variants.push(item);
-        });
-
+        console.log(variantArray);
+        
         $scope.question.order = $scope.questionOrder;
-        console.log("ORDER" + $scope.question.order);
-
-        $scope.question.variants = variants;
-        console.log($scope.question.variants);
-        console.log($scope.question.type);
-        formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variants, "ROLE_STUDENT", $scope.question.order);
+        
+        formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variantArray, "ROLE_STUDENT", $scope.question.order);
     }
 
     $scope.finalMarks = [1, 2, 3];

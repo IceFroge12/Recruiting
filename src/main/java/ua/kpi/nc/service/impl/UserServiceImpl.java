@@ -231,6 +231,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
+        return userDao.getUserByTimeAndRole(scheduleTimePointId, roleId);
+    }
+
+    @Override
     public List<User> getUsersWithoutInterview(Long roleId) {
         return userDao.getUsersWithoutInterview(roleId);
     }

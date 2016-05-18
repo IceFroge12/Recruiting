@@ -81,6 +81,20 @@ function studentManagementService(http) {
         })
     };
 
+    service.getApprovedCount = function () {
+        return http({
+            method: 'GET',
+            url: '/admin/getApprovedCount'
+        })
+    };
+    
+    service.getTimePoints = function() {
+    	 return http({
+             method: 'GET',
+             url: '/admin/getTimePoints'
+         })
+    }
+    
     service.confirmSelection = function () {
         return http({
             method: 'POST',
@@ -139,6 +153,19 @@ function studentManagementService(http) {
         return ( JSON.parse("[" + response.data + "]") );
     }
 
+    
+    service.getRecruitmentStatus = function() {
+    	console.log("recruitment service");
+//    	return http.get('../../admin/getRecruitmentStatus').then(function (response) {
+//            return response;
+//        });
+    	 return http({
+             method: 'GET',
+             url: '/admin/getRecruitmentStatus',
+         })
+    }
+    
+    
     return service;
 }
 

@@ -173,4 +173,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	public List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment) {
 		return applicationFormDao.getRejectedAfterInterview(recruitment);
 	}
+
+	@Override
+	public Long getCountApprovedAppForm() {
+		return applicationFormDao.getCountApprovedAppForm();
+	}
 }
