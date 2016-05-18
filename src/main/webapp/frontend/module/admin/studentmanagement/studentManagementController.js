@@ -134,6 +134,8 @@ function studentManagementController($scope,$filter, studentManagementService) {
         console.log("error");
     });
     
+    
+    
     studentManagementService.getJobCount().success(function(data){
         $scope.approvedToWork = data;
         console.log(data);
@@ -294,6 +296,23 @@ function studentManagementController($scope,$filter, studentManagementService) {
         $scope.showFilteredStudents($scope.currentPage);
     };
     
+    
+    $scope.confirmSelectionInfo = function() {
+    	studentManagementService.getApprovedCount().success(function(data){
+            $scope.approved = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
+    	
+    	studentManagementService.getTimePoints().success(function(data){
+            $scope.timePoints = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
+    }
+    
     $scope.confirmSelection = function() {
     	studentManagementService.confirmSelection().success(function(data) {
     		console.log('Confirm selection');
@@ -314,6 +333,13 @@ function studentManagementController($scope,$filter, studentManagementService) {
     		console.log(data);
     	})
     }
+    
+    studentManagementService.getRecruitmentStatus().then(function success(data) {
+        $scope.recruitmentStatus = data.data;
+        console.log('Recruitment status:');
+        console.log($scope.recruitmentStatus);
+    });
+   
     
     
 }

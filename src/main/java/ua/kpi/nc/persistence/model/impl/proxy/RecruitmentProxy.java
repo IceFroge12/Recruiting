@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.SchedulingStatus;
 import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -197,6 +198,18 @@ public class RecruitmentProxy implements Recruitment {
     public void setNumberOfDays(int numberOfDays) {
         checkRecruitmentForExist();
         recruitment.setNumberOfDays(numberOfDays);
+    }
+
+    @Override
+    public SchedulingStatus getSchedulingStatus() {
+        checkRecruitmentForExist();
+        return recruitment.getSchedulingStatus();
+    }
+
+    @Override
+    public void setSchedulingStatus(SchedulingStatus schedulingStatus) {
+        checkRecruitmentForExist();
+        recruitment.setSchedulingStatus(schedulingStatus);
     }
 
     private void checkRecruitmentForExist(){

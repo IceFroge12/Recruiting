@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.SchedulingStatus;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -42,13 +43,15 @@ public class RecruitmentImpl implements Recruitment {
 
     private int numberOfDays;
 
+    private SchedulingStatus schedulingStatus;
+
     public RecruitmentImpl() {
     }
 
     public RecruitmentImpl(int numberOfDays, String name, Timestamp startDate, Timestamp endDate,
                            int maxGeneralGroup, int maxAdvancedGroup, Timestamp registrationDeadline,
                            Timestamp scheduleChoicesDeadline, int studentsOnInterview, int timeInterviewTech,
-                           int timeInterviewSoft, int numberTechInterviwers, int numberSoftInterviwers) {
+                           int timeInterviewSoft, int numberTechInterviwers, int numberSoftInterviwers, SchedulingStatus schedulingStatus) {
         this.numberOfDays = numberOfDays;
         this.name = name;
         this.startDate = startDate;
@@ -62,12 +65,13 @@ public class RecruitmentImpl implements Recruitment {
         this.timeInterviewSoft = timeInterviewSoft;
         this.numberTechInterviewers = numberTechInterviwers;
         this.numberSoftInterviewers = numberSoftInterviwers;
+        this.schedulingStatus = schedulingStatus;
     }
 
     public RecruitmentImpl(Long id, String name, Timestamp startDate, Timestamp endDate, int maxGeneralGroup,
                            int maxAdvancedGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline,
                            int studentsOnInterview, int timeInterviewTech, int timeInterviewSoft,
-                           int numberTechInterviewers, int numberSoftInterviewers, int numberOfDays) {
+                           int numberTechInterviewers, int numberSoftInterviewers, int numberOfDays, SchedulingStatus schedulingStatus) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -82,6 +86,7 @@ public class RecruitmentImpl implements Recruitment {
         this.numberTechInterviewers = numberTechInterviewers;
         this.numberSoftInterviewers = numberSoftInterviewers;
         this.numberOfDays = numberOfDays;
+        this.schedulingStatus = schedulingStatus;
     }
 
     public RecruitmentImpl(String name, Timestamp startDate, int maxAdvancedGroup, int maxGeneralGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline) {
@@ -234,6 +239,14 @@ public class RecruitmentImpl implements Recruitment {
         this.numberOfDays = numberOfDays;
     }
 
+    public SchedulingStatus getSchedulingStatus() {
+        return schedulingStatus;
+    }
+
+    public void setSchedulingStatus(SchedulingStatus schedulingStatus) {
+        this.schedulingStatus = schedulingStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -257,6 +270,7 @@ public class RecruitmentImpl implements Recruitment {
                 .append(endDate, that.endDate)
                 .append(registrationDeadline, that.registrationDeadline)
                 .append(scheduleChoicesDeadline, that.scheduleChoicesDeadline)
+                .append(schedulingStatus, that.schedulingStatus)
                 .isEquals();
     }
 
@@ -277,6 +291,7 @@ public class RecruitmentImpl implements Recruitment {
                 .append(numberTechInterviewers)
                 .append(numberSoftInterviewers)
                 .append(numberOfDays)
+                .append(schedulingStatus)
                 .toHashCode();
     }
 
@@ -294,9 +309,10 @@ public class RecruitmentImpl implements Recruitment {
                 ", studentsOnInterview=" + studentsOnInterview +
                 ", timeInterviewTech=" + timeInterviewTech +
                 ", timeInterviewSoft=" + timeInterviewSoft +
-                ", numberTechInterviwers=" + numberTechInterviewers +
-                ", numberSoftInterviwers=" + numberSoftInterviewers +
+                ", numberTechInterviewers=" + numberTechInterviewers +
+                ", numberSoftInterviewers=" + numberSoftInterviewers +
                 ", numberOfDays=" + numberOfDays +
+                ", schedulingStatus=" + schedulingStatus +
                 '}';
     }
 }
