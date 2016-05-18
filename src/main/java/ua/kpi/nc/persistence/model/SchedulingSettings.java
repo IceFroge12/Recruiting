@@ -19,11 +19,17 @@ public class SchedulingSettings implements Serializable {
     public SchedulingSettings() {
     }
 
+    public SchedulingSettings(Timestamp startDate, Timestamp endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public SchedulingSettings(Long id, Timestamp startDate, Timestamp endDate) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
 
     public Long getId() {
         return id;

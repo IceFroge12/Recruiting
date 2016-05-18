@@ -20,8 +20,8 @@ public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements Schedul
     private ResultSetExtractor<SchedulingSettings> extractor = resultSet -> {
         SchedulingSettings schedulingSettings = new SchedulingSettings();
         schedulingSettings.setId(resultSet.getLong("id"));
-        schedulingSettings.setStartDate(resultSet.getTimestamp("start_date"));
-        schedulingSettings.setEndDate(resultSet.getTimestamp("end_date"));
+        schedulingSettings.setStartDate(resultSet.getTimestamp("start_time"));
+        schedulingSettings.setEndDate(resultSet.getTimestamp("end_time"));
         return schedulingSettings;
     };
 

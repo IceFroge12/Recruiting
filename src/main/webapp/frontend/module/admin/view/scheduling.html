@@ -1,6 +1,6 @@
 <div app-header></div>
 <div app-menu-admin></div>
-<div ng-controller="schedulingController" id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+<div ng-controller="schedulingController" ng-init="init()" id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
 
@@ -83,12 +83,15 @@
                                 <div>
                                     Selected Dates:
                                     <div class='well well-sm'>
-                                        <div ng-repeat='d in selectedDates'>
+                                        <div ng-repeat='d in selectedDates track by $index'>
                                             {{d | date : 'fullDate'}}
-                                            <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='removeFromSelected(d)'>Remove</button>
-                                            <uib-timepicker ng-model="startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>
-                                            <uib-timepicker ng-model="endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>
-                                            <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='setTime(startTime, endTime, d)'>Test</button>
+                                            <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='removeFromSelected(d)' ng-init="createMap(d)">Remove</button>
+                                            <!--<uib-timepicker ng-model="startTime" ng-init="startTime = map[d].startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>-->
+                                            <!--<uib-timepicker ng-model="endTime" ng-init="endTime = map[d].endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>-->
+                                            <input type="number" ng-model="map[d].startTime">
+                                            <input type="number" ng-model="map[d].endTime">
+                                            <button class='btn btn-xs btn-warning' style='margin:5px'ng-click='setTime(map[d], d)'>Save</button>
+                                            <button class='btn btn-xs btn-warning' style='margin:5px'ng-click='edit(map[d], d)'>Edit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -169,7 +172,7 @@
                 </table>
             </div>
             <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left" disabled>Save
+                <button type="submit" class="btn btn-info search-element btn-left" ng-click="saveSelectedDay()">Save
                 </button>
                 <button type="submit" class="btn btn-info search-element btn-left" disabled>Send notification to all
                 </button>
