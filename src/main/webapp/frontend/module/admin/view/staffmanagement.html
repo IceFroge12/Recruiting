@@ -227,22 +227,37 @@
                 <h4 class="modal-title">Edit employee</h4>
 
                 <div>
+                    <form name="editEmployeeForm">
                     <table class="table">
                         <tr>
                             <td> First Name</td>
-                            <td><input type="text" ng-model="firstNameEdit" id="firstNameEdit"></td>
+                            <td><input type="text" ng-model="firstNameEdit" id="firstNameEdit" name="firstName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                                <td><span ng-show="editEmployeeForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="editEmployeeForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="editEmployeeForm.firstName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
                         </tr>
                         <tr>
                             <td> Second Name</td>
-                            <td><input type="text" ng-model="secondNameEdit" id="secondNameEdit"></td>
+                            <td><input type="text" ng-model="secondNameEdit" id="secondNameEdit" name="secondName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="editEmployeeForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="editEmployeeForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="editEmployeeForm.secondName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
                         </tr>
                         <tr>
                             <td> Last Name</td>
-                            <td><input type="text" ng-model="lastNameEdit" id="lastNameEdit"></td>
+                            <td><input type="text" ng-model="lastNameEdit" id="lastNameEdit" name="lastName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="editEmployeeForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="editEmployeeForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="editEmployeeForm.lastName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
                         </tr>
                         <tr>
                             <td> Email</td>
-                            <td><input type="text" ng-model="emailEdit" id="emailEdit"></td>
+                            <td><input type="text" ng-model="emailEdit" id="emailEdit" name="email" required ng-pattern="/^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/"></td>
+                              <td><span ng-show="editEmployeeForm.email.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.email.$error.pattern" class="text-danger">Invalid email.</span></td>
                         </tr>
                         <tr>
                             <td> Role</td>
@@ -256,11 +271,12 @@
                             </td>
                         </tr>
                     </table>
+                        </form>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges"
-                        data-dismiss="modal">Save changes
+                        data-dismiss="modal" ng-disabled="editEmployeeForm.$invalid">Save changes
                 </button>
             </div>
         </div>
@@ -281,27 +297,27 @@
                     <table class="table">
                         <tr>
                             <td>First Name</td>
-                            <td><input ng-model="firstName" type="text" name="firstName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9]+$/"></td>
+                            <td><input ng-model="firstName" type="text" name="firstName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
                             <td><span ng-show="addEmployeeForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
                             <span ng-show="addEmployeeForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
                             <span ng-show="addEmployeeForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
-                            <span ng-show="addEmployeeForm.firstName.$error.pattern" class="text-danger">Can contain only numbers and letters.</span></td>
+                            <span ng-show="addEmployeeForm.firstName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
                         </tr>
                         <tr>
                             <td>Second Name</td>
-                            <td><input ng-model="secondName" id="secondName" type="text" name="secondName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9]+$/"></td>
+                            <td><input ng-model="secondName" id="secondName" type="text" name="secondName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
                             <td><span ng-show="addEmployeeForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
                             <span ng-show="addEmployeeForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
                             <span ng-show="addEmployeeForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
-                            <span ng-show="addEmployeeForm.secondName.$error.pattern" class="text-danger">Can contain only numbers and letters.</span></td>
+                            <span ng-show="addEmployeeForm.secondName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
                         </tr>
                         <tr>
                             <td>Last Name</td>
-                            <td><input ng-model="lastName" id="lastName" type="text" name="lastName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9]+$/"></td>
+                            <td><input ng-model="lastName" id="lastName" type="text" name="lastName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
                             <td><span ng-show="addEmployeeForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
                             <span ng-show="addEmployeeForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
                             <span ng-show="addEmployeeForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
-                            <span ng-show="addEmployeeForm.lastName.$error.pattern" class="text-danger">Can contain only numbers and letters.</span></td>
+                            <span ng-show="addEmployeeForm.lastName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
                         </tr>
                         <tr>
                             <td> Email</td>
@@ -317,8 +333,7 @@
                                            value="{{employee.roleName}}"
                                            ng-click="toggleSelection(employee.roleName)"
                                            ng-checked="selection.indexOf(employee.roleName) > -1"
-                                           ng-required="selection.length==0"
-                                    />
+                                           ng-required="selection.length==0"/>
                                     {{employee.roleName}}
                                 </div>
                             </td>

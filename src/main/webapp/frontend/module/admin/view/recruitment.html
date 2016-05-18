@@ -3,12 +3,16 @@
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
-            <form>
+            <form name="recruitmentForm">
                 <table class="table-cells">
                     <tr>
                         <td>Recruitment name</td>
                         <td>
-                            <input ng-model="recruitmentName" class="input" type="text">
+                            <input ng-model="recruitmentName" class="input" type="text" name="name" required ng-minlength="2" ng-maxlength="10" ng-pattern="/^\w+$/">
+                            <span ng-show="recruitmentForm.name.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="recruitmentForm.name.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="recruitmentForm.name.$error.maxlength" class="text-danger">Must be no more than 10 characters.</span>
+                            <span ng-show="recruitmentForm.name.$error.pattern" class="text-danger">Must contain only numbers, letters and underscore(_).</span>
                             </br>
                             </br>
                         </td>
@@ -19,7 +23,8 @@
                             <div class="form-group">
                                 <div class="input-group date">
                                     <input datetimepicker  class="form-control" ng-model="date1"
-                                           datetime-picker date-format="yyyy-MM-dd HH:mm" />
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="date1" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
+                                    <span ng-show="recruitmentForm.date1.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</span>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
@@ -33,7 +38,8 @@
 
                                 <div class="input-group">
                                     <input datetimepicker  class="form-control" ng-model="date2"
-                                           datetime-picker date-format="yyyy-MM-dd HH:mm"/>
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="date2" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
+                                    <span ng-show="recruitmentForm.date2.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</span>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
@@ -47,7 +53,8 @@
                             <div class="form-group">
                                 <div class="input-group date">
                                     <input datetimepicker  class="form-control" ng-model="date3"
-                                           datetime-picker date-format="yyyy-MM-dd HH:mm"/>
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="date3" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
+                                    <span ng-show="recruitmentForm.date3.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</span>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
@@ -58,21 +65,27 @@
                     <tr>
                         <td>Number of students to general group</td>
                         <td>
-                            <input ng-model="general" class="input-nums" type="text">
-                        </td>
+                            <input ng-model="general" class="input-nums" type="text" name="general" required ng-minlength="1" ng-maxlength="5" ng-pattern="/^\d+$/">
+                            <span ng-show="recruitmentForm.general.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="recruitmentForm.general.$error.minlength" class="text-danger">Must be at least 1 characters.</span>
+                            <span ng-show="recruitmentForm.general.$error.maxlength" class="text-danger">Must be no more than 5 characters.</span>
+                            <span ng-show="recruitmentForm.general.$error.pattern" class="text-danger">Must contain only numbers.</span></td>
                     </tr>
                     <br>
                     <tr>
                         <td>Number of students to advanced group</td>
                         <td>
-                            <input ng-model="advanced" class="input-nums" type="text">
-                        </td>
+                            <input ng-model="advanced" class="input-nums" type="text" name="advanced" required ng-minlength="1" ng-maxlength="5" ng-pattern="/^\d+$/">
+                            <span ng-show="recruitmentForm.advanced.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="recruitmentForm.advanced.$error.minlength" class="text-danger">Must be at least 1 characters.</span>
+                            <span ng-show="recruitmentForm.advanced.$error.maxlength" class="text-danger">Must be no more than 5 characters.</span>
+                            <span ng-show="recruitmentForm.advanced.$error.pattern" class="text-danger">Must contain only numbers.</span></td>
                     </tr>
                 </table>
                 <button ng-click="save()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Add new
                     Recruitment
                 </button>
-                <button ng-click="edit()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Edit
+                <button ng-click="edit()" type="submit" class="btn btn-sm btn-info search-element col-md-1" ng-disabled="recruitmentForm.$invalid">Edit
                     Recruitment
                 </button>
             </form>
