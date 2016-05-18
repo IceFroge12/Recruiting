@@ -425,4 +425,11 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 	public List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment) {
 		return getJdbcTemplate().queryForList(SQL_GET_REJECTED_AFTER_INTERVIEW, extractor, recruitment.getId());
 	}
+
+	@Override
+	public Long getCountApprovedAppForm() {
+		log.info("Looking for Count of approved AppForm");
+		return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
+				resultSet -> resultSet.getLong(1), StatusEnum.APPROVED.getId());
+	}
 }
