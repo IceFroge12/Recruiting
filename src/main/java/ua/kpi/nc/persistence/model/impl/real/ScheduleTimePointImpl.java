@@ -3,6 +3,7 @@ package ua.kpi.nc.persistence.model.impl.real;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -67,6 +68,7 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 		this.users = users;
 	}
 
+	@JsonIgnore
 	@Override
 	public Set<UserTimePriority> getUserTimePriorities() {
 		return userTimePriorities;

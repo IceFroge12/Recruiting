@@ -181,6 +181,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u INNER JOIN application_form a ON a.id_user = u.id  WHERE a.id_recruitment IS NULL";
 
+    private static final String SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date FROM public.user u JOIN public.user_time_final f ON u.id = f.id_user JOIN public.user_role ur ON u.id = ur.id_user WHERE ur.id_role = ? AND f.id_time_point = ?";
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -225,16 +227,16 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public int[] batchUpdate(List<User> users){
-        Object[][] objects = {};
+    public int[] batchUpdate(List<User> users) {
+        Object[][] objects = new Object[users.size()][];
         int count = 0;
-        for (User user : users){
+        for (User user : users) {
             objects[count] = new Object[]{user.getEmail(), user.getFirstName(), user.getSecondName(), user.getLastName(),
                     user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                     user.getId()};
             count++;
         }
-        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE,objects);
+        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
     }
 
     @Override
@@ -289,6 +291,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }
         return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", user.getId());
     }
+
 
     @Override
     public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
@@ -490,4 +493,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public List<User> getStudentsWithNotconnectedForms() {
         return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
     }
+
+    @Override
+    public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE, extractor,scheduleTimePointId, roleId);
+    }
+
 }

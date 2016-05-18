@@ -23,4 +23,6 @@ public interface DecisionService {
     int truncateDecisionTable();
 	
     Status getStatusByFinalMark(int finalMark);
+    
+    void updateDecisionMatrix(List<Decision> decisionMatrix);
 }

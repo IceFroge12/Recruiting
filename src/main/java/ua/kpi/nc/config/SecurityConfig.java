@@ -60,11 +60,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")
+                .antMatchers("/student/appform/**").permitAll()
                 .antMatchers("/student/**").hasRole("STUDENT")
 
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")
+                .antMatchers("/staff/appForm/**").permitAll()
                 .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
                 .and()
 

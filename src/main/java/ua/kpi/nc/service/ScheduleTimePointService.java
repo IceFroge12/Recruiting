@@ -4,6 +4,7 @@ import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Korzh
@@ -27,4 +28,6 @@ public interface ScheduleTimePointService {
 	boolean isScheduleDatesExists();
 	
 	boolean isScheduleExists();
+
+    public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
 }

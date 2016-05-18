@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.RecruitmentDAO;
 import ua.kpi.nc.persistence.model.Recruitment;
+import ua.kpi.nc.persistence.model.SchedulingStatus;
 import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
@@ -40,28 +41,30 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         recruitment.setNumberSoftInterviewers(resultSet.getInt("number_soft_interviewers"));
         recruitment.setNumberTechInterviewers(resultSet.getInt("number_tech_interviewers"));
         recruitment.setNumberOfDays(resultSet.getInt("number_of_hours"));
+        recruitment.setSchedulingStatus(new SchedulingStatus(resultSet.getString("title"),resultSet.getLong("scheduling_status")));
         return recruitment;
     };
 
     private static final String SQL_GET_RECRUITMENT_BY_ID = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview  ,r.time_interview_soft, r.time_interview_tech," +
-            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
-            "FROM \"recruitment\" r\n" +
+            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours, r.scheduling_status,  " +
+            "ss.title FROM recruitment r JOIN scheduling_status ss on (ss.id= r.scheduling_status)" +
             "WHERE r.id = ?;";
 
     private static final String SQL_GET_RECRUITMENT_BY_NAME = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
-            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
-            "FROM \"recruitment\" r\n" +
+            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours, r.scheduling_status, \n" +
+            "ss.title  FROM recruitment r JOIN scheduling_status ss on (ss.id= r.scheduling_status)" +
             "WHERE r.name = ?;";
 
     private static final String SQL_GET_ALL = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview ,r.time_interview_soft, r.time_interview_tech," +
-            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
-            "FROM \"recruitment\" r\n";
+            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours, r.scheduling_status, \n" +
+            "ss.title  " +
+            "FROM \"recruitment\" r JOIN scheduling_status ss on (ss.id= r.scheduling_status)";
     
     private static final String SQL_GET_ALL_SORTED = SQL_GET_ALL + " ORDER BY r.start_date";
 
@@ -69,22 +72,23 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             "SET name = ? , start_date = ?,\n" +
             "end_date = ?, max_general_group = ?, max_advanced_group = ?, registration_deadline = ?," +
             "schedule_choices_deadline = ?, students_on_interview = ?, time_interview_tech = ?, " +
-            "time_interview_soft = ?, number_tech_interviewers = ?, number_soft_interviewers = ?, number_of_hours = ?\n" +
+            "time_interview_soft = ?, number_tech_interviewers = ?, number_soft_interviewers = ?, number_of_hours = ? ," +
+            " r.scheduling_status = ? \n" +
             "WHERE recruitment.id = ?;";
 
     private static final String SQL_INSERT = "INSERT INTO \"recruitment\"(name, start_date," +
             "end_date, max_general_group, max_advanced_group, registration_deadline, schedule_choices_deadline, " +
             "students_on_interview, time_interview_tech, time_interview_soft, number_tech_interviewers," +
-            "number_soft_interviewers, number_of_hours) " +
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            "number_soft_interviewers, number_of_hours, r.scheduling_status) " +
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
     private static final String SQL_DELETE = "DELETE FROM \"recruitment\" WHERE \"recruitment\".id = ?;";
 
     private static final String SQL_GET_CURRENT = "SELECT r.id, r.name,r.start_date,r.end_date," +
             "r.max_general_group, r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline," +
             " r.schedule_choices_deadline, r.students_on_interview  ,r.time_interview_soft, r.time_interview_tech," +
-            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours\n" +
-            "FROM \"recruitment\" r\n" +
+            "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours, r.scheduling_status, \n" +
+            "ss.title FROM \"recruitment\" r JOIN scheduling_status ss on (ss.id= r.scheduling_status) " +
             "WHERE r.end_date > CURRENT_DATE;";
 
     private static final String SQL_GET_REGISTERED_COUNT = "SELECT COUNT(*) FROM \"application_form\" + apl\n" +
@@ -112,7 +116,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(), recruitment.getTimeInterviewTech(), recruitment.getTimeInterviewSoft(),
                 recruitment.getNumberTechInterviewers(), recruitment.getNumberSoftInterviewers(),
-                recruitment.getNumberOfDays(), recruitment.getId());
+                recruitment.getNumberOfDays(),recruitment.getSchedulingStatus().getId(), recruitment.getId());
     }
 
     @Override
@@ -123,7 +127,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(), recruitment.getTimeInterviewTech(), recruitment.getTimeInterviewSoft(),
                 recruitment.getNumberTechInterviewers(), recruitment.getNumberSoftInterviewers(),
-                recruitment.getNumberOfDays()) > 0;
+                recruitment.getNumberOfDays(),recruitment.getSchedulingStatus().getId()) > 0;
     }
 
     @Override

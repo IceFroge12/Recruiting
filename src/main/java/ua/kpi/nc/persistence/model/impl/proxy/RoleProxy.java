@@ -76,5 +76,10 @@ public class RoleProxy implements Role {
         return (RoleImpl) roleService.getRoleById(id);
     }
 
-
+    @Override
+    public String toString() {
+        return "RoleProxy{" +
+                "role=" + role +
+                '}';
+    }
 }

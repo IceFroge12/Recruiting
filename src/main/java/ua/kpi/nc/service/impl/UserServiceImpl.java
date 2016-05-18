@@ -229,5 +229,10 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsWithNotconnectedForms() {
         return userDao.getStudentsWithNotconnectedForms();
     }
+
+    @Override
+    public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
+        return userDao.getUserByTimeAndRole(scheduleTimePointId, roleId);
+    }
 }
 

@@ -3,7 +3,7 @@
  */
 
 
-function studentSchedulingController($scope, $http) {
+function studentSchedulingController($scope, ngToast, $http) {
 	$http.get('../../student/schedule').success(function(data) {
 		$scope.schedule = data;
 		console.log($scope.schedule);
@@ -18,9 +18,24 @@ function studentSchedulingController($scope, $http) {
 		var req= $http.post('../../student/updateSchedule', $scope.schedule.timePoints);
 		req.success(function(data) {
 			$scope.resultMessage = data;
+			var toastMessage = {
+	                content: $scope.resultMessage.message,
+	                timeout: 5000,  
+	                horizontalPosition: 'center',
+	                verticalPosition: 'bottom',
+	                dismissOnClick: true,
+	                combineDuplications: true,
+	                maxNumber: 2
+	            };
+			if ($scope.resultMessage.type == 'ERROR') {
+				var myToastMsg = ngToast.warning(toastMessage);
+			}
+			else if ($scope.resultMessage.type == 'SUCCESS') {
+				var myToastMsg = ngToast.success(toastMessage);
+			}
 		});
 	}
 }
 
 angular.module('studentScheduling')
-    .controller('studentSchedulingController', ['$scope', '$http', 'studentSchedulingService', studentSchedulingController]);
+    .controller('studentSchedulingController', ['$scope', 'ngToast', '$http', 'studentSchedulingService', studentSchedulingController]);

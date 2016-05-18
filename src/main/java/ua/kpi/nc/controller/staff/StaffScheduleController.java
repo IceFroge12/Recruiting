@@ -43,7 +43,6 @@ public class StaffScheduleController {
         }
 
         List<UserTimePriority> userTimePriorities = userTimePriorityService.getAllUserTimePriorities(getCurrentUser().getId());
-
         List<UserTimePriority> updatingUserTimePriorities = IntStream.range(0, userTimePriorityListDto.size())
                 .mapToObj(i -> {
                     UserTimePriority userTimePriority = new UserTimePriority();
@@ -53,7 +52,9 @@ public class StaffScheduleController {
                     return userTimePriority;
                 }).collect(Collectors.toList());
 
-        updatingUserTimePriorities.forEach(userTimePriorityService:: updateUserPriority);
+
+        userTimePriorityService.batchUpdateUserPriority(updatingUserTimePriorities);
+//        updatingUserTimePriorities.forEach(userTimePriorityService:: updateUserPriority);
     }
 
     private User getCurrentUser() {

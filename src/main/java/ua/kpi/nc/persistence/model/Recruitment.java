@@ -60,4 +60,8 @@ public interface Recruitment extends Serializable {
     int getNumberOfDays();
 
     void setNumberOfDays(int numberOfDays);
+
+    SchedulingStatus getSchedulingStatus();
+
+    void setSchedulingStatus(SchedulingStatus schedulingStatus);
 }

@@ -187,4 +187,22 @@ public class AdminManagementStaffController {
         return userService.getUserCount();
     }
 
+    @RequestMapping(value = "hasNotMarked", method = RequestMethod.GET)
+    public List<String> hasNotMarked(@RequestParam List<String> emails) {
+        List<String> notMarkedAll = new ArrayList<>();
+        for(String email:emails){
+            User user = userService.getUserByUsername(email);
+            List<Interview> interviews = interviewService.getByInterviewer(user);
+            boolean foundNotMarked = false;
+            for(Interview interview: interviews){
+                if(interview.getMark() == null)
+                    foundNotMarked = true;
+            }
+            if(foundNotMarked)
+                notMarkedAll.add(email);
+        }
+
+        return notMarkedAll;
+    }
+
 }

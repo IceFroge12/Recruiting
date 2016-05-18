@@ -165,6 +165,35 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variants, "ROLE_STUDENT", $scope.question.order);
     }
 
+    $scope.finalMarks = [1, 2, 3];
+    
+    formAppService.getDecisionMatrix().then(function success(data) {
+        $scope.decisionMatrix = data.data;
+        console.log($scope.decisionMatrix);
+    });
+    
+    $scope.saveDecisionMatrix = function() {
+    	formAppService.saveDecisionMatrix($scope.decisionMatrix).then(function success(data) {
+    		console.log('Updating decision');
+            console.log(data);
+            $scope.resultMessage =  data.data;
+			var toastMessage = {
+	                content: $scope.resultMessage.message,
+	                timeout: 5000,  
+	                horizontalPosition: 'center',
+	                verticalPosition: 'bottom',
+	                dismissOnClick: true,
+	                combineDuplications: true,
+	                maxNumber: 2
+	            };
+			if ($scope.resultMessage.type == 'ERROR') {
+				var myToastMsg = ngToast.warning(toastMessage);
+			}
+			else if ($scope.resultMessage.type == 'SUCCESS') {
+				var myToastMsg = ngToast.success(toastMessage);
+			}
+        });
+    }
 
 };
 
