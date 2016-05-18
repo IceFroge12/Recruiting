@@ -8,8 +8,6 @@ import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -35,21 +33,22 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
         decision.setSoftMark(resultSet.getInt(SOFT_MARK_COL));
         decision.setTechMark(resultSet.getInt(TECH_MARK_COL));
         decision.setFinalMark(resultSet.getInt(FINAL_MARK_COL));
-        decision.setFinalMark(resultSet.getInt(SCALE_COL));
         return decision;
     };
 
-    private static final String SQL_GET_ALL = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL + ", " +
-        SCALE_COL + " FROM decision_matrix";
+    private static final String SQL_GET = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL + ", " +
+        SCALE_COL + " FROM " + TABLE_NAME;
+    
+    private static final String SQL_GET_ALL = SQL_GET +" ORDER BY " + TECH_MARK_COL + ", " + SOFT_MARK_COL;
 
-    private static final String SQL_GET_BY_IDS = SQL_GET_ALL + " WHERE " + SOFT_MARK_COL + " = ? and " + TECH_MARK_COL
+    private static final String SQL_GET_BY_IDS = SQL_GET + " WHERE " + SOFT_MARK_COL + " = ? and " + TECH_MARK_COL
             + " = ?;";
 
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + SOFT_MARK_COL + ", " + TECH_MARK_COL
             + ", " + FINAL_MARK_COL + ", " + SCALE_COL + ") VALUES (?,?,?,?)";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + FINAL_MARK_COL + " = ? WHERE "
-            + SOFT_MARK_COL + " = ? AND " + TECH_MARK_COL + " = ? AND "+ SCALE_COL + " = ? ";
+            + SOFT_MARK_COL + " = ? AND " + TECH_MARK_COL + " = ?";
 
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + SOFT_MARK_COL + " = ? AND "
             + TECH_MARK_COL + " = ? AND " + FINAL_MARK_COL + " = ?;";
@@ -111,6 +110,19 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
         }
         return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
+
+	@Override
+	public int[] updateDecisionMatrix(List<Decision> decisionMatrix) {
+		log.trace("Updating decision matrix.");
+		Object[][] paramObjects = new Object[decisionMatrix.size()][3];
+		int i = 0;
+		for (Decision decision : decisionMatrix) {
+			paramObjects[i][0] = decision.getFinalMark();
+			paramObjects[i][1] = decision.getSoftMark();
+			paramObjects[i++][2] = decision.getTechMark();
+		}
+		return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, paramObjects);
+	}
 
 
 }

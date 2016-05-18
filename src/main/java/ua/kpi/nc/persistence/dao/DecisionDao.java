@@ -19,4 +19,6 @@ public interface DecisionDao {
 	List<Decision> getAll();
 
 	int truncateDecisionTable();
+
+	int[] updateDecisionMatrix(List<Decision> decisionMatrix);
 }

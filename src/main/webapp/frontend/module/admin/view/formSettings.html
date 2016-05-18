@@ -166,89 +166,18 @@
                     <form>
                         <table class="table table-hover table-condensed">
                             <tr>
-                                <th>Tech Skill</th>
+                              	<th>Tech Skill</th>
                                 <th>Soft Skill</th>
                                 <th>Result</th>
                             </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>
-                                    <select>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
-                                </td>
+                            <tr ng-repeat="decision in decisionMatrix">
+                            	<td>{{decision.techMark}}</td>
+                            	<td>{{decision.softMark}}</td>
+                            	<td><select ng-model="decision.finalMark" ng-options="finalMark for finalMark in finalMarks track by finalMark"></select>
+                            	</td>
                             </tr>
                         </table>
-                        <button type="submit" class="btn btn-info search-element btn-left">Confirm</button>
+                        <button type="submit" ng-click="saveDecisionMatrix()" class="btn btn-info search-element btn-left">Confirm</button>
                     </form>
                 </div>
             </div>

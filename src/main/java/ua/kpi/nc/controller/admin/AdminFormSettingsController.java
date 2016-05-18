@@ -3,6 +3,8 @@ package ua.kpi.nc.controller.admin;
 import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.FormQuestionDto;
+import ua.kpi.nc.persistence.dto.MessageDto;
+import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
@@ -113,4 +115,15 @@ public class AdminFormSettingsController {
         return formQuestion.isMandatory();
     }
 
+	@RequestMapping(value = "getDecisionMatrix", method = RequestMethod.GET)
+	public List<Decision> getDecisionMatrix() {
+		return decisionService.getAll();
+	}
+
+	@RequestMapping(value = "saveDecisionMatrix", method = RequestMethod.POST)
+	public String saveDecisionMatrix(@RequestBody List<Decision> decisionMatrix) {
+		decisionService.updateDecisionMatrix(decisionMatrix);
+		return new Gson().toJson(new MessageDto("Decision matrix was updated", MessageDtoType.SUCCESS));
+	}
+    
 }

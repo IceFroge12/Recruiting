@@ -89,6 +89,17 @@ function formSettingsService(http) {
         });
     };
 
+    service.getDecisionMatrix = function() {
+    	return http.get('/admin/getDecisionMatrix').then(function (response) {
+            return response;
+        });
+    }
+    service.saveDecisionMatrix = function(decisionMatrix) {
+    	return http.post('../../admin/saveDecisionMatrix', decisionMatrix).then(function (response) {
+            return response;
+        });
+    }
+    
     return service;
 }
 

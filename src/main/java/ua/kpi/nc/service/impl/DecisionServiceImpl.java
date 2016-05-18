@@ -63,4 +63,10 @@ public class DecisionServiceImpl implements DecisionService {
 		return null;
 	}
 
+	@Override
+	public void updateDecisionMatrix(List<Decision> decisionMatrix) {
+		decisionDao.updateDecisionMatrix(decisionMatrix);
+	}
+
+	
 }

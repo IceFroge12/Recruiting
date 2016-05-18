@@ -42,6 +42,11 @@ public class StaffInterviewController {
 	private FormAnswerVariantService formAnswerVariantService;
 	private InterviewService interviewService;
 
+	private static final Gson gson = new Gson();
+	
+	private static final String INTERVIEW_UPDATED_MESSAGE = gson.toJson(new MessageDto("Interview was updated.", MessageDtoType.SUCCESS));
+	private static final String NOT_ASSIGNED_MESSAGE = gson.toJson(new MessageDto("This student is not assigned to you.", MessageDtoType.ERROR));
+	
 	public StaffInterviewController() {
 		formAnswerService = ServiceFactory.getFormAnswerService();
 		applicationFormService = ServiceFactory.getApplicationFormService();
@@ -87,7 +92,6 @@ public class StaffInterviewController {
 	public String saveInterview(@RequestBody InterviewDto interviewDto) {
 		User interviewer = userService.getAuthorizedUser();
 		Interview interview = interviewService.getById(interviewDto.getId());
-		Gson gson = new Gson();
 		if (interview.getInterviewer().getId().equals(interviewer.getId())) {
 			interview.setAdequateMark(interviewDto.isAdequateMark());
 			interview.setMark(interviewDto.getMark());
@@ -97,9 +101,9 @@ public class StaffInterviewController {
 				updateAnswers(formQuestion, answers, questionDto.getAnswers(), interview);
 			}
 			interviewService.updateInterview(interview);
-			return gson.toJson(new MessageDto("Interview was updated.", MessageDtoType.SUCCESS));
+			return INTERVIEW_UPDATED_MESSAGE;
 		}
-		return gson.toJson(new MessageDto("This student is not assigned to you.", MessageDtoType.ERROR));
+		return NOT_ASSIGNED_MESSAGE;
 	}
 
 	@RequestMapping(value = "getRoles/{applicationFormId}", method = RequestMethod.GET)
