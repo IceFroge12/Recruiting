@@ -35,8 +35,8 @@ public class SchedulingSettingsServiceImpl implements SchedulingSettingsService 
     }
 
     @Override
-    public int deleteTimeRange(SchedulingSettings schedulingSettings) {
-        return schedulingSettingsDao.deleteTimeRange(schedulingSettings);
+    public int deleteTimeRange(Long id) {
+        return schedulingSettingsDao.deleteTimeRange(id);
     }
 
     @Override

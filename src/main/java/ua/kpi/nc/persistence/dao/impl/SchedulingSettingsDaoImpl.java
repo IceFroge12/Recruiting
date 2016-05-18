@@ -55,9 +55,9 @@ public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements Schedul
     }
 
     @Override
-    public int deleteTimeRange(SchedulingSettings schedulingSettings) {
-        log.trace("Delete Scheduling Setting with id = {}", schedulingSettings.getId());
-        return this.getJdbcTemplate().update(DELETE_TIME_RANGE, schedulingSettings.getId());
+    public int deleteTimeRange(Long id) {
+        log.trace("Delete Scheduling Setting with id = {}", id);
+        return this.getJdbcTemplate().update(DELETE_TIME_RANGE, id);
     }
 
     @Override

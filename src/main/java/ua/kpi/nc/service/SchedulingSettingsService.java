@@ -15,7 +15,7 @@ public interface SchedulingSettingsService {
 
     int updateTimeRange(SchedulingSettings schedulingSettings);
 
-    int deleteTimeRange(SchedulingSettings schedulingSettings);
+    int deleteTimeRange(Long id);
 
     List<SchedulingSettings> getAll();
 }
