@@ -88,7 +88,7 @@ public class AdminSchedulingController {
     @RequestMapping(value = "deleteSelectedDay", method = RequestMethod.GET)
     public ResponseEntity deleteSelectedDay(@RequestParam Long id){
         //TODO create dao method "delete by id"
-        int amount =  schedulingSettingsService.deleteTimeRange(schedulingSettingsService.getById(id));
+        int amount =  schedulingSettingsService.deleteTimeRange(id);
         if (amount != 0){
             return ResponseEntity.ok(null);
         }else {
