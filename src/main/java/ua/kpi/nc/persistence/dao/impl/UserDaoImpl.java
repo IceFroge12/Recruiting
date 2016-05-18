@@ -181,6 +181,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u INNER JOIN application_form a ON a.id_user = u.id  WHERE a.id_recruitment IS NULL";
 
+    private static final String SQL_GET_WITHOUT_INTERVIEW = "SELECT * FROM \"user\" u INNER JOIN user_role ur " +
+            "on ur.id_user=u.id WHERE ur.id_role = ? \n" +
+            " and EXISTS(SELECT 1 FROM user_time_final utf WHERE utf.id_user = u.id );\n";
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -489,5 +493,10 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public List<User> getStudentsWithNotconnectedForms() {
         return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
+    }
+
+    @Override
+    public List<User> getUsersWithoutInterview(Long roleId) {
+        return this.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor,roleId);
     }
 }

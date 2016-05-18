@@ -80,4 +80,6 @@ public interface UserService {
     int disableAllStaff();
     
     List<User> getStudentsWithNotconnectedForms();
+
+    List<User> getUsersWithoutInterview(Long roleId);
 }

@@ -13,6 +13,7 @@ import ua.kpi.nc.persistence.dto.SchedulingSettingDto;
 import ua.kpi.nc.persistence.model.SchedulingSettings;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.*;
 
@@ -131,5 +132,11 @@ public class AdminSchedulingController {
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
+    }
+
+    @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
+    public List<User> getUsersWithoutInterview(@RequestParam Long roleId){
+        List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
+        return usersWithoutInterview;
     }
 }
