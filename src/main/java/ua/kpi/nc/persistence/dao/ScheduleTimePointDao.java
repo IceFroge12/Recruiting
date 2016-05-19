@@ -15,6 +15,8 @@ public interface ScheduleTimePointDao {
 
     ScheduleTimePoint getFinalTimePointById(Long id);
 
+    int deleteAll();
+
     int[] batchInsert(List<Timestamp> timestaps);
 
     List<ScheduleTimePoint> getFinalTimePointByUserId(Long id);

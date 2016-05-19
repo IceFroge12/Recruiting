@@ -34,11 +34,19 @@ public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements Schedul
     private static final String UPDATE_TIME_RANGE = "UPDATE scheduling_settings set start_time = ?, end_time = ? WHERE id = ?;";
     private static final String DELETE_TIME_RANGE = "DELETE FROM scheduling_settings WHERE id = ?;";
     private static final String GET_ALL = "SELECT  ss.id, ss.start_time, ss.end_time FROM scheduling_settings ss ORDER BY start_time;";
+    private static final String DELETE_ALL = "DELETE FROM scheduling_settings";
+
 
     @Override
     public SchedulingSettings getById(Long id) {
         log.trace("Looking for Scheduling Setting with id = {} = ", id);
         return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
+    }
+
+    @Override
+    public int deleteAll(){
+        log.info("Delete all rows from scheduling settings");
+        return this.getJdbcTemplate().update(DELETE_ALL);
     }
 
     @Override

@@ -18,6 +18,10 @@ public class SchedulingSettingsServiceImpl implements SchedulingSettingsService 
         this.schedulingSettingsDao = schedulingSettingsDao;
     }
 
+    @Override
+    public int deleteAll(){
+        return schedulingSettingsDao.deleteAll();
+    }
 
     @Override
     public SchedulingSettings getById(Long id) {
