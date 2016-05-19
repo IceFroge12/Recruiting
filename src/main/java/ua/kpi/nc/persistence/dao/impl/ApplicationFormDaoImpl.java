@@ -177,6 +177,11 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =?";
 
+    private static final String SQL_GET_All = "SELECT a.id,  a.id_status, a.is_active,a."
+            + "id_recruitment, a.photo_scope, a.id_user, a.date_create, a.feedback, s.title \n" + "FROM \""
+            + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n"
+            + "WHERE a.id_user = ? AND a.id_recruitment <> (SELECT r.id FROM recruitment r WHERE r.end_date > CURRENT_DATE)";
+
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     public ApplicationFormDaoImpl(DataSource dataSource) {
@@ -308,6 +313,13 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         log.trace("Looking for current application form with user id = {}", id);
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor, id);
     }
+
+    @Override
+    public List<ApplicationForm> getOldApplicationFormsByUserId(Long id) {
+        log.trace("Looking for current application form with user id = {}", id);
+        return this.getJdbcTemplate().queryForList(SQL_GET_All, extractor, id);
+    }
+
 
     @Override
     public ApplicationForm getLastApplicationFormByUserId(Long id) {

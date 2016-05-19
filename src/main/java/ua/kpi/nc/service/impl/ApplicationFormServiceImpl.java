@@ -108,6 +108,11 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
+	public List<ApplicationForm> getOldApplicationFormsByUserId(Long id) {
+		return applicationFormDao.getOldApplicationFormsByUserId(id);
+	}
+
+	@Override
 	public ApplicationForm getLastApplicationFormByUserId(Long id) {
 		return applicationFormDao.getLastApplicationFormByUserId(id);
 	}

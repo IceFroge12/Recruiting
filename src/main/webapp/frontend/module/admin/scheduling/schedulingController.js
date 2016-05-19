@@ -161,6 +161,12 @@ function schedulingController($scope, schedulingService) {
             }
         }
     };
+    
+    $scope.startScheduling = function () {
+        schedulingService.startSchedulingService().then(function (response) {
+            console.log(response);      
+        })
+    };
 
 
     schedulingService.getCurrentRecruitmentCountStudents().then(function success(data) {

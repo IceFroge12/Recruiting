@@ -170,6 +170,13 @@ function schedulingService($http) {
         })
     };
     
+    service.startSchedulingService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/startScheduling'
+        })
+    };
+    
     service.getInterviewParametersService = function () {
         return $http({
             method : 'GET',

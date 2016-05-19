@@ -33,9 +33,17 @@ function adminStudentFormController($scope,$http,ngToast, studentAppFormService,
             }, function error() {
                 console.log("error");
             });
+
         }, function error() {
             console.log("error");
         });
+
+        studentAppFormService.getOldApplicationForms(id).success(function (data) {
+            $scope.oldForms = [];
+            for(var i=0; i< data.length; i++){
+                $scope.oldForms[i]=angular.fromJson(data[i]);
+            }
+        })
     };
 
 

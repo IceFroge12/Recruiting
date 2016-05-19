@@ -37,6 +37,14 @@ function studentAppFormService(http) {
             url: '/admin/getAdequateMark/'+ appFormId
         })
     };
+
+    service.getOldApplicationForms = function (id) {
+        console.log("Service getOldApplicationForms");
+        return http({
+            method: 'POST',
+            url: '/admin/getOldApplicationForms/' + id
+        })
+    };
     return service;
 }
 

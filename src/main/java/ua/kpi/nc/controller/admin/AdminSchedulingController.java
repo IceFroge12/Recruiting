@@ -30,7 +30,6 @@ public class AdminSchedulingController {
     private SchedulingSettingsService schedulingSettingsService = ServiceFactory.getSchedulingSettingsService();
     private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
 
-
     @RequestMapping(value = "getCurrentStatus", method = RequestMethod.GET)
     public ResponseEntity getCurrentStatus() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
@@ -167,6 +166,14 @@ public class AdminSchedulingController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @RequestMapping(value = "startScheduling", method = RequestMethod.GET)
+    public ResponseEntity startScheduling(){
+        ScheduleService scheduleService = new ScheduleService();
+        scheduleService.startScheduleForStudents();
+        scheduleService.startScheduleForStaff();
+        return ResponseEntity.ok(null);
     }
 
     @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
