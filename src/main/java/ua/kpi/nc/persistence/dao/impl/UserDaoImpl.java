@@ -158,8 +158,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_GET_MAX_ID = "SELECT MAX(u.id) FROM \"user\" u;";
 
-    private static final String SQL_GET_STUDENT_COUNT = "Select count(*) \"user\" FROM \"user\" u " +
-            "JOIN user_role ur on ur.id_user = u.id where ur.id_role = 3;";
+    private static final String SQL_GET_STUDENT_COUNT = "Select count(*) FROM application_form af\n" +
+            "  JOIN recruitment r on af.id_recruitment= r.id where r.end_date > current_date;";
 
     private static final String SQL_GET_ACTIVE_EMPLOYEES = "Select count(*)  FROM  \"user\" u JOIN user_role ur on ur.id_user = u.id where ur.id_role =? and\n" +
             "                                                                                  ur.id_role <>? AND u.is_active=true;";

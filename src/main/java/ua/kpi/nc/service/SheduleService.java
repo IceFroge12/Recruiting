@@ -6,10 +6,7 @@ import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.UserTimePriority;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
-import ua.kpi.nc.util.scheduling.CreatingOfAllSchedules;
-import ua.kpi.nc.util.scheduling.ScheduleCell;
-import ua.kpi.nc.util.scheduling.StudentsScheduleCell;
-import ua.kpi.nc.util.scheduling.User;
+import ua.kpi.nc.util.scheduling.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -80,6 +77,13 @@ public class SheduleService {
         }
     }
 
+//    public int getNumberOfTeacherWithLongerInterview(){
+//        return AllActivityAboutFindingTeachers.getTotalNumberOfNecessaryTeacherWithLongerInterview(
+//        userService.getAllStudentCount(), durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, , ,
+//                totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv,
+//                numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay);
+//    }
+
     private void initializeUndistributedStudents(){
         List<ua.kpi.nc.persistence.model.User> users = userService.getAllNotScheduleStudents();
         for (ua.kpi.nc.persistence.model.User user : users){
@@ -134,6 +138,17 @@ public class SheduleService {
             for (User user : scheduleCell.getStudents()) {
                 ScheduleTimePoint scheduleTimePoint = scheduleTimePointService
                         .getScheduleTimePointByTimepoint(scheduleCell.getDateAndHour());
+                userService.insertFinalTimePoint(reverseAdaptUser(user), scheduleTimePoint);
+            }
+        }
+    }
+
+    public void startScheduleForStaff() {
+        List<TeachersScheduleCell> scheduleCellList = creatingOfAllSchedules.getTeachersSchedule();
+        for (TeachersScheduleCell scheduleCell : scheduleCellList) {
+            for (User user : scheduleCell.getTeachers()) {
+                ScheduleTimePoint scheduleTimePoint = scheduleTimePointService
+                        .getScheduleTimePointByTimepoint(scheduleCell.getDate());
                 userService.insertFinalTimePoint(reverseAdaptUser(user), scheduleTimePoint);
             }
         }
