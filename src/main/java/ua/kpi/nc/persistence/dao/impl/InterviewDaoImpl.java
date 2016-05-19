@@ -81,7 +81,7 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
 	}
 
 	@Override
-	public Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, int interviewerRoleId) {
+	public Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, Long interviewerRoleId) {
 		return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_APPLICATION_FORM_AND_INTERVIEWER_ROLE_ID,extractor,
 				applicationForm.getId(),interviewerRoleId);
 	}

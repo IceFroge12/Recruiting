@@ -7,11 +7,11 @@ import ua.kpi.nc.persistence.model.User;
  * Created by dima on 26.04.16.
  */
 public enum RoleEnum {
-    ROLE_ADMIN(1), ROLE_STUDENT(3), ROLE_SOFT(5), ROLE_TECH(2);
+    ROLE_ADMIN(1L), ROLE_STUDENT(3L), ROLE_SOFT(5L), ROLE_TECH(2L);
 
-    private int id;
+    private Long id;
 
-    RoleEnum(int id) {
+    RoleEnum(Long id) {
         this.id = id;
     }
 
@@ -42,11 +42,11 @@ public enum RoleEnum {
         throw new IllegalArgumentException("No role defined for");
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
