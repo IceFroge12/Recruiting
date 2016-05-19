@@ -185,7 +185,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_GET_WITHOUT_INTERVIEW = "SELECT * FROM \"user\" u INNER JOIN user_role ur " +
             "on ur.id_user=u.id WHERE ur.id_role = ? \n" +
-            " and EXISTS(SELECT 1 FROM user_time_final utf WHERE utf.id_user = u.id );\n";
+            " and NOT EXISTS(SELECT 1 FROM user_time_final utf WHERE utf.id_user = u.id ) AND " +
+            "(u.is_active='true' OR EXISTS(SELECT * FROM application_form af WHERE af.id_user=u.id AND af.id_status=3));\n";
 
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {

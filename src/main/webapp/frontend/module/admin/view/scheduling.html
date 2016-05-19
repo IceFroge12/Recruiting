@@ -140,7 +140,7 @@
                                     <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
                                     </button>
                                 </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleSoft,timePoint.timePoint)'>Add
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleSoft,timePoint)'>Add
                                 </button>
                             </div>
                         </td>
@@ -157,7 +157,7 @@
                                     <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
                                     </button>
                                 </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleTech,timePoint.timePoint)'>Add
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleTech,timePoint)'>Add
                                 </button>
                             </div>
                         </td>
@@ -174,7 +174,7 @@
                                     <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
                                     </button>
                                 </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleStudent,timePoint.timePoint)'>Add
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleStudent,timePoint)'>Add
                                 </button>
                             </div>
                         </td>
@@ -194,7 +194,7 @@
     </div>
     <modal-dialog show='modalShown' width='400px'>
         <h4>Add new user to interview timepoint</h4>
-        <p>{{timePointToChange}}</p>
+        <p>{{timePointToChange.timePoint | date : 'fullDate'}}</p>
         <table class="table table-condensed table-hover col-md-8">
             <thead>
             <tr>
@@ -208,24 +208,13 @@
                 <td>{{user.id}}</td>
                 <td>{{user.lastName +" "+ user.firstName +" "+ user.secondName}}</td>
                 <td>
-                    <button type="submit" class="btn btn-info search-element btn-left" ng-click="addUserToTomepoint(user.id,timePointToChange)">Add
+                    <button type="submit" class="btn btn-info search-element btn-left" ng-click="addUserToTimepoint(user.id,timePointToChange.id)">Add
                     </button>
                 </td>
             </tr>
             </tbody>
             </table>
     </modal-dialog>
-</div>
-<div id="addToTimePointSoft" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
-                <h4 class="modal-title">Add new</h4>
-            </div>
-            <div class="modal-body">{{roleToShow}}</div>
-            <div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Закрыть</button></div>
-        </div>
-    </div>
 </div>
 <div app-footer></div>
 

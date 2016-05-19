@@ -64,11 +64,11 @@ function schedulingService($http) {
         })
     };
 
-    service.addUserToTomepoint = function (id,timePoint) {
+    service.addUserToTimepoint = function (id,timePoint) {
         return $http({
             method: 'POST',
-            url: '/scheduling/addUserToTomepoint',
-            params: {userId:id, timePoint:timePoint}
+            url: '/scheduling/addUserToTimepoint',
+            params: {userId:id, idTimePoint:timePoint}
         })
     };
 

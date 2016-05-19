@@ -75,4 +75,9 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint) {
 		return scheduleTimePointDao.getUsersNumberInFinalTimePoint(timePoint);
 	}
+
+	@Override
+	public Long addUserToTimepoint(User user, ScheduleTimePoint timePoint) {
+		return scheduleTimePointDao.addUserToTimepoint(user, timePoint);
+	}
 }

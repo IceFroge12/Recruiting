@@ -68,6 +68,8 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
 	private static final String DELETE_USER_TIME_FINAL="DELETE FROM user_time_final where id_user = ? and id_time_point=?";
 
+	private static final String INSERT_USER_TIME_FINAL="INSERT INTO \"user_time_final\"(id_user, id_time_point) VALUES (?,?)";
+
 	@Override
 	public ScheduleTimePoint getFinalTimePointById(Long id) {
 		log.trace("Looking for Schedule time Point with id = ", id);
@@ -166,4 +168,9 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 		}, timePoint);
 	}
 
+	@Override
+	public Long addUserToTimepoint(User user, ScheduleTimePoint timePoint) {
+		log.trace("Adding user to final timepoint");
+		return this.getJdbcTemplate().insert(INSERT_USER_TIME_FINAL, user.getId(), timePoint.getId());
+	}
 }

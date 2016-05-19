@@ -32,5 +32,7 @@ public interface ScheduleTimePointService {
 	
 	boolean isScheduleExists();
 
-    public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
+    Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
+
+    Long addUserToTimepoint(User user, ScheduleTimePoint timePoint);
 }

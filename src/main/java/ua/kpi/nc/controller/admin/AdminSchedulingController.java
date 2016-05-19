@@ -21,6 +21,7 @@ import ua.kpi.nc.service.*;
 import java.lang.reflect.WildcardType;
 import java.sql.Timestamp;
 import java.util.List;
+
 import ua.kpi.nc.persistence.model.impl.real.ScheduleTimePointImpl;
 import ua.kpi.nc.service.*;
 
@@ -62,7 +63,7 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "saveSelectedDays", method = RequestMethod.POST)
-    public ResponseEntity<Long> saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto){
+    public ResponseEntity<Long> saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto) {
         long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
@@ -71,41 +72,41 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
-    public List<SchedulingSettings> getSelectedDays(){
+    public List<SchedulingSettings> getSelectedDays() {
         List<SchedulingSettings> list = schedulingSettingsService.getAll();
         return list;
     }
 
     @RequestMapping(value = "deleteSelectedDay", method = RequestMethod.GET)
-    public ResponseEntity deleteSelectedDay(@RequestParam Long id){
-        int amount =  schedulingSettingsService.deleteTimeRange(id);
-        if (amount != 0){
+    public ResponseEntity deleteSelectedDay(@RequestParam Long id) {
+        int amount = schedulingSettingsService.deleteTimeRange(id);
+        if (amount != 0) {
             return ResponseEntity.ok(null);
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 
     @RequestMapping(value = "editSelectedDay", method = RequestMethod.POST)
-    public ResponseEntity editSelectedDay(@RequestBody SchedulingDaysDto schedulingDaysDto){
+    public ResponseEntity editSelectedDay(@RequestBody SchedulingDaysDto schedulingDaysDto) {
         int amount = schedulingSettingsService.updateTimeRange(new SchedulingSettings(
                 schedulingDaysDto.getId(),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
         ));
-        if (amount != 0){
+        if (amount != 0) {
             return ResponseEntity.ok(null);
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 
     @RequestMapping(value = "deleteUserTimeFinal", method = RequestMethod.POST)
-    public void deleteUserTimeFinal(@RequestParam long id1, @RequestParam long id2){
-        System.out.println(id1+" "+id2);
-        User user=userService.getUserByID(id1);
-        ScheduleTimePoint stp=timePointService.getScheduleTimePointById(id2);
-        System.out.println(user+"\n"+stp);
+    public void deleteUserTimeFinal(@RequestParam long id1, @RequestParam long id2) {
+        System.out.println(id1 + " " + id2);
+        User user = userService.getUserByID(id1);
+        ScheduleTimePoint stp = timePointService.getScheduleTimePointById(id2);
+        System.out.println(user + "\n" + stp);
         timePointService.deleteUserTimeFinal(user, stp);
     }
 
@@ -116,45 +117,53 @@ public class AdminSchedulingController {
         for (ScheduleTimePoint timePoint : allTimePoints) {
             ScheduleOverallDto oneTimePoint = new ScheduleOverallDto(timePoint.getTimePoint());
             oneTimePoint.setId(timePoint.getId());
-            Map<Long,Long> numberForEachRole = timePointService.getUsersNumberInFinalTimePoint(timePoint.getTimePoint());
+            Map<Long, Long> numberForEachRole = timePointService.getUsersNumberInFinalTimePoint(timePoint.getTimePoint());
             setUsersNumberToEachRole(numberForEachRole, oneTimePoint);
             scheduleOverall.add(oneTimePoint);
         }
         return scheduleOverall;
     }
 
-    @RequestMapping(value = "getUsersByTimePoint",method = RequestMethod.GET)
-    public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint){
+    @RequestMapping(value = "getUsersByTimePoint", method = RequestMethod.GET)
+    public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint) {
         return userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
     }
 
-    private void setUsersNumberToEachRole(Map<Long,Long> numberForEachRole, ScheduleOverallDto timePoint) {
+    private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {
         if (numberForEachRole == null) {
             timePoint.setAmountOfStudents(0);
             timePoint.setAmountOfSoft(0);
             timePoint.setAmountOfTech(0);
         } else {
-            if (numberForEachRole.get((long)RoleEnum.ROLE_STUDENT.getId()) == null) {
+            if (numberForEachRole.get((long) RoleEnum.ROLE_STUDENT.getId()) == null) {
                 timePoint.setAmountOfStudents(0);
             } else {
-                timePoint.setAmountOfStudents(numberForEachRole.get((long)RoleEnum.ROLE_STUDENT.getId()));
+                timePoint.setAmountOfStudents(numberForEachRole.get((long) RoleEnum.ROLE_STUDENT.getId()));
             }
-            if (numberForEachRole.get((long)RoleEnum.ROLE_SOFT.getId()) == null) {
+            if (numberForEachRole.get((long) RoleEnum.ROLE_SOFT.getId()) == null) {
                 timePoint.setAmountOfSoft(0);
             } else {
-                timePoint.setAmountOfSoft(numberForEachRole.get((long)RoleEnum.ROLE_SOFT.getId()));
+                timePoint.setAmountOfSoft(numberForEachRole.get((long) RoleEnum.ROLE_SOFT.getId()));
             }
-            if (numberForEachRole.get((long)RoleEnum.ROLE_TECH.getId()) == null) {
+            if (numberForEachRole.get((long) RoleEnum.ROLE_TECH.getId()) == null) {
                 timePoint.setAmountOfTech(0);
             } else {
-                timePoint.setAmountOfTech(numberForEachRole.get((long)RoleEnum.ROLE_TECH.getId()));
+                timePoint.setAmountOfTech(numberForEachRole.get((long) RoleEnum.ROLE_TECH.getId()));
             }
         }
     }
 
     @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
-    public List<User> getUsersWithoutInterview(@RequestParam Long roleId){
+    public List<User> getUsersWithoutInterview(@RequestParam Long roleId) {
         List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
         return usersWithoutInterview;
+    }
+
+    @RequestMapping(value = "addUserToTimepoint", method = RequestMethod.POST)
+    public void addUserToTimepoint(@RequestParam Long userId,@RequestParam Long idTimePoint) {
+        User user = userService.getUserByID(userId);
+        ScheduleTimePoint timePoint = timePointService.getScheduleTimePointById(idTimePoint);
+        Long res = timePointService.addUserToTimepoint(user, timePoint);
+        System.out.println("ressssul: "+ res);
     }
 }

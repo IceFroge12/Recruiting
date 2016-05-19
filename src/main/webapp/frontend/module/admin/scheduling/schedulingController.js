@@ -157,8 +157,30 @@ function schedulingController($scope, schedulingService) {
         console.log($scope.possibleToAdd);
     });
 
-    $scope.addUserToTomepoint = function addUserToTomepoint(id,timePoint){
+    $scope.addUserToTimepoint = function addUserToTimepoint(id,idTimePoint){
+        schedulingService.addUserToTimepoint(id,idTimePoint).then(function(){
+            var index = findInPossible(id, $scope.possibleToAdd[$scope.roleToShow].data);
+            $scope.possibleToAdd[$scope.roleToShow].data.splice(index, 1);
+            switch($scope.roleToShow){
+                case $scope.roleSoft:
+                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfSoft++;
+                    break;
+                case $scope.roleTech:
+                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfTech++;
+                    break;
+                case $scope.roleStudent:
+                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfStudents++;
+                    break;
+            }
+        });
+    };
 
+    var findInPossible = function findInPossible(id, list){
+        for(var i=0; i< list.length; i++){
+          if(list[i].id===id)
+          return i;
+      }
+        return -1;
     };
 
     $scope.modalShown = false;
