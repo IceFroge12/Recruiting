@@ -16,7 +16,7 @@ function schedulingController($scope, schedulingService) {
     $scope.roleStudent = 3;
     $scope.roleToShow = 2;
     $scope.timePointToChange;
-    
+
     // $scope.softArray = {};
     // $scope.techArray = {};
     // $scope.studentArray = {};
@@ -37,7 +37,7 @@ function schedulingController($scope, schedulingService) {
             })
         }
     };
-    
+
     $scope.edit = function (object, date) {
         var temp = {
             id: object.id,
@@ -51,34 +51,34 @@ function schedulingController($scope, schedulingService) {
         })
     };
 
-    $scope.deleteSoftTimeFinal = function(soft, timePoint){
+    $scope.deleteSoftTimeFinal = function (soft, timePoint) {
         schedulingService.deleteUserTimeFinal(soft.id, timePoint.id).then(function (response) {
-        if(response.status===200){
-            var index=$scope.softMap[timePoint.id].indexOf(soft);
-            $scope.softMap[timePoint.id].slice(index,1);
-        }
+            if (response.status === 200) {
+                var index = $scope.softMap[timePoint.id].indexOf(soft);
+                $scope.softMap[timePoint.id].splice(index, 1);
+            }
         });
-        console.log("delete Soft TimeFinal with id = "+soft.id +" and timePoint id = "+timePoint.id);
+        console.log("delete Soft TimeFinal with id = " + soft.id + " and timePoint id = " + timePoint.id);
     };
 
-    $scope.deleteTechTimeFinal = function(tech, timePoint){
+    $scope.deleteTechTimeFinal = function (tech, timePoint) {
         schedulingService.deleteUserTimeFinal(tech.id, timePoint.id).then(function (response) {
-            if(response.status===200){
-                var index=$scope.techMap[timePoint.id].indexOf(tech);
-                $scope.techMap[timePoint.id].slice(index,1);
+            if (response.status === 200) {
+                var index = $scope.techMap[timePoint.id].indexOf(tech);
+                $scope.techMap[timePoint.id].slice(index, 1);
             }
         });
-        console.log("delete Tech TimeFinal with id = "+tech.id +" and timePoint id = "+timePoint.id);
+        console.log("delete Tech TimeFinal with id = " + tech.id + " and timePoint id = " + timePoint.id);
     };
-    
-    $scope.deleteStudentTimeFinal = function(student, timePoint){
+
+    $scope.deleteStudentTimeFinal = function (student, timePoint) {
         schedulingService.deleteUserTimeFinal(student.id, timePoint.id).then(function (response) {
-            if(response.status===200){
-                var index=$scope.studentMap[timePoint.id].indexOf(student);
-                $scope.studentMap[timePoint.id].slice(index,1);
+            if (response.status === 200) {
+                var index = $scope.studentMap[timePoint.id].indexOf(student);
+                $scope.studentMap[timePoint.id].slice(index, 1);
             }
         });
-        console.log("delete Student imeFinal with id = "+student.id +" and timePoint id = "+timePoint.id);
+        console.log("delete Student imeFinal with id = " + student.id + " and timePoint id = " + timePoint.id);
     };
 
     $scope.setTime = function (object, date) {
@@ -199,7 +199,7 @@ function schedulingController($scope, schedulingService) {
 
     $scope.submitInterviewParameters = function () {
         schedulingService.confirmInterviewParametersService().then(function (response) {
-            if (response.status === 200){
+            if (response.status === 200) {
                 $scope.currentStatus = schedulingService.getConfirmInterviewParametersStatus();
             }
         })
@@ -207,48 +207,51 @@ function schedulingController($scope, schedulingService) {
 
     $scope.possibleToAdd = [];
 
-    schedulingService.getUsersWithoutInterview($scope.roleSoft).then(function success(data){
+    schedulingService.getUsersWithoutInterview($scope.roleSoft).then(function success(data) {
         $scope.possibleToAdd[$scope.roleSoft] = data;
         console.log($scope.possibleToAdd);
     });
 
-    schedulingService.getUsersWithoutInterview($scope.roleTech).then(function success(data){
+    schedulingService.getUsersWithoutInterview($scope.roleTech).then(function success(data) {
         $scope.possibleToAdd[$scope.roleTech] = data;
     });
 
-    schedulingService.getUsersWithoutInterview($scope.roleStudent).then(function success(data){
+    schedulingService.getUsersWithoutInterview($scope.roleStudent).then(function success(data) {
         $scope.possibleToAdd[$scope.roleStudent] = data;
         console.log($scope.possibleToAdd);
     });
 
-    $scope.addUserToTimepoint = function addUserToTimepoint(id,idTimePoint){
-        schedulingService.addUserToTimepoint(id,idTimePoint).then(function(){
-            var index = findInPossible(id, $scope.possibleToAdd[$scope.roleToShow].data);
+    $scope.addUserToTimepoint = function addUserToTimepoint(object, timePoint) {
+        schedulingService.addUserToTimepoint(object.id, timePoint.id).then(function () {
+            var index = findInPossible(object.id, $scope.possibleToAdd[$scope.roleToShow].data);
             $scope.possibleToAdd[$scope.roleToShow].data.splice(index, 1);
-            switch($scope.roleToShow){
+            switch ($scope.roleToShow) {
                 case $scope.roleSoft:
-                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfSoft++;
+                    $scope.schedulePoints[findInPossible(timePoint.id, $scope.schedulePoints)].amountOfSoft++;
+                    $scope.softMap[timePoint.id].push(object);
                     break;
                 case $scope.roleTech:
-                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfTech++;
+                    $scope.schedulePoints[findInPossible(timePoint.id, $scope.schedulePoints)].amountOfTech++;
+                    $scope.techMap[timePoint.id].push(object);
                     break;
                 case $scope.roleStudent:
-                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfStudents++;
+                    $scope.schedulePoints[findInPossible(timePoint.id, $scope.schedulePoints)].amountOfStudents++;
+                    $scope.studentMap[timePoint.id].push(object);
                     break;
             }
         });
     };
 
-    var findInPossible = function findInPossible(id, list){
-        for(var i=0; i< list.length; i++){
-          if(list[i].id===id)
-          return i;
-      }
+    var findInPossible = function findInPossible(id, list) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].id === id)
+                return i;
+        }
         return -1;
     };
 
     $scope.modalShown = false;
-    $scope.toggleModal = function(idRole, timePointToChange) {
+    $scope.toggleModal = function (idRole, timePointToChange) {
         $scope.timePointToChange = timePointToChange;
         $scope.roleToShow = idRole;
         $scope.modalShown = !$scope.modalShown;
@@ -256,7 +259,7 @@ function schedulingController($scope, schedulingService) {
 
 }
 
-angular.module('appScheduling').directive('modalDialog', function() {
+angular.module('appScheduling').directive('modalDialog', function () {
     return {
         restrict: 'E',
         scope: {
@@ -264,7 +267,7 @@ angular.module('appScheduling').directive('modalDialog', function() {
         },
         replace: true,
         transclude: true,
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             scope.dialogStyle = {};
 
             if (attrs.width) {
@@ -275,7 +278,7 @@ angular.module('appScheduling').directive('modalDialog', function() {
                 scope.dialogStyle.height = attrs.height;
             }
 
-            scope.hideModal = function() {
+            scope.hideModal = function () {
                 scope.show = false;
             };
         },
