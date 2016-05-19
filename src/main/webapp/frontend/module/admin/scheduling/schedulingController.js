@@ -16,7 +16,7 @@ function schedulingController($scope, schedulingService) {
     $scope.roleStudent = 3;
     $scope.roleToShow = 2;
     $scope.timePointToChange;
-    
+
     // $scope.softArray = {};
     // $scope.techArray = {};
     // $scope.studentArray = {};
@@ -37,7 +37,7 @@ function schedulingController($scope, schedulingService) {
             })
         }
     };
-    
+
     $scope.edit = function (object, date) {
         var temp = {
             id: object.id,
@@ -90,7 +90,7 @@ function schedulingController($scope, schedulingService) {
         });
         console.log("delete Tech TimeFinal with id = "+currentTech.id +" and timePoint id = "+currentTimePoint.id);
     };
-    
+
     $scope.deleteStudentTimeFinal = function(){
         schedulingService.deleteUserTimeFinal(currentStudent.id, currentTimePoint.id).then(function (response) {
             if(response.status===200){
@@ -200,6 +200,10 @@ function schedulingController($scope, schedulingService) {
                 $scope.currentStatus = schedulingService.getConfirmDaysSelectionStatus();
             }
         })
+    };
+
+    $scope.cancelDaysSelection = function () {
+
     };
 
     $scope.saveInterviewParameters = function (softDuration, techDuration) {

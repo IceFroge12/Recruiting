@@ -42,6 +42,22 @@ public enum SchedulingStatusEnum {
         }
     }
 
+    public static SchedulingStatusEnum getStatusEnum(Long id){
+        if (Objects.equals(id, DATES.getId())) {
+            return SchedulingStatusEnum.DATES;
+        } else if (Objects.equals(id, TIME_POINTS.getId())) {
+            return SchedulingStatusEnum.TIME_POINTS;
+        } else if (Objects.equals(id, STAFF_SCHEDULING.getId())) {
+            return SchedulingStatusEnum.STAFF_SCHEDULING;
+        } else if (Objects.equals(id, STUDENT_SCHEDULING.getId())) {
+            return SchedulingStatusEnum.STUDENT_SCHEDULING;
+        } else if (Objects.equals(id, NOT_STARTED.getId())) {
+            return SchedulingStatusEnum.NOT_STARTED;
+        } else {
+            throw new IllegalStateException("status not found");
+        }
+    }
+
     SchedulingStatusEnum(Long id) {
         this.id = id;
     }

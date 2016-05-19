@@ -80,9 +80,13 @@
             </div>
 
             <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left" ng-click="submitDaysSelection()">
+                <button type="submit" class="btn btn-info search-element btn-left" ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
                     Confirm days selection
                 </button>
+                <button type="submit" class="btn btn-info search-element btn-left" ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
+                    Cancel days selection
+                </button>
+
             </div>
 
             <form name="schedulingForm" ng-init="getInterviewParameters()">

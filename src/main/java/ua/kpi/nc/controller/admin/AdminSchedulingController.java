@@ -125,9 +125,9 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "changeSchedulingStatus", method = RequestMethod.GET)
-    public ResponseEntity changeSchedulingStatus(@RequestParam Long id) {
+    public ResponseEntity changeSchedulingStatus(@RequestParam Long idStatus) {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        SchedulingStatus schedulingStatus = SchedulingStatusEnum.getStatus(id);
+        SchedulingStatus schedulingStatus = SchedulingStatusEnum.getStatus(idStatus);
         if (Objects.equals(schedulingStatus.getId(), SchedulingStatusEnum.DATES.getId())){
             saveTimePoint();
         }
@@ -137,6 +137,17 @@ public class AdminSchedulingController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @RequestMapping(value = "cancelSchedulingStatus", method = RequestMethod.GET)
+    public ResponseEntity cancelSchedulingStatus(@RequestParam Long idStatus){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        switch (SchedulingStatusEnum.getStatusEnum(idStatus)){
+            case DATES:
+                cancelDaySelectStatus();
+                break;
+        }
+        return null;
     }
 
     @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
@@ -181,6 +192,10 @@ public class AdminSchedulingController {
             }while (!schedulingSettings.getStartDate().equals(schedulingSettings.getEndDate()));
         }
         timePointService.batchInsert(listForInsert);
+    }
+
+    private void cancelDaySelectStatus(){
+
     }
 
     private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {

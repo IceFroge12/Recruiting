@@ -129,6 +129,16 @@ function schedulingService($http) {
             }
         })
     };
+    
+    service.cancelDaysSelectionService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/cancelSchedulingStatus',
+            params : {
+                id : DATES
+            }
+        })
+    };
 
     service.confirmInterviewParametersService = function () {
         return $http({
