@@ -70,6 +70,7 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
 	private static final String INSERT_USER_TIME_FINAL="INSERT INTO \"user_time_final\"(id_user, id_time_point) VALUES (?,?)";
 
+	private static final String DELETE_ALL = "DELETE FROM schedule_time_point";
 
 	@Override
 	public int[] batchInsert(List<Timestamp> timestaps) {
@@ -81,6 +82,12 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 			count++;
 		}
 		return this.getJdbcTemplate().batchUpdate(INSERT_SCHEDULE_TIME_POINT, objects);
+	}
+
+	@Override
+	public int deleteAll(){
+		log.info("Delete all rows from schedule time point");
+		return this.getJdbcTemplate().update(DELETE_ALL);
 	}
 
 	@Override

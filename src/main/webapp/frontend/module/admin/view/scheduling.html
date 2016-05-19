@@ -1,6 +1,6 @@
 <div app-header></div>
 <div app-menu-admin></div>
-<div ng-controller="schedulingController" ng-init="init()" id="main-block"
+<div ng-controller="schedulingController" ng-init="init(); getCurrentStatus()" id="main-block"
      class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
@@ -80,9 +80,13 @@
             </div>
 
             <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left" ng-click="submitDaysSelection()">
+                <button type="submit" class="btn btn-info search-element btn-left" ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
                     Confirm days selection
                 </button>
+                <button type="submit" class="btn btn-info search-element btn-left" ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
+                    Cancel days selection
+                </button>
+
             </div>
 
             <form name="schedulingForm" ng-init="getInterviewParameters()">
@@ -164,7 +168,8 @@
                                             <div class="col-md-8">id:{{soft.id}} {{soft.firstName}} {{soft.secondName}}
                                                 {{soft.lastName}}
                                             </div>
-                                            <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click="deleteSoftTimeFinal(soft, timePoint)">Delete
+                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
+                                                    data-target="#deleteSoft" ng-click="setCurrentSoft(soft, timePoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
@@ -185,7 +190,8 @@
                                             <div class="col-md-8">id:{{tech.id}} {{tech.firstName}} {{tech.secondName}}
                                                 {{tech.lastName}}
                                             </div>
-                                            <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click="deleteTechTimeFinal(tech, timePoint)">Delete
+                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
+                                                    data-target="#deleteTech" ng-click="setCurrentTech(tech, timePoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
@@ -206,7 +212,8 @@
                                             <div class="col-md-8">id:{{student.id}} {{student.firstName}}
                                                 {{student.secondName}} {{student.lastName}}
                                             </div>
-                                            <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click="deleteStudentTimeFinal(student, timePoint)">Delete
+                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
+                                                    data-target="#deleteStudent" ng-click="setCurrentStudent(student, timePoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
@@ -250,13 +257,55 @@
                 <td>{{user.lastName +" "+ user.firstName +" "+ user.secondName}}</td>
                 <td>
                     <button type="submit" class="btn btn-info search-element btn-left"
-                            ng-click="addUserToTimepoint(user.id,timePointToChange.id)">Add
+                            ng-click="addUserToTimepoint(user, timePointToChange)">Add
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
     </modal-dialog>
+    <div id="deleteSoft" class="modal fade" style="z-index: 2000">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove"></span></button>
+                    <h4 class="modal-title">Are you sure?</h4>
+                    <button ng-click="deleteSoftTimeFinal()" data-dismiss="modal" class="btn btn-link">Yes
+                    </button>
+                    <button class="btn btn-link" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="deleteTech" class="modal fade" style="z-index: 2000">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove"></span></button>
+                    <h4 class="modal-title">Are you sure?</h4>
+                    <button ng-click="deleteTechTimeFinal()" data-dismiss="modal" class="btn btn-link">Yes
+                    </button>
+                    <button class="btn btn-link" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="deleteStudent" class="modal fade" style="z-index: 2000">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove"></span></button>
+                    <h4 class="modal-title">Are you sure?</h4>
+                    <button ng-click="deleteStudentTimeFinal()" data-dismiss="modal" class="btn btn-link">Yes
+                    </button>
+                    <button class="btn btn-link" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div app-footer></div>
 

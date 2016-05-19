@@ -22,6 +22,8 @@ public enum SchedulingStatusEnum {
                 return "staff_scheduling";
             case STUDENT_SCHEDULING:
                 return "student_scheduling";
+            case NOT_STARTED:
+                return "not_started";
         }
         throw new IllegalArgumentException("No status defined for");
     }
@@ -37,6 +39,22 @@ public enum SchedulingStatusEnum {
             return new SchedulingStatus(valueOf(STUDENT_SCHEDULING), id);
         } else if (Objects.equals(id, NOT_STARTED.getId())) {
             return new SchedulingStatus(valueOf(NOT_STARTED), id);
+        } else {
+            throw new IllegalStateException("status not found");
+        }
+    }
+
+    public static SchedulingStatusEnum getStatusEnum(Long id){
+        if (Objects.equals(id, DATES.getId())) {
+            return SchedulingStatusEnum.DATES;
+        } else if (Objects.equals(id, TIME_POINTS.getId())) {
+            return SchedulingStatusEnum.TIME_POINTS;
+        } else if (Objects.equals(id, STAFF_SCHEDULING.getId())) {
+            return SchedulingStatusEnum.STAFF_SCHEDULING;
+        } else if (Objects.equals(id, STUDENT_SCHEDULING.getId())) {
+            return SchedulingStatusEnum.STUDENT_SCHEDULING;
+        } else if (Objects.equals(id, NOT_STARTED.getId())) {
+            return SchedulingStatusEnum.NOT_STARTED;
         } else {
             throw new IllegalStateException("status not found");
         }

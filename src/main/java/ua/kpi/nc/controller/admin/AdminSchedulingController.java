@@ -40,6 +40,18 @@ public class AdminSchedulingController {
     private SchedulingSettingsService schedulingSettingsService = ServiceFactory.getSchedulingSettingsService();
     private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
 
+
+
+    @RequestMapping(value = "getCurrentStatus", method = RequestMethod.GET)
+    public ResponseEntity getCurrentStatus(){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        if (null != recruitment){
+            return ResponseEntity.ok(recruitment.getSchedulingStatus());
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @RequestMapping(value = "getStudentCount", method = RequestMethod.GET)
     public SchedulingSettingDto getCountStudents() {
 
@@ -125,9 +137,9 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "changeSchedulingStatus", method = RequestMethod.GET)
-    public ResponseEntity changeSchedulingStatus(@RequestParam Long id) {
+    public ResponseEntity changeSchedulingStatus(@RequestParam Long idStatus) {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        SchedulingStatus schedulingStatus = SchedulingStatusEnum.getStatus(id);
+        SchedulingStatus schedulingStatus = SchedulingStatusEnum.getStatus(idStatus);
         if (Objects.equals(schedulingStatus.getId(), SchedulingStatusEnum.DATES.getId())){
             saveTimePoint();
         }
@@ -137,6 +149,17 @@ public class AdminSchedulingController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @RequestMapping(value = "cancelSchedulingStatus", method = RequestMethod.GET)
+    public ResponseEntity cancelSchedulingStatus(@RequestParam Long idStatus){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        switch (SchedulingStatusEnum.getStatusEnum(idStatus)){
+            case DATES:
+                cancelDaySelectStatus();
+                break;
+        }
+        return ResponseEntity.ok(null);
     }
 
     @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
@@ -181,6 +204,15 @@ public class AdminSchedulingController {
             }while (!schedulingSettings.getStartDate().equals(schedulingSettings.getEndDate()));
         }
         timePointService.batchInsert(listForInsert);
+    }
+
+    private void cancelDaySelectStatus(){
+        //TODO need add mehtod to recruitmnet change status
+        schedulingSettingsService.deleteAll();
+        timePointService.deleteAll();
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        recruitment.setSchedulingStatus(SchedulingStatusEnum.getStatus(SchedulingStatusEnum.NOT_STARTED.getId()));
+        recruitmentService.updateRecruitment(recruitment);
     }
 
     private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {
