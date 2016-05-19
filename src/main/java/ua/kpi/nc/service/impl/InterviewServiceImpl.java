@@ -47,7 +47,7 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, int interviewerRoleId) {
+    public Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, Long interviewerRoleId) {
         return interviewDao.getByApplicationFormAndInterviewerRoleId(applicationForm,interviewerRoleId);
     }
 

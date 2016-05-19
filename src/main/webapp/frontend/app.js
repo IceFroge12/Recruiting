@@ -40,18 +40,18 @@ angular.module('app', [
     'appRecoverPassword',
     'appConfirmRegistration',
     'appError'
-])
-    .controller('appController', function ($scope, $http, $rootScope) {
+]).controller('appController', function ($scope, $http, $rootScope) {
         $scope.init = function () {
             $http.get('/currentUser')
                 .success(function (user) {
                     $rootScope.authenticated = true;
                     $rootScope.id = user.id;
                     $rootScope.username = user.firstName;
+                    $rootScope.roles = user.roles;
+                   console.log(user.roles);
                 });
-        }
-    })
-    .config(function ($routeProvider, $httpProvider) {
+        };
+    }).config(function ($routeProvider, $httpProvider) {
 
         $httpProvider.interceptors.push('TokenAuthInterceptor');
 
@@ -116,6 +116,22 @@ angular.module('app', [
             .when('/admin/studentform/:id', {
                 templateUrl: 'module/admin/view/studentappform.html',
                 controller: 'adminStudentFormController'
+            })
+        
+            //double roles
+            .when('/admin/studentManagement', {
+                templateUrl: 'module/staff/view/staffStudentManagement.html',
+                controller: 'staffStudentManagementController'
+            })
+
+            .when('/admin/interview', {
+                templateUrl: 'module/staff/view/interview.html',
+                controller: 'interviewController'
+            })
+
+            .when('/admin/staffScheduling', {
+                templateUrl: 'module/staff/view/staffScheduling.html',
+                controller: 'staffSchedulingController'
             })
 
             //STAFF

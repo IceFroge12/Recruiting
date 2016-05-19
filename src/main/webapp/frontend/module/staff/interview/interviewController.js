@@ -3,7 +3,7 @@
  */
 
 function interviewController($scope) {
-
+    
 }
 
 angular.module('appInterview')

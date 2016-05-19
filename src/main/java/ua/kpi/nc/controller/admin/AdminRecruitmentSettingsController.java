@@ -27,12 +27,11 @@ public class AdminRecruitmentSettingsController {
 
     private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
     private DeadlineController deadlineController = DeadlineController.getInstance();
-    private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
     private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
     private UserService userService = ServiceFactory.getUserService();
     private SenderService senderService = SenderServiceImpl.getInstance();
 
-    @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
+    @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST)
     private void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) throws MessagingException {
         if (null == recruitmentService.getCurrentRecruitmnet()) {
 
@@ -51,12 +50,11 @@ public class AdminRecruitmentSettingsController {
             deadlineController.setRegisteredDeadline(recruitment.getRegistrationDeadline());
             deadlineController.setEndOfRecruitingDeadLine(recruitment.getEndDate());
         }
-
     }
-    @RequestMapping(value = "/editRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
+
+    @RequestMapping(value = "/editRecruitment", method = RequestMethod.POST)
     public void editRecruitment(@RequestBody RecruitmentSettingsDto recruitmentDto){
         Recruitment recruitment = recruitmentService.getRecruitmentById(recruitmentDto.getId());
-        System.out.println(recruitment);
         recruitment.setName(recruitmentDto.getName());
         recruitment.setRegistrationDeadline(Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()));
         recruitment.setScheduleChoicesDeadline(Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));

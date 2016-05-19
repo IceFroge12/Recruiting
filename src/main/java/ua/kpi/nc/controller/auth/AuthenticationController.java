@@ -24,7 +24,7 @@ public class AuthenticationController {
         if (null == user){
             return null;
         }else {
-            return new CurrentAuthUser(user.getId(), user.getFirstName());
+            return new CurrentAuthUser(user.getId(), user.getFirstName(), user.getRoles());
         }
     }
 }

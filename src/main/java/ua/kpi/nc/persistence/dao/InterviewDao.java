@@ -18,7 +18,7 @@ public interface InterviewDao {
 
     List<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
-    Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, int interviewerRoleId );
+    Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, Long interviewerRoleId );
 
     Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
 

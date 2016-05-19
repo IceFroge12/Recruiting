@@ -3,7 +3,7 @@
  */
 
 function staffSchedulingController($scope, staffSchedulingService) {
-
+    
     staffSchedulingService.getUserTimePriorities().then(function success(data) {
 
         $scope.timePoints = data;
