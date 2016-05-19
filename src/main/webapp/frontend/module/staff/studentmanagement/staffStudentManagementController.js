@@ -2,7 +2,7 @@
  * Created by Vova on 02.05.2016.
  */
 
-function staffStudentManagementController($scope, $http, staffStudentManagementService) {
+function staffStudentManagementController($scope, ngToast, $http, staffStudentManagementService) {
     var loadForms = function () {
         $http.get('../../staff/assigned').success(function (data) {
             $scope.assignedStudents = data;
@@ -13,12 +13,26 @@ function staffStudentManagementController($scope, $http, staffStudentManagementS
     $scope.search = {};
     $scope.searchApplicationForm = function (id) {
         $http.get('../../staff/getById/' + id).success(function (data) {
+            console.log(data);
             console.log($scope.foundStudent);
+            if(data == ""){
+                var myToastMsg = ngToast.info({
+                    content: 'Student not found ',
+                    timeout: 5000, 
+                    horizontalPosition: 'center',
+                    verticalPosition: 'bottom',
+                    dismissOnClick: true,
+                    combineDuplications: true,
+                    maxNumber: 2
+                });
+            }
             $scope.search.resultMessage = data;
             if ($scope.search.resultMessage.type != 'WARNING') {
                 $scope.search.resultMessage.message == null;
                 $scope.foundStudent = data;
             }
+         
+            
         });
     };
 
@@ -76,4 +90,4 @@ function staffStudentManagementController($scope, $http, staffStudentManagementS
 }
 
 angular.module('appStaffStudentManagement')
-    .controller('staffStudentManagementController', ['$scope', '$http', 'staffStudentManagementService', staffStudentManagementController]);
+    .controller('staffStudentManagementController', ['$scope', 'ngToast', '$http', 'staffStudentManagementService', staffStudentManagementController]);

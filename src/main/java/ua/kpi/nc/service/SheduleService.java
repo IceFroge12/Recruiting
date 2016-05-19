@@ -1,5 +1,6 @@
 package ua.kpi.nc.service;
 
+import org.springframework.scheduling.annotation.Async;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
