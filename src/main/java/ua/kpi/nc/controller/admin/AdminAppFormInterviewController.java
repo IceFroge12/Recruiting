@@ -16,6 +16,7 @@ import ua.kpi.nc.util.export.ExportApplicationForm;
 import ua.kpi.nc.util.export.ExportApplicationFormImp;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,16 +40,30 @@ public class AdminAppFormInterviewController {
         return jsonResult;
     }
 
+    @RequestMapping(value = "getOldApplicationForms/{studentId}", method = RequestMethod.POST)
+    public List<String> getOldApplicationForms(@PathVariable Long studentId) {
+        List<ApplicationForm> allApplicationForms = applicationFormService.getOldApplicationFormsByUserId(studentId);
+        Gson applicationFormGson = GsonFactory.getApplicationFormGson();
+        List<String> appForms = new ArrayList<>();
+        for (ApplicationForm appForm : allApplicationForms) {
+            String jsonResult = applicationFormGson.toJson(appForm);
+            appForms.add(jsonResult);
+        }
+        return appForms;
+    }
+
+
     @RequestMapping(value = "getRolesInterview/{applicationFormId}", method = RequestMethod.GET)
     public Set<Role> getInterviewRoles(@PathVariable Long applicationFormId) {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         List<Interview> interviews = interviewService.getByApplicationForm(applicationForm);
         Set<Role> interviewRoles = new HashSet<>();
-        for( Interview interview : interviews){
+        for (Interview interview : interviews) {
             interviewRoles.add(interview.getRole());
         }
         return interviewRoles;
     }
+
     @RequestMapping(value = "getInterview/{applicationFormId}/{role}", method = RequestMethod.POST)
     public String getInterview(@PathVariable Long applicationFormId, @PathVariable Long role) {
         Interview interview = null;
@@ -63,6 +78,7 @@ public class AdminAppFormInterviewController {
         String jsonResult = interviewGson.toJson(interview);
         return jsonResult;
     }
+
     @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)
     public boolean getAdequateMark(@PathVariable Long applicationFormId) {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
@@ -77,7 +93,6 @@ public class AdminAppFormInterviewController {
         response.setContentType("application/pdf");
         pdfAppForm.export(applicationForm, response);
     }
-
 
 
 }

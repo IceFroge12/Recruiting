@@ -29,6 +29,12 @@
                         <b class="caret"></b>
                     </a>
                 </li>
+                <li ng-show="oldForms" ng-class="{active:tab===4}" class="dropdown" >
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 4;">
+                        Old Forms
+                        <b class="caret"></b>
+                    </a>
+                </li>
             </ul>
             <div  class="tab-content">
                 <div ng-show="tab === 1"  class="tab-pane fade in active">
@@ -124,6 +130,51 @@
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div ng-show="tab === 4"  class="tab-pane fade in active">
+                    <table class="table table-hover table-condensed">
+                        <tr class="text-success">
+                            <td>Status</td>
+                            <td>{{oldForms[0].status}}</td>
+                        </tr>
+                        <tr class="text-success">
+                            <td>ID</td>
+                            <td ng-model="id">{{oldForms[0].id}}</td>
+                        </tr>
+                        <td >
+                            <label class="control-label">Photo</label>
+                        </td>
+                        <td><img ng-src="/photo/{{appForm.photoScope}}" width=100px>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>{{oldForms[0].user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Firs name</td>
+                                <td>{{oldForms[0].user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Second name</td>
+                                <td>{{oldForms[0].user.secondName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{oldForms[0].user.email}}</td>
+                            </tr>
+                            <tr ng-repeat="question in oldForms[0].questions">
+                                <td > {{question.questionTitle}}</td>
+                                <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                    {{answer.answer}}
+                                </td>
+                                <td ng-if="question.questionType == 'checkbox'" >
+                                    <p ng-repeat="variant in question.variants">
+                                        {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                    </p>
+                                </td>
+                            </tr>
+                    </table>
+                    <button ng-click = "exportAppForm(oldForms[0])" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
                 </div>
             </div>
         </div>

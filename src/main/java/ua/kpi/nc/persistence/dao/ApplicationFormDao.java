@@ -40,6 +40,8 @@ public interface ApplicationFormDao {
 
 	ApplicationForm getCurrentApplicationFormByUserId(Long id);
 
+    List<ApplicationForm> getOldApplicationFormsByUserId(Long id);
+
 	ApplicationForm getLastApplicationFormByUserId(Long id);
 
 	List<ApplicationForm> getByInterviewer(User interviewer);
