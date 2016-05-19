@@ -15,6 +15,8 @@ public interface ScheduleTimePointDao {
 
     ScheduleTimePoint getFinalTimePointById(Long id);
 
+    int[] batchInsert(List<Timestamp> timestaps);
+
     List<ScheduleTimePoint> getFinalTimePointByUserId(Long id);
 
     Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
@@ -22,6 +24,8 @@ public interface ScheduleTimePointDao {
     int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
     int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
+
+    int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint);
 
 	ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
 
@@ -31,6 +35,7 @@ public interface ScheduleTimePointDao {
 
 	boolean isScheduleDatesExists();
 
-    public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
+    Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
 
+    Long addUserToTimepoint(User user, ScheduleTimePoint timePoint);
 }

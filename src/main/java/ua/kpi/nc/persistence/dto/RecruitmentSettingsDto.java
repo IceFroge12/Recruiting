@@ -1,8 +1,11 @@
 package ua.kpi.nc.persistence.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Created by Admin on 06.05.2016.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecruitmentSettingsDto {
 
     private Long id;
@@ -19,6 +22,10 @@ public class RecruitmentSettingsDto {
 
     private int maxAdvancedGroup;
 
+    private int softDuration;
+
+    private int techDuration;
+
     public RecruitmentSettingsDto() {
     }
 
@@ -31,6 +38,27 @@ public class RecruitmentSettingsDto {
         this.endDate = endDate;
         this.maxGeneralGroup = maxGeneralGroup;
         this.maxAdvancedGroup = maxAdvancedGroup;
+    }
+
+    public RecruitmentSettingsDto(int softDuration, int techDuration) {
+        this.softDuration = softDuration;
+        this.techDuration = techDuration;
+    }
+
+    public int getSoftDuration() {
+        return softDuration;
+    }
+
+    public void setSoftDuration(int softDuration) {
+        this.softDuration = softDuration;
+    }
+
+    public int getTechDuration() {
+        return techDuration;
+    }
+
+    public void setTechDuration(int techDuration) {
+        this.techDuration = techDuration;
     }
 
     public String getName() {
@@ -99,6 +127,9 @@ public class RecruitmentSettingsDto {
                 ", endDate='" + endDate + '\'' +
                 ", maxGeneralGroup=" + maxGeneralGroup +
                 ", maxAdvancedGroup=" + maxAdvancedGroup +
+                ", softDuration=" + softDuration +
+                ", techDuration=" + techDuration +
                 '}';
     }
+
 }

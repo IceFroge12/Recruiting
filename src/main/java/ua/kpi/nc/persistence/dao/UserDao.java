@@ -85,4 +85,6 @@ public interface UserDao {
 
     List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId);
 
+
+    List<User> getUsersWithoutInterview(Long roleId);
 }

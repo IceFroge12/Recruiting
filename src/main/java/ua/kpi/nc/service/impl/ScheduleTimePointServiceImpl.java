@@ -2,6 +2,7 @@ package ua.kpi.nc.service.impl;
 
 import ua.kpi.nc.persistence.dao.ScheduleTimePointDao;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.ScheduleTimePointService;
 
 import java.sql.Timestamp;
@@ -28,6 +29,10 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	public List<ScheduleTimePoint> getFinalTimePointByUserId(Long id) {
 		return scheduleTimePointDao.getFinalTimePointByUserId(id);
 	}
+    @Override
+	public int[] batchInsert(List<Timestamp> timestaps){
+		return scheduleTimePointDao.batchInsert(timestaps);
+	}
 
 	@Override
 	public Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
@@ -42,6 +47,12 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	@Override
 	public int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
 		return scheduleTimePointDao.deleteScheduleTimePoint(scheduleTimePoint);
+	}
+
+
+	@Override
+	public int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint) {
+		return scheduleTimePointDao.deleteUserTimeFinal(user, scheduleTimePoint);
 	}
 
 	@Override
@@ -67,5 +78,10 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	@Override
 	public Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint) {
 		return scheduleTimePointDao.getUsersNumberInFinalTimePoint(timePoint);
+	}
+
+	@Override
+	public Long addUserToTimepoint(User user, ScheduleTimePoint timePoint) {
+		return scheduleTimePointDao.addUserToTimepoint(user, timePoint);
 	}
 }

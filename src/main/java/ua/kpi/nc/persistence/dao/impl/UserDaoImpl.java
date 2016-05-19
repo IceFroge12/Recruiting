@@ -183,6 +183,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date FROM public.user u JOIN public.user_time_final f ON u.id = f.id_user JOIN public.user_role ur ON u.id = ur.id_user WHERE ur.id_role = ? AND f.id_time_point = ?";
 
+    private static final String SQL_GET_WITHOUT_INTERVIEW = "SELECT * FROM \"user\" u INNER JOIN user_role ur " +
+            "on ur.id_user=u.id WHERE ur.id_role = ? \n" +
+            " and NOT EXISTS(SELECT 1 FROM user_time_final utf WHERE utf.id_user = u.id ) AND " +
+            "(u.is_active='true' OR EXISTS(SELECT * FROM application_form af WHERE af.id_user=u.id AND af.id_status=3));\n";
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -492,6 +497,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public List<User> getStudentsWithNotconnectedForms() {
         return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
+    }
+
+    @Override
+    public List<User> getUsersWithoutInterview(Long roleId) {
+        return this.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor,roleId);
     }
 
     @Override

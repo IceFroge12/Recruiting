@@ -52,8 +52,9 @@
                 </div>
             <table class="table table-condensed table-hover col-md-8">
                 <thead class="table-head">
-                <tr><th class ='student-check' custom-sort><span class="glyphicon glyphicon-ok">
-                    <input type="checkbox" ng-model="allSelected" ng-click="checkAll()" ng-model-options="{getterSetter: true}"></span>&nbsp;</th>
+                <tr><th class ='student-check' custom-sort>
+                    <input type="checkbox" ng-if ="checkedAll"  ng-checked="true" ng-click="selectAll()" >
+                    <input type="checkbox" ng-if ="!checkedAll" ng-checked="false" ng-click="selectAll()" ></th>
                     <th class="student-id" custom-sort-stud order="1" sort="sort">ID&nbsp;</th>
                     <th class="student-name" custom-sort-stud order="2" sort="sort">Name&nbsp;</th>
                     <th class="student-status">Status</th>
@@ -62,8 +63,10 @@
                     <th class="student-techMark">Final Mark</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="student in allStudents">
-                    <td><input type="checkbox" ng-click="checkStudentStatus(student)"  ng-model="student.Selected"></td>
+                <tr ng-repeat="student in allStudents" ng-class="{'studentreject' : student.status == 'Rejected',
+                 'studenttojob': student.status == 'Approved to job','studenttocourses': student.status == 'Approved to general group',
+                 'studenttoadvanced' : student.status == 'Approved to advanced courses' }" >
+                    <td><input type="checkbox" ng-click="checkStudentStatus(student)" ng-checked="checkedAll" ng-model="student.Selected"></td>
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.appFormId}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>
                     <td>

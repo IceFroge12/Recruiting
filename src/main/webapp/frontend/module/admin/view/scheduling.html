@@ -4,6 +4,12 @@
      class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" data-target="#schedSettings">Sheduling settings</a></li>
+                <li><a data-toggle="tab" data-target="#currSched">Current scheduling</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="schedSettings" class="tab-pane fade in active">
 
             <div class="row">
                 <h4>
@@ -27,45 +33,6 @@
                     {{amountOfSoft}}
                 </div>
             </div>
-            <form name="schedulingForm">
-                <div class="row info-text">
-                    <div class="col-md-2">
-                        Duration for each interview:
-                    </div>
-
-                    <div class="col-md-2">
-                        Tech duration:
-                        <input class="input-nums" type="text" placeholder="minutes" name="techDuration" required
-                               ng-pattern="/^(\d{1,3})+$/">
-                        <span ng-show="schedulingForm.techDuration.$error.required">required</span>
-                        <span ng-show="schedulingForm.techDuration.$error.pattern">pattern</span>
-                    </div>
-                    <div class="col-md-2">
-                        Soft duration:
-                        <input class="input-nums" type="text" placeholder="minutes" name="softDuration" required
-                               ng-minlength="1" ng-maxlength="3" ng-pattern="/^\d+$/">
-                        <span ng-show="schedulingForm.softDuration.$error.required">required</span>
-                        <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2 time-result">
-                        Needed hours: 100
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                ng-disabled="schedulingForm.$invalid">
-                            Calculate needed hours
-                        </button>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                ng-disabled="schedulingForm.$invalid">
-                            Save interview parameters
-                        </button>
-                    </div>
-                </div>
-            </form>
             <div class="row">
                 <h4>Select dates on calendar</h4>
                 <p class="marks-cell"><b>0/30</b> hours selected</p>
@@ -99,10 +66,10 @@
                                         <input type="number" ng-model="map[d].startTime">
                                         <input type="number" ng-model="map[d].endTime">
                                         <button class='btn btn-xs btn-warning' style='margin:5px'
-                                                ng-click='setTime(map[d], d)'>Save
+                                                ng-click='setTime(map[d], d)' ng-hide="map[d].id != -1">Save
                                         </button>
                                         <button class='btn btn-xs btn-warning' style='margin:5px'
-                                                ng-click='edit(map[d], d)'>Edit
+                                                ng-click='edit(map[d], d)' ng-hide="map[d].id === -1">Edit
                                         </button>
                                     </div>
                                 </div>
@@ -111,94 +78,185 @@
                     </tr>
                 </table>
             </div>
+
             <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left" disabled>Generate
-                    schedule
+                <button type="submit" class="btn btn-info search-element btn-left" ng-click="submitDaysSelection()">
+                    Confirm days selection
                 </button>
             </div>
-            <div class="row">
-                <h4>
-                    Current schedule:
-                </h4>
-                <table class="table table-condensed table-hover col-md-8">
-                    <thead class="table-head">
-                    <tr>
-                        <th>Date</th>
-                        <th>Soft</th>
-                        <th>Tech</th>
-                        <th>Students</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="timePoint in schedulePoints">
-                        <td>
-                            {{timePoint.timePoint | date : 'fullDate'}}
-                        </td>
-                        <td>
-                            <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]"
-                               ng-click="collapsed[1][schedulePoints.indexOf(timePoint)]=!collapsed[1][schedulePoints.indexOf(timePoint)]; getSoft(timePoint.id);">
-                                {{timePoint.amountOfSoft}}<span class="glyphicon glyphicon glyphicon-chevron-down"
-                                                                aria-hidden="true"></span>
-                            </a>
-                            <div ng-show="collapsed[1][schedulePoints.indexOf(timePoint)]">
-                                <div ng-repeat="soft in softMap[timePoint.id]">
-                                    <div class="col-md-8">id:{{soft.id}} {{soft.firstName}} {{soft.secondName}} {{soft.lastName}}
-                                    </div>
-                                    <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
-                                    </button>
-                                </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+
+            <form name="schedulingForm" ng-init="getInterviewParameters()">
+                <div class="row info-text">
+                    <div class="col-md-2">
+                        Duration for each interview:
+                    </div>
+
+                            <div class="col-md-2">
+                                Tech duration:
+                                <input class="input-nums" type="text" placeholder="minutes" name="techDuration"
+                                       ng-model="techDuration" required
+                                       ng-pattern="/^(\d{1,3})+$/">
+                                <span ng-show="schedulingForm.techDuration.$error.required">required</span>
+                                <span ng-show="schedulingForm.techDuration.$error.pattern">pattern</span>
+                            </div>
+                            <div class="col-md-2">
+                                Soft duration:
+                                <input class="input-nums" type="text" placeholder="minutes" name="softDuration"
+                                       ng-model="softDuration" required
+                                       ng-minlength="1" ng-maxlength="3" ng-pattern="/^\d+$/">
+                                <span ng-show="schedulingForm.softDuration.$error.required">required</span>
+                                <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 time-result">
+                                Needed hours: 100
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
+                                        ng-disabled="schedulingForm.$invalid">
+                                    Calculate needed hours
                                 </button>
                             </div>
-                        </td>
-                        <td>
-                            <a ng-model="collapsed[2][schedulePoints.indexOf(timePoint)]"
-                               ng-click="collapsed[2][schedulePoints.indexOf(timePoint)]=!collapsed[2][schedulePoints.indexOf(timePoint)]; getTech(timePoint.id)">
-                                {{timePoint.amountOfTech}}<span class="glyphicon glyphicon glyphicon-chevron-down"
-                                                                aria-hidden="true"></span>
-                            </a>
-                            <div ng-show="collapsed[2][schedulePoints.indexOf(timePoint)]">
-                                <div ng-repeat="tech in techMap[timePoint.id]">
-                                    <div class="col-md-8">id:{{tech.id}} {{tech.firstName}} {{tech.secondName}} {{tech.lastName}}
-                                    </div>
-                                    <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
-                                    </button>
-                                </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
+                                        ng-disabled="schedulingForm.$invalid"
+                                        ng-click="saveInterviewParameters(softDuration, techDuration)">
+                                    Save interview parameters
+                                </button>
+                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
+                                        ng-disabled="schedulingForm.$invalid" ng-click="submitInterviewParameters()">
+                                    Confirm interview parameters
                                 </button>
                             </div>
-                        </td>
-                        <td>
-                            <a ng-model="collapsed[3][schedulePoints.indexOf(timePoint)]"
-                               ng-click="collapsed[3][schedulePoints.indexOf(timePoint)]=!collapsed[3][schedulePoints.indexOf(timePoint)]; getStudent(timePoint.id)">
-                                {{timePoint.amountOfStudents}}<span class="glyphicon glyphicon glyphicon-chevron-down"
-                                                                    aria-hidden="true"></span>
-                            </a>
-                            <div ng-show="collapsed[3][schedulePoints.indexOf(timePoint)]">
-                                <div ng-repeat="student in studentMap[timePoint.id]">
-                                    <div class="col-md-8">id:{{student.id}} {{student.firstName}} {{student.secondName}} {{student.lastName}}
+                        </div>
+                    </form>
+                </div>
+                <div id="currSched" class="tab-pane fade">
+                    <div class="row">
+                        <h4>
+                            Current schedule:
+                        </h4>
+                        <table class="table table-condensed table-hover col-md-8">
+                            <thead class="table-head">
+                            <tr>
+                                <th>Date</th>
+                                <th>Soft</th>
+                                <th>Tech</th>
+                                <th>Students</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="timePoint in schedulePoints">
+                                <td class="col-md-3">
+                                    {{timePoint.timePoint | date : 'fullDate'}}
+                                </td>
+                                <td class="col-md-3">
+                                    <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]"
+                                       ng-click="collapsed[1][schedulePoints.indexOf(timePoint)]=!collapsed[1][schedulePoints.indexOf(timePoint)]; getSoft(timePoint.id);">
+                                        {{timePoint.amountOfSoft}}<span
+                                            class="glyphicon glyphicon glyphicon-chevron-down"
+                                            aria-hidden="true"></span>
+                                    </a>
+
+                                    <div ng-show="collapsed[1][schedulePoints.indexOf(timePoint)]">
+                                        <div ng-repeat="soft in softMap[timePoint.id]">
+                                            <div class="col-md-8">id:{{soft.id}} {{soft.firstName}} {{soft.secondName}}
+                                                {{soft.lastName}}
+                                            </div>
+                                            <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click="deleteSoftTimeFinal(soft, timePoint)">Delete
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-info btn-xs search-element btn-left col-md-2"
+                                                ng-click='toggleModal(roleSoft,timePoint)'>Add
+                                        </button>
                                     </div>
-                                    <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
-                                    </button>
-                                </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left" ng-click="saveSelectedDay()">Save
-                </button>
-                <button type="submit" class="btn btn-info search-element btn-left" disabled>Send notification to all
-                </button>
-                <button type="submit" class="btn btn-info search-element btn-left" disabled>Export
-                </button>
+                                </td>
+                                <td class="col-md-3">
+                                    <a ng-model="collapsed[2][schedulePoints.indexOf(timePoint)]"
+                                       ng-click="collapsed[2][schedulePoints.indexOf(timePoint)]=!collapsed[2][schedulePoints.indexOf(timePoint)]; getTech(timePoint.id)">
+                                        {{timePoint.amountOfTech}}<span
+                                            class="glyphicon glyphicon glyphicon-chevron-down"
+                                            aria-hidden="true"></span>
+                                    </a>
+
+                                    <div ng-show="collapsed[2][schedulePoints.indexOf(timePoint)]">
+                                        <div ng-repeat="tech in techMap[timePoint.id]">
+                                            <div class="col-md-8">id:{{tech.id}} {{tech.firstName}} {{tech.secondName}}
+                                                {{tech.lastName}}
+                                            </div>
+                                            <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click="deleteTechTimeFinal(tech, timePoint)">Delete
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-info btn-xs search-element btn-left col-md-2"
+                                                ng-click='toggleModal(roleTech,timePoint)'>Add
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="col-md-3">
+                                    <a ng-model="collapsed[3][schedulePoints.indexOf(timePoint)]"
+                                       ng-click="collapsed[3][schedulePoints.indexOf(timePoint)]=!collapsed[3][schedulePoints.indexOf(timePoint)]; getStudent(timePoint.id)">
+                                        {{timePoint.amountOfStudents}}<span
+                                            class="glyphicon glyphicon glyphicon-chevron-down"
+                                            aria-hidden="true"></span>
+                                    </a>
+
+                                    <div ng-show="collapsed[3][schedulePoints.indexOf(timePoint)]">
+                                        <div ng-repeat="student in studentMap[timePoint.id]">
+                                            <div class="col-md-8">id:{{student.id}} {{student.firstName}}
+                                                {{student.secondName}} {{student.lastName}}
+                                            </div>
+                                            <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click="deleteStudentTimeFinal(student, timePoint)">Delete
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-info btn-xs search-element btn-left col-md-2"
+                                                ng-click='toggleModal(roleStudent,timePoint)'>Add
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row info-text">
+                        <button type="submit" class="btn btn-info search-element btn-left" ng-click="saveSelectedDay()">
+                            Save
+                        </button>
+                        <button type="submit" class="btn btn-info search-element btn-left" disabled>Send notification to
+                            all
+                        </button>
+                        <button type="submit" class="btn btn-info search-element btn-left" disabled>Export
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <modal-dialog show='modalShown' width='400px'>
+        <h4>Add new user to interview timepoint</h4>
+
+        <p>{{timePointToChange.timePoint | date : 'fullDate'}}</p>
+        <table class="table table-condensed table-hover col-md-8">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Add</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat='user in possibleToAdd[roleToShow].data track by $index'>
+                <td>{{user.id}}</td>
+                <td>{{user.lastName +" "+ user.firstName +" "+ user.secondName}}</td>
+                <td>
+                    <button type="submit" class="btn btn-info search-element btn-left"
+                            ng-click="addUserToTimepoint(user.id,timePointToChange.id)">Add
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </modal-dialog>
 </div>
 <div app-footer></div>
 

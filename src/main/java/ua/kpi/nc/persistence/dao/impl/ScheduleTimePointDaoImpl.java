@@ -66,6 +66,23 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 			"    on ur.id_user=u.id INNER JOIN user_time_final f on u.id=f.id_user INNER JOIN schedule_time_point s \n" +
 			"    on s.id = f.id_time_point WHERE s.time_point = ? GROUP BY ur.id_role) sel;";
 
+	private static final String DELETE_USER_TIME_FINAL="DELETE FROM user_time_final where id_user = ? and id_time_point=?";
+
+	private static final String INSERT_USER_TIME_FINAL="INSERT INTO \"user_time_final\"(id_user, id_time_point) VALUES (?,?)";
+
+
+	@Override
+	public int[] batchInsert(List<Timestamp> timestaps) {
+		log.info("Insert schedule time points");
+		Object[][] objects = new Object[timestaps.size()][];
+		int count = 0;
+		for (Timestamp scheduleTimePoint : timestaps) {
+			objects[count] = new Object[]{scheduleTimePoint};
+			count++;
+		}
+		return this.getJdbcTemplate().batchUpdate(INSERT_SCHEDULE_TIME_POINT, objects);
+	}
+
 	@Override
 	public ScheduleTimePoint getFinalTimePointById(Long id) {
 		log.trace("Looking for Schedule time Point with id = ", id);
@@ -95,6 +112,12 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 	public int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
 		log.trace("Deleting Schedule time Point with id = ", scheduleTimePoint.getId());
 		return this.getJdbcTemplate().update(DELETE_SCHEDULE_TIME_POINT, scheduleTimePoint.getId());
+	}
+
+	@Override
+	public int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint) {
+		log.trace("Deleting user_time_final with user id = ", user.getId());
+		return this.getJdbcTemplate().update(DELETE_USER_TIME_FINAL, user.getId(), scheduleTimePoint.getId());
 	}
 
 	private Set<User> getUsersFinalInTimePoint(Long timeID) {
@@ -158,4 +181,9 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 		}, timePoint);
 	}
 
+	@Override
+	public Long addUserToTimepoint(User user, ScheduleTimePoint timePoint) {
+		log.trace("Adding user to final timepoint");
+		return this.getJdbcTemplate().insert(INSERT_USER_TIME_FINAL, user.getId(), timePoint.getId());
+	}
 }

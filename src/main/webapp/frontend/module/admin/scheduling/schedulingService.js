@@ -8,6 +8,12 @@ function schedulingService($http) {
     var ROLE_SOTF = "5";
     var ROLE_TECH = "2";
     var ROLE_STUDENT = "3";
+    
+    var DATES = 1;
+    var TIME_POINTS = 2;
+    var STAFF_SCHEDULING = 3;
+    var STUDENT_SCHEDULING = 4;
+    var NOT_STARTED = 5;
 
     var service = {};
     service.getCurrentRecruitmentCountStudents = function () {
@@ -19,40 +25,65 @@ function schedulingService($http) {
 
     service.saveSelectedDayService = function (data) {
         return $http({
-            method : 'POST',
-            url : '/scheduling/saveSelectedDays',
-            data : data
+            method: 'POST',
+            url: '/scheduling/saveSelectedDays',
+            data: data
         })
     };
-    
+
     service.getSelectedDayService = function () {
         return $http({
-            method : 'POST',
-            url : '/scheduling/getSelectedDays'
+            method: 'POST',
+            url: '/scheduling/getSelectedDays'
         })
     };
-    
+
     service.deleteSelectedDayService = function (id) {
         return $http({
-            method : 'GET',
-            url : '/scheduling/deleteSelectedDay',
-            params : {id: id}
+            method: 'GET',
+            url: '/scheduling/deleteSelectedDay',
+            params: {id: id}
         })
     };
-    
-    service.editSelectedDayService = function (data) {
+
+    service.deleteUserTimeFinal = function(id, timePointId){
         return $http({
             method : 'POST',
-            url : '/scheduling/editSelectedDay',
-            data : data
+            url : '/scheduling/deleteUserTimeFinal',
+            params : {id1:id,
+                id2:timePointId}
         })
     };
-    
+
+    service.editSelectedDayService = function (data) {
+        return $http({
+            method: 'POST',
+            url: '/scheduling/editSelectedDay',
+            data: data
+        })
+    };
+
 
     service.getCurrentSchedule = function () {
         return $http({
-            method : 'GET',
-            url : '/scheduling/getCurrentSchedule'
+            method: 'GET',
+            url: '/scheduling/getCurrentSchedule'
+        })
+    };
+
+    service.getUsersWithoutInterview = function (roleId) {
+        return $http({
+            method: 'GET',
+            url: '/scheduling/getUsersWithoutInterview',
+            params: {roleId: roleId}
+        })
+    };
+
+    service.addUserToTimepoint = function (id,timePoint) {
+        return $http({
+            method: 'POST',
+            url: '/scheduling/addUserToTimepoint',
+            params: {userId:id, idTimePoint:timePoint}
         })
     };
 
@@ -87,6 +118,53 @@ function schedulingService($http) {
                 idTimePoint : idTimePoint
             }
         })
+    };
+
+    service.confirmDaysSelectionService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/changeSchedulingStatus',
+            params : {
+                id : DATES
+            }
+        })
+    };
+
+    service.confirmInterviewParametersService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/changeSchedulingStatus',
+            params : {
+                id : TIME_POINTS
+            }
+        })
+    };
+
+    
+    service.saveInterviewParametersService = function (softDuration, techDuration) {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/saveInterviewParameters',
+            params : {
+                softDuration : softDuration,
+                techDuration : techDuration
+            }
+        })
+    };
+    
+    service.getInterviewParametersService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/getInterviewParameters'
+        })
+    };
+    
+    service.getConfirmDaysSelectionStatus = function(){
+        return DATES;
+    };
+    
+    service.getConfirmInterviewParametersStatus = function () {
+        return TIME_POINTS;
     };
     
     return service;
