@@ -1,26 +1,26 @@
 package ua.kpi.nc.controller.admin;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.dto.SchedulingDaysDto;
+import ua.kpi.nc.persistence.dto.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ua.kpi.nc.persistence.dto.ScheduleOverallDto;
-import ua.kpi.nc.persistence.dto.SchedulingSettingDto;
-import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.SchedulingSettings;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
+import ua.kpi.nc.persistence.model.enums.SchedulingStatusEnum;
 import ua.kpi.nc.service.*;
 
 import java.lang.reflect.WildcardType;
 import java.sql.Timestamp;
 import java.util.List;
+
 import ua.kpi.nc.persistence.model.impl.real.ScheduleTimePointImpl;
 import ua.kpi.nc.service.*;
 
@@ -62,7 +62,7 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "saveSelectedDays", method = RequestMethod.POST)
-    public ResponseEntity<Long> saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto){
+    public ResponseEntity<Long> saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto) {
         long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
@@ -71,31 +71,31 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
-    public List<SchedulingSettings> getSelectedDays(){
+    public List<SchedulingSettings> getSelectedDays() {
         List<SchedulingSettings> list = schedulingSettingsService.getAll();
         return list;
     }
 
     @RequestMapping(value = "deleteSelectedDay", method = RequestMethod.GET)
-    public ResponseEntity deleteSelectedDay(@RequestParam Long id){
-        int amount =  schedulingSettingsService.deleteTimeRange(id);
-        if (amount != 0){
+    public ResponseEntity deleteSelectedDay(@RequestParam Long id) {
+        int amount = schedulingSettingsService.deleteTimeRange(id);
+        if (amount != 0) {
             return ResponseEntity.ok(null);
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 
     @RequestMapping(value = "editSelectedDay", method = RequestMethod.POST)
-    public ResponseEntity editSelectedDay(@RequestBody SchedulingDaysDto schedulingDaysDto){
+    public ResponseEntity editSelectedDay(@RequestBody SchedulingDaysDto schedulingDaysDto) {
         int amount = schedulingSettingsService.updateTimeRange(new SchedulingSettings(
                 schedulingDaysDto.getId(),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
         ));
-        if (amount != 0){
+        if (amount != 0) {
             return ResponseEntity.ok(null);
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -107,38 +107,67 @@ public class AdminSchedulingController {
         for (ScheduleTimePoint timePoint : allTimePoints) {
             ScheduleOverallDto oneTimePoint = new ScheduleOverallDto(timePoint.getTimePoint());
             oneTimePoint.setId(timePoint.getId());
-            Map<Long,Long> numberForEachRole = timePointService.getUsersNumberInFinalTimePoint(timePoint.getTimePoint());
+            Map<Long, Long> numberForEachRole = timePointService.getUsersNumberInFinalTimePoint(timePoint.getTimePoint());
             setUsersNumberToEachRole(numberForEachRole, oneTimePoint);
             scheduleOverall.add(oneTimePoint);
         }
         return scheduleOverall;
     }
 
-    @RequestMapping(value = "getUsersByTimePoint",method = RequestMethod.GET)
-    public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint){
+    @RequestMapping(value = "getUsersByTimePoint", method = RequestMethod.GET)
+    public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint) {
         return userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
     }
 
-    private void setUsersNumberToEachRole(Map<Long,Long> numberForEachRole, ScheduleOverallDto timePoint) {
+    @RequestMapping(value = "changeSchedulingStatus", method = RequestMethod.GET)
+    public ResponseEntity changeSchedulingStatus(@RequestParam Long id) {
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        recruitment.setSchedulingStatus(SchedulingStatusEnum.getStatus(id));
+        if (recruitmentService.updateRecruitment(recruitment) != 0) {
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
+    public ResponseEntity getInterviewParameters(){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        return ResponseEntity.ok(new RecruitmentSettingsDto(recruitment.getTimeInterviewSoft(), recruitment.getTimeInterviewTech()));
+    }
+
+    @RequestMapping(value = "saveInterviewParameters", method = RequestMethod.GET)
+    public ResponseEntity saveInterviewParameters(@RequestParam int softDuration, @RequestParam int techDuration){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        recruitment.setTimeInterviewSoft(softDuration);
+        recruitment.setTimeInterviewTech(techDuration);
+        if (recruitmentService.updateRecruitment(recruitment) != 0){
+            return ResponseEntity.ok(null);
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {
         if (numberForEachRole == null) {
             timePoint.setAmountOfStudents(0);
             timePoint.setAmountOfSoft(0);
             timePoint.setAmountOfTech(0);
         } else {
-            if (numberForEachRole.get((long)RoleEnum.ROLE_STUDENT.getId()) == null) {
+            if (numberForEachRole.get((long) RoleEnum.ROLE_STUDENT.getId()) == null) {
                 timePoint.setAmountOfStudents(0);
             } else {
-                timePoint.setAmountOfStudents(numberForEachRole.get((long)RoleEnum.ROLE_STUDENT.getId()));
+                timePoint.setAmountOfStudents(numberForEachRole.get((long) RoleEnum.ROLE_STUDENT.getId()));
             }
-            if (numberForEachRole.get((long)RoleEnum.ROLE_SOFT.getId()) == null) {
+            if (numberForEachRole.get((long) RoleEnum.ROLE_SOFT.getId()) == null) {
                 timePoint.setAmountOfSoft(0);
             } else {
-                timePoint.setAmountOfSoft(numberForEachRole.get((long)RoleEnum.ROLE_SOFT.getId()));
+                timePoint.setAmountOfSoft(numberForEachRole.get((long) RoleEnum.ROLE_SOFT.getId()));
             }
-            if (numberForEachRole.get((long)RoleEnum.ROLE_TECH.getId()) == null) {
+            if (numberForEachRole.get((long) RoleEnum.ROLE_TECH.getId()) == null) {
                 timePoint.setAmountOfTech(0);
             } else {
-                timePoint.setAmountOfTech(numberForEachRole.get((long)RoleEnum.ROLE_TECH.getId()));
+                timePoint.setAmountOfTech(numberForEachRole.get((long) RoleEnum.ROLE_TECH.getId()));
             }
         }
     }

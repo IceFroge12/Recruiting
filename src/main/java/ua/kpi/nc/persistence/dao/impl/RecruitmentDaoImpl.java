@@ -73,7 +73,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             "end_date = ?, max_general_group = ?, max_advanced_group = ?, registration_deadline = ?," +
             "schedule_choices_deadline = ?, students_on_interview = ?, time_interview_tech = ?, " +
             "time_interview_soft = ?, number_tech_interviewers = ?, number_soft_interviewers = ?, number_of_hours = ? ," +
-            " r.scheduling_status = ? \n" +
+            "scheduling_status = ? \n" +
             "WHERE recruitment.id = ?;";
 
     private static final String SQL_INSERT = "INSERT INTO \"recruitment\"(name, start_date," +

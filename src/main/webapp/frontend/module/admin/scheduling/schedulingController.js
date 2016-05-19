@@ -10,7 +10,7 @@ function schedulingController($scope, schedulingService) {
 
     $scope.softAmountSet;
     $scope.techAmountSet;
-    
+
     // $scope.softArray = {};
     // $scope.techArray = {};
     // $scope.studentArray = {};
@@ -19,6 +19,8 @@ function schedulingController($scope, schedulingService) {
     $scope.softMap = {};
     $scope.techMap = {};
     $scope.studentMap = {};
+
+    $scope.currentStatus = '';
 
 
     $scope.removeFromSelected = function (dt) {
@@ -29,10 +31,10 @@ function schedulingController($scope, schedulingService) {
             })
         }
     };
-    
+
     $scope.edit = function (object, date) {
         var temp = {
-            id : object.id,
+            id: object.id,
             day: date,
             hourStart: object.startTime,
             hourEnd: object.endTime,
@@ -44,8 +46,8 @@ function schedulingController($scope, schedulingService) {
     };
 
     $scope.setTime = function (object, date) {
-        if (object.id === -1){
-            var temp = {    
+        if (object.id === -1) {
+            var temp = {
                 day: date,
                 hourStart: object.startTime,
                 hourEnd: object.endTime,
@@ -85,13 +87,13 @@ function schedulingController($scope, schedulingService) {
     $scope.setStartHours = function (date, startTime) {
 
     };
-    
+
     $scope.createMap = function (date) {
-        if ($scope.map[date] === undefined){
+        if ($scope.map[date] === undefined) {
             $scope.map[date] = {
-                id : -1,
-                startTime : 0,
-                endTime :0
+                id: -1,
+                startTime: 0,
+                endTime: 0
             }
         }
     };
@@ -111,7 +113,7 @@ function schedulingController($scope, schedulingService) {
         $scope.collapsed[1] = [];
         $scope.collapsed[2] = [];
         $scope.collapsed[3] = [];
-        for(var i=0; i<$scope.schedulePoints.length; i++){
+        for (var i = 0; i < $scope.schedulePoints.length; i++) {
             $scope.collapsed[1][i] = false;
             $scope.collapsed[2][i] = false;
             $scope.collapsed[3][i] = false;
@@ -135,6 +137,37 @@ function schedulingController($scope, schedulingService) {
             $scope.studentMap[idTimePoint] = response.data;
         })
     };
+
+    $scope.submitDaysSelection = function () {
+        schedulingService.confirmDaysSelectionService().then(function (response) {
+            if (response.status === 200) {
+                $scope.currentStatus = schedulingService.getConfirmDaysSelectionStatus();
+            }
+        })
+    };
+
+    $scope.saveInterviewParameters = function (softDuration, techDuration) {
+        schedulingService.saveInterviewParametersService(softDuration, techDuration).then(function (response) {
+
+        })
+    };
+
+    $scope.getInterviewParameters = function () {
+        schedulingService.getInterviewParametersService().then(function (response) {
+            if (response.status === 200) {
+                $scope.softDuration = response.data.softDuration;
+                $scope.techDuration = response.data.techDuration;
+            }
+        })
+    }
+
+    $scope.submitInterviewParameters = function () {
+        schedulingService.confirmInterviewParametersService().then(function (response) {
+            if (response.status === 200){
+                $scope.currentStatus = schedulingService.getConfirmInterviewParametersStatus();
+            }
+        })
+    }
 
 }
 
