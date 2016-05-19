@@ -36,6 +36,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.statuses = [];
     $scope.UnivList=[];
     $scope.filtered = false;
+    $scope.checkedAll = false;
 
 
     studentManagementService.getAllStatuses().success(function (data) {
@@ -199,8 +200,40 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.statusIdArray = [];
     $scope.checkStudentStatus = function (student) {
-        $scope.statusIdArray.push(student.appFormId);
+        var flag = false;
+        if($scope.statusIdArray.length != 0){
+        angular.forEach($scope.statusIdArray, function (item, i) {
+            if(item == student.appFormId){
+                $scope.statusIdArray.splice(i,1);
+                flag = true;
+            }
+        });
+        if (flag == false) {
+            $scope.statusIdArray.push(student.appFormId);
+        }
+        }
+        if($scope.statusIdArray.length == 0){
+            $scope.statusIdArray.push(student.appFormId);
+        }
         console.log(student.appFormId);
+        console.log($scope.statusIdArray);
+    };
+
+    $scope.selectAll = function() {
+        var statusIdArray = [];
+        if ($scope.checkedAll == false) {
+            angular.forEach($scope.allStudents, function (item, i) {
+                statusIdArray.push(item.appFormId);
+            });
+            $scope.statusIdArray = statusIdArray;
+            $scope.checkedAll = true;
+        }
+        else if ($scope.checkedAll == true){
+            $scope.checkedAll = false;
+            $scope.statusIdArray = [];
+            console.log($scope.checkedAll);
+            console.log($scope.statusIdArray);
+        }
     };
 
     $scope.statusTemp = [];
