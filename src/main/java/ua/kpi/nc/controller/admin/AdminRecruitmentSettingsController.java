@@ -32,6 +32,7 @@ public class AdminRecruitmentSettingsController {
     private UserService userService = ServiceFactory.getUserService();
     private SenderService senderService = SenderServiceImpl.getInstance();
 
+
     @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST, headers = {"Content-type=application/json"})
     private void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) throws MessagingException {
         if (null == recruitmentService.getCurrentRecruitmnet()) {

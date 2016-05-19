@@ -195,7 +195,7 @@ function schedulingController($scope, schedulingService) {
                 $scope.techDuration = response.data.techDuration;
             }
         })
-    }
+    };
 
     $scope.submitInterviewParameters = function () {
         schedulingService.confirmInterviewParametersService().then(function (response) {
@@ -203,7 +203,7 @@ function schedulingController($scope, schedulingService) {
                 $scope.currentStatus = schedulingService.getConfirmInterviewParametersStatus();
             }
         })
-    }
+    };
 
     $scope.possibleToAdd = [];
 
