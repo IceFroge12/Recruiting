@@ -63,7 +63,9 @@
                     <th class="student-techMark">Final Mark</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="student in allStudents" >
+                <tr ng-repeat="student in allStudents" ng-class="{'studentreject' : student.status == 'Rejected',
+                 'studenttojob': student.status == 'Approved to job','studenttocourses': student.status == 'Approved to general group',
+                 'studenttoadvanced' : student.status == 'Approved to advanced courses' }" >
                     <td><input type="checkbox" ng-click="checkStudentStatus(student)" ng-checked="checkedAll" ng-model="student.Selected"></td>
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.appFormId}}</a></td>
                     <td>{{student.firstName +" "+ student.lastName}}</td>

@@ -360,6 +360,18 @@ h4 {
 .employeewarning{
     background: rgba(255,0,0,0.2);
 }
+.studentreject{
+    background: rgba(255,0,0,0.2);
+}
+.studenttocourses{
+    background: rgba(0,255,0,0.2);
+}
+.studenttojob{
+    background: rgba(45,100,255,0.2);
+}
+.studenttoadvanced{
+    background: rgba(110,255,255,0.4);
+}
 .search-block{
     text-align: right;
 }

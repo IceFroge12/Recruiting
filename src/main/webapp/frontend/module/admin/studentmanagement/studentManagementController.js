@@ -181,7 +181,11 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     studentManagementService.showAllStudents(1, $scope.itemsPerPage, $scope.sort.sortingOrder,$scope.sort.reverse).success(function (data) {
         $scope.allStudents= data;
-        console.log("All students " + data)
+        console.log("All students " + data);
+        angular.forEach($scope.allStudents,function (item, i) {
+            console.log("ITEMM"+item.status);
+            //console.log(selectedValue);
+        });
     }, function error() {
         console.log("error");
     });
