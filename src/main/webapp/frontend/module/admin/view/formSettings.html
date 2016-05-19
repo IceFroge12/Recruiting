@@ -9,6 +9,11 @@
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
             <label>Search Question: <input ng-model="searchQuestion"></label>
+            </br>
+            <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
+                    data-target="#addQuestion">Add
+                question
+            </button>
             <ul class="nav nav-tabs">
                 <li ng-init="getMandatory()" ng-click="getMandatory()" class="active"><a data-toggle="tab"
                                                                                          data-target="#applic-form1">Application
@@ -35,13 +40,15 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button ng-click="changeStatus(question)" ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
+                                    <button ng-click="changeStatus(question)"
+                                            ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
                                             type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
+                                    <button ng-click="changeMandatoryStatus(question)"
+                                            ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
                                             type="button">
                                         {{question.mandatory}}
                                     </button>
@@ -60,10 +67,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                data-target="#addQuestion">Add
-                            question
-                        </button>
+
                     </form>
                 </div>
                 <div id="applic-soft1" class="tab-pane fade">
@@ -83,13 +87,15 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button ng-click="changeStatus(question)" ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
+                                    <button ng-click="changeStatus(question)"
+                                            ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
                                             type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
+                                    <button ng-click="changeMandatoryStatus(question)"
+                                            ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
                                             type="button">
                                         {{question.mandatory}}
                                     </button>
@@ -108,10 +114,6 @@
                                 </td>
                             </tr>
                         </table>
-                        <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                data-target="#addQuestion">Add
-                            question
-                        </button>
                     </form>
                 </div>
                 <div id="applic-tech1" class="tab-pane fade">
@@ -131,13 +133,15 @@
                                 <td>{{question.title}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
-                                    <button ng-click="changeStatus(question)" ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
+                                    <button ng-click="changeStatus(question)"
+                                            ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
                                             type="button">
                                         {{question.enable}}
                                     </button>
                                 </td>
                                 <td>
-                                    <button ng-click="changeMandatoryStatus(question)" ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
+                                    <button ng-click="changeMandatoryStatus(question)"
+                                            ng-class="{'btn btn-success' : question.mandatory, 'btn btn-danger' : !question.mandatory}"
                                             type="button">
                                         {{question.mandatory}}
                                     </button>
@@ -156,10 +160,6 @@
                                 </td>
                             </tr>
                         </table>
-                        <button class="btn btn-info btn-sm col-md-2 add-question" type="button" data-toggle="modal"
-                                data-target="#addQuestion">Add
-                            question
-                        </button>
                     </form>
                 </div>
                 <div id="matrix" class="tab-pane fade">
@@ -195,10 +195,12 @@
 
                 <h4 class="modal-title">Add Question</h4>
                 <div>
+                    <h3>{{questionRole}}</h3>
                     <table class="table">
                         <tr>
                             <td> Order</td>
-                            <td><input type="text" ng-model="addOrder"></td>
+                            <td><input ng-model-options="{ debounce: 1000 }"
+                                       type="text" ng-model="addOrder" ng-change="changeOrder(addOrder)"></td>
                         </tr>
                         <tr>
                             <td> Text Question</td>
@@ -209,14 +211,6 @@
                             <td>
                                 <select ng-model="mySelect" ng-change="showSelectValue(mySelect)">
                                     <option ng-repeat="type in types">{{type}}</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> ROLE</td>
-                            <td>
-                                <select ng-model="myRoleSelect" ng-change="showSelectRoleValue(myRoleSelect)">
-                                    <option ng-repeat="role in roles">{{role}}</option>
                                 </select>
                             </td>
                         </tr>
@@ -248,7 +242,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" ng-click="saveForm()" type="button"
-                        data-dismiss="modal">Save changes
+                        ng-disabled="cantAddQuestion" data-dismiss="modal">Save changes
                 </button>
             </div>
         </div>
@@ -268,7 +262,8 @@
                     <table class="table">
                         <tr>
                             <td> Order</td>
-                            <td><input type="text" ng-model="questionOrder"></td>
+                            <td><input type="text" ng-model-options="{ debounce: 1000 }"
+                                       ng-model="questionOrder" ng-change="changeEditOrder(questionOrder)"></td>
                         </tr>
                         <tr>
                             <td> Text</td>
@@ -276,26 +271,24 @@
                         </tr>
                         <tr>
                             <td> Type</td>
-                            <!--<td><input type="text" ng-model="type"></td>-->
                             <td>
-                                <select ng-model="type">
-                                    <option ng-repeat="typee in types" ng-checked ="typee==type" value="{{typee}}">{{typee}}</option>
+                                <select ng-model="type" ng-change="changeEditType(type)">
+                                    <option ng-repeat="typee in types" ng-checked="typee==type" value="{{typee}}">
+                                        {{typee}}
+                                    </option>
                                 </select>
                             </td>
-                            <!--<select ng-model="student.status"  ng-change ="changeStatus(student.status,student.appFormId)" >-->
-                            <!--<option ng-repeat="stat in student.possibleStatus" ng-checked ="stat.title==student.status" >{{stat.title}}</option>-->
-                            <!--</select>-->
                         </tr>
                         <tr>
                             <td> Answer Variant</td>
-                            <td><textarea ng-model="editVariant"></textarea></td>
+                            <td><textarea ng-disabled="cantEditVariant" ng-model="editVariant"></textarea></td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges"
-                        data-dismiss="modal">Save changes
+                <button class="btn btn-default" ng-click="saveEditQuestion()" type="button" id="saveChanges"
+                        ng-disabled="cantEditQuestion" data-dismiss="modal">Save changes
                 </button>
             </div>
         </div>

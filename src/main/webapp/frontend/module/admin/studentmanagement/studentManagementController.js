@@ -15,6 +15,14 @@ function studentManagementController($scope,$filter, studentManagementService) {
         console.log($scope.restrictions);
         console.log($scope.questions);
     };
+
+    $scope.calculateStatuses = function() {
+        studentManagementService.calculateStatuses().success(function(data) {
+            console.log('Confirm selection');
+            console.log(data);
+        })
+    };
+    
     
     $scope.sort = {
         sortingOrder: 1,
@@ -318,21 +326,18 @@ function studentManagementController($scope,$filter, studentManagementService) {
     		console.log('Confirm selection');
     		console.log(data);
     	})
-    }
+    };
     
     $scope.announceResults = function() {
     	studentManagementService.announceResults().success(function(data) {
     		console.log('Confirm selection');
     		console.log(data);
     	})
-    }
+    };
     
-    $scope.calculateStatuses = function() {
-    	studentManagementService.calculateStatuses().success(function(data) {
-    		console.log('Confirm selection');
-    		console.log(data);
-    	})
-    }
+  
+    
+ 
     
     studentManagementService.getRecruitmentStatus().then(function success(data) {
         $scope.recruitmentStatus = data.data;
@@ -381,7 +386,9 @@ angular.module('appStudentManagement').directive("customSortStud", function () {
                 }
             };
         }
-    }
+    };
+
+ 
 
 
 });

@@ -14,7 +14,6 @@ import ua.kpi.nc.service.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -79,18 +78,21 @@ public class AdminFormSettingsController {
         formQuestionService.insertFormQuestion(formQuestion, role, formAnswerVariantList);
     }
 
-    @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST, headers = {"Content-type=application/json"})
+    @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST)
     public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
-        System.out.println("ALE"+formQuestionDto.toString());
-        System.out.println(formQuestionDto.getType());
+        System.out.println("ALE" + formQuestionDto.toString());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
+
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         for (String s : formQuestionDto.getFormAnswerVariants()) {
-            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(s);
+            System.out.println("LOL" + s);
+            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
+            formAnswerVariant.setAnswer(s);
             formAnswerVariantList.add(formAnswerVariant);
         }
 
-        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(), formQuestionDto.getQuestion(), questionType, formAnswerVariantList,formQuestionDto.getOrder());
+        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(), formQuestionDto.getQuestion(), questionType,
+                formAnswerVariantList, formQuestionDto.getOrder());
         formQuestionService.updateFormQuestion(formQuestion);
     }
 

@@ -151,4 +151,10 @@ public class AdminSchedulingController {
             }
         }
     }
+
+    @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
+    public List<User> getUsersWithoutInterview(@RequestParam Long roleId){
+        List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
+        return usersWithoutInterview;
+    }
 }
