@@ -183,7 +183,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
         $scope.allStudents= data;
         console.log("All students " + data);
         angular.forEach($scope.allStudents,function (item, i) {
-            console.log("ITEMM"+item.status);
+            // console.log("ITEMM"+item.status);
             //console.log(selectedValue);
         });
     }, function error() {

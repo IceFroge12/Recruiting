@@ -1,6 +1,11 @@
 <div app-header></div>
 <div app-menu-admin></div>
-
+<style>
+    #finalMark{
+        /*padding-left: 60px;*/
+        text-align:center;
+    }
+</style>
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
@@ -75,7 +80,10 @@
                         </select> </td>
                     <td>{{student.softMark}}</td>
                     <td>{{student.techMark}}</td>
-                    <td>{{student.finalMark}}</td>
+                    <td id="finalMark">
+                        <span ng-show="student.finalMark>0">{{student.finalMark}}</span>
+                        <span ng-show="student.finalMark==0" class="glyphicon glyphicon-question-sign" ></span>
+                    </td>
                 </tr>
                 </tbody>
                 <tfoot>

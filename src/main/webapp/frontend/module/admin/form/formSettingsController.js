@@ -235,7 +235,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variantArray, "ROLE_STUDENT", $scope.question.order);
     }
 
-    $scope.finalMarks = [1, 2, 3];
+    $scope.finalMarks = [0, 1, 2, 3];
     
     formAppService.getDecisionMatrix().then(function success(data) {
         $scope.decisionMatrix = data.data;

@@ -1,26 +1,31 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
-import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.dto.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.nc.persistence.dto.MessageDto;
+import ua.kpi.nc.persistence.dto.MessageDtoType;
+import ua.kpi.nc.persistence.dto.RecruitmentStatusDto;
+import ua.kpi.nc.persistence.dto.StudentAppFormDto;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
-import ua.kpi.nc.persistence.model.enums.EmailTemplateEnum;
-import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
-import ua.kpi.nc.util.scheduling.StudentsScheduleCell;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.MessagingException;
-
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.*;
+import static ua.kpi.nc.persistence.model.enums.RoleEnum.ROLE_SOFT;
+import static ua.kpi.nc.persistence.model.enums.RoleEnum.ROLE_TECH;
 import static ua.kpi.nc.persistence.model.enums.StatusEnum.*;
+import static ua.kpi.nc.persistence.model.enums.StatusEnum.valueOf;
 
 /**
  * Created by dima on 23.04.16.
@@ -41,6 +46,7 @@ public class AdminManagementStudentController {
     private InterviewService interviewService = ServiceFactory.getInterviewService();
     private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
     private ScheduleTimePointService scheduleTimePointService = ServiceFactory.getScheduleTimePointService();
+    private DecisionService decisionService = ServiceFactory.getDecisionService();
 
 //    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
 //    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -70,8 +76,8 @@ public class AdminManagementStudentController {
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         DecisionService decisionService = ServiceFactory.getDecisionService();
         for (ApplicationForm applicationForm : applicationForms) {
-            Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, RoleEnum.ROLE_SOFT.getId());
-            Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, RoleEnum.ROLE_TECH.getId());
+            Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, ROLE_SOFT.getId());
+            Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, ROLE_TECH.getId());
             Integer softMark = null;
             Integer techMark = null;
             Integer finalMark = null;
@@ -91,7 +97,7 @@ public class AdminManagementStudentController {
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
                     softMark,
                     techMark,
-                    finalMark,//TODO:Final Mark Via decision Matrix
+                    finalMark,
                     getPossibleStatus(applicationForm.getStatus())));
         }
         return studentAppFormDtoList;
@@ -237,24 +243,26 @@ public class AdminManagementStudentController {
     }
 
     @RequestMapping(value = "calculateStatuses", method = RequestMethod.POST)
-    public void calulateStatuses() {
+    public void calculateStatuses() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         Status approvedStatus = statusService.getStatusById(StatusEnum.APPROVED.getId());
         List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus, recruitment);
-        DecisionService decisionService = ServiceFactory.getDecisionService();
+
         for (ApplicationForm applicationForm : approvedForms) {
             Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
-                    RoleEnum.ROLE_SOFT.getId());
+                    ROLE_SOFT.getId());
             Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
-                    RoleEnum.ROLE_TECH.getId());
+                    ROLE_TECH.getId());
             if (interviewSoft != null && interviewSoft.getMark() != null && interviewTech != null
                     && interviewTech.getMark() != null) {
                 Integer softMark = interviewSoft.getMark();
                 Integer techMark = interviewTech.getMark();
                 int finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
-                Status finalStatus = decisionService.getStatusByFinalMark(finalMark);
-                applicationForm.setStatus(finalStatus);
-                applicationFormService.updateApplicationForm(applicationForm);
+                if (finalMark > 0){
+                    Status finalStatus = decisionService.getStatusByFinalMark(finalMark);
+                    applicationForm.setStatus(finalStatus);
+                    applicationFormService.updateApplicationForm(applicationForm);
+                }
             }
         }
     }

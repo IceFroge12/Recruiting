@@ -72,12 +72,11 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST)
     public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
-        System.out.println("ALE" + formQuestionDto.toString());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
 
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         for (String s : formQuestionDto.getFormAnswerVariants()) {
-            System.out.println("LOL" + s);
+            System.out.println(s);
             FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
             formAnswerVariant.setAnswer(s);
             formAnswerVariantList.add(formAnswerVariant);

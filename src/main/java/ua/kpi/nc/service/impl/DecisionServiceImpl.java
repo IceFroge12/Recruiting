@@ -12,56 +12,56 @@ import ua.kpi.nc.service.StatusService;
 
 public class DecisionServiceImpl implements DecisionService {
 
-	private DecisionDao decisionDao;
-	private StatusService statusService;
-	
-	public DecisionServiceImpl(DecisionDao decisionDao) {
-		this.decisionDao = decisionDao;
-		statusService = ServiceFactory.getStatusService();
-	}
+    private DecisionDao decisionDao;
+    private StatusService statusService;
 
-	@Override
-	public Decision getByMarks(int softMark, int techMark) {
-		return decisionDao.getByMarks(softMark, techMark);
-	}
+    public DecisionServiceImpl(DecisionDao decisionDao) {
+        this.decisionDao = decisionDao;
+        statusService = ServiceFactory.getStatusService();
+    }
 
-	@Override
-	public Long insertDecision(Decision decision) {
-		return decisionDao.insertDecision(decision);
-	}
+    @Override
+    public Decision getByMarks(int softMark, int techMark) {
+        return decisionDao.getByMarks(softMark, techMark);
+    }
 
-	@Override
-	public int updateDecision(Decision decision) {
-		return decisionDao.updateDecision(decision);
-	}
+    @Override
+    public Long insertDecision(Decision decision) {
+        return decisionDao.insertDecision(decision);
+    }
 
-	@Override
-	public int deleteDecision(Decision decision) {
-		return decisionDao.deleteDecision(decision);
-	}
+    @Override
+    public int updateDecision(Decision decision) {
+        return decisionDao.updateDecision(decision);
+    }
 
-	@Override
-	public List<Decision> getAll() {
-		return decisionDao.getAll();
-	}
+    @Override
+    public int deleteDecision(Decision decision) {
+        return decisionDao.deleteDecision(decision);
+    }
 
-	@Override
-	public Status getStatusByFinalMark(int finalMark) {
-		switch(finalMark) {
-		case 3:
-			return statusService.getStatusById(StatusEnum.APPROVED_TO_JOB.getId());
-		case 2:
-			return statusService.getStatusById(StatusEnum.APPROVED_TO_GENERAL_COURSES.getId());
-		case 1:
-			return statusService.getStatusById(StatusEnum.REJECTED.getId());
-		}
-		return null;
-	}
+    @Override
+    public List<Decision> getAll() {
+        return decisionDao.getAll();
+    }
 
-	@Override
-	public void updateDecisionMatrix(List<Decision> decisionMatrix) {
-		decisionDao.updateDecisionMatrix(decisionMatrix);
-	}
+    @Override
+    public Status getStatusByFinalMark(int finalMark) {
+        switch (finalMark) {
+            case 3:
+                return statusService.getStatusById(StatusEnum.APPROVED_TO_JOB.getId());
+            case 2:
+                return statusService.getStatusById(StatusEnum.APPROVED_TO_GENERAL_COURSES.getId());
+            case 1:
+                return statusService.getStatusById(StatusEnum.REJECTED.getId());
+        }
+        return null;
+    }
 
-	
+    @Override
+    public void updateDecisionMatrix(List<Decision> decisionMatrix) {
+        decisionDao.updateDecisionMatrix(decisionMatrix);
+    }
+
+
 }
