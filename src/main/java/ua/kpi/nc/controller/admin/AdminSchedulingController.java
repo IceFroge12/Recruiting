@@ -9,24 +9,20 @@ import ua.kpi.nc.persistence.dto.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ua.kpi.nc.persistence.model.SchedulingSettings;
-import ua.kpi.nc.persistence.model.Recruitment;
-import ua.kpi.nc.persistence.model.ScheduleTimePoint;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.SchedulingStatusEnum;
 import ua.kpi.nc.service.*;
 
 import java.lang.reflect.WildcardType;
+import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 import ua.kpi.nc.persistence.model.impl.real.ScheduleTimePointImpl;
 import ua.kpi.nc.service.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -72,8 +68,7 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
     public List<SchedulingSettings> getSelectedDays() {
-        List<SchedulingSettings> list = schedulingSettingsService.getAll();
-        return list;
+        return schedulingSettingsService.getAll();
     }
 
     @RequestMapping(value = "deleteSelectedDay", method = RequestMethod.GET)
@@ -131,7 +126,11 @@ public class AdminSchedulingController {
     @RequestMapping(value = "changeSchedulingStatus", method = RequestMethod.GET)
     public ResponseEntity changeSchedulingStatus(@RequestParam Long id) {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        recruitment.setSchedulingStatus(SchedulingStatusEnum.getStatus(id));
+        SchedulingStatus schedulingStatus = SchedulingStatusEnum.getStatus(id);
+        if (Objects.equals(schedulingStatus.getId(), SchedulingStatusEnum.DATES.getId())){
+            saveTimePoint();
+        }
+        recruitment.setSchedulingStatus(schedulingStatus);
         if (recruitmentService.updateRecruitment(recruitment) != 0) {
             return ResponseEntity.ok(null);
         } else {
@@ -157,6 +156,32 @@ public class AdminSchedulingController {
         }
     }
 
+    @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
+    public List<User> getUsersWithoutInterview(@RequestParam Long roleId) {
+        List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
+        return usersWithoutInterview;
+    }
+
+    @RequestMapping(value = "addUserToTimepoint", method = RequestMethod.POST)
+    public void addUserToTimepoint(@RequestParam Long userId,@RequestParam Long idTimePoint) {
+        User user = userService.getUserByID(userId);
+        ScheduleTimePoint timePoint = timePointService.getScheduleTimePointById(idTimePoint);
+        Long res = timePointService.addUserToTimepoint(user, timePoint);
+        System.out.println("ressssul: "+ res);
+    }
+
+    private void saveTimePoint(){
+        List<SchedulingSettings> list = schedulingSettingsService.getAll();
+        List<Timestamp> listForInsert = new LinkedList<>();
+        for (SchedulingSettings schedulingSettings : list) {
+            do{
+                listForInsert.add(new Timestamp(schedulingSettings.getStartDate().getTime()));
+                schedulingSettings.getStartDate().setTime(schedulingSettings.getStartDate().getTime() + HOURS_FACTOR);
+            }while (!schedulingSettings.getStartDate().equals(schedulingSettings.getEndDate()));
+        }
+        timePointService.batchInsert(listForInsert);
+    }
+
     private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {
         if (numberForEachRole == null) {
             timePoint.setAmountOfStudents(0);
@@ -179,19 +204,5 @@ public class AdminSchedulingController {
                 timePoint.setAmountOfTech(numberForEachRole.get((long) RoleEnum.ROLE_TECH.getId()));
             }
         }
-    }
-
-    @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
-    public List<User> getUsersWithoutInterview(@RequestParam Long roleId) {
-        List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
-        return usersWithoutInterview;
-    }
-
-    @RequestMapping(value = "addUserToTimepoint", method = RequestMethod.POST)
-    public void addUserToTimepoint(@RequestParam Long userId,@RequestParam Long idTimePoint) {
-        User user = userService.getUserByID(userId);
-        ScheduleTimePoint timePoint = timePointService.getScheduleTimePointById(idTimePoint);
-        Long res = timePointService.addUserToTimepoint(user, timePoint);
-        System.out.println("ressssul: "+ res);
     }
 }

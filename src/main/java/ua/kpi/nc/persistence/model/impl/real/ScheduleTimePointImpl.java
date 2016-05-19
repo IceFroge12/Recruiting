@@ -26,6 +26,10 @@ public class ScheduleTimePointImpl implements ScheduleTimePoint {
 	public ScheduleTimePointImpl() {
 	}
 
+	public ScheduleTimePointImpl(Timestamp timePoint) {
+		this.timePoint = timePoint;
+	}
+
 	public ScheduleTimePointImpl(Timestamp timePoint, Set<User> users, Set<UserTimePriority> userTimePriorities) {
 		this.timePoint = timePoint;
 		this.users = users;
