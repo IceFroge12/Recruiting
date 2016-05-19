@@ -25,7 +25,7 @@ function schedulingService($http) {
     };
     
     service.getCurrentRecruitmentCountStudents = function () {
-        return $http.get('/scheduling/getStudentCount').then(function (response) {
+        return $http.get('/scheduling/getStaffCount').then(function (response) {
             console.log(response.data);
             return response.data;
         });
