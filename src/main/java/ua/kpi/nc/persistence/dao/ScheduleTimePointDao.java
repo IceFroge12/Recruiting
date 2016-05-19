@@ -23,6 +23,8 @@ public interface ScheduleTimePointDao {
 
     int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
+    int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint);
+
 	ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
 
 	List<ScheduleTimePoint> getAll();

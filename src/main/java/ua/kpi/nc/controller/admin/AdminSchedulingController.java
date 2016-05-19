@@ -100,6 +100,15 @@ public class AdminSchedulingController {
         }
     }
 
+    @RequestMapping(value = "deleteUserTimeFinal", method = RequestMethod.POST)
+    public void deleteUserTimeFinal(@RequestParam long id1, @RequestParam long id2){
+        System.out.println(id1+" "+id2);
+        User user=userService.getUserByID(id1);
+        ScheduleTimePoint stp=timePointService.getScheduleTimePointById(id2);
+        System.out.println(user+"\n"+stp);
+        timePointService.deleteUserTimeFinal(user, stp);
+    }
+
     @RequestMapping(value = "getCurrentSchedule", method = RequestMethod.GET)
     public List<ScheduleOverallDto> getCurrentSchedule() {
         List<ScheduleOverallDto> scheduleOverall = new ArrayList<>();
@@ -170,5 +179,11 @@ public class AdminSchedulingController {
                 timePoint.setAmountOfTech(numberForEachRole.get((long) RoleEnum.ROLE_TECH.getId()));
             }
         }
+    }
+
+    @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
+    public List<User> getUsersWithoutInterview(@RequestParam Long roleId){
+        List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
+        return usersWithoutInterview;
     }
 }

@@ -1,6 +1,7 @@
 package ua.kpi.nc.service;
 
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
+import ua.kpi.nc.persistence.model.User;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -20,6 +21,8 @@ public interface ScheduleTimePointService {
     int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
 
     int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
+
+    int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint);
 
 	ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
 

@@ -138,10 +138,10 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="timePoint in schedulePoints">
-                        <td>
+                        <td class="col-md-3">
                             {{timePoint.timePoint | date : 'fullDate'}}
                         </td>
-                        <td>
+                        <td class="col-md-3">
                             <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]"
                                ng-click="collapsed[1][schedulePoints.indexOf(timePoint)]=!collapsed[1][schedulePoints.indexOf(timePoint)]; getSoft(timePoint.id);">
                                 {{timePoint.amountOfSoft}}<span class="glyphicon glyphicon glyphicon-chevron-down"
@@ -154,11 +154,11 @@
                                     <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
                                     </button>
                                 </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleSoft,timePoint.timePoint)'>Add
                                 </button>
                             </div>
                         </td>
-                        <td>
+                        <td class="col-md-3">
                             <a ng-model="collapsed[2][schedulePoints.indexOf(timePoint)]"
                                ng-click="collapsed[2][schedulePoints.indexOf(timePoint)]=!collapsed[2][schedulePoints.indexOf(timePoint)]; getTech(timePoint.id)">
                                 {{timePoint.amountOfTech}}<span class="glyphicon glyphicon glyphicon-chevron-down"
@@ -171,11 +171,11 @@
                                     <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
                                     </button>
                                 </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleTech,timePoint.timePoint)'>Add
                                 </button>
                             </div>
                         </td>
-                        <td>
+                        <td class="col-md-3">
                             <a ng-model="collapsed[3][schedulePoints.indexOf(timePoint)]"
                                ng-click="collapsed[3][schedulePoints.indexOf(timePoint)]=!collapsed[3][schedulePoints.indexOf(timePoint)]; getStudent(timePoint.id)">
                                 {{timePoint.amountOfStudents}}<span class="glyphicon glyphicon glyphicon-chevron-down"
@@ -188,7 +188,7 @@
                                     <button class="btn btn-info btn-xs search-element btn-left col-md-2">Delete
                                     </button>
                                 </div>
-                                <button class="btn btn-info btn-xs search-element btn-left col-md-2">Add
+                                <button class="btn btn-info btn-xs search-element btn-left col-md-2" ng-click='toggleModal(roleStudent,timePoint.timePoint)'>Add
                                 </button>
                             </div>
                         </td>
@@ -204,6 +204,40 @@
                 <button type="submit" class="btn btn-info search-element btn-left" disabled>Export
                 </button>
             </div>
+        </div>
+    </div>
+    <modal-dialog show='modalShown' width='400px'>
+        <h4>Add new user to interview timepoint</h4>
+        <p>{{timePointToChange}}</p>
+        <table class="table table-condensed table-hover col-md-8">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Add</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat='user in possibleToAdd[roleToShow].data track by $index'>
+                <td>{{user.id}}</td>
+                <td>{{user.lastName +" "+ user.firstName +" "+ user.secondName}}</td>
+                <td>
+                    <button type="submit" class="btn btn-info search-element btn-left" ng-click="addUserToTomepoint(user.id,timePointToChange)">Add
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+    </modal-dialog>
+</div>
+<div id="addToTimePointSoft" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Add new</h4>
+            </div>
+            <div class="modal-body">{{roleToShow}}</div>
+            <div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Закрыть</button></div>
         </div>
     </div>
 </div>

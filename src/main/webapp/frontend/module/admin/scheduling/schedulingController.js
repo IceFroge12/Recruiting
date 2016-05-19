@@ -11,6 +11,12 @@ function schedulingController($scope, schedulingService) {
     $scope.softAmountSet;
     $scope.techAmountSet;
 
+    $scope.roleSoft = 5;
+    $scope.roleTech = 2;
+    $scope.roleStudent = 3;
+    $scope.roleToShow = 2;
+    $scope.timePointToChange;
+    
     // $scope.softArray = {};
     // $scope.techArray = {};
     // $scope.studentArray = {};
@@ -31,7 +37,7 @@ function schedulingController($scope, schedulingService) {
             })
         }
     };
-
+    
     $scope.edit = function (object, date) {
         var temp = {
             id: object.id,
@@ -169,7 +175,67 @@ function schedulingController($scope, schedulingService) {
         })
     }
 
+    $scope.possibleToAdd = [];
+
+    schedulingService.getUsersWithoutInterview($scope.roleSoft).then(function success(data){
+        $scope.possibleToAdd[$scope.roleSoft] = data;
+        console.log($scope.possibleToAdd);
+    });
+
+    schedulingService.getUsersWithoutInterview($scope.roleTech).then(function success(data){
+        $scope.possibleToAdd[$scope.roleTech] = data;
+    });
+
+    schedulingService.getUsersWithoutInterview($scope.roleStudent).then(function success(data){
+        $scope.possibleToAdd[$scope.roleStudent] = data;
+        console.log($scope.possibleToAdd);
+    });
+
+    $scope.addUserToTomepoint = function addUserToTomepoint(id,timePoint){
+
+    };
+
+    $scope.modalShown = false;
+    $scope.toggleModal = function(idRole, timePointToChange) {
+        $scope.timePointToChange = timePointToChange;
+        $scope.roleToShow = idRole;
+        $scope.modalShown = !$scope.modalShown;
+    };
+
 }
+
+angular.module('appScheduling').directive('modalDialog', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            show: '='
+        },
+        replace: true,
+        transclude: true,
+        link: function(scope, element, attrs) {
+            scope.dialogStyle = {};
+
+            if (attrs.width) {
+                scope.dialogStyle.width = attrs.width;
+            }
+
+            if (attrs.height) {
+                scope.dialogStyle.height = attrs.height;
+            }
+
+            scope.hideModal = function() {
+                scope.show = false;
+            };
+        },
+        template: "<div class='ng-modal' ng-show='show'>" +
+        "<div class='ng-modal-dialog' ng-style='dialogStyle'>" +
+        "<div class='ng-modal-close' ng-click='hideModal()'>X</div>" +
+        "<div class='ng-modal-dialog-content' ng-transclude>" +
+        "</div>" +
+        "</div>" +
+        "</div>"
+    };
+});
 
 angular.module('appScheduling')
     .controller('schedulingController', ['$scope', 'schedulingService', schedulingController]);
