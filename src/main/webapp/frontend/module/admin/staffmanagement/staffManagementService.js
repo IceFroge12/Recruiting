@@ -128,7 +128,7 @@ function staffManagementService(http) {
 
 
     service.changeEmployeeStatus = function (email) {
-        console.log(email)
+        console.log(email);
         return http({
             method: 'GET',
             url: '/admin/changeEmployeeStatus',

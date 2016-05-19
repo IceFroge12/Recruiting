@@ -94,16 +94,6 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
     }
 
     @Override
-    public int truncateDecisionTable() {
-        if (log.isInfoEnabled()) {
-            log.info("Clear table decisions = ");
-        }
-        return this.getJdbcTemplate().update(SQL_TRUNCATE);
-    }
-
-
-
-    @Override
     public List<Decision> getAll() {
         if (log.isInfoEnabled()) {
             log.info("Getting all decisions");

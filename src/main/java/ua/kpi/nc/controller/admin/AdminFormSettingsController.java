@@ -32,14 +32,6 @@ public class AdminFormSettingsController {
     private QuestionTypeService questionTypeService = ServiceFactory.getQuestionTypeService();
 
 
-    @RequestMapping(value = "addmatrix")
-    public void addDecisionMatrix(@RequestParam List<Decision> decisionList) {
-        decisionService.truncateDecisionTable();
-        for (Decision decision : decisionList) {
-            decisionService.insertDecision(decision);
-        }
-    }
-
     @RequestMapping(value = "getapplicationquestions", method = RequestMethod.POST)
     public List<String> getAppFormQuestions(@RequestParam String role) {
         Role roleTitle = roleService.getRoleByTitle(role);
