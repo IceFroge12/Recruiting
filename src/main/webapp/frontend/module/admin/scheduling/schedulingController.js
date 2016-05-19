@@ -75,7 +75,7 @@ function schedulingController($scope, schedulingService) {
         schedulingService.deleteUserTimeFinal(currentSoft.id, currentTimePoint.id).then(function (response) {
         if(response.status===200){
             var index=$scope.softMap[currentTimePoint.id].indexOf(currentSoft);
-            $scope.softMap[currentTimePoint.id].slice(index,1);
+            $scope.softMap[currentTimePoint.id].splice(index,1);
         }
         });
         console.log("delete Soft TimeFinal with id = "+currentSoft.id +" and timePoint id = "+currentTimePoint.id);
@@ -85,7 +85,7 @@ function schedulingController($scope, schedulingService) {
         schedulingService.deleteUserTimeFinal(currentTech.id, currentTimePoint.id).then(function (response) {
             if(response.status===200){
                 var index=$scope.techMap[currentTimePoint.id].indexOf(currentTech);
-                $scope.techMap[currentTimePoint.id].slice(index,1);
+                $scope.techMap[currentTimePoint.id].splice(index,1);
             }
         });
         console.log("delete Tech TimeFinal with id = "+currentTech.id +" and timePoint id = "+currentTimePoint.id);
@@ -95,7 +95,7 @@ function schedulingController($scope, schedulingService) {
         schedulingService.deleteUserTimeFinal(currentStudent.id, currentTimePoint.id).then(function (response) {
             if(response.status===200){
                 var index=$scope.studentMap[currentTimePoint.id].indexOf(currentStudent);
-                $scope.studentMap[currentTimePoint.id].slice(index,1);
+                $scope.studentMap[currentTimePoint.id].splice(index,1);
             }
         });
         console.log("delete Student TimeFinal with id = "+currentStudent.id +" and timePoint id = "+currentTimePoint.id);
