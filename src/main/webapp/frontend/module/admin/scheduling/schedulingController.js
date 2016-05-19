@@ -255,6 +255,12 @@ function schedulingController($scope, schedulingService) {
         $scope.timePointToChange = timePointToChange;
         $scope.roleToShow = idRole;
         $scope.modalShown = !$scope.modalShown;
+
+        schedulingService.getUsersWithoutInterview($scope.roleToShow).then(function success(data) {
+            $scope.possibleToAdd[$scope.roleToShow] = data;
+
+        });
+
     };
 
 }
