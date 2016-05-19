@@ -1,21 +1,20 @@
 package ua.kpi.nc.controller.admin;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.dto.SchedulingDaysDto;
+import ua.kpi.nc.persistence.dto.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ua.kpi.nc.persistence.dto.ScheduleOverallDto;
-import ua.kpi.nc.persistence.dto.SchedulingSettingDto;
-import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.SchedulingSettings;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.ScheduleTimePoint;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
+import ua.kpi.nc.persistence.model.enums.SchedulingStatusEnum;
 import ua.kpi.nc.service.*;
 
 import java.lang.reflect.WildcardType;
@@ -127,6 +126,35 @@ public class AdminSchedulingController {
     @RequestMapping(value = "getUsersByTimePoint", method = RequestMethod.GET)
     public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint) {
         return userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "changeSchedulingStatus", method = RequestMethod.GET)
+    public ResponseEntity changeSchedulingStatus(@RequestParam Long id) {
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        recruitment.setSchedulingStatus(SchedulingStatusEnum.getStatus(id));
+        if (recruitmentService.updateRecruitment(recruitment) != 0) {
+            return ResponseEntity.ok(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
+    public ResponseEntity getInterviewParameters(){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        return ResponseEntity.ok(new RecruitmentSettingsDto(recruitment.getTimeInterviewSoft(), recruitment.getTimeInterviewTech()));
+    }
+
+    @RequestMapping(value = "saveInterviewParameters", method = RequestMethod.GET)
+    public ResponseEntity saveInterviewParameters(@RequestParam int softDuration, @RequestParam int techDuration){
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        recruitment.setTimeInterviewSoft(softDuration);
+        recruitment.setTimeInterviewTech(techDuration);
+        if (recruitmentService.updateRecruitment(recruitment) != 0){
+            return ResponseEntity.ok(null);
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {

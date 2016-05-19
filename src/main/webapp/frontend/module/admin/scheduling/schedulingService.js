@@ -8,6 +8,12 @@ function schedulingService($http) {
     var ROLE_SOTF = "5";
     var ROLE_TECH = "2";
     var ROLE_STUDENT = "3";
+    
+    var DATES = 1;
+    var TIME_POINTS = 2;
+    var STAFF_SCHEDULING = 3;
+    var STUDENT_SCHEDULING = 4;
+    var NOT_STARTED = 5;
 
     var service = {};
     service.getCurrentRecruitmentCountStudents = function () {
@@ -103,6 +109,53 @@ function schedulingService($http) {
                 idTimePoint : idTimePoint
             }
         })
+    };
+
+    service.confirmDaysSelectionService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/changeSchedulingStatus',
+            params : {
+                id : DATES
+            }
+        })
+    };
+
+    service.confirmInterviewParametersService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/changeSchedulingStatus',
+            params : {
+                id : TIME_POINTS
+            }
+        })
+    };
+
+    
+    service.saveInterviewParametersService = function (softDuration, techDuration) {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/saveInterviewParameters',
+            params : {
+                softDuration : softDuration,
+                techDuration : techDuration
+            }
+        })
+    };
+    
+    service.getInterviewParametersService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/getInterviewParameters'
+        })
+    };
+    
+    service.getConfirmDaysSelectionStatus = function(){
+        return DATES;
+    };
+    
+    service.getConfirmInterviewParametersStatus = function () {
+        return TIME_POINTS;
     };
     
     return service;
