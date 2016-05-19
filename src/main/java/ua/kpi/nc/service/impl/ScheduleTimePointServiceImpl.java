@@ -29,6 +29,10 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 	public List<ScheduleTimePoint> getFinalTimePointByUserId(Long id) {
 		return scheduleTimePointDao.getFinalTimePointByUserId(id);
 	}
+    @Override
+	public int[] batchInsert(List<Timestamp> timestaps){
+		return scheduleTimePointDao.batchInsert(timestaps);
+	}
 
 	@Override
 	public Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {

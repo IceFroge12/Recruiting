@@ -70,6 +70,19 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
 	private static final String INSERT_USER_TIME_FINAL="INSERT INTO \"user_time_final\"(id_user, id_time_point) VALUES (?,?)";
 
+
+	@Override
+	public int[] batchInsert(List<Timestamp> timestaps) {
+		log.info("Insert schedule time points");
+		Object[][] objects = new Object[timestaps.size()][];
+		int count = 0;
+		for (Timestamp scheduleTimePoint : timestaps) {
+			objects[count] = new Object[]{scheduleTimePoint};
+			count++;
+		}
+		return this.getJdbcTemplate().batchUpdate(INSERT_SCHEDULE_TIME_POINT, objects);
+	}
+
 	@Override
 	public ScheduleTimePoint getFinalTimePointById(Long id) {
 		log.trace("Looking for Schedule time Point with id = ", id);

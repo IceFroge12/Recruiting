@@ -14,6 +14,8 @@ public interface ScheduleTimePointService {
 
     ScheduleTimePoint getScheduleTimePointById(Long id);
 
+    int[] batchInsert(List<Timestamp> timestaps);
+
     List<ScheduleTimePoint> getFinalTimePointByUserId(Long id);
 
     Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
