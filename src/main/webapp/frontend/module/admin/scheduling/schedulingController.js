@@ -51,6 +51,36 @@ function schedulingController($scope, schedulingService) {
         })
     };
 
+    $scope.deleteSoftTimeFinal = function(soft, timePoint){
+        schedulingService.deleteUserTimeFinal(soft.id, timePoint.id).then(function (response) {
+        if(response.status===200){
+            var index=$scope.softMap[timePoint.id].indexOf(soft);
+            $scope.softMap[timePoint.id].slice(index,1);
+        }
+        });
+        console.log("delete Soft TimeFinal with id = "+soft.id +" and timePoint id = "+timePoint.id);
+    };
+
+    $scope.deleteTechTimeFinal = function(tech, timePoint){
+        schedulingService.deleteUserTimeFinal(tech.id, timePoint.id).then(function (response) {
+            if(response.status===200){
+                var index=$scope.techMap[timePoint.id].indexOf(tech);
+                $scope.techMap[timePoint.id].slice(index,1);
+            }
+        });
+        console.log("delete Tech TimeFinal with id = "+tech.id +" and timePoint id = "+timePoint.id);
+    };
+    
+    $scope.deleteStudentTimeFinal = function(student, timePoint){
+        schedulingService.deleteUserTimeFinal(student.id, timePoint.id).then(function (response) {
+            if(response.status===200){
+                var index=$scope.studentMap[timePoint.id].indexOf(student);
+                $scope.studentMap[timePoint.id].slice(index,1);
+            }
+        });
+        console.log("delete Student imeFinal with id = "+student.id +" and timePoint id = "+timePoint.id);
+    };
+
     $scope.setTime = function (object, date) {
         if (object.id === -1) {
             var temp = {

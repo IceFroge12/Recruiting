@@ -46,6 +46,15 @@ function schedulingService($http) {
         })
     };
 
+    service.deleteUserTimeFinal = function(id, timePointId){
+        return $http({
+            method : 'POST',
+            url : '/scheduling/deleteUserTimeFinal',
+            params : {id1:id,
+                id2:timePointId}
+        })
+    };
+
     service.editSelectedDayService = function (data) {
         return $http({
             method: 'POST',
