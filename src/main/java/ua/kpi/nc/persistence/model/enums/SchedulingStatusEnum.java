@@ -22,6 +22,8 @@ public enum SchedulingStatusEnum {
                 return "staff_scheduling";
             case STUDENT_SCHEDULING:
                 return "student_scheduling";
+            case NOT_STARTED:
+                return "not_started";
         }
         throw new IllegalArgumentException("No status defined for");
     }

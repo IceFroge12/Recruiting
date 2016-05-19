@@ -37,6 +37,14 @@ function schedulingController($scope, schedulingService) {
             })
         }
     };
+    
+    $scope.getCurrentStatus = function () {
+        schedulingService.getCurrentStatusService().then(function (response) {
+            if (response.status === 200){
+                $scope.currentStatus = response.data.id;
+            }
+        })
+    };
 
     $scope.edit = function (object, date) {
         var temp = {
@@ -203,6 +211,13 @@ function schedulingController($scope, schedulingService) {
     };
 
     $scope.cancelDaysSelection = function () {
+        schedulingService.cancelDaysSelectionService().then(function (response) {
+            if (response.status == 200){
+                $scope.map.length = 0;
+                $scope.selectedDates.length = 0;
+                $scope.currentStatus = 5;
+            }
+        })
 
     };
 
