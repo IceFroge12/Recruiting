@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function staffManagementController($scope, $filter, $http, staffManagementService) {
+function staffManagementController($scope, $rootScope, ngToast, $filter, $http, staffManagementService) {
 
 
     $scope.sort = {
@@ -55,15 +55,15 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     staffManagementService.showFilteredEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse,
         $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
         $scope.notEvaluated).success(function (data) { //TODO
-            angular.forEach(data, function (value1, key1) {
-                angular.forEach(value1.roles, function (value2, key2) {
-                    value2.roleName = value2.roleName.slice(5);
-                })
-            });
-            $scope.allEmployee = data;
-        }, function error() {
-            console.log("error");
+        angular.forEach(data, function (value1, key1) {
+            angular.forEach(value1.roles, function (value2, key2) {
+                value2.roleName = value2.roleName.slice(5);
+            })
         });
+        $scope.allEmployee = data;
+    }, function error() {
+        console.log("error");
+    });
 
     staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
         angular.forEach(data, function (value1, key1) {
@@ -82,7 +82,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         $scope.amount = Math.ceil(data / $scope.itemsPerPage);
     });
 
-    $scope.getCountOfEmployee = function(){
+    $scope.getCountOfEmployee = function () {
         staffManagementService.getCountOfEmployee().success(function (data) {
             $scope.amount = Math.ceil(data / $scope.itemsPerPage);
         });
@@ -92,19 +92,19 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         staffManagementService.showFilteredEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
             $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
             $scope.notEvaluated).success(function (data) { //TODO
-                angular.forEach(data, function (value1, key1) {
-                    angular.forEach(value1.roles, function (value2, key2) {
-                        value2.roleName = value2.roleName.slice(5);
-                    })
-                });
-                console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
-                    $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
-                    $scope.notEvaluated);
-                $scope.allEmployee = data;
-                console.log(data);
-            }, function error() {
-                console.log("error");
+            angular.forEach(data, function (value1, key1) {
+                angular.forEach(value1.roles, function (value2, key2) {
+                    value2.roleName = value2.roleName.slice(5);
+                })
             });
+            console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
+                $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
+                $scope.notEvaluated);
+            $scope.allEmployee = data;
+            console.log(data);
+        }, function error() {
+            console.log("error");
+        });
     };
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
@@ -124,7 +124,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             $scope.allEmployee = data;
             console.log(data);
 
-            staffManagementService.hasNotMarked($scope.users).success(function(data){
+            staffManagementService.hasNotMarked($scope.users).success(function (data) {
                 $scope.notMarked = data;
                 console.log($scope.notMarked);
             }, function error() {
@@ -137,7 +137,6 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     };
 
 
-    //NE TROGAT ROLI !!!!!!!!!!!!!
     $scope.employees =
         [{roleName: 'ROLE_ADMIN'},
             {roleName: 'ROLE_SOFT'},
@@ -158,7 +157,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         }
         console.log($scope.selection);
     };
-    
+
     $scope.addEmployee = function () {
 
         var roleArray = [];
@@ -210,7 +209,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     };
 
     //var editRoles = [];
-    $scope.editRoles=[];
+    $scope.editRoles = [];
     $scope.showUserData = function (employee) {
         $scope.adminEdit = false;
         $scope.softEdit = false;
@@ -228,7 +227,7 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             }
             if (item.roleName == "SOFT") {
                 $scope.softEdit = true;
-               // $scope.editRoles.push({roleName: item.roleName});
+                // $scope.editRoles.push({roleName: item.roleName});
             }
             if (item.roleName == "TECH") {
                 $scope.techEdit = true;
@@ -237,32 +236,58 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
             //TODO change logic
         });
 
-       // editRoles = [];
+        // editRoles = [];
         // editRoles.push({roleName: "ADMIN"});
     };
 
-    $scope.checkRole = function(){
-      if($scope.adminEdit) $scope.editRoles.push({roleName: "ADMIN"});
-        if($scope.softEdit)$scope.editRoles.push({roleName: "SOFT"});
-            if($scope.techEdit)$scope.editRoles.push({roleName: "TECH"});
+    $scope.checkRole = function () {
+        if ($scope.adminEdit) $scope.editRoles.push({roleName: "ADMIN"});
+        if ($scope.softEdit)$scope.editRoles.push({roleName: "SOFT"});
+        if ($scope.techEdit)$scope.editRoles.push({roleName: "TECH"});
     };
-    
+
     $scope.editEmployee = function () {
         $scope.checkRole();
-        staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
-            $scope.lastNameEdit, $scope.emailEdit, $scope.editRoles);
+        var roleEditCheck;
+
+        angular.forEach($scope.editRoles, function (item, i) {
+            roleEditCheck += item.roleName;
+        });
+        
+        if ($rootScope.id == $scope.id && roleEditCheck.toLowerCase().indexOf("admin") <= 0) {
+            var myToastMsg = ngToast.warning({
+                content: 'You can not delete admin role',
+                timeout: 5000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                dismissOnClick: true,
+                combineDuplications: true,
+                maxNumber: 2
+            });
+        } else {
+            staffManagementService.editEmployee($scope.id, $scope.firstNameEdit, $scope.secondNameEdit,
+                $scope.lastNameEdit, $scope.emailEdit, $scope.editRoles);
+        }
+        $scope.editRoles = [];
     };
 
     $scope.changeEmployeeStatus = function (employee) {
-        staffManagementService.changeEmployeeStatus(employee.email).success(function (data) {
-            console.log(data);
-            employee.active = data;
-        });
-        // console.log($scope.data);
-        // if ($scope.myClass === "btn-danger")
-        //     $scope.myClass = "btn btn-info";
-        // else
-        //     $scope.myClass = "btn-danger";
+        console.log($rootScope.id);
+        if ($rootScope.id == employee.id) {
+            var myToastMsg = ngToast.warning({
+                content: 'You can not make themselves not active',
+                timeout: 5000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                dismissOnClick: true,
+                combineDuplications: true,
+                maxNumber: 2
+            });
+        } else {
+            staffManagementService.changeEmployeeStatus(employee.email).success(function (data) {
+                employee.active = data;
+            });
+        }
     };
 
     $scope.showAssigned = function (employee) {
@@ -285,15 +310,27 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
     };
 
     $scope.deleteEmployee = function () {
-        console.log(currentEmployee);
-        staffManagementService.deleteEmployee(currentEmployee.email);
-        var index = $scope.allEmployee.indexOf(currentEmployee);
-        $scope.allEmployee.splice(index, 1);
+        if ($rootScope.id == currentEmployee.id) {
+            var myToastMsg = ngToast.warning({
+                content: 'You can not remove yourself',
+                timeout: 5000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                dismissOnClick: true,
+                combineDuplications: true,
+                maxNumber: 2
+            });
+        } else {
+            console.log(currentEmployee);
+            staffManagementService.deleteEmployee(currentEmployee.email);
+            var index = $scope.allEmployee.indexOf(currentEmployee);
+            $scope.allEmployee.splice(index, 1);
+        }
     };
 
     $scope.deleteAssignedStudent = function () {
         console.log('deleteAssignedStudent');
-        console.log(currentEmployee)
+        console.log(currentEmployee);
         staffManagementService.deleteAssignedStudent(currentEmployee);
         var index = $scope.assignedStudents.indexOf(currentEmployee);
         $scope.assignedStudents.splice(index, 1);
@@ -371,28 +408,25 @@ function staffManagementController($scope, $filter, $http, staffManagementServic
         staffManagementService.getCountOfEmployeeFiltered($scope.currentPage, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
             $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
             $scope.notEvaluated).success(function (data) {
-                $scope.amount = Math.ceil(data / $scope.itemsPerPage);
-            });
+            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        });
         $scope.filtered = true;
     };
 
     staffManagementService.showActiveEmployee().success(function (data) {
-        console.log("ACTIVE"+data);
+        console.log("ACTIVE" + data);
         $scope.activeTech = data[0];
         $scope.activeSoft = data[1];
     });
 
-    $scope.exists = function(item,list){
-        console.log(item+" === "+list);
-        for(var i = 0; i<list.length; i++){
+    $scope.exists = function (item, list) {
+        // console.log(item + " === " + list);
+        for (var i = 0; i < list.length; i++) {
             if (list[i] === item)
-            return true;
+                return true;
         }
         return false;
     }
-    
-    
-    
 
 
 }
@@ -441,4 +475,4 @@ angular.module('appStaffManagement').directive("customSort", function () {
 
 
 angular.module('appStaffManagement')
-    .controller('staffManagementController', ['$scope', '$filter', '$http', 'staffManagementService', staffManagementController]);
+    .controller('staffManagementController', ['$scope', '$rootScope', 'ngToast', '$filter', '$http', 'staffManagementService', staffManagementController]);

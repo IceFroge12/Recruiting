@@ -16,8 +16,16 @@ function schedulingService($http) {
     var NOT_STARTED = 5;
 
     var service = {};
+    
+    service.getCurrentStatusService = function () {
+        return $http({
+            method : 'GET',
+            url : '/scheduling/getCurrentStatus'
+        })
+    };
+    
     service.getCurrentRecruitmentCountStudents = function () {
-        return $http.get('/scheduling/getStudentCount').then(function (response) {
+        return $http.get('/scheduling/getStaffCount').then(function (response) {
             console.log(response.data);
             return response.data;
         });
@@ -125,7 +133,7 @@ function schedulingService($http) {
             method : 'GET',
             url : '/scheduling/changeSchedulingStatus',
             params : {
-                id : DATES
+                idStatus : DATES
             }
         })
     };
@@ -135,7 +143,7 @@ function schedulingService($http) {
             method : 'GET',
             url : '/scheduling/cancelSchedulingStatus',
             params : {
-                id : DATES
+                idStatus : DATES
             }
         })
     };
@@ -145,7 +153,7 @@ function schedulingService($http) {
             method : 'GET',
             url : '/scheduling/changeSchedulingStatus',
             params : {
-                id : TIME_POINTS
+                idStatus : TIME_POINTS
             }
         })
     };

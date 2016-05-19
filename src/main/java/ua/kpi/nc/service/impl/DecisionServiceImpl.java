@@ -46,11 +46,6 @@ public class DecisionServiceImpl implements DecisionService {
 	}
 
 	@Override
-	public int truncateDecisionTable() {
-		return decisionDao.truncateDecisionTable();
-	}
-
-	@Override
 	public Status getStatusByFinalMark(int finalMark) {
 		switch(finalMark) {
 		case 3:

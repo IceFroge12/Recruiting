@@ -40,8 +40,6 @@ public class AdminManagementStaffController {
 
     private SenderService senderService = SenderServiceImpl.getInstance();
 
-    private SendMessageService sendMessageService = ServiceFactory.getResendMessageService();
-
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
 
 
@@ -86,7 +84,7 @@ public class AdminManagementStaffController {
     }
 
 
-    @RequestMapping(value = "addEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
+    @RequestMapping(value = "addEmployee", method = RequestMethod.POST)
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
         System.out.println(userDto.toString());
         List<RoleImpl> roles = userDto.getRoleList();
@@ -96,8 +94,15 @@ public class AdminManagementStaffController {
         }
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
-        User user = new UserImpl(userDto.getEmail(), userDto.getFirstName(), userDto.getSecondName(),
-                userDto.getLastName(), passwordEncoderGeneratorService.encode(password), true, new Timestamp(date.getTime()), null);
+        User user = new UserImpl();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setSecondName(userDto.getSecondName());
+        user.setLastName(userDto.getLastName());
+        user.setPassword(passwordEncoderGeneratorService.encode(password));
+        user.setActive(true);
+        user.setRegistrationDate(new Timestamp(date.getTime()));
+
         userService.insertUser(user, userRoles);
         user.setPassword(password);
         EmailTemplate emailTemplate = emailTemplateService.getById(STUDENT_REGISTRATION.getId());
@@ -106,7 +111,7 @@ public class AdminManagementStaffController {
     }
 
 
-    @RequestMapping(value = "editEmployee", method = RequestMethod.POST, headers = {"Content-type=application/json"})
+    @RequestMapping(value = "editEmployee", method = RequestMethod.POST)
     public void editEmployeeParams(@RequestBody UserDto userDto) {
 //        System.out.println("Зашли в контроллер");
 //        System.out.println(userDto);
@@ -197,7 +202,7 @@ public class AdminManagementStaffController {
             List<Interview> interviews = interviewService.getByInterviewer(user);
             boolean foundNotMarked = false;
             for (Interview interview : interviews) {
-                if (interview.getMark() == null)
+                if (null == interview.getMark())
                     foundNotMarked = true;
             }
             if (foundNotMarked)
