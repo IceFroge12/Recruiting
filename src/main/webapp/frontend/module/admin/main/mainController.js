@@ -3,7 +3,7 @@
  */
 
 function mainController($scope, mainService) {
-
+    
     mainService.loadRecruitmentData().then(function success(data) {
         $scope.reqruitment = data.data;
         console.log($scope.reqruitment);

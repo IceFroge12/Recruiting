@@ -93,11 +93,26 @@ h4 {
 }
 
 #my_menu {
+    width: 500px;
     padding: 0px !important;
     height: 100%;
     background-color: #4f7ba2;
     margin-top: 51px;
 }
+
+#my_menuu {
+    width: 500px;
+    padding: 0px !important;
+    height: 100%;
+    background-color: #4f7ba2;
+    margin-top: 51px;
+}
+
+#left-menuu {
+    padding: 0px;
+    width: 100%;
+}
+
 
 #my_menuMain {
     padding: 0px !important;

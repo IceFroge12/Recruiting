@@ -51,34 +51,54 @@ function schedulingController($scope, schedulingService) {
         })
     };
 
-    $scope.deleteSoftTimeFinal = function(soft, timePoint){
-        schedulingService.deleteUserTimeFinal(soft.id, timePoint.id).then(function (response) {
-        if(response.status===200){
-            var index=$scope.softMap[timePoint.id].indexOf(soft);
-            $scope.softMap[timePoint.id].slice(index,1);
-        }
-        });
-        console.log("delete Soft TimeFinal with id = "+soft.id +" and timePoint id = "+timePoint.id);
+    var currentSoft;
+    var currentTech;
+    var currentStudent;
+    var currentTimePoint;
+
+    $scope.setCurrentSoft = function (soft, timePoint) {
+        currentSoft = soft;
+        currentTimePoint=timePoint;
     };
 
-    $scope.deleteTechTimeFinal = function(tech, timePoint){
-        schedulingService.deleteUserTimeFinal(tech.id, timePoint.id).then(function (response) {
+    $scope.setCurrentTech = function (tech, timePoint) {
+        currentTech = tech;
+        currentTimePoint=timePoint;
+    };
+
+    $scope.setCurrentStudent = function (student, timePoint) {
+        currentStudent = student;
+        currentTimePoint=timePoint;
+    };
+
+    $scope.deleteSoftTimeFinal = function(){
+        schedulingService.deleteUserTimeFinal(currentSoft.id, currentTimePoint.id).then(function (response) {
+        if(response.status===200){
+            var index=$scope.softMap[currentTimePoint.id].indexOf(currentSoft);
+            $scope.softMap[currentTimePoint.id].splice(index,1);
+        }
+        });
+        console.log("delete Soft TimeFinal with id = "+currentSoft.id +" and timePoint id = "+currentTimePoint.id);
+    };
+
+    $scope.deleteTechTimeFinal = function(){
+        schedulingService.deleteUserTimeFinal(currentTech.id, currentTimePoint.id).then(function (response) {
             if(response.status===200){
-                var index=$scope.techMap[timePoint.id].indexOf(tech);
-                $scope.techMap[timePoint.id].slice(index,1);
+                var index=$scope.techMap[currentTimePoint.id].indexOf(currentTech);
+                $scope.techMap[currentTimePoint.id].splice(index,1);
             }
         });
-        console.log("delete Tech TimeFinal with id = "+tech.id +" and timePoint id = "+timePoint.id);
+        console.log("delete Tech TimeFinal with id = "+currentTech.id +" and timePoint id = "+currentTimePoint.id);
     };
     
-    $scope.deleteStudentTimeFinal = function(student, timePoint){
-        schedulingService.deleteUserTimeFinal(student.id, timePoint.id).then(function (response) {
+    $scope.deleteStudentTimeFinal = function(){
+        schedulingService.deleteUserTimeFinal(currentStudent.id, currentTimePoint.id).then(function (response) {
             if(response.status===200){
-                var index=$scope.studentMap[timePoint.id].indexOf(student);
-                $scope.studentMap[timePoint.id].slice(index,1);
+                var index=$scope.studentMap[currentTimePoint.id].indexOf(currentStudent);
+                $scope.studentMap[currentTimePoint.id].splice(index,1);
             }
         });
-        console.log("delete Student imeFinal with id = "+student.id +" and timePoint id = "+timePoint.id);
+        console.log("delete Student TimeFinal with id = "+currentStudent.id +" and timePoint id = "+currentTimePoint.id);
     };
 
     $scope.setTime = function (object, date) {
