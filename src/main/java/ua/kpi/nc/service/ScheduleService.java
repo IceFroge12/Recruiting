@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by natalya on 14.05.2016.
  */
-public class SheduleService {
+public class ScheduleService {
     private CreatingOfAllSchedules creatingOfAllSchedules;
 
     private static final String CAN_TIME_PRIORITY = "Can";
@@ -40,7 +40,7 @@ public class SheduleService {
     private Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
     private boolean techLonger;
 
-    public SheduleService() {
+    public ScheduleService() {
         initializeStartParametr();
         creatingOfAllSchedules = new CreatingOfAllSchedules(durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
                 totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv,
