@@ -67,7 +67,7 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
     		return;
     	}
     	for(var i = 0; i < $scope.questions.length; i++) {
-    		if(!checkAnswersSelected($scope.questions[i])) {
+    		if($scope.questions[i].isMandatory && !checkAnswersSelected($scope.questions[i])) {
     			return;
     		}
     	}
