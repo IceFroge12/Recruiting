@@ -3,12 +3,25 @@
  */
 
 function studentManagementController($scope,$filter, studentManagementService) {
+    $scope.sort = {
+        sortingOrder: 1,
+        reverse: false
+    };
+    $scope.gap = 5;
+    $scope.items = [];
+    $scope.amount = 0;
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 15;
+    $scope.statuses = [];
+    $scope.UnivList=[];
+    $scope.filtered = false;
+    $scope.checkedAll = false;
+    $scope.isActive = true;
 
-    $scope.pageItems = 9;
     $scope.showFiltration = function () {
         $scope.questions = [];
         $scope.restrictions = [];
-        $scope.statusesChoosen = angular.copy($scope.statusTemp);
+        $scope.statusesChoosen = [];
         console.log($scope.statusesChoosen);
         console.log("Finding questions");
         getAllQuestions();
@@ -23,21 +36,6 @@ function studentManagementController($scope,$filter, studentManagementService) {
         })
     };
     
-    
-    $scope.sort = {
-        sortingOrder: 1,
-        reverse: false
-    };
-    $scope.gap = 5;
-    $scope.items = [];
-    $scope.amount = 0;
-    $scope.currentPage = 1;
-    $scope.itemsPerPage = 15;
-    $scope.statuses = [];
-    $scope.UnivList=[];
-    $scope.filtered = false;
-    $scope.checkedAll = false;
-
 
     studentManagementService.getAllStatuses().success(function (data) {
         $scope.statuses = data;
@@ -270,7 +268,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
         studentManagementService.showFilteredStudents(pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder,
-            $scope.sort.reverse, $scope.restrictions, $scope.statusesTitle).success(function (data) {
+            $scope.sort.reverse, $scope.restrictions, $scope.statusesTitle, $scope.isActive).success(function (data) {
             $scope.allStudents = data;
             var list = [];
             //checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
@@ -356,7 +354,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
         }, function error() {
             console.log("error");
         });
-    }
+    };
     
     $scope.confirmSelection = function() {
     	studentManagementService.confirmSelection().success(function(data) {
@@ -371,11 +369,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     		console.log(data);
     	})
     };
-    
-  
-    
- 
-    
+
     studentManagementService.getRecruitmentStatus().then(function success(data) {
         $scope.recruitmentStatus = data.data;
         console.log('Recruitment status:');

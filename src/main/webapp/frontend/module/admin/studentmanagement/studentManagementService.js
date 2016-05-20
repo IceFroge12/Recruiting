@@ -139,13 +139,13 @@ function studentManagementService(http) {
         return ( request.then(handleSuccess) );
     };
 
-    service.showFilteredStudents = function (pageNum, rowsNum, sortingCol, increase, restrictions, statuses) {
+    service.showFilteredStudents = function (pageNum, rowsNum, sortingCol, increase, restrictions, statuses, isActive) {
         console.log("Service showFilteredStudents");
         return http({
             method: 'GET',
             url: '/admin/showFilteredStudents',
             params: {pageNum: pageNum, rowsNum: rowsNum, sortingCol: sortingCol, increase: increase,
-                restrictions: restrictions, statuses: statuses}
+                restrictions: restrictions, statuses: statuses, isActive: isActive}
         })
     };
 
