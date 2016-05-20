@@ -106,15 +106,20 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
-    private static final String SQL_GET_All_APP_FORMS_SORTED = "Select DISTINCT s1.id , u.first_name, s1.id_status, s1.is_active," +
-            "s1.id_recruitment, s1.photo_scope, s1.id_user, s1.date_create, s1.feedback, s.title" +
-            " from \"user\" u LEFT JOIN (SELECT a1.id id, id_status, is_active," +
-            "id_recruitment, photo_scope, id_user, date_create,end_date, feedback FROM application_form a1" +
-            " INNER JOIN recruitment r1 on a1.id_recruitment = r1.id) s1 on u.id = s1.id_user" +
-            " LEFT JOIN (SELECT * FROM application_form a2 " +
-            " INNER JOIN recruitment r2 on a2.id_recruitment = r2.id) s2" +
-            " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date" +
-            " INNER JOIN status s on s1.id_status = s.id" +
+    private static final String SQL_GET_All_APP_FORMS_SORTED = "SELECT apl.id, u.first_name, apl.id_status, apl.is_active,\n" +
+            "  apl.id_recruitment, apl.photo_scope, apl.id_user, apl.date_create, apl.feedback, s.title\n" +
+            "from \"user\" u INNER JOIN application_form apl on apl.id_user= u.id\n" +
+            "  INNER JOIN recruitment r on apl.id_recruitment = r.id\n" +
+            "  INNER JOIN status s on apl.id_status = s.id WHERE apl.id = ANY (\n" +
+            "Select newest.applic FROM (Select DISTINCT MAX(s1.id) applic, u.id\n" +
+            " from \"user\" u LEFT JOIN (SELECT a1.id id, id_status, is_active,\n" +
+            "id_recruitment, photo_scope, id_user, date_create,end_date, feedback FROM application_form a1\n" +
+            " INNER JOIN recruitment r1 on a1.id_recruitment = r1.id) s1 on u.id = s1.id_user\n" +
+            " LEFT JOIN (SELECT * FROM application_form a2 \n" +
+            " INNER JOIN recruitment r2 on a2.id_recruitment = r2.id) s2\n" +
+            " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date\n" +
+            " INNER JOIN status s on s1.id_status = s.id\n" +
+            "  GROUP BY u.id) newest)\n" +
             " ORDER BY ";
     private static final String SQL_GET_SEARCH_APP_FORMS = "Select DISTINCT s1.id , u.first_name, s1.id_status, s1.is_active,\n" +
             "s1.id_recruitment, s1.photo_scope, s1.id_user, s1.date_create, s1.feedback, s.title\n" +
