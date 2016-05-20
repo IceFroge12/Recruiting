@@ -12,6 +12,7 @@ import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.TimePriorityTypeService;
 import ua.kpi.nc.service.UserTimePriorityService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,7 +67,7 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	public int[] createStaffTimePriorities(List<User> staffList) {
 
 		List<ScheduleTimePoint> timePoints = timePointService.getAll();
-		List<UserTimePriority> staffTimePriorities = null;
+		List<UserTimePriority> staffTimePriorities = new ArrayList<>();
 		for (ScheduleTimePoint timePoint : timePoints){
 		for (User staff : staffList){
 			UserTimePriority staffPriority = new UserTimePriority();

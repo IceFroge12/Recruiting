@@ -1,5 +1,8 @@
 package ua.kpi.nc.persistence.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageDto {
 
 	private String message;
@@ -7,6 +10,10 @@ public class MessageDto {
 	private MessageDtoType type;
 
 	public MessageDto() {
+	}
+
+	public MessageDto(String message) {
+		this.message = message;
 	}
 
 	public MessageDto(String message, MessageDtoType type) {

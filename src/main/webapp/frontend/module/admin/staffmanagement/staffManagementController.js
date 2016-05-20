@@ -65,6 +65,16 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         console.log("error");
     });
 
+    $scope.confirmStaff = function () {
+        staffManagementService.confirmStaffService().then(function (response) {
+            if (response.status == 200){
+                
+            }else{
+                //TODO toast
+            }
+        })
+    };
+
     staffManagementService.showAllEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse).success(function (data) { //TODO
         angular.forEach(data, function (value1, key1) {
             angular.forEach(value1.roles, function (value2, key2) {
@@ -468,13 +478,9 @@ angular.module('appStaffManagement').directive("customSort", function () {
                 }
             };
         }
-    }
+    };
     
-    $scope.confirmStaff = function () {
-        
-    }
-
-
+    
 });
 
 

@@ -18,31 +18,30 @@ public class TokenAuthenticationService {
 
     private final TokenHandler tokenHandler;
 
-    private static TokenAuthenticationService tokenAuthenticationService;
-
     public TokenAuthenticationService(String secret, UserAuthService userAuthService) {
         tokenHandler = new TokenHandler(secret, userAuthService);
     }
 
-    public String addAuthentication(HttpServletResponse response, HttpServletRequest request, Authentication authentication) {
+    public String addAuthentication(HttpServletResponse response, Authentication authentication) {
         User user = (User) authentication.getDetails();
-        String token = tokenHandler.createTokenForUser(user);
-        response.addHeader(AUTH_HEADER_NAME, token);
-        //request.getSession().setAttribute(AUTH_HEADER_NAME, token);
-        return token;
+        return addToken(user, response);
     }
 
-
-    public Authentication getAuthentication(HttpServletRequest request) {
-        //String token = (String) request.getSession().getAttribute(AUTH_HEADER_NAME);
+    public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader(AUTH_HEADER_NAME);
         if (token != null) {
             final ua.kpi.nc.persistence.model.User user = tokenHandler.parseUserFromToken(token);
             if (user != null) {
-//                user.getAuthorities().forEach(GrantedAuthority::getAuthority);
+                addToken(user, response);
                 return new UserAuthentication(user);
             }
         }
         return null;
+    }
+
+    private String addToken(User user, HttpServletResponse response){
+        String token = tokenHandler.createTokenForUser(user);
+        response.addHeader(AUTH_HEADER_NAME, token);
+        return token;
     }
 }

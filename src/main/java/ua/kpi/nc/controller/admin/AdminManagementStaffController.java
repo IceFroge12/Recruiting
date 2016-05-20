@@ -4,6 +4,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.dto.UserRateDto;
 import ua.kpi.nc.persistence.model.*;
@@ -50,7 +51,9 @@ public class AdminManagementStaffController {
 
     private final static String NEED_MORE_TECH = "Need select more then 0 tech";
 
-    private final static String NEED_MORE_TECH_SOTF = "Need select more then 0 then and soft";
+    private final static String NEED_MORE_TECH_SOFT = "Need select more then 0 then and soft";
+
+    private final static String TIME_PRIORITY_ALREADY_EXIST = "Time priority already exist";
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
@@ -225,28 +228,30 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "confirmStaff", method = RequestMethod.GET)
     public ResponseEntity confirmStaff() {
         if (userTimePriorityService.isSchedulePrioritiesExistStaff()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TIME_PRIORITY_ALREADY_EXIST));
         } else {
             List<User> softList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_SOFT.getId()));
             List<User> techList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_TECH.getId()));
             if (softList.size() == 0 & techList.size() == 0) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(NEED_MORE_TECH_SOTF);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH_SOFT));
             } else if (softList.size() == 0) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(NEED_MORE_SOFT);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_SOFT));
             } else if (techList.size() == 0) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(NEED_MORE_TECH);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH));
             } else {
-                List<User> staff = new ArrayList<>(softList);
+                Set<User> staff = new LinkedHashSet<>(softList);
                 staff.addAll(techList);
                 EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_INTERVIEW_SELECT.getId());
-                for (User user : staff) {
-                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
-                    try {
-                        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
-                    } catch (MessagingException e) {
-                        //TODO log
-                    }
-                }
+//                for (User user : staff) {
+//                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+//                    try {
+//                        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
+//                    } catch (MessagingException e) {
+//                        //TODO log
+//                    }
+//                }
+                userTimePriorityService.createStaffTimePriorities(softList);
+                return ResponseEntity.ok(null);
             }
         }
 
@@ -270,7 +275,6 @@ public class AdminManagementStaffController {
 //        processRejectedStudentsSelection(recruitment);
 //        return gson.toJson(new MessageDto("Selection confirmed.",
 //                MessageDtoType.SUCCESS));
-        return ResponseEntity.ok(null);
     }
 
 
