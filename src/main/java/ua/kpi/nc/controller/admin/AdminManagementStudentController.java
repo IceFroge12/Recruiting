@@ -107,7 +107,8 @@ public class AdminManagementStudentController {
     public List<StudentAppFormDto> showFilteredStudents(@RequestParam int pageNum, @RequestParam Long rowsNum,
                                                         @RequestParam Long sortingCol, @RequestParam boolean increase,
                                                         @RequestParam(value = "restrictions", required = false) String[] restrictions,
-                                                        @RequestParam(value = "statuses", required = false) List<String> statuses) {
+                                                        @RequestParam(value = "statuses", required = false) List<String> statuses,
+                                                        @RequestParam boolean isActive) {
         System.out.println(statuses);
         Long fromRow = (pageNum - 1) * rowsNum;
         List<FormQuestion> questions = new ArrayList<>();
@@ -117,7 +118,7 @@ public class AdminManagementStudentController {
         }
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationFormsFiltered(fromRow,
-                rowsNum, sortingCol, increase, questions, statuses);
+                rowsNum, sortingCol, increase, questions, statuses, isActive);
         for (ApplicationForm applicationForm : applicationForms) {
             studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
@@ -128,6 +129,7 @@ public class AdminManagementStudentController {
 
         return studentAppFormDtoList;
     }
+
 
     @RequestMapping(value = "getapplicationquestionsnontext", method = RequestMethod.POST)
     public List<String> getAppFormQuestionsNonText(@RequestParam String role) {

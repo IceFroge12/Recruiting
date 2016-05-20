@@ -3,27 +3,6 @@
  */
 
 function studentManagementController($scope,$filter, studentManagementService) {
-
-    $scope.pageItems = 9;
-    $scope.showFiltration = function () {
-        $scope.questions = [];
-        $scope.restrictions = [];
-        $scope.statusesChoosen = angular.copy($scope.statusTemp);
-        console.log($scope.statusesChoosen);
-        console.log("Finding questions");
-        getAllQuestions();
-        console.log($scope.restrictions);
-        console.log($scope.questions);
-    };
-
-    $scope.calculateStatuses = function() {
-        studentManagementService.calculateStatuses().success(function(data) {
-            console.log('Confirm selection');
-            console.log(data);
-        })
-    };
-    
-    
     $scope.sort = {
         sortingOrder: 1,
         reverse: false
@@ -37,14 +16,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.UnivList=[];
     $scope.filtered = false;
     $scope.checkedAll = false;
-
-
-    studentManagementService.getAllStatuses().success(function (data) {
-        $scope.statuses = data;
-        console.log($scope.statuses);
-    }, function error() {
-        console.log("error with getting allStatus");
-    });
+    $scope.isActive = true;
 
     function getAllQuestions() {
         studentManagementService.getAllQuestions().then(function success(data) {
@@ -56,13 +28,41 @@ function studentManagementController($scope,$filter, studentManagementService) {
                 }
             }
             $scope.restrictions = angular.copy($scope.questions);
-            //for(var i=0; i<$scope.restrictions.length; i++){
-            //    for(var j=0; j<$scope.restrictions.variants[i].length(); j++){
-            //        $scope.restrictions.variants[i];
-            //    }
-            //}
+            for(var i=0; i<$scope.restrictions.length; i++){
+                $scope.restrictions[i].variants=[];
+            }
         });
     }
+
+    function countAmountOfPages(allNum){
+        $scope.amount = Math.ceil(allNum / $scope.itemsPerPage);
+    }
+
+    $scope.showFiltration = function () {
+        $scope.questions = [];
+        $scope.restrictions = [];
+        $scope.statusesChoosen = [];
+        console.log($scope.statusesChoosen);
+        console.log("Finding questions");
+        getAllQuestions();
+        console.log($scope.restrictions);
+        console.log($scope.questions);
+    };
+
+    $scope.calculateStatuses = function() {
+        studentManagementService.calculateStatuses().success(function(data) {
+            console.log('Confirm selection');
+            console.log(data);
+        })
+    };
+
+
+    studentManagementService.getAllStatuses().success(function (data) {
+        $scope.statuses = data;
+        console.log($scope.statuses);
+    }, function error() {
+        console.log("error with getting allStatus");
+    });
 
     $scope.toggle = function (variant, question) {
         var x = 0;
@@ -80,7 +80,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
             $scope.restrictions[x].variants.splice(idx, 1);
         }
         else {
-            $scope.restrictions[x].variants.push({variant: variant});
+            $scope.restrictions[x].variants.push(variant);
         }
         console.log($scope.restrictions);
         console.log($scope.questions);
@@ -192,15 +192,16 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     studentManagementService.getCountOfStudents().success(function (data) {
         console.log("Count of students" + data);
-        $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        countAmountOfPages(data);
     });
 
     $scope.getCountOfStudents = function(){
         studentManagementService.getCountOfStudents().success(function (data) {
             console.log("Count of students" + data);
-            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+            countAmountOfPages(data);
         });
     };
+
 
     $scope.statusIdArray = [];
     $scope.checkStudentStatus = function (student) {
@@ -270,7 +271,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
         studentManagementService.showFilteredStudents(pageNum,$scope.itemsPerPage, $scope.sort.sortingOrder,
-            $scope.sort.reverse, $scope.restrictions, $scope.statusesTitle).success(function (data) {
+            $scope.sort.reverse, $scope.restrictions, $scope.statusesTitle, $scope.isActive).success(function (data) {
             $scope.allStudents = data;
             var list = [];
             //checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
@@ -339,6 +340,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
         });
         console.log($scope.statusesTitle);
         $scope.showFilteredStudents($scope.currentPage);
+        countAmountOfPages($scope.allStudents.length);
     };
     
     
@@ -356,7 +358,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
         }, function error() {
             console.log("error");
         });
-    }
+    };
     
     $scope.confirmSelection = function() {
     	studentManagementService.confirmSelection().success(function(data) {
@@ -371,11 +373,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
     		console.log(data);
     	})
     };
-    
-  
-    
- 
-    
+
     studentManagementService.getRecruitmentStatus().then(function success(data) {
         $scope.recruitmentStatus = data.data;
         console.log('Recruitment status:');

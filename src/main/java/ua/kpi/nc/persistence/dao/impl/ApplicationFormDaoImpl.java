@@ -115,10 +115,6 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             " from \"user\" u LEFT JOIN (SELECT a1.id id, id_status, is_active,\n" +
             "id_recruitment, photo_scope, id_user, date_create,end_date, feedback FROM application_form a1\n" +
             " INNER JOIN recruitment r1 on a1.id_recruitment = r1.id) s1 on u.id = s1.id_user\n" +
-            " LEFT JOIN (SELECT * FROM application_form a2 \n" +
-            " INNER JOIN recruitment r2 on a2.id_recruitment = r2.id) s2\n" +
-            " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date\n" +
-            " INNER JOIN status s on s1.id_status = s.id\n" +
             "  GROUP BY u.id) newest)\n" +
             " ORDER BY ";
     private static final String SQL_GET_SEARCH_APP_FORMS = "Select DISTINCT s1.id , u.first_name, s1.id_status, s1.is_active,\n" +
@@ -172,7 +168,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id_recruitment = ?;";
 
-    private static final String SQL_SORT = ") ORDER BY ";
+    private static final String SQL_SORT = " ORDER BY ";
 
     private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"status_count\" from \"" + TABLE_NAME + "\" where id_status=? and is_active='true'";
 
@@ -383,7 +379,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     }
 
     @Override
-    public List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions, List<String> statuses) {
+    public List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol,
+                                                                    boolean increase, List<FormQuestion> questions,
+                                                                    List<String> statuses, boolean isActive) {
         log.info("Looking for current filtered application forms");
         StringBuilder sbTotal = new StringBuilder();
         for(FormQuestion question: questions){
@@ -402,22 +400,21 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
                 sbTotal.append(sb.toString());
             }
         }
-        if(!statuses.isEmpty()) {
+        if(!(statuses == null)) {
             sbTotal.append("(s.title = ANY ('{");
             for (String status : statuses) {
                 sbTotal.append(status + ",");
             }
             sbTotal.deleteCharAt(sbTotal.length()-1);
-            sbTotal.append("}') ");
+            sbTotal.append("}') )  AND");
         }
-
-        sbTotal.append(SQL_SORT);
+        sbTotal.append(" a.is_active = ?" + SQL_SORT);
 
         String sql = SQL_GET_CURRENT_APP_FORMS_FILTERED + sbTotal.toString();
         sql += sortingCol.toString();
         sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
 
-        return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum );
+        return this.getJdbcTemplate().queryForList(sql, extractor, isActive, fromRow, rowsNum );
     }
     
 	@Override

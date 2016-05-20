@@ -30,7 +30,7 @@ public interface ApplicationFormService {
     Long getCountGeneralAppForm();
 
     Long getCountAdvancedAppForm();
-    
+
     Long getCountApprovedAppForm();
 
     int deleteApplicationForm(ApplicationForm applicationForm);
@@ -55,15 +55,17 @@ public interface ApplicationFormService {
 
     List<ApplicationForm> getSearchAppFormByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
 
-    List<ApplicationForm> getCurrentsApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions, List<String> statuses);
+    List<ApplicationForm> getCurrentsApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol,
+                                                              boolean increase, List<FormQuestion> questions,
+                                                              List<String> statuses, boolean isActive);
 
-	Long getCountInReviewAppForm();
+    Long getCountInReviewAppForm();
 
-    List<ApplicationForm>getCurrentApplicationForms();
+    List<ApplicationForm> getCurrentApplicationForms();
 
-	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
+    List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 
     List<ApplicationForm> getByRecruitment(Recruitment recruitment);
-    
+
     List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
 }

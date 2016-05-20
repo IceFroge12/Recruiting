@@ -56,7 +56,9 @@ public interface ApplicationFormDao {
 
     List<ApplicationForm> getCurrentApplicationForms();
 
-    List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol, boolean increase, List<FormQuestion> questions, List<String> statuses);
+    List<ApplicationForm> getCurrentApplicationFormsFiltered(Long fromRow, Long rowsNum, Long sortingCol,
+                                                             boolean increase, List<FormQuestion> questions,
+                                                             List<String> statuses, boolean isActive);
 
     List<ApplicationForm> getApplicationFormsSorted(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 
