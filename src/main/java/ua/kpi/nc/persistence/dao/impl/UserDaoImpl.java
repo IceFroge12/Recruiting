@@ -166,7 +166,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     private static final String SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE = "SELECT count(DISTINCT u.id), date_trunc('day', stp.time_point) AS day From \"user\" u\n" +
             "  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "  INNER JOIN user_time_final utf ON u.id = utf.id_user\n" +
+            "  INNER JOIN user_time_priority utf ON u.id = utf.id_user\n" +
             "  INNER JOIN  schedule_time_point stp ON utf.id_time_point = stp.id\n" +
             "WHERE ur.id_role = ?\n" +
             "GROUP BY day ORDER BY day";

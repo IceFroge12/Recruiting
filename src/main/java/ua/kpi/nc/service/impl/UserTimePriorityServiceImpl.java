@@ -66,11 +66,14 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 		}
 	}
 
-
+	@Override
+	public boolean isSchedulePrioritiesExistStaff() {
+		return userTimePriorityDao.isSchedulePrioritiesExistStaff();
+	}
 
 	@Override
-	public boolean isSchedulePrioritiesExist() {
-		return userTimePriorityDao.isSchedulePrioritiesExist();
+	public boolean isSchedulePrioritiesExistStudent() {
+		return userTimePriorityDao.isSchedulePrioritiesExistStudent();
 	}
 
 	@Override
