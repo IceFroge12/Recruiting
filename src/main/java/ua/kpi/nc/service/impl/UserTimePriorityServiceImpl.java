@@ -58,7 +58,7 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	public void createStudentTimePriotities(User student) {
 		ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
 		TimePriorityTypeService priorityTypeService = ServiceFactory.getTimePriorityTypeService();
-		TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CAN.getId());
+		TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CANNOT.getId());
 		List<ScheduleTimePoint> timePoints = timePointService.getAll();
 		for (ScheduleTimePoint scheduleTimePoint : timePoints) {
 			UserTimePriority userTimePriority = new UserTimePriority(student, scheduleTimePoint, defaultPriorityType);
