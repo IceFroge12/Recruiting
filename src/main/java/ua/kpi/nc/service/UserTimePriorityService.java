@@ -29,6 +29,8 @@ public interface UserTimePriorityService {
 
     void createStudentTimePriotities(User student);
 
+    public int[] createStaffTimePriorities(List<User> staffList) ;
+
     boolean isSchedulePrioritiesExistStaff();
     
     boolean isSchedulePrioritiesExistStudent();

@@ -19,6 +19,9 @@ import java.util.List;
  */
 public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	private UserTimePriorityDao userTimePriorityDao;
+	private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
+	private TimePriorityTypeService priorityTypeService = ServiceFactory.getTimePriorityTypeService();
+	private TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CANNOT.getId());
 
 	public UserTimePriorityServiceImpl(UserTimePriorityDao userTimePriorityDao) {
 		this.userTimePriorityDao = userTimePriorityDao;
@@ -58,6 +61,23 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	public int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities) {
 		return userTimePriorityDao.batchCreateUserPriority(userTimePriorities);
 	}
+
+	@Override
+	public int[] createStaffTimePriorities(List<User> staffList) {
+
+		List<ScheduleTimePoint> timePoints = timePointService.getAll();
+		List<UserTimePriority> staffTimePriorities = null;
+		for (ScheduleTimePoint timePoint : timePoints){
+		for (User staff : staffList){
+			UserTimePriority staffPriority = new UserTimePriority();
+			staffPriority.setUser(staff);
+			staffPriority.setScheduleTimePoint(timePoint);
+			staffPriority.setTimePriorityType(defaultPriorityType);
+			staffTimePriorities.add(staffPriority);
+		}}
+		return userTimePriorityDao.batchCreateUserPriority(staffTimePriorities);
+	}
+
 
 	@Override
 	public void createStudentTimePriotities(User student) {
