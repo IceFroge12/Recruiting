@@ -1,13 +1,12 @@
 package ua.kpi.nc.controller.admin;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.dto.UserRateDto;
-import ua.kpi.nc.persistence.model.EmailTemplate;
-import ua.kpi.nc.persistence.model.Interview;
-import ua.kpi.nc.persistence.model.Role;
-import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
@@ -21,6 +20,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STAFF_INTERVIEW_SELECT;
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STUDENT_REGISTRATION;
 
 /**
@@ -36,11 +36,21 @@ public class AdminManagementStaffController {
 
     private InterviewService interviewService = ServiceFactory.getInterviewService();
 
-    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
-
     private SenderService senderService = SenderServiceImpl.getInstance();
 
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
+
+    private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
+
+    private RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
+
+    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
+
+    private final static String NEED_MORE_SOFT  = "Need select more then 0 soft";
+
+    private final static String NEED_MORE_TECH = "Need select more then 0 tech";
+
+    private final static String NEED_MORE_TECH_SOTF = "Need select more then 0 then and soft";
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
@@ -211,5 +221,57 @@ public class AdminManagementStaffController {
 
         return notMarkedAll;
     }
+
+    @RequestMapping(value = "confirmStaff", method = RequestMethod.GET)
+    public ResponseEntity confirmStaff() {
+        if (userTimePriorityService.isSchedulePrioritiesExistStaff()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        } else {
+            List<User> softList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_SOFT.getId()));
+            List<User> techList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_TECH.getId()));
+            if (softList.size() == 0 & techList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(NEED_MORE_TECH_SOTF);
+            } else if (softList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(NEED_MORE_SOFT);
+            } else if (techList.size() == 0) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(NEED_MORE_TECH);
+            } else {
+                List<User> staff = new ArrayList<>(softList);
+                staff.addAll(techList);
+                EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_INTERVIEW_SELECT.getId());
+                for (User user : staff) {
+                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+                    try {
+                        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
+                    } catch (MessagingException e) {
+                        //TODO log
+                    }
+                }
+            }
+        }
+
+//        Gson gson = new Gson();
+//        if (userTimePriorityService.isSchedulePrioritiesExistStudent()) {
+//            return gson.toJson(new MessageDto("Selection is already confirmed.",
+//                    MessageDtoType.ERROR));
+//        }
+//        Long appFormInReviewCount = applicationFormService.getCountInReviewAppForm();
+//        if (appFormInReviewCount != 0) {
+//            return gson.toJson(new MessageDto("You haven't reviewed all application forms. There are still "
+//                    + appFormInReviewCount + " unreviewed forms.", MessageDtoType.ERROR));
+//        }
+//        ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
+//        if (!timePointService.isScheduleDatesExists()) {
+//            return gson.toJson(new MessageDto("You have to choose dates for schedule before confirming selection.",
+//                    MessageDtoType.ERROR));
+//        }
+//        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+//        processApprovedStudents(recruitment);
+//        processRejectedStudentsSelection(recruitment);
+//        return gson.toJson(new MessageDto("Selection confirmed.",
+//                MessageDtoType.SUCCESS));
+        return ResponseEntity.ok(null);
+    }
+
 
 }

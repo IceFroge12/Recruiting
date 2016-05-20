@@ -313,7 +313,7 @@ public class AdminManagementStudentController {
     @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     public String confirmSelection() throws MessagingException {
         Gson gson = new Gson();
-        if (userTimePriorityService.isSchedulePrioritiesExist()) {
+        if (userTimePriorityService.isSchedulePrioritiesExistStudent()) {
             return gson.toJson(new MessageDto("Selection is already confirmed.",
                     MessageDtoType.ERROR));
         }

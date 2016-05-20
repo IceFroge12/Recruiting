@@ -469,6 +469,10 @@ angular.module('appStaffManagement').directive("customSort", function () {
             };
         }
     }
+    
+    $scope.confirmStaff = function () {
+        
+    }
 
 
 });

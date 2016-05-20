@@ -171,7 +171,7 @@ public class AdminSchedulingController {
     @RequestMapping(value = "startScheduling", method = RequestMethod.GET)
     public ResponseEntity startScheduling(){
         ScheduleService scheduleService = new ScheduleService();
-        scheduleService.startScheduleForStudents();
+        //scheduleService.startScheduleForStudents();
         scheduleService.startScheduleForStaff();
         return ResponseEntity.ok(null);
     }
