@@ -153,7 +153,7 @@
                             <tbody>
                             <tr ng-repeat="timePoint in schedulePoints">
                                 <td class="col-md-3">
-                                    {{timePoint.timePoint | date : 'fullDate'}}
+                                    {{timePoint.timePoint | date:"MM/dd/yyyy 'at' h:mma"  }}
                                 </td>
                                 <td class="col-md-3">
                                     <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]"
@@ -242,7 +242,7 @@
     <modal-dialog show='modalShown' width='400px'>
         <h4>Add new user to interview timepoint</h4>
 
-        <p>{{timePointToChange.timePoint | date : 'fullDate'}}</p>
+        <p>{{timePointToChange.timePoint | date:"MM/dd/yyyy 'at' h:mma"}</p>
         <table class="table table-condensed table-hover col-md-8">
             <thead>
             <tr>

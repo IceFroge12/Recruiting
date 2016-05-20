@@ -242,6 +242,7 @@ public class AdminManagementStaffController {
                 Set<User> staff = new LinkedHashSet<>(softList);
                 staff.addAll(techList);
                 EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_INTERVIEW_SELECT.getId());
+
 //                for (User user : staff) {
 //                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
 //                    try {
