@@ -55,6 +55,11 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	}
 
 	@Override
+	public int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities) {
+		return userTimePriorityDao.batchCreateUserPriority(userTimePriorities);
+	}
+
+	@Override
 	public void createStudentTimePriotities(User student) {
 		ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
 		TimePriorityTypeService priorityTypeService = ServiceFactory.getTimePriorityTypeService();

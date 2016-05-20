@@ -23,6 +23,8 @@ public interface UserTimePriorityDao {
 
     int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities);
 
+    int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities);
+
     List<UserTimePriority> getAllUserTimePriorities(Long userId);
 
 	boolean isSchedulePrioritiesExistStudent();

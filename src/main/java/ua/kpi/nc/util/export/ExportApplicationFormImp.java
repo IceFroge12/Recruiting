@@ -109,7 +109,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         cell.setPhrase(new Phrase("Email:"));
         innerTable1.addCell(cell);
         for (String string : selectInputQuestions) {
-            cell.setPhrase(new Phrase(string));
+            cell.setPhrase(new Phrase(string +":"));
             innerTable1.addCell(cell);
         }
         PdfPCell cellTableLeft = new PdfPCell(innerTable1);
