@@ -73,7 +73,7 @@ public class StudentScheduleController {
 		if (recruitment == null) {
 			return NO_RECRUITMENT_MESSAGE;
 		}
-		if (userTimePriorityService.isSchedulePrioritiesExist()) {
+		if (userTimePriorityService.isSchedulePrioritiesExistStudent()) {
 			ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
 			if (applicationForm == null) {
 				return NOT_INVITED_MESSAGE;

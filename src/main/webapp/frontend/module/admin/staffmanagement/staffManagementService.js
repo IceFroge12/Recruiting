@@ -8,7 +8,7 @@ function staffManagementService(http) {
     var service = {};
     
     service.confirmStaffService = function () {
-        return $http({
+        return http({
             method : 'GET',
             url : '/admin/confirmStaff'
         })
