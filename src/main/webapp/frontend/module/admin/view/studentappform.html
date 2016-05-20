@@ -30,10 +30,17 @@
                     </a>
                 </li>
                 <li ng-show="oldForms" ng-class="{active:tab===4}" class="dropdown" >
-                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 4;">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href>
                         Old Forms
                         <b class="caret"></b>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="prForm in oldForms track by $index">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="changeTab(4);">
+                                {{prForm.recruitment.name}}
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
             <div  class="tab-content">
@@ -135,11 +142,11 @@
                     <table class="table table-hover table-condensed">
                         <tr class="text-success">
                             <td>Status</td>
-                            <td>{{oldForms[0].status}}</td>
+                            <td>{{oldForms[oldToShow].status}}</td>
                         </tr>
                         <tr class="text-success">
                             <td>ID</td>
-                            <td ng-model="id">{{oldForms[0].id}}</td>
+                            <td ng-model="id">{{oldForms[oldToShow].id}}</td>
                         </tr>
                         <td >
                             <label class="control-label">Photo</label>
@@ -147,21 +154,21 @@
                         <td><img ng-src="/photo/{{appForm.photoScope}}" width=100px>
                             <tr>
                                 <td>Last Name</td>
-                                <td>{{oldForms[0].user.lastName}}</td>
+                                <td>{{oldForms[oldToShow].user.lastName}}</td>
                             </tr>
                             <tr>
                                 <td>Firs name</td>
-                                <td>{{oldForms[0].user.firstName}}</td>
+                                <td>{{oldForms[oldToShow].user.firstName}}</td>
                             </tr>
                             <tr>
                                 <td>Second name</td>
-                                <td>{{oldForms[0].user.secondName}}</td>
+                                <td>{{oldForms[oldToShow].user.secondName}}</td>
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td>{{oldForms[0].user.email}}</td>
+                                <td>{{oldForms[oldToShow].user.email}}</td>
                             </tr>
-                            <tr ng-repeat="question in oldForms[0].questions">
+                            <tr ng-repeat="question in oldForms[oldToShow].questions">
                                 <td > {{question.questionTitle}}</td>
                                 <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
                             question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
