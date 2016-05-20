@@ -18,6 +18,26 @@ function studentManagementController($scope,$filter, studentManagementService) {
     $scope.checkedAll = false;
     $scope.isActive = true;
 
+    function getAllQuestions() {
+        studentManagementService.getAllQuestions().then(function success(data) {
+            for (var i = 0, len = data.length; i < len; i++) {
+                if (typeof data[i].variants !== "undefined"
+                    && data[i].variants !== "undefined") {
+                    data[i].variants = JSON.parse(data[i].variants);
+                    $scope.questions = data;
+                }
+            }
+            $scope.restrictions = angular.copy($scope.questions);
+            for(var i=0; i<$scope.restrictions.length; i++){
+                $scope.restrictions[i].variants=[];
+            }
+        });
+    }
+
+    function countAmountOfPages(allNum){
+        $scope.amount = Math.ceil(allNum / $scope.itemsPerPage);
+    }
+
     $scope.showFiltration = function () {
         $scope.questions = [];
         $scope.restrictions = [];
@@ -35,7 +55,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
             console.log(data);
         })
     };
-    
+
 
     studentManagementService.getAllStatuses().success(function (data) {
         $scope.statuses = data;
@@ -43,24 +63,6 @@ function studentManagementController($scope,$filter, studentManagementService) {
     }, function error() {
         console.log("error with getting allStatus");
     });
-
-    function getAllQuestions() {
-        studentManagementService.getAllQuestions().then(function success(data) {
-            for (var i = 0, len = data.length; i < len; i++) {
-                if (typeof data[i].variants !== "undefined"
-                    && data[i].variants !== "undefined") {
-                    data[i].variants = JSON.parse(data[i].variants);
-                    $scope.questions = data;
-                }
-            }
-            $scope.restrictions = angular.copy($scope.questions);
-            //for(var i=0; i<$scope.restrictions.length; i++){
-            //    for(var j=0; j<$scope.restrictions.variants[i].length(); j++){
-            //        $scope.restrictions.variants[i];
-            //    }
-            //}
-        });
-    }
 
     $scope.toggle = function (variant, question) {
         var x = 0;
@@ -78,7 +80,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
             $scope.restrictions[x].variants.splice(idx, 1);
         }
         else {
-            $scope.restrictions[x].variants.push({variant: variant});
+            $scope.restrictions[x].variants.push(variant);
         }
         console.log($scope.restrictions);
         console.log($scope.questions);
@@ -190,15 +192,16 @@ function studentManagementController($scope,$filter, studentManagementService) {
 
     studentManagementService.getCountOfStudents().success(function (data) {
         console.log("Count of students" + data);
-        $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        countAmountOfPages(data);
     });
 
     $scope.getCountOfStudents = function(){
         studentManagementService.getCountOfStudents().success(function (data) {
             console.log("Count of students" + data);
-            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+            countAmountOfPages(data);
         });
     };
+
 
     $scope.statusIdArray = [];
     $scope.checkStudentStatus = function (student) {
@@ -337,6 +340,7 @@ function studentManagementController($scope,$filter, studentManagementService) {
         });
         console.log($scope.statusesTitle);
         $scope.showFilteredStudents($scope.currentPage);
+        countAmountOfPages($scope.allStudents.length);
     };
     
     

@@ -146,7 +146,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static final String SQL_GET_CURRENT_APP_FORMS_FILTERED = "Select DISTINCT a.id, a.id_status, a.is_active"
             +"  ,a.id_recruitment, a.photo_scope, a.id_user, a."
             +"date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id"
-            +"  INNER JOIN status s on a.id_status = s.id WHERE a.is_active = ? AND ";
+            +"  INNER JOIN status s on a.id_status = s.id WHERE ";
 
     private static final String SQL_GET_APP_FORMS_FILTERED_CONDITION = "WHERE exists(SELECT 1 FROM form_answer fa\n" +
             "                INNER JOIN form_answer_variant fav on fa.id_variant = fav.id\n" +
@@ -168,7 +168,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id_recruitment = ?;";
 
-    private static final String SQL_SORT = ") ORDER BY ";
+    private static final String SQL_SORT = " ORDER BY ";
 
     private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"status_count\" from \"" + TABLE_NAME + "\" where id_status=? and is_active='true'";
 
@@ -406,9 +406,9 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
                 sbTotal.append(status + ",");
             }
             sbTotal.deleteCharAt(sbTotal.length()-1);
-            sbTotal.append("}') ");
+            sbTotal.append("}') )  AND");
         }
-        sbTotal.append(SQL_SORT);
+        sbTotal.append(" a.is_active = ?" + SQL_SORT);
 
         String sql = SQL_GET_CURRENT_APP_FORMS_FILTERED + sbTotal.toString();
         sql += sortingCol.toString();
