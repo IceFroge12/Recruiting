@@ -56,7 +56,6 @@ public class AdminSchedulingController {
     @RequestMapping(value = "getStaffCount", method = RequestMethod.GET)
     public SchedulingSettingDto getStaffCount() {
 
-
         Long activeTech = userService.getCountActiveEmployees(ROLE_TECH.getId(),
                 ROLE_SOFT.getId());
 
@@ -178,9 +177,10 @@ public class AdminSchedulingController {
     public ResponseEntity getInterviewParameters() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         if (null != recruitment){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.ok(new RecruitmentSettingsDto(recruitment.getTimeInterviewSoft(), recruitment.getTimeInterviewTech()));
+
         }
-        return ResponseEntity.ok(new RecruitmentSettingsDto(recruitment.getTimeInterviewSoft(), recruitment.getTimeInterviewTech()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
 
     @RequestMapping(value = "saveInterviewParameters", method = RequestMethod.GET)
@@ -210,7 +210,7 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "addUserToTimepoint", method = RequestMethod.POST)
-    public void addUserToTimepoint(@RequestParam Long userId, @RequestParam Long idTimePoint) {
+    public void addUserToTimePoint(@RequestParam Long userId, @RequestParam Long idTimePoint) {
         User user = userService.getUserByID(userId);
         ScheduleTimePoint timePoint = timePointService.getScheduleTimePointById(idTimePoint);
         Long res = timePointService.addUserToTimepoint(user, timePoint);
