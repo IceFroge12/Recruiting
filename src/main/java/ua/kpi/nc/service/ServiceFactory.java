@@ -91,4 +91,8 @@ public class ServiceFactory {
     public static SchedulingSettingsService getSchedulingSettingsService() {
         return new SchedulingSettingsServiceImpl(DaoFactory.getSchedulingSettingsDao());
     }
+
+    public static DaoUtilService getDaoUtilService(){
+        return new DaoUtilServiceImpl(DaoFactory.getDaoUtil());
+    }
 }

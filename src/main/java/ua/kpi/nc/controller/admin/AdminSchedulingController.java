@@ -3,6 +3,7 @@ package ua.kpi.nc.controller.admin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.kpi.nc.persistence.dao.DaoUtil;
 import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
@@ -29,6 +30,18 @@ public class AdminSchedulingController {
     private UserService userService = ServiceFactory.getUserService();
     private SchedulingSettingsService schedulingSettingsService = ServiceFactory.getSchedulingSettingsService();
     private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
+    private DaoUtilService daoUtilService = ServiceFactory.getDaoUtilService();
+
+
+    private final static String SAVE_SELECTED_DAYS_ERROR = "Error during save selected days, try later";
+    private final static String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
+    private final static String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
+    private final static String EDIT_SELECTED_DAY_ERROR = "Error during edit selected day, refresh page or try again later";
+    private final static String GET_USERS_BY_ROLE_TIME_PRIORITY_ERROR = "Error during get users, refresh page or try again later";
+    private final static String CHANGE_STATUS_ERROR = "Acton has been not complete";
+    private final static String GET_CURRENT_STATUS_ERROR = " Can't load current scheduling status, refresh page or try again later";
+    private final static String RECRUITMENT_NOT_STARTED = "Any recruitment not started";
+
 
     @RequestMapping(value = "getCurrentStatus", method = RequestMethod.GET)
     public ResponseEntity getCurrentStatus() {
@@ -36,14 +49,12 @@ public class AdminSchedulingController {
         if (null != recruitment) {
             return ResponseEntity.ok(recruitment.getSchedulingStatus());
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(RECRUITMENT_NOT_STARTED);
         }
     }
 
     @RequestMapping(value = "getStaffCount", method = RequestMethod.GET)
     public SchedulingSettingDto getStaffCount() {
-
-        //TODO refactor
         Long activeTech = userService.getActiveEmployees(ROLE_TECH.getId(),
                 ROLE_SOFT.getId());
 
@@ -58,17 +69,24 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "saveSelectedDays", method = RequestMethod.POST)
-    public ResponseEntity<Long> saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto) {
+    public ResponseEntity saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto) {
         long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
         ));
+        if (id == 0){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(SAVE_SELECTED_DAYS_ERROR));
+        }
         return ResponseEntity.ok(id);
     }
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
-    public List<SchedulingSettings> getSelectedDays() {
-        return schedulingSettingsService.getAll();
+    public ResponseEntity getSelectedDays() {
+        List<SchedulingSettings> schedulingSettingsList = schedulingSettingsService.getAll();
+        if (null != schedulingSettingsList){
+            return ResponseEntity.ok(schedulingSettingsList);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(GET_SELECTED_DAYS_ERROR));
     }
 
     @RequestMapping(value = "deleteSelectedDay", method = RequestMethod.GET)
@@ -77,7 +95,7 @@ public class AdminSchedulingController {
         if (amount != 0) {
             return ResponseEntity.ok(null);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(DELETE_SELECTED_DAY_ERROR));
         }
     }
 
@@ -91,7 +109,7 @@ public class AdminSchedulingController {
         if (amount != 0) {
             return ResponseEntity.ok(null);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(EDIT_SELECTED_DAY_ERROR));
         }
     }
 
@@ -120,8 +138,13 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "getUsersByTimePoint", method = RequestMethod.GET)
-    public List<UserDto> getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint) {
-        return userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
+    public ResponseEntity getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint) {
+        List<UserDto> userDtoList = userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
+        if (null != userDtoList){
+            return ResponseEntity.ok(userDtoList);
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(GET_USERS_BY_ROLE_TIME_PRIORITY_ERROR));
+        }
     }
 
     @RequestMapping(value = "changeSchedulingStatus", method = RequestMethod.GET)
@@ -135,13 +158,12 @@ public class AdminSchedulingController {
         if (recruitmentService.updateRecruitment(recruitment) != 0) {
             return ResponseEntity.ok(null);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(CHANGE_STATUS_ERROR));
         }
     }
 
     @RequestMapping(value = "cancelSchedulingStatus", method = RequestMethod.GET)
     public ResponseEntity cancelSchedulingStatus(@RequestParam Long idStatus) {
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         switch (SchedulingStatusEnum.getStatusEnum(idStatus)) {
             case DATES:
                 cancelDaySelectStatus();
@@ -153,6 +175,9 @@ public class AdminSchedulingController {
     @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
     public ResponseEntity getInterviewParameters() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        if (null != recruitment){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
         return ResponseEntity.ok(new RecruitmentSettingsDto(recruitment.getTimeInterviewSoft(), recruitment.getTimeInterviewTech()));
     }
 
@@ -172,7 +197,7 @@ public class AdminSchedulingController {
     public ResponseEntity startScheduling(){
         ScheduleService scheduleService = new ScheduleService();
         scheduleService.startScheduleForStudents();
-        //scheduleService.startScheduleForStaff();
+        scheduleService.startScheduleForStaff();
         return ResponseEntity.ok(null);
     }
 
