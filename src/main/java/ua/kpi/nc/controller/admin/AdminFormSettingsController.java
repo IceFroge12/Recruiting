@@ -54,6 +54,7 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "addAppFormQuestion")
     public void addAppFormQuestion(@RequestBody FormQuestionDto formQuestionDto) {
+        System.out.println(formQuestionDto);
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
 

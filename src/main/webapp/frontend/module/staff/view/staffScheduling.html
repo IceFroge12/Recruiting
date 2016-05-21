@@ -5,38 +5,83 @@
         <div>
             <h4>Choose appropriate variant for each date.</h4>
 
-            <form>
+            <button type="submit" ng-click="save()" class="btn btn-info search-element btn-left">Confirm
+            </button>
+
+
+            <div ng-controller="staffSchedulingController as vm">
+                <uib-alert type="info">
+                    Click on a day on the view.
+                    <strong ng-show="vm.lastDateClicked">You clicked on this day: {{ vm.lastDateClicked | date:'medium' }}</strong>
+                    <br><input type="radio" name="k" ng-model="timePoint" ng-value="2"/>Can <br> <input type="radio" name="k" ng-model="timePoint" ng-value="3"/> Can not
+                </uib-alert>
+                <ng-include src="'calendarControls.html'"></ng-include>
+                <mwl-calendar
+                        events="vm.events"
+                        view="vm.calendarView"
+                        view-date="vm.viewDate"
+                        cell-is-open="vm.isCellOpen"
+                        on-timespan-click="vm.timespanClicked(calendarDate)">
+                </mwl-calendar>
+            </div>
+
+
+            <div ng-controller="staffSchedulingController as vm">
+                <h2 class="text-center">{{ vm.calendarTitle }}</h2>
+
                 <div class="row">
-                    <div class="col-md-3 day-point">
-                        <div ng-repeat="timePoint in timePoints" class="col-md-3 day-point">
-                            <div>
-                                <h5>{{timePoint.timePoint | date : format : timezone}}</h5>
-                                <input type="radio" ng-model="timePoint.idPriorityType" ng-value="3"/>
-                                Can
-                                <br>
-                                <input type="radio" ng-model="timePoint.idPriorityType" ng-value="2"/>
-                                Can not
-                            </div>
+
+                    <div class="col-md-6 text-center">
+                        <div class="btn-group">
+
+                            <button
+                                    class="btn btn-primary"
+                                    mwl-date-modifier
+                                    date="vm.viewDate"
+                                    decrement="vm.calendarView">
+                                Previous
+                            </button>
+                            <button
+                                    class="btn btn-default"
+                                    mwl-date-modifier
+                                    date="vm.viewDate"
+                                    set-to-today>
+                                Today
+                            </button>
+                            <button
+                                    class="btn btn-primary"
+                                    mwl-date-modifier
+                                    date="vm.viewDate"
+                                    increment="vm.calendarView">
+                                Next
+                            </button>
                         </div>
                     </div>
-                    <button type="submit" ng-click="save()" class="btn btn-info search-element btn-left">Confirm
-                    </button>
-                </div>
-            </form>
-            <form>
-                <h2>Your interviews dates: </h2>
-                <p class="par">20.09.2017 17:00-20:00</p>
-                <p class="par">21.09.2017 17:00-20:00</p>
-                <p class="par">24.09.2017 17:00-20:00</p>
-                <p class="par">27.09.2017 17:00-20:00</p>
-                <p class="par">29.09.2017 17:00-20:00</p>
-                <h4>We will be waiting for you at 18 Corps KPI (Street Polytechnic, 41), audience - 420.</h4>
-                <h4>See you there!</h4>
-            </form>
-            <div id="map">
-                <h2>MAP </h2>
 
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1778.9304201007299!2d30.456716531876303!3d50.44656005854637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x01f5234079336190!2z0KTQsNC60YPQu9GM0YLQtdGCINGW0L3RhNC-0YDQvNCw0YLQuNC60Lgg0YLQsCDQvtCx0YfQuNGB0LvRjtCy0LDQu9GM0L3QvtGXINGC0LXRhdC90ZbQutC4INCd0KLQo9CjICLQmtCf0IYi!5e1!3m2!1sru!2sua!4v1463489226379" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    <br class="visible-xs visible-sm">
+
+                </div>
+
+                <br>
+
+                <!--<mwl-calendar-->
+                        <!--events="vm.events"-->
+                        <!--view="vm.calendarView"-->
+                        <!--view-title="vm.calendarTitle"-->
+                        <!--view-date="vm.viewDate"-->
+                        <!--day-view-split="30"-->
+                        <!--on-timespan-click="vm.timespanClicked(calendarDate)">-->
+                <!--&gt;-->
+                <!--</mwl-calendar>-->
+
+                <br><br><br>
+
+                <div id="map">
+                    <h2>MAP </h2>
+
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1778.9304201007299!2d30.456716531876303!3d50.44656005854637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x01f5234079336190!2z0KTQsNC60YPQu9GM0YLQtdGCINGW0L3RhNC-0YDQvNCw0YLQuNC60Lgg0YLQsCDQvtCx0YfQuNGB0LvRjtCy0LDQu9GM0L3QvtGXINGC0LXRhdC90ZbQutC4INCd0KLQo9CjICLQmtCf0IYi!5e1!3m2!1sru!2sua!4v1463489226379"
+                            width="1200" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
     </div>

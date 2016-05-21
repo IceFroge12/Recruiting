@@ -3,9 +3,9 @@
  */
 
 function formSettingsController($scope, ngToast, $sce, formAppService) {
-    
+
     $scope.questionRole;
-    
+
     $scope.getMandatory = function () {
         var role = "ROLE_STUDENT";
         $scope.questionRole = "Student question";
@@ -104,12 +104,6 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         selectMandatoryValue = myMandatorySelect;
     };
 
-    var selectRoleValue;
-    $scope.showSelectRoleValue = function (myRoleSelect) {
-        console.log(myRoleSelect);
-        selectRoleValue = myRoleSelect;
-    };
-
     function splitString(stringToSplit, separator) {
         return stringToSplit.split(separator);
     };
@@ -129,8 +123,8 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             question.mandatory = data;
         })
     };
-    
-    
+
+
     $scope.changeOrder = function (addOrder) {
 
         var x = 0;
@@ -195,7 +189,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         } else {
             $scope.cantEditVariant = false;
         }
-        
+
     };
 
 
@@ -208,9 +202,17 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             variantArray = [];
         }
         
-        var role = selectRoleValue;
-
-
+        var role;
+        if ($scope.questionRole == "Student question") {
+            role = "ROLE_STUDENT";
+        }
+        if ($scope.questionRole == "Tech question") {
+            role = "ROLE_TECH";
+        }
+        if ($scope.questionRole == "Soft question") {
+            role = "ROLE_SOFT";
+        }
+        
         formAppService.addQuestion($scope.addText, selectedValue, selectMandatoryValue, selectActiveValue, variantArray, role, $scope.addOrder);
     };
 
@@ -229,39 +231,39 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             var variantArray = splitString($scope.editVariant, comma);
         }
         console.log(variantArray);
-        
+
         $scope.question.order = $scope.questionOrder;
-        
+
         formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variantArray, "ROLE_STUDENT", $scope.question.order);
     }
 
     $scope.finalMarks = [0, 1, 2, 3];
-    
+
     formAppService.getDecisionMatrix().then(function success(data) {
         $scope.decisionMatrix = data.data;
         console.log($scope.decisionMatrix);
     });
-    
-    $scope.saveDecisionMatrix = function() {
-    	formAppService.saveDecisionMatrix($scope.decisionMatrix).then(function success(data) {
-    		console.log('Updating decision');
+
+    $scope.saveDecisionMatrix = function () {
+        formAppService.saveDecisionMatrix($scope.decisionMatrix).then(function success(data) {
+            console.log('Updating decision');
             console.log(data);
-            $scope.resultMessage =  data.data;
-			var toastMessage = {
-	                content: $scope.resultMessage.message,
-	                timeout: 5000,  
-	                horizontalPosition: 'center',
-	                verticalPosition: 'bottom',
-	                dismissOnClick: true,
-	                combineDuplications: true,
-	                maxNumber: 2
-	            };
-			if ($scope.resultMessage.type == 'ERROR') {
-				var myToastMsg = ngToast.warning(toastMessage);
-			}
-			else if ($scope.resultMessage.type == 'SUCCESS') {
-				var myToastMsg = ngToast.success(toastMessage);
-			}
+            $scope.resultMessage = data.data;
+            var toastMessage = {
+                content: $scope.resultMessage.message,
+                timeout: 5000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                dismissOnClick: true,
+                combineDuplications: true,
+                maxNumber: 2
+            };
+            if ($scope.resultMessage.type == 'ERROR') {
+                var myToastMsg = ngToast.warning(toastMessage);
+            }
+            else if ($scope.resultMessage.type == 'SUCCESS') {
+                var myToastMsg = ngToast.success(toastMessage);
+            }
         });
     }
 

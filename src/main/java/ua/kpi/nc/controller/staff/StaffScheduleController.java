@@ -52,9 +52,7 @@ public class StaffScheduleController {
                     return userTimePriority;
                 }).collect(Collectors.toList());
 
-
         userTimePriorityService.batchUpdateUserPriority(updatingUserTimePriorities);
-//        updatingUserTimePriorities.forEach(userTimePriorityService:: updateUserPriority);
     }
 
     private User getCurrentUser() {
