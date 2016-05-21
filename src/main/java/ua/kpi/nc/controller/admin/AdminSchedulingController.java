@@ -44,10 +44,10 @@ public class AdminSchedulingController {
     public SchedulingSettingDto getStaffCount() {
 
         //TODO refactor
-        Long activeTech = userService.getActiveEmployees(ROLE_TECH.getId(),
+        Long activeTech = userService.getCountActiveEmployees(ROLE_TECH.getId(),
                 ROLE_SOFT.getId());
 
-        Long activeSoft = userService.getActiveEmployees(ROLE_SOFT.getId(),
+        Long activeSoft = userService.getCountActiveEmployees(ROLE_SOFT.getId(),
                 ROLE_TECH.getId());
 
         return new SchedulingSettingDto(
@@ -172,7 +172,8 @@ public class AdminSchedulingController {
     public ResponseEntity startScheduling(){
         ScheduleService scheduleService = new ScheduleService();
         scheduleService.startScheduleForStudents();
-        //scheduleService.startScheduleForStaff();
+        scheduleService.startScheduleForStaff();
+       // System.out.println(scheduleService.startScheduleForStaff());
         return ResponseEntity.ok(null);
     }
 

@@ -421,6 +421,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         console.log("ACTIVE" + data);
         $scope.activeTech = data[0];
         $scope.activeSoft = data[1];
+        $scope.activeTechSoft = data[2];
     });
 
     $scope.exists = function (item, list) {

@@ -216,8 +216,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long getActiveEmployees(Long idParam0, Long idParam1) {
-        return userDao.getActiveEmployees(idParam0, idParam1);
+    public Long getCountActiveEmployees(Long idRole0, Long idRole1) {
+        return userDao.getActiveEmployees(idRole0, idRole1);
+    }
+
+    @Override
+    public Long getCountActiveDoubleRoleEmployee() {
+        return userDao.getCountActiveDoubleRoleEmployee();
     }
 
     @Override

@@ -29,7 +29,7 @@ public interface UserTimePriorityService {
 
     void createStudentTimePriotities(User student);
 
-    public int[] createStaffTimePriorities(List<User> staffList) ;
+    public int[] createStaffTimePriorities(Set<User> staffList) ;
 
     boolean isSchedulePrioritiesExistStaff();
     

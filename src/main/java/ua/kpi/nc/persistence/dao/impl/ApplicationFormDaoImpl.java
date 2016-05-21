@@ -110,7 +110,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             "  apl.id_recruitment, apl.photo_scope, apl.id_user, apl.date_create, apl.feedback, s.title\n" +
             "from \"user\" u INNER JOIN application_form apl on apl.id_user= u.id\n" +
             "  INNER JOIN recruitment r on apl.id_recruitment = r.id\n" +
-            "  INNER JOIN status s on apl.id_status = s.id WHERE apl.id = ANY (\n" +
+            "  INNER JOIN status s on apl.id_status = s.id WHERE r.end_date >current_date and apl.id = ANY (\n" +
             "Select newest.applic FROM (Select DISTINCT MAX(s1.id) applic, u.id\n" +
             " from \"user\" u LEFT JOIN (SELECT a1.id id, id_status, is_active,\n" +
             "id_recruitment, photo_scope, id_user, date_create,end_date, feedback FROM application_form a1\n" +
@@ -127,7 +127,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             " on s1.id_user = s2.id_user AND s1.end_date < s2.end_date\n" +
             " INNER JOIN status s on s1.id_status = s.id\n" +
             "INNER JOIN user_role ur ON u.id = ur.id_user\n"+
-            "WHERE (ur.id_role = 3) AND  ((s1.id = ?) OR (u.last_name LIKE ?)) ORDER BY 2 OFFSET ? LIMIT ?;";
+            "WHERE (s1.end_date >current_date) and (ur.id_role = 3) AND  ((s1.id = ?) OR (u.last_name LIKE ?)) ORDER BY 2 OFFSET ? LIMIT ?;";
 
     private static final String SQL_QUERY_ENDING_ASC = " ASC OFFSET ? LIMIT ?;";
 

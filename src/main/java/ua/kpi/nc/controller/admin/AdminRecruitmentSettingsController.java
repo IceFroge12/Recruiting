@@ -9,6 +9,7 @@ import ua.kpi.nc.persistence.dto.RecruitmentSettingsDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.EmailTemplateEnum;
 import ua.kpi.nc.persistence.model.impl.real.RecruitmentImpl;
 import ua.kpi.nc.service.*;
 import ua.kpi.nc.service.util.SenderService;
@@ -34,13 +35,18 @@ public class AdminRecruitmentSettingsController {
     @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST)
     private void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) throws MessagingException {
         if (null == recruitmentService.getCurrentRecruitmnet()) {
-
-            System.out.println(recruitmentDto);
-            Recruitment recruitment = new RecruitmentImpl(recruitmentDto.getName(), new Timestamp(System.currentTimeMillis()), recruitmentDto.getMaxAdvancedGroup(), recruitmentDto.getMaxGeneralGroup(),
-                    Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()), Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
+            Recruitment recruitment = new RecruitmentImpl();
+            recruitment.setName(recruitmentDto.getName());
             recruitment.setEndDate(Timestamp.valueOf(recruitmentDto.getEndDate()));
+            recruitment.setStartDate(new Timestamp(System.currentTimeMillis()));
+            recruitment.setRegistrationDeadline(Timestamp.valueOf(recruitmentDto.getRegistrationDeadline()));
+            recruitment.setScheduleChoicesDeadline(Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
+            recruitment.setMaxAdvancedGroup(recruitmentDto.getMaxAdvancedGroup());
+            recruitment.setMaxGeneralGroup(recruitmentDto.getMaxGeneralGroup());
+
+
             recruitmentService.addRecruitment(recruitment);
-            EmailTemplate newRecruitmentTemplate = emailTemplateService.getById(7L);
+            EmailTemplate newRecruitmentTemplate = emailTemplateService.getById(EmailTemplateEnum.CONFIRM_PARTICIPATE.getId());
             List<User> users = userService.getStudentsWithNotconnectedForms();
             for (User student : users) {
                 String subject = newRecruitmentTemplate.getTitle();
@@ -61,8 +67,9 @@ public class AdminRecruitmentSettingsController {
         recruitment.setEndDate(Timestamp.valueOf(recruitmentDto.getEndDate()));
         recruitment.setMaxGeneralGroup(recruitmentDto.getMaxGeneralGroup());
         recruitment.setMaxAdvancedGroup(recruitmentDto.getMaxAdvancedGroup());
-        System.out.println(recruitment);
         recruitmentService.updateRecruitment(recruitment);
+        deadlineController.setRegisteredDeadline(recruitment.getRegistrationDeadline());
+        deadlineController.setEndOfRecruitingDeadLine(recruitment.getEndDate());
     }
 
     @RequestMapping(value = "/getCurrentRecruitment", method = RequestMethod.GET)
