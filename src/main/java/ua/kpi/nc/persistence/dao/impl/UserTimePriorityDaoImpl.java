@@ -51,7 +51,16 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     private static final String DELETE_USER_TIME_PRIORITY = "DELETE FROM public.user_time_priority p WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
             "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) Where p.id_user = ?;";
-    private static final String IS_PRIORITIES_EXIST = "SELECT EXISTS (SELECT 1 FROM user_time_priority)";
+    private static final String IS_PRIORITIES_EXIST_FOR_STAFF = "SELECT EXISTS(SELECT 1\n" +
+            "              FROM user_time_priority utp\n" +
+            "JOIN \"user\" u on utp.id_user = u.id\n" +
+            "JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role = 2 OR ur.id_role = 5);";
+    private static final String IS_PRIORITIES_EXIST_FOR_STUDENT = "SELECT EXISTS(SELECT 1\n" +
+            "              FROM user_time_priority utp\n" +
+            "JOIN \"user\" u on utp.id_user = u.id\n" +
+            "JOIN user_role ur ON u.id = ur.id_user\n" +
+            "WHERE ur.id_role = 3);";
 
     private static final String GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID = "SELECT\n" +
             "  p.id_priority_type,\n" +
@@ -87,7 +96,7 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
 
     @Override
     public int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities) {
-        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = {}");
+        log.trace("Updating User time priority  with id user,  id  scheduleTimePoint = {}");
         Object[][] objects = new Object[userTimePriorities.size()][];
         int count = 0;
         for (UserTimePriority userTimePriority : userTimePriorities){
@@ -98,6 +107,21 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
             count++;
         }
         return this.getJdbcTemplate().batchUpdate(UPDATE_USER_TIME_PRIORITY, objects);
+    }
+
+    @Override
+    public int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities) {
+        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = {}");
+        Object[][] objects = new Object[userTimePriorities.size()][];
+        int count = 0;
+        for (UserTimePriority userTimePriority : userTimePriorities){
+            objects[count] = new Object[]{
+                    userTimePriority.getUser().getId(),
+                    userTimePriority.getScheduleTimePoint().getId(),
+                    userTimePriority.getTimePriorityType().getId()};
+            count++;
+        }
+        return this.getJdbcTemplate().batchUpdate(INSERT_USER_TIME_PRIORITY,objects);
     }
 
     @Override
@@ -121,9 +145,15 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     }
 
 	@Override
-	public boolean isSchedulePrioritiesExist() {
+	public boolean isSchedulePrioritiesExistStudent() {
 		log.trace("Check the existing of user time priorities.");
-		return this.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST, resultSet -> resultSet.getBoolean(1));
+		return this.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST_FOR_STUDENT, resultSet -> resultSet.getBoolean(1));
 	}
+    @Override
+    public boolean isSchedulePrioritiesExistStaff() {
+        log.trace("Check the existing of user time priorities.");
+        return this.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST_FOR_STAFF, resultSet -> resultSet.getBoolean(1));
+    }
+
 
 }

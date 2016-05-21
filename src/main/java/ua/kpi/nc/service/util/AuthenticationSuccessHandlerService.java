@@ -7,6 +7,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import ua.kpi.nc.persistence.dto.AuthUserDto;
 import ua.kpi.nc.persistence.model.User;
 
 import javax.servlet.ServletException;
@@ -42,13 +44,21 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
                                         HttpServletResponse response, Authentication authentication) throws IOException,
             ServletException, IOException {
         //TODO create DTO
-        Map<String, String> map = new HashMap<>();
-        map.put("redirectURL", determineTargetUrl(authentication));
-        map.put("username", ((User) authentication.getDetails()).getFirstName());
-        map.put("id", ((User) authentication.getDetails()).getId().toString());
-        map.put("roles", new HashSet(authentication.getAuthorities().stream().map((Function<GrantedAuthority, String>) GrantedAuthority::getAuthority).collect(Collectors.toSet())).toString());
-        response.setContentType("application/json");
-        response.getWriter().write(new Gson().toJson(map));
+
+//        Map<String, String> map = new HashMap<>();
+//        map.put("redirectURL", determineTargetUrl(authentication));
+//        map.put("username", ((User) authentication.getDetails()).getFirstName());
+//        map.put("id", ((User) authentication.getDetails()).getId().toString());
+//        map.put("roles", new HashSet(authentication.getAuthorities().stream().map((Function<GrantedAuthority, String>) GrantedAuthority::getAuthority).collect(Collectors.toSet())).toString());
+//        response.getWriter().write(new Gson().toJson(map));
+        response.getWriter().write(new Gson().toJson(
+                new AuthUserDto(
+                        ((User) authentication.getDetails()).getId(),
+                        ((User) authentication.getDetails()).getUsername(),
+                        determineTargetUrl(authentication),
+                        new HashSet(authentication.getAuthorities().stream().map((Function<GrantedAuthority, String>) GrantedAuthority::getAuthority).collect(Collectors.toSet())).toString()
+                )
+        ));
     }
 
     private String determineTargetUrl(Authentication authentication) {

@@ -3,10 +3,7 @@ package ua.kpi.nc;
 import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.Recruitment;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
-import ua.kpi.nc.service.ApplicationFormService;
-import ua.kpi.nc.service.RecruitmentService;
-import ua.kpi.nc.service.ServiceFactory;
-import ua.kpi.nc.service.UserService;
+import ua.kpi.nc.service.*;
 
 import java.sql.Timestamp;
 import java.util.concurrent.Executors;
@@ -27,6 +24,8 @@ public class DeadlineController {
     private static final ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
     private static final RecruitmentService recruitmentService = ServiceFactory.getRecruitmentService();
     private static final UserService userService = ServiceFactory.getUserService();
+    private static final SchedulingSettingsService scheduleSettingsService = ServiceFactory.getSchedulingSettingsService();
+    private static final ScheduleTimePointService scheduleTimePointService = ServiceFactory.getScheduleTimePointService();
 
     private DeadlineController() {
         Recruitment recruitment = recruitmentService.getLastRecruitment();
@@ -75,24 +74,23 @@ public class DeadlineController {
     }
 
     private void actionForEndOfRecruitingDeadLne(Recruitment recruitment){
-        for (ApplicationForm applicationForm : applicationFormService.getByRecruitment(recruitment)) {
-            applicationForm.setActive(false);
-            //TODO don't delete
-//            applicationFormService.updateApplicationForm(applicationForm);
-            System.out.println(applicationForm.toString());
-        }
-        userService.disableAllStaff();
+       endOfRecruitmentMagic(recruitment);
     }
 
     private void actionForEndOfRecruitingDeadLne(){
-        for (ApplicationForm applicationForm : applicationFormService.getCurrentApplicationForms()) {
+        endOfRecruitmentMagic(recruitmentService.getCurrentRecruitmnet());
+    }
+
+    private void endOfRecruitmentMagic (Recruitment recruitment) {
+        for (ApplicationForm applicationForm : applicationFormService.getByRecruitment(recruitment)) {
             applicationForm.setActive(false);
-            //TODO don't delete
-//            applicationFormService.updateApplicationForm(applicationForm);
-            System.out.println(applicationForm.toString());
+            applicationFormService.updateApplicationForm(applicationForm);
         }
         userService.disableAllStaff();
+        scheduleSettingsService.deleteAll();
+        scheduleTimePointService.deleteAll();
     }
+
 
     private Long calculateDate(Timestamp date){
         return date.getTime() - System.currentTimeMillis();

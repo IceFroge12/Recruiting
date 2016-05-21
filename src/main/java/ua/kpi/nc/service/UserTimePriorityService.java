@@ -25,9 +25,15 @@ public interface UserTimePriorityService {
 
     int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities);
 
+    int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities);
+
     void createStudentTimePriotities(User student);
+
+    public int[] createStaffTimePriorities(Set<User> staffList) ;
+
+    boolean isSchedulePrioritiesExistStaff();
     
-    boolean isSchedulePrioritiesExist();
+    boolean isSchedulePrioritiesExistStudent();
 
     public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId);
 

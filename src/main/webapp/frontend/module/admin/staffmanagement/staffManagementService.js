@@ -6,6 +6,13 @@
 function staffManagementService(http) {
 
     var service = {};
+    
+    service.confirmStaffService = function () {
+        return http({
+            method : 'GET',
+            url : '/admin/confirmStaff'
+        })
+    };
 
     service.showAllEmployees = function (pageNum, rowsNum, sortingCol, increase) {
         console.log("Service showAllEmployees");

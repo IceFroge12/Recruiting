@@ -75,7 +75,9 @@ public interface UserService {
 
     Long getUserCount();
 
-    Long getActiveEmployees(Long idParam0, Long idParam1);
+    Long getCountActiveEmployees(Long idRole0, Long idRole1);
+
+    Long getCountActiveDoubleRoleEmployee ();
 
     int disableAllStaff();
     

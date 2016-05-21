@@ -118,8 +118,8 @@
                     </td>
                     <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                         <p>
-                            <input ng-model="answer.answer" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="answer.ID" class="form-control" type="text"
-                                   value="{{answer.answer}}"> {{variant.variant}}
+                            <textarea style="height: 150px " ng-model="answer.answer" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="answer.ID" class="form-control" type="text"
+                                   value="{{answer.answer}}"> {{variant.variant}}</textarea>
                         </p>
 
                     </td>

@@ -12,13 +12,18 @@ import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.TimePriorityTypeService;
 import ua.kpi.nc.service.UserTimePriorityService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Korzh
  */
 public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	private UserTimePriorityDao userTimePriorityDao;
+	private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
+	private TimePriorityTypeService priorityTypeService = ServiceFactory.getTimePriorityTypeService();
+	private TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CANNOT.getId());
 
 	public UserTimePriorityServiceImpl(UserTimePriorityDao userTimePriorityDao) {
 		this.userTimePriorityDao = userTimePriorityDao;
@@ -55,10 +60,32 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	}
 
 	@Override
+	public int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities) {
+		return userTimePriorityDao.batchCreateUserPriority(userTimePriorities);
+	}
+
+	@Override
+	public int[] createStaffTimePriorities(Set<User> staffList) {
+
+		List<ScheduleTimePoint> timePoints = timePointService.getAll();
+		List<UserTimePriority> staffTimePriorities = new ArrayList<>();
+		for (ScheduleTimePoint timePoint : timePoints){
+		for (User staff : staffList){
+			UserTimePriority staffPriority = new UserTimePriority();
+			staffPriority.setUser(staff);
+			staffPriority.setScheduleTimePoint(timePoint);
+			staffPriority.setTimePriorityType(defaultPriorityType);
+			staffTimePriorities.add(staffPriority);
+		}}
+		return userTimePriorityDao.batchCreateUserPriority(staffTimePriorities);
+	}
+
+
+	@Override
 	public void createStudentTimePriotities(User student) {
 		ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
 		TimePriorityTypeService priorityTypeService = ServiceFactory.getTimePriorityTypeService();
-		TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CAN.getId());
+		TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CANNOT.getId());
 		List<ScheduleTimePoint> timePoints = timePointService.getAll();
 		for (ScheduleTimePoint scheduleTimePoint : timePoints) {
 			UserTimePriority userTimePriority = new UserTimePriority(student, scheduleTimePoint, defaultPriorityType);
@@ -66,11 +93,14 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 		}
 	}
 
-
+	@Override
+	public boolean isSchedulePrioritiesExistStaff() {
+		return userTimePriorityDao.isSchedulePrioritiesExistStaff();
+	}
 
 	@Override
-	public boolean isSchedulePrioritiesExist() {
-		return userTimePriorityDao.isSchedulePrioritiesExist();
+	public boolean isSchedulePrioritiesExistStudent() {
+		return userTimePriorityDao.isSchedulePrioritiesExistStudent();
 	}
 
 	@Override

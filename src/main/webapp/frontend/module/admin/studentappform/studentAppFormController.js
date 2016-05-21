@@ -39,13 +39,18 @@ function adminStudentFormController($scope,$http,ngToast, studentAppFormService,
         });
 
         studentAppFormService.getOldApplicationForms(id).success(function (data) {
-            $scope.oldForms = [];
+            if(data.length>0)
+                $scope.oldForms = [];
             for(var i=0; i< data.length; i++){
                 $scope.oldForms[i]=angular.fromJson(data[i]);
             }
         })
     };
 
+    $scope.oldToShow = 0;
+    $scope.changeTab = function(tab){
+        $scope.tab = tab;
+    };
 
     $scope.showInterview = function showInterview(role) {
         var appFormId = $scope.appForm.id;

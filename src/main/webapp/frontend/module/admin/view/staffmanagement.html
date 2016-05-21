@@ -7,12 +7,17 @@
             <div class="row">
                 <label class="col-md-2 col-md-offset-3">Active Soft Employee: {{activeSoft}}</label>
                 <label class="col-md-2">Active Tech Employee: {{activeTech}}</label>
+                <label class="col-md-2">Active Double Role Employees: {{activeTechSoft}}</label>
             </div>
             <div class="row">
                 <button id="add-empl" class="btn btn-info col-md-1 " type="button"
                         data-toggle="modal"
                         data-target="#addEmployee">Add
                     employee
+                </button>
+
+                <button id="confirmSelection" class="btn btn-info col-md-1 " type="button" ng-click="confirmStaff()">
+                    Confirm staff
                 </button>
                 <button id="filter" class="btn btn-info col-md-1 col-md-offset-10" type="button"
                         data-toggle="modal"

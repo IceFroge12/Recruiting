@@ -42,6 +42,10 @@ function schedulingController($scope, schedulingService) {
         schedulingService.getCurrentStatusService().then(function (response) {
             if (response.status === 200){
                 $scope.currentStatus = response.data.id;
+            }else if (response.status === 409){
+                console.log("Recruiting not started");
+            }else if (response.status === 500){
+                console.log("Server error");
             }
         })
     };
