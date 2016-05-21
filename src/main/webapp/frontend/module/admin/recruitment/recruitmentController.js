@@ -26,10 +26,10 @@ function recruitmentController($scope, recruitmentService) {
         console.log($scope.general);
         console.log($scope.advanced);
     });
-    
 
+    var zeroSeconds = ':00';
     $scope.edit = function () {
-        var zeroSeconds = ':00';
+
         console.log($scope.date1);
         console.log($scope.date2);
         console.log($scope.date3);
@@ -44,7 +44,7 @@ function recruitmentController($scope, recruitmentService) {
         console.log($scope.date3);
         console.log($scope.general);
         console.log($scope.advanced);
-        recruitmentService.addRecruitment($scope.recruitmentName, $scope.date1, $scope.date2, $scope.date3, $scope.general, $scope.advanced);
+        recruitmentService.addRecruitment($scope.recruitmentName, $scope.date1 + zeroSeconds, $scope.date2+ zeroSeconds, $scope.date3+ zeroSeconds, $scope.general, $scope.advanced);
     };
 
     $scope.endRecruitment = function () {

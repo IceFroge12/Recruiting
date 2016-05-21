@@ -14,6 +14,7 @@ import ua.kpi.nc.service.UserTimePriorityService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Korzh
@@ -64,7 +65,7 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 	}
 
 	@Override
-	public int[] createStaffTimePriorities(List<User> staffList) {
+	public int[] createStaffTimePriorities(Set<User> staffList) {
 
 		List<ScheduleTimePoint> timePoints = timePointService.getAll();
 		List<UserTimePriority> staffTimePriorities = new ArrayList<>();

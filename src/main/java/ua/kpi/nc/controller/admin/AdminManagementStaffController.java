@@ -8,7 +8,6 @@ import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.dto.UserRateDto;
 import ua.kpi.nc.persistence.model.*;
-import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.*;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STAFF_INTERVIEW_SELECT;
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STUDENT_REGISTRATION;
+import static ua.kpi.nc.persistence.model.enums.RoleEnum.*;
 
 /**
  * Created by dima on 23.04.16.
@@ -187,17 +187,20 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "getActiveEmployee", method = RequestMethod.GET)
-    public List<String> getActiveEmployee() {
+    public List<Long> getActiveEmployee() {
 
-        Long activeTech = userService.getActiveEmployees(RoleEnum.ROLE_TECH.getId(),
-                RoleEnum.ROLE_SOFT.getId());
+        Long activeTech = userService.getCountActiveEmployees(ROLE_TECH.getId(),
+                ROLE_SOFT.getId());
 
-        Long activeSoft = userService.getActiveEmployees(RoleEnum.ROLE_SOFT.getId(),
-                RoleEnum.ROLE_TECH.getId());
+        Long activeSoft = userService.getCountActiveEmployees(ROLE_SOFT.getId(),
+                ROLE_TECH.getId());
 
-        List<String> activeEmployees = new ArrayList<>();
-        activeEmployees.add(String.valueOf(activeTech));
-        activeEmployees.add(String.valueOf(activeSoft));
+        Long activeSoftTech = userService.getCountActiveDoubleRoleEmployee();
+
+        List<Long> activeEmployees = new ArrayList<>();
+        activeEmployees.add(activeTech);
+        activeEmployees.add(activeSoft);
+        activeEmployees.add(activeSoftTech);
         return activeEmployees;
     }
 
@@ -230,8 +233,8 @@ public class AdminManagementStaffController {
         if (userTimePriorityService.isSchedulePrioritiesExistStaff()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TIME_PRIORITY_ALREADY_EXIST));
         } else {
-            List<User> softList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_SOFT.getId()));
-            List<User> techList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_TECH.getId()));
+            List<User> softList = userService.getActiveStaffByRole(new RoleImpl(ROLE_SOFT.getId()));
+            List<User> techList = userService.getActiveStaffByRole(new RoleImpl(ROLE_TECH.getId()));
             if (softList.size() == 0 & techList.size() == 0) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH_SOFT));
             } else if (softList.size() == 0) {
@@ -251,7 +254,7 @@ public class AdminManagementStaffController {
 //                        //TODO log
 //                    }
 //                }
-                userTimePriorityService.createStaffTimePriorities(softList);
+                userTimePriorityService.createStaffTimePriorities(staff);
                 return ResponseEntity.ok(null);
             }
         }

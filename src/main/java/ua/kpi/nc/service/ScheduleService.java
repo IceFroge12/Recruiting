@@ -59,23 +59,29 @@ public class ScheduleService {
     }
 
     private void initializeTeachersList() {
+        System.out.println("initializeTeachersList");
         List<ua.kpi.nc.persistence.model.User> softUsers = userService.getActiveStaffByRole(SOFT_ROLE);
         List<ua.kpi.nc.persistence.model.User> techUsers = userService.getActiveStaffByRole(TECH_ROLE);
         if (techLonger) {
             for (ua.kpi.nc.persistence.model.User user : softUsers){
                 allShortTeachers.add(adaptUser(user));
+                System.out.println("softAdaptUser " + user.getEmail());
             }
             for (ua.kpi.nc.persistence.model.User user : techUsers){
                 allLongTeachers.add(adaptUser(user));
+                System.out.println("techAdaptUser " + user.getEmail());
             }
         }else {
             for (ua.kpi.nc.persistence.model.User user : softUsers){
                 allLongTeachers.add(adaptUser(user));
+                System.out.println("softAdaptUser " + user.getEmail());
             }
             for (ua.kpi.nc.persistence.model.User user : techUsers){
                 allShortTeachers.add(adaptUser(user));
+                System.out.println("techAdaptUser " + user.getEmail());
             }
         }
+        System.out.println( "----------------------------------------------------");
     }
 
 //    public int getNumberOfTeacherWithLongerInterview(){
@@ -86,30 +92,42 @@ public class ScheduleService {
 //    }
 
     private void initializeUndistributedStudents(){
+        System.out.println("initializeUndistributedStudents");
         List<ua.kpi.nc.persistence.model.User> users = userService.getAllNotScheduleStudents();
         for (ua.kpi.nc.persistence.model.User user : users){
             undistributedStudents.add(adaptUser(user));
+            System.out.println("student " + user.getEmail());
         }
+        System.out.println( "----------------------------------------------------");
     }
 
     private void initializeDatesAndTimesList(){
+        System.out.println("initializeDatesAndTimesList");
         List<ScheduleTimePoint> scheduleTimePoints = scheduleTimePointService.getAll();
         for (ScheduleTimePoint scheduleTimePoint : scheduleTimePoints) {
             datesAndTimesList.add(scheduleTimePoint.getTimePoint());
+            System.out.println("time poitns " + scheduleTimePoint.getTimePoint());
         }
+        System.out.println( "----------------------------------------------------");
     }
 
     private void initializeNumbOfBookedPositionByForEachDay(){
+        System.out.println("initializeNumbOfBookedPositionByForEachDay");
         if (techLonger) {
             numbOfBookedPositionByLongTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(TECH_ROLE);
             numbOfBookedPositionByShortTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(SOFT_ROLE);
+
         }else {
             numbOfBookedPositionByLongTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(SOFT_ROLE);
             numbOfBookedPositionByShortTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(TECH_ROLE);
         }
+        System.out.println("numbOfBookedPositionByLongTeacherForEachDay  " + numbOfBookedPositionByLongTeacherForEachDay );
+        System.out.println("numbOfBookedPositionByShortTeacherForEachDay  " + numbOfBookedPositionByShortTeacherForEachDay );
+        System.out.println( "----------------------------------------------------");
     }
 
     private void initializeNumOfInterviewerParameter() {
+        System.out.println("initializeNumOfInterviewerParameter");
         if (techLonger) {
             totalNumbOfRegisteredTeachersWithLongerInterv = recruitment.getNumberTechInterviewers();
             totalNumbOfRegisteredTeachersWithShorterInterv = recruitment.getNumberSoftInterviewers();
@@ -117,9 +135,13 @@ public class ScheduleService {
             totalNumbOfRegisteredTeachersWithLongerInterv = recruitment.getNumberSoftInterviewers();
             totalNumbOfRegisteredTeachersWithShorterInterv = recruitment.getNumberTechInterviewers();
         }
+        System.out.println("totalNumbOfRegisteredTeachersWithLongerInterv   " + totalNumbOfRegisteredTeachersWithLongerInterv);
+        System.out.println(" totalNumbOfRegisteredTeachersWithShorterInterv   "  +  totalNumbOfRegisteredTeachersWithShorterInterv );
+        System.out.println( "----------------------------------------------------");
     }
 
     private void initializeInterviewTimeParameter() {
+        System.out.println("initializeInterviewTimeParameter");
         int softInterviewTime = recruitment.getTimeInterviewSoft();
         int techInterviewTime = recruitment.getTimeInterviewTech();
         if (softInterviewTime > techInterviewTime) {
@@ -131,6 +153,9 @@ public class ScheduleService {
             durationOfShortIntervInMinutes = softInterviewTime;
             techLonger = true;
         }
+        System.out.println("durationOfLongIntervInMinutes    " + durationOfLongIntervInMinutes);
+        System.out.println("durationOfShortIntervInMinutes   "  + durationOfShortIntervInMinutes);
+        System.out.println( "----------------------------------------------------");
     }
 
     public void startScheduleForStudents() {
@@ -144,15 +169,19 @@ public class ScheduleService {
         }
     }
 
-    public void startScheduleForStaff() {
+    public boolean startScheduleForStaff() {
         List<TeachersScheduleCell> scheduleCellList = creatingOfAllSchedules.getTeachersSchedule();
         for (TeachersScheduleCell scheduleCell : scheduleCellList) {
+            System.out.println("sche" + scheduleCell.getTeachers().size());
             for (User user : scheduleCell.getTeachers()) {
                 ScheduleTimePoint scheduleTimePoint = scheduleTimePointService
                         .getScheduleTimePointByTimepoint(scheduleCell.getDate());
                 userService.insertFinalTimePoint(reverseAdaptUser(user), scheduleTimePoint);
+                System.out.println(scheduleTimePoint + "   " + user.getId());
             }
         }
+
+        return (scheduleCellList==null)?false:true;
     }
 
     private ua.kpi.nc.persistence.model.User reverseAdaptUser(User user) {

@@ -107,9 +107,6 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
                     value2.roleName = value2.roleName.slice(5);
                 })
             });
-            console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
-                $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
-                $scope.notEvaluated);
             $scope.allEmployee = data;
             console.log(data);
         }, function error() {
@@ -128,9 +125,6 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
                 console.log(value1);
                 $scope.users.push(value1.email);
             });
-            console.log(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
-                $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
-                $scope.notEvaluated);
             $scope.allEmployee = data;
             console.log(data);
 
@@ -427,6 +421,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         console.log("ACTIVE" + data);
         $scope.activeTech = data[0];
         $scope.activeSoft = data[1];
+        $scope.activeTechSoft = data[2];
     });
 
     $scope.exists = function (item, list) {

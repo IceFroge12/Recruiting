@@ -8,7 +8,6 @@ import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.proxy.RoleProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.ScheduleTimePointProxy;
 import ua.kpi.nc.persistence.model.impl.proxy.SocialInformationProxy;
-import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
@@ -161,8 +160,11 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_GET_STUDENT_COUNT = "Select count(*) FROM application_form af\n" +
             "  JOIN recruitment r on af.id_recruitment= r.id where r.end_date > current_date;";
 
-    private static final String SQL_GET_ACTIVE_EMPLOYEES = "Select count(*)  FROM  \"user\" u JOIN user_role ur on ur.id_user = u.id where ur.id_role =? and\n" +
-            "                                                                                  ur.id_role <>? AND u.is_active=true;";
+    private static final String SQL_GET_COUNT_ACTIVE_EMPLOYEES = "Select count(*)  FROM  \"user\" u JOIN user_role ur on ur.id_user = u.id where ur.id_role =? and\n" +
+            "  ur.id_role <>? AND u.is_active=true;";
+
+    private static final String SQL_GET_COUNT_ACTIVE_DOUBLE_ROLE_EMPLOYEES = "Select count(*)  FROM  \"user\" u JOIN user_role ur on ur.id_user = u.id where ur.id_role = 2 and\n" +
+            "  ur.id_role = 5 AND u.is_active=true;";
 
     private static final String SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE = "SELECT count(DISTINCT u.id), date_trunc('day', stp.time_point) AS day From \"user\" u\n" +
             "  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
@@ -464,10 +466,17 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public Long getActiveEmployees(Long idParam0, Long idParam1) {
+    public Long getActiveEmployees(Long idRole0, Long idRole1) {
         log.info("Looking for count employees");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_ACTIVE_EMPLOYEES,
-                resultSet -> resultSet.getLong(1), idParam0, idParam1);
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_EMPLOYEES,
+                resultSet -> resultSet.getLong(1), idRole0, idRole1);
+    }
+
+    @Override
+    public Long getCountActiveDoubleRoleEmployee() {
+        log.info("Looking for count of active double role employees");
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_DOUBLE_ROLE_EMPLOYEES,
+                resultSet -> resultSet.getLong(1) );
     }
 
     @Override
