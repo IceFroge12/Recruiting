@@ -38,8 +38,8 @@ public class ForgotPassword {
     private static final String secret = "verySecretStringForRecover";
     private static final long expireTme = 60 * 1000 * 60;
     private static Logger log = LoggerFactory.getLogger(ForgotPassword.class.getName());
-    private static String SESSION_ERROR = "Link session has been expired";
-    private static String USER_NOT_FOUND = "User with this email not found";
+    private static final String SESSION_ERROR = "Link session has been expired";
+    private static final String USER_NOT_FOUND = "User with this email not found";
 
     private UserService userService = ServiceFactory.getUserService();
     private SenderService senderService = SenderServiceImpl.getInstance();

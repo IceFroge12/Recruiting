@@ -23,52 +23,56 @@
                                                         class="glyphicon glyphicon-user"></span></span>
                                         <input ng-model="firstName" name="firstName" type="text" class="form-control" ng-maxlength="15"
                                                ng-minlength="2" ng-pattern="/^\w+$/" placeholder="First name" required autofocus/>
-                                        <span ng-show="registrationForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
-                                        <span ng-show="registrationForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
-                                        <span ng-show="registrationForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
-                                        <span ng-show="registrationForm.firstName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span>
+
                                         <!--<div ng-messages="registrationForm.firstName.$error">
                                             <div ng-message="maxlength">Password must not exceed 77 characters</div>
                                             <div ng-message="minlength">Password must be over 1 characters</div>
                                         </div>-->
                                     </div>
+                                <span ng-show="registrationForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="registrationForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="registrationForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="registrationForm.firstName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
                                         <input ng-model="secondName" type="text" name="secondName" class="form-control" ng-maxlength="15"
                                                ng-minlength="2" ng-pattern="/^\w+$/" placeholder="Second name" required autofocus/>
-                                        <span ng-show="registrationForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
-                                        <span ng-show="registrationForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
-                                        <span ng-show="registrationForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
-                                        <span ng-show="registrationForm.secondName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span>
+
                                         <!--<div ng-messages="registrationForm.secondName.$error">
                                             <div ng-message="maxlength">Password must not exceed 77 characters</div>
                                             <div ng-message="minlength">Password must be over 1 characters</div>
                                         </div>-->
                                     </div>
+                                <span ng-show="registrationForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="registrationForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="registrationForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="registrationForm.secondName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
                                         <input ng-model="lastName" name="lastName" type="text" class="form-control" ng-maxlength="15" ng-minlength="2" ng-pattern="/^\w+$/"
                                                placeholder="Last name" required autofocus/>
-                                        <span ng-show="registrationForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
-                                        <span ng-show="registrationForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
-                                        <span ng-show="registrationForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
-                                        <span ng-show="registrationForm.lastName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span>
+
                                         <!--<div ng-messages="registrationForm.lastName.$error">
                                             <div ng-message="maxlength">Password must not exceed 77 characters</div>
                                             <div ng-message="minlength">Password must be over 1 characters</div>
                                         </div>-->
                                     </div>
+                                <span ng-show="registrationForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="registrationForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="registrationForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="registrationForm.lastName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span>
                                     <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-envelope"></span></span>
                                         <input ng-model="email" type="email" name="userEmail" class="form-control"
                                                ng-pattern="/^[-\w.]+@[-\w.]+[A-z]{2,4}$/" placeholder="Email" required
                                                autofocus/>
-                                        <span ng-show="registrationForm.userEmail.$error.required" class="text-danger">The field can not be empty.</span>
-                                        <span ng-show="registrationForm.userEmail.$error.pattern" class="text-danger">Invalid email.</span>
+
                                     </div>
+                                <span ng-show="registrationForm.userEmail.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="registrationForm.userEmail.$error.pattern" class="text-danger">Invalid email.</span>
                                     <!--<div ng-messages="registrationForm.userEmail.$error">
                                         <div ng-message="email">Your email address is invalid</div>
                                     </div>-->
@@ -77,15 +81,16 @@
                                                         class="glyphicon glyphicon-lock"></span></span>
                                         <input ng-model="password" type="password"  name="password"  ng-maxlength="16" ng-minlength="4" class="form-control" ng-pattern="/^\w+$/"
                                                placeholder="Password" required/>
-                                        <span ng-show="registrationForm.password.$error.required" class="text-danger">The field can not be empty.</span>
-                                        <span ng-show="registrationForm.password.$error.minlength" class="text-danger">Must be at least 4 characters.</span>
-                                        <span ng-show="registrationForm.password.$error.maxlength" class="text-danger">Password should be no more than 16 characters.</span>
-                                        <span ng-show="registrationForm.password.$error.pattern" class="text-danger">Can contain only numbers and letters.</span>
+
                                         <!--<div ng-messages="registrationForm.password.$error">
                                             <div ng-message="maxlength">Password must not exceed 16 characters</div>
                                             <div ng-message="minlength">Password must be over 4 characters</div>
                                         </div>-->
                                     </div>
+                                <span ng-show="registrationForm.password.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="registrationForm.password.$error.minlength" class="text-danger">Must be at least 4 characters.</span>
+                                <span ng-show="registrationForm.password.$error.maxlength" class="text-danger">Password should be no more than 16 characters.</span>
+                                <span ng-show="registrationForm.password.$error.pattern" class="text-danger">Can contain only numbers and letters.</span>
                                     <p>
                                     <div ng-show="userExist">
                                     <p class="alert-danger">User with this email already exist</p>
