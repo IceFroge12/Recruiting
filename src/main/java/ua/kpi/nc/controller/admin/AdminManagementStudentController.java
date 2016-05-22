@@ -169,7 +169,6 @@ public class AdminManagementStudentController {
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(REJECTED)));
         } else {
-            statusList.add(new Status(valueOf(REJECTED)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_GENERAL_COURSES)));
