@@ -22,16 +22,16 @@ function registrationController($scope, $http) {
                     password: $scope.password
                 }
             }).success(function (data, status) {
-                if (status === 409) {
-                    // TODO show message user already exist!!!
-                }
                 if (status === 200) {
                     $scope.emailSend = true;
                     $scope.username = data.firstName;
                     $scope.email = data.email;
+                    $scope.userExist = false;
                 }
             }).error(function (data, status) {
-                console.log(status);
+                if (status === 409) {
+                    $scope.userExist = true;
+                }
             });
         }
 
