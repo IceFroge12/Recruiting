@@ -13,8 +13,12 @@
 
             <div class="row">
                 <h4>
-                    To create a schedule, set the input parameters
+                    To create a schedule, set the input parameters.
+                <span class="glyphicon glyphicon-question-sign"
+                        title="You can change this parameters by selection users in Staff/Student management"
+                        data-toggle="tooltip" data-placement="top" tooltip></span>
                 </h4>
+
             </div>
             <div class="row info-text">
                 <div class="col-md-2">
@@ -35,7 +39,7 @@
             </div>
             <div class="row">
                 <h4>Select dates on calendar</h4>
-                <p class="marks-cell"><b>0/30</b> hours selected</p>
+                <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
             </div>
             <div id="calendar-sizing" class="row">
                 <table>
@@ -74,10 +78,12 @@
             </div>
 
             <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left" ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
+                <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                        ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
                     Confirm days selection
                 </button>
-                <button type="submit" class="btn btn-info search-element btn-left" ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
+                <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                        ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
                     Cancel days selection
                 </button>
 
@@ -85,6 +91,9 @@
 
             <form name="schedulingForm" ng-init="getInterviewParameters()">
                 <div class="row info-text">
+                    <h4>
+                        Set the interview parameters:
+                    </h4>
                     <div class="col-md-2">
                         Duration for each interview:
                     </div>
@@ -105,30 +114,27 @@
                                 <span ng-show="schedulingForm.softDuration.$error.required">required</span>
                                 <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2 time-result">
-                                Needed hours: 100
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                        ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
-                                    Start schedule
-                                </button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                        ng-disabled="schedulingForm.$invalid"
-                                        ng-click="saveInterviewParameters(softDuration, techDuration)">
-                                    Save interview parameters
-                                </button>
-                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                        ng-disabled="schedulingForm.$invalid" ng-click="submitInterviewParameters()">
-                                    Confirm interview parameters
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                </div>
+                <div class="row info-text">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                ng-disabled="schedulingForm.$invalid"
+                                ng-click="saveInterviewParameters(softDuration, techDuration)">
+                            Save interview parameters
+                        </button>
+                </div>
+                <div class="row info-text">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
+                            Start schedule
+                        </button>
+                </div>
+                <div class="row info-text">
+                         <button type="submit" class="btn btn-sm btn-info search-element btn-left col-md-2"
+                                ng-disabled="schedulingForm.$invalid" ng-click="submitInterviewParameters()">
+                            Confirm interview parameters
+                        </button>
+                </div>
+            </form>
                 </div>
                 <div id="currSched" class="tab-pane fade">
                     <div class="row">
@@ -220,13 +226,13 @@
                         </table>
                     </div>
                     <div class="row info-text">
-                        <button type="submit" class="btn btn-info search-element btn-left" ng-click="saveSelectedDay()">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" ng-click="saveSelectedDay()">
                             Save
                         </button>
-                        <button type="submit" class="btn btn-info search-element btn-left" disabled>Send notification to
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" disabled>Send notification to
                             all
                         </button>
-                        <button type="submit" class="btn btn-info search-element btn-left" disabled>Export
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" disabled>Export
                         </button>
                     </div>
                 </div>
