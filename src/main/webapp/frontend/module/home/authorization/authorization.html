@@ -38,6 +38,10 @@
                                                required/>
                                     </div>
 
+                                    <div ng-show="errorcredential">
+                                        <p class="alert-danger">Wrong email or password</p>
+                                    </div>
+
                                     <div ng-messages="authForm.userEmail.$error">
                                         <div ng-message="email">Your email address is invalid</div>
                                     </div>
