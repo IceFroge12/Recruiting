@@ -88,6 +88,10 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         console.log("error");
     });
 
+    $scope.roleEdit = function(roleName){
+        return roleName.slice(5);
+    };
+
     staffManagementService.getCountOfEmployee().success(function (data) {
         $scope.amount = Math.ceil(data / $scope.itemsPerPage);
     });
