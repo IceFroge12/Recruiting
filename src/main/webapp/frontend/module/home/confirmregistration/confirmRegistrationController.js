@@ -3,11 +3,24 @@
  */
 function confirmRegistrationController($scope, $routeParams, confirmRegistrationService) {
 
+    $scope.foo = true;
+    $scope.message = '';
+
+    $scope.init = function () {
+        console.log();
+    };
+
     console.log($routeParams);
-    confirmRegistrationService.confirmRegistration($routeParams.token).success(function (data) {
-        console.log(data);
-        $scope.result = data;
-    });
+    confirmRegistrationService.confirmRegistration($routeParams.token)
+        .then(function (response) {
+            $scope.foo = true;
+        })
+        .catch(function (response) {
+            if (response.status === 409){
+                $scope.foo = false;
+                $scope.message = response.data.message;
+            }
+        });
 
 }
 
