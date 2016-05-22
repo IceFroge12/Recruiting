@@ -8,6 +8,8 @@ function schedulingController($scope, ngToast, schedulingService) {
     $scope.timeResult = [];
     $scope.type = 'individual';
 
+    $scope.recruiting = false;
+    
     $scope.softAmountSet;
     $scope.techAmountSet;
 
@@ -69,16 +71,90 @@ function schedulingController($scope, ngToast, schedulingService) {
     $scope.getCurrentStatus = function () {
         schedulingService.getCurrentStatusService()
             .then(function (response) {
-                if (response.status === 200) {
-                    $scope.currentStatus = response.data.id;
-                } else if (response.status === 409) {
-                    console.log("Recruiting not started");
-                } else if (response.status === 500) {
-                    console.log("Server error");
-                }
+                $scope.currentStatus = response.data.id;
+                schedulingService.getCurrentRecruitmentCountStudents().then(function success(data) {
+                    $scope.countStudent = data.amountOfStudents;
+                    $scope.amountOfTech = data.amountOfTech;
+                    $scope.amountOfSoft = data.amountOfSoft;
+                });
+
+                schedulingService.getSelectedDayService()
+                    .then(function (response) {
+                        $scope.selectedDates.length = 0;
+                        $scope.timeResult.length = 0;
+                        angular.forEach(response.data, function (value, key) {
+                            var foo = new Date(value.startDate).setHours(0, 0, 0, 0);
+                            $scope.selectedDates.push(foo);
+                            $scope.map[foo] = {
+                                id: value.id,
+                                startTime: new Date(value.startDate).getHours(),
+                                endTime: new Date(value.endDate).getHours()
+                            };
+                            console.log(response.data);
+                        });
+                        console.log($scope.map);
+                    })
+                    .catch(function (response) {
+                        getWarningToast('Error! Cannot get selected day');
+                    });
+
+
+                schedulingService.getCurrentSchedule().then(function success(data) {
+                    console.log(data);
+                    $scope.schedulePoints = data.data;
+                    $scope.collapsed = [];
+                    $scope.collapsed[1] = [];
+                    $scope.collapsed[2] = [];
+                    $scope.collapsed[3] = [];
+                    for (var i = 0; i < $scope.schedulePoints.length; i++) {
+                        $scope.collapsed[1][i] = false;
+                        $scope.collapsed[2][i] = false;
+                        $scope.collapsed[3][i] = false;
+                    }
+                });
+
+                schedulingService.getUsersWithoutInterview($scope.roleSoft)
+                    .then(function success(data) {
+                        $scope.possibleToAdd[$scope.roleSoft] = data;
+                        console.log($scope.possibleToAdd);
+                    })
+                    .catch(function (response) {
+                        getWarningToast('Cannot get possible Soft');
+                    });
+
+                schedulingService.getUsersWithoutInterview($scope.roleTech)
+                    .then(function success(data) {
+                        $scope.possibleToAdd[$scope.roleTech] = data;
+                    })
+                    .catch(function (response) {
+                        getWarningToast('Cannot get possible Tech');
+                    });
+
+                schedulingService.getUsersWithoutInterview($scope.roleStudent)
+                    .then(function success(data) {
+                        $scope.possibleToAdd[$scope.roleStudent] = data;
+                        console.log($scope.possibleToAdd);
+                    })
+                    .catch(function (response) {
+                        getWarningToast('Cannot get possible Students');
+                    });
+
+                schedulingService.getInterviewParametersService().then(function (response) {
+                    if (response.status === 200) {
+                        $scope.softDuration = response.data.softDuration;
+                        $scope.techDuration = response.data.techDuration;
+                    }
+                    else {
+                        getWarningToast('Error! Cannot get interview parameters')
+                    }
+                })
+
             })
             .catch(function (response) {
-                getWarningToast('Cannot get current status of recruiting');
+                $scope.recruiting = true;
+                if (response.status === 409) {
+                    getWarningToast(response.data.message);
+                }
             });
     };
 
@@ -175,7 +251,7 @@ function schedulingController($scope, ngToast, schedulingService) {
                     $scope.map[date].id = response.data;
                 })
                 .catch(function (response) {
-                    getWarningToast('Error! Day has not been saved');
+                    getWarningToast(response.data.message);
                 });
         }
     };
@@ -183,30 +259,16 @@ function schedulingController($scope, ngToast, schedulingService) {
     $scope.saveSelectedDay = function () {
         console.log($scope.timeResult);
         schedulingService.saveSelectedDayService($scope.timeResult).then(function (response) {
-
+            
+        }, function (response) {
+            if (response === 409){
+                getWarningToast(response.data.message);
+            }
         })
     };
 
     $scope.init = function () {
-        schedulingService.getSelectedDayService()
-            .then(function (response) {
-                $scope.selectedDates.length = 0;
-                $scope.timeResult.length = 0;
-                angular.forEach(response.data, function (value, key) {
-                    var foo = new Date(value.startDate).setHours(0, 0, 0, 0);
-                    $scope.selectedDates.push(foo);
-                    $scope.map[foo] = {
-                        id: value.id,
-                        startTime: new Date(value.startDate).getHours(),
-                        endTime: new Date(value.endDate).getHours()
-                    };
-                    console.log(response.data);
-                });
-                console.log($scope.map);
-            })
-            .catch(function (response) {
-                getWarningToast('Error! Cannot get selected day');
-            });
+
     };
 
     $scope.setStartHours = function (date, startTime) {
@@ -229,31 +291,10 @@ function schedulingController($scope, ngToast, schedulingService) {
                 console.log(response);
             })
             .catch(function (response) {
-                getWarningToast('Error! Scheduling has not been started');
+                getWarningToast(response.data.message);
             });
     };
 
-
-    schedulingService.getCurrentRecruitmentCountStudents().then(function success(data) {
-        $scope.countStudent = data.amountOfStudents;
-        $scope.amountOfTech = data.amountOfTech;
-        $scope.amountOfSoft = data.amountOfSoft;
-    });
-
-
-    schedulingService.getCurrentSchedule().then(function success(data) {
-        console.log(data);
-        $scope.schedulePoints = data.data;
-        $scope.collapsed = [];
-        $scope.collapsed[1] = [];
-        $scope.collapsed[2] = [];
-        $scope.collapsed[3] = [];
-        for (var i = 0; i < $scope.schedulePoints.length; i++) {
-            $scope.collapsed[1][i] = false;
-            $scope.collapsed[2][i] = false;
-            $scope.collapsed[3][i] = false;
-        }
-    });
 
     $scope.getSoft = function (idTimePoint) {
         schedulingService.getSoftService(idTimePoint)
@@ -325,17 +366,6 @@ function schedulingController($scope, ngToast, schedulingService) {
         })
     };
 
-    $scope.getInterviewParameters = function () {
-        schedulingService.getInterviewParametersService().then(function (response) {
-            if (response.status === 200) {
-                $scope.softDuration = response.data.softDuration;
-                $scope.techDuration = response.data.techDuration;
-            }
-            else{
-                getWarningToast('Error! Cannot get interview parameters')
-            }
-        })
-    };
 
     $scope.submitInterviewParameters = function () {
         schedulingService.confirmInterviewParametersService().then(function (response) {
@@ -351,31 +381,6 @@ function schedulingController($scope, ngToast, schedulingService) {
 
     $scope.possibleToAdd = [];
 
-    schedulingService.getUsersWithoutInterview($scope.roleSoft)
-        .then(function success(data) {
-            $scope.possibleToAdd[$scope.roleSoft] = data;
-            console.log($scope.possibleToAdd);
-        })
-        .catch(function (response) {
-            getWarningToast('Cannot get possible Soft');
-        });
-
-    schedulingService.getUsersWithoutInterview($scope.roleTech)
-        .then(function success(data) {
-            $scope.possibleToAdd[$scope.roleTech] = data;
-        })
-        .catch(function (response) {
-            getWarningToast('Cannot get possible Tech');
-        });
-
-    schedulingService.getUsersWithoutInterview($scope.roleStudent)
-        .then(function success(data) {
-            $scope.possibleToAdd[$scope.roleStudent] = data;
-            console.log($scope.possibleToAdd);
-        })
-        .catch(function (response) {
-            getWarningToast('Cannot get possible Students');
-        });
 
     $scope.addUserToTimepoint = function addUserToTimepoint(id, idTimePoint) {
         schedulingService.addUserToTimepoint(id, idTimePoint)
@@ -479,13 +484,13 @@ angular.module('appScheduling').directive('modalDialog', function () {
     };
 });
 
-angular.module('appScheduling').directive('tooltip', function(){
+angular.module('appScheduling').directive('tooltip', function () {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs){
-            $(element).hover(function(){
+        link: function (scope, element, attrs) {
+            $(element).hover(function () {
                 $(element).tooltip('show');
-            }, function(){
+            }, function () {
                 $(element).tooltip('hide');
             });
         }

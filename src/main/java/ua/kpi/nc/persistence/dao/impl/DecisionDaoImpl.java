@@ -37,9 +37,9 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
     };
 
     private static final String SQL_GET = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL + ", " +
-        SCALE_COL + " FROM " + TABLE_NAME;
-    
-    private static final String SQL_GET_ALL = SQL_GET +" ORDER BY " + TECH_MARK_COL + ", " + SOFT_MARK_COL;
+            SCALE_COL + " FROM " + TABLE_NAME;
+
+    private static final String SQL_GET_ALL = SQL_GET + " ORDER BY " + TECH_MARK_COL + ", " + SOFT_MARK_COL;
 
     private static final String SQL_GET_BY_IDS = SQL_GET + " WHERE " + SOFT_MARK_COL + " = ? and " + TECH_MARK_COL
             + " = ?;";
@@ -53,7 +53,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + SOFT_MARK_COL + " = ? AND "
             + TECH_MARK_COL + " = ? AND " + FINAL_MARK_COL + " = ?;";
 
-    private static final String SQL_TRUNCATE = "TRUNCATE TABLE "+TABLE_NAME;
+    private static final String SQL_TRUNCATE = "TRUNCATE TABLE " + TABLE_NAME;
 
     @Override
     public Decision getByMarks(int softMark, int techMark) {
@@ -101,18 +101,18 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
         return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
-	@Override
-	public int[] updateDecisionMatrix(List<Decision> decisionMatrix) {
-		log.trace("Updating decision matrix.");
-		Object[][] paramObjects = new Object[decisionMatrix.size()][3];
-		int i = 0;
-		for (Decision decision : decisionMatrix) {
-			paramObjects[i][0] = decision.getFinalMark();
-			paramObjects[i][1] = decision.getSoftMark();
-			paramObjects[i++][2] = decision.getTechMark();
-		}
-		return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, paramObjects);
-	}
+    @Override
+    public int[] updateDecisionMatrix(List<Decision> decisionMatrix) {
+        log.trace("Updating decision matrix.");
+        Object[][] paramObjects = new Object[decisionMatrix.size()][3];
+        int i = 0;
+        for (Decision decision : decisionMatrix) {
+            paramObjects[i][0] = decision.getFinalMark();
+            paramObjects[i][1] = decision.getSoftMark();
+            paramObjects[i++][2] = decision.getTechMark();
+        }
+        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, paramObjects);
+    }
 
 
 }

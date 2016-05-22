@@ -32,9 +32,7 @@ public class JdbcTemplate {
     public int update(String sql, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            log.trace("Open connection");
-            log.trace("Create prepared statement");
-            log.trace("Get result");
+            log.trace("Open connection, create prepared statement");
             int rowNum = 1;
             for (Object object : objects) {
                 statement.setObject(rowNum++, object);
@@ -63,9 +61,7 @@ public class JdbcTemplate {
     public Long insert(String sql, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            log.trace("Open connection");
-            log.trace("Create prepared statement");
-            log.trace("Get result");
+            log.trace("Open connection, create prepared statement");
             return insert(statement, objects);
         } catch (SQLException e) {
             log.error("Cannot read objects ", e);
@@ -125,7 +121,7 @@ public class JdbcTemplate {
         } catch (SQLException e) {
             log.error("Cannot insert objects ", e);
         }
-        return null;
+        return 0L;
     }
 
     public int[] batchUpdate(String sql, Object[][] objects) {
@@ -155,9 +151,7 @@ public class JdbcTemplate {
                 statement.setObject(rowNum++, object);
             }
             ResultSet resultSet = statement.executeQuery();
-            log.trace("Open connection");
-            log.trace("Create prepared statement");
-            log.trace("Get result");
+            log.trace("Open connection, create prepared statement");
             if (resultSet.next()) {
                 return resultSetExtractor.extractData(resultSet);
             }

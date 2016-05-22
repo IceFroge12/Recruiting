@@ -1,7 +1,6 @@
 package ua.kpi.nc.persistence.dao.impl;
 
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.dao.StatusDao;
@@ -31,7 +30,6 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
         status.setTitle(resultSet.getString("title"));
         return status;
     };
-
 
 
     @Override
@@ -69,6 +67,6 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
     @Override
     public Status getByName(String name) {
         log.trace("Looking for user with name = ", name);
-        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.title = ?;",extractor, name);
+        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.title = ?;", extractor, name);
     }
 }

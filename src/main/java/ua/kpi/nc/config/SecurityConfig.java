@@ -48,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-//                .authorizeRequests().anyRequest().permitAll().and()
                 .authorizeRequests()
                 .antMatchers("/home").anonymous()
 
@@ -71,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 
 
 
@@ -80,40 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .servletApi().and()
                 .headers().cacheControl();
 
-//        http
-//                .authorizeRequests()
-////                .antMatchers("**/**").permitAll()
-//
-//                .antMatchers("/index.html", "/home.html", "/login.html", "/").permitAll()
-//
-//                .and()
-//
-////                .antMatchers(HttpMethod.POST, "/loginIn").permitAll()
-////
-////                .antMatchers(HttpMethod.GET, "/login").permitAll()
-////
-////                .antMatchers("/student/**").hasRole("STUDENT")
-////                .antMatchers("/admin/**").hasRole("ADMIN")
-////                .antMatchers("/student.html").hasRole("STUDENT")
-////                .antMatchers("/admin.html").hasRole("STUDENT")
-////                .antMatchers("appForm.html").hasRole("STUDENT")
-//
-//                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, userAuthService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
 
-
-    }
-
-    private PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-
-    private DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userAuthService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
     }
 
     @Bean

@@ -7,7 +7,6 @@ import ua.kpi.nc.persistence.model.User;
 
 public class UserAuthority implements GrantedAuthority {
 
-
 	@JsonIgnore
 	private User user;
 
@@ -36,7 +35,7 @@ public class UserAuthority implements GrantedAuthority {
 			return false;
 
 		UserAuthority ua = (UserAuthority) obj;
-		return ua.getAuthority() == this.getAuthority() || ua.getAuthority().equals(this.getAuthority());
+		return ua.getAuthority().equals(this.getAuthority()) || ua.getAuthority().equals(this.getAuthority());
 	}
 
 	@Override

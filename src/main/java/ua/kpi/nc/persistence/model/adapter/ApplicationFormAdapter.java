@@ -37,9 +37,6 @@ public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter
 		JsonArray jsonQuestions = new JsonArray();
 
 		Map<FormQuestion, JsonObject> questionsMap = generateQuestionsAndAnswers(applicationForm.getAnswers());
-
-
-
 		for (FormQuestion question : questionsMap.keySet()) {
 			jsonQuestions.add(questionsMap.get(question));
 		}

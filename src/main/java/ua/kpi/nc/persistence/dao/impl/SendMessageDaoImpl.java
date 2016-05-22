@@ -25,15 +25,15 @@ public class SendMessageDaoImpl extends JdbcDaoSupport implements SendMessageDao
     static final String STATUS_COL = "status";
 
     private static final String SQL_GET_ALL = "SELECT " + ID_COL + ", " + SUBJECT_COL + ", " + TEXT_COL + ", "
-            + EMAIL_COL + ", " + STATUS_COL + " FROM " + TABLE_NAME + " WHERE "+ STATUS_COL+"=false";
+            + EMAIL_COL + ", " + STATUS_COL + " FROM " + TABLE_NAME + " WHERE " + STATUS_COL + "=false";
     private static final String SQL_GET_BY_ID = SQL_GET_ALL + " WHERE " + TABLE_NAME + "." + ID_COL + "=?;";
     private static final String SQL_GET_BY_SUBJECT = SQL_GET_ALL + " WHERE " + TABLE_NAME + "." + SUBJECT_COL + "=?;";
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + SUBJECT_COL + ", "
             + TEXT_COL + ", " + EMAIL_COL + ", " + STATUS_COL + ") VALUES (?,?,?,?)";
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + "  WHERE " + TABLE_NAME + "." + ID_COL + " = ?;";
-    private static final String SQL_UPDATE = "UPDATE "+ TABLE_NAME + " SET "+ STATUS_COL +"=? WHERE "+ID_COL+ "=?;";
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + STATUS_COL + "=? WHERE " + ID_COL + "=?;";
 
-    private static final String SQL_EXIST = "select exists(SELECT "+ID_COL + " FROM TABLE_NAME  where "+ ID_COL+ "=?)";
+    private static final String SQL_EXIST = "select exists(SELECT " + ID_COL + " FROM TABLE_NAME  where " + ID_COL + "=?)";
 
 
     private static Logger log = LoggerFactory.getLogger(RecruitmentDaoImpl.class.getName());

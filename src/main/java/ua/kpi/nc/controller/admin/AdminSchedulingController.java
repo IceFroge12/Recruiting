@@ -34,7 +34,7 @@ public class AdminSchedulingController {
     private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
 
 
-    private final static String SAVE_SELECTED_DAYS_ERROR = "Error during save selected days, try later";
+    private final static String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
     private final static String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
     private final static String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
     private final static String EDIT_SELECTED_DAY_ERROR = "Error during edit selected day, refresh page or try again later";
@@ -52,7 +52,7 @@ public class AdminSchedulingController {
         if (null != recruitment) {
             return ResponseEntity.ok(recruitment.getSchedulingStatus());
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(RECRUITMENT_NOT_STARTED);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(RECRUITMENT_NOT_STARTED));
         }
     }
 
@@ -78,7 +78,7 @@ public class AdminSchedulingController {
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
                 new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
         ));
-        if (id == 0){
+        if (id == 0) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(SAVE_SELECTED_DAYS_ERROR));
         }
         return ResponseEntity.ok(id);
@@ -87,7 +87,7 @@ public class AdminSchedulingController {
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
     public ResponseEntity getSelectedDays() {
         List<SchedulingSettings> schedulingSettingsList = schedulingSettingsService.getAll();
-        if (null != schedulingSettingsList){
+        if (null != schedulingSettingsList) {
             return ResponseEntity.ok(schedulingSettingsList);
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(GET_SELECTED_DAYS_ERROR));
@@ -119,10 +119,8 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "deleteUserTimeFinal", method = RequestMethod.POST)
     public ResponseEntity deleteUserTimeFinal(@RequestParam long id1, @RequestParam long id2) {
-        System.out.println(id1 + " " + id2);
         User user = userService.getUserByID(id1);
         ScheduleTimePoint stp = timePointService.getScheduleTimePointById(id2);
-        System.out.println(user + "\n" + stp);
         timePointService.deleteUserTimeFinal(user, stp);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -144,9 +142,9 @@ public class AdminSchedulingController {
     @RequestMapping(value = "getUsersByTimePoint", method = RequestMethod.GET)
     public ResponseEntity getUsersByTimePoint(@RequestParam Long idRole, @RequestParam Long idTimePoint) {
         List<UserDto> userDtoList = userService.getUserByTimeAndRole(idRole, idTimePoint).stream().map(UserDto::new).collect(Collectors.toList());
-        if (null != userDtoList){
+        if (null != userDtoList) {
             return ResponseEntity.ok(userDtoList);
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto(GET_USERS_BY_ROLE_TIME_PRIORITY_ERROR));
         }
     }
@@ -179,7 +177,7 @@ public class AdminSchedulingController {
     @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
     public ResponseEntity getInterviewParameters() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        if (null != recruitment){
+        if (null != recruitment) {
             return ResponseEntity.ok(new RecruitmentSettingsDto(recruitment.getTimeInterviewSoft(), recruitment.getTimeInterviewTech()));
 
         }
@@ -199,14 +197,14 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "startScheduling", method = RequestMethod.GET)
-    public ResponseEntity startScheduling(){
-        if ((userTimePriorityService.isSchedulePrioritiesExistStudent() & userTimePriorityService.isSchedulePrioritiesExistStaff())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(STAFF_STUDENT_NOT_CONFIRM);
-        }else if (!userTimePriorityService.isSchedulePrioritiesExistStaff()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(STAFF_NOT_CONFIRM);
-        }else if (!userTimePriorityService.isSchedulePrioritiesExistStudent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(STUDENT_NOT_CONFIRM);
-        }else {
+    public ResponseEntity startScheduling() {
+        if ((userTimePriorityService.isSchedulePrioritiesExistStudent() & userTimePriorityService.isSchedulePrioritiesExistStaff())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STAFF_STUDENT_NOT_CONFIRM));
+        } else if (!userTimePriorityService.isSchedulePrioritiesExistStaff()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STAFF_NOT_CONFIRM));
+        } else if (!userTimePriorityService.isSchedulePrioritiesExistStudent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STUDENT_NOT_CONFIRM));
+        } else {
             ScheduleService scheduleService = new ScheduleService();
             scheduleService.startScheduleForStudents();
             scheduleService.startScheduleForStaff();
@@ -216,16 +214,14 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
     public List<User> getUsersWithoutInterview(@RequestParam Long roleId) {
-        List<User> usersWithoutInterview = userService.getUsersWithoutInterview(roleId);
-        return usersWithoutInterview;
+        return userService.getUsersWithoutInterview(roleId);
     }
 
     @RequestMapping(value = "addUserToTimepoint", method = RequestMethod.POST)
     public void addUserToTimePoint(@RequestParam Long userId, @RequestParam Long idTimePoint) {
         User user = userService.getUserByID(userId);
         ScheduleTimePoint timePoint = timePointService.getScheduleTimePointById(idTimePoint);
-        Long res = timePointService.addUserToTimepoint(user, timePoint);
-        System.out.println("ressssul: " + res);
+        timePointService.addUserToTimepoint(user, timePoint);
     }
 
     private void saveTimePoint() {
@@ -255,20 +251,20 @@ public class AdminSchedulingController {
             timePoint.setAmountOfSoft(0);
             timePoint.setAmountOfTech(0);
         } else {
-            if (numberForEachRole.get((long) RoleEnum.ROLE_STUDENT.getId()) == null) {
+            if (numberForEachRole.get(ROLE_STUDENT.getId()) == null) {
                 timePoint.setAmountOfStudents(0);
             } else {
-                timePoint.setAmountOfStudents(numberForEachRole.get((long) RoleEnum.ROLE_STUDENT.getId()));
+                timePoint.setAmountOfStudents(numberForEachRole.get(ROLE_STUDENT.getId()));
             }
-            if (numberForEachRole.get((long) ROLE_SOFT.getId()) == null) {
+            if (numberForEachRole.get(ROLE_SOFT.getId()) == null) {
                 timePoint.setAmountOfSoft(0);
             } else {
-                timePoint.setAmountOfSoft(numberForEachRole.get((long) ROLE_SOFT.getId()));
+                timePoint.setAmountOfSoft(numberForEachRole.get(ROLE_SOFT.getId()));
             }
-            if (numberForEachRole.get((long) ROLE_TECH.getId()) == null) {
+            if (numberForEachRole.get(ROLE_TECH.getId()) == null) {
                 timePoint.setAmountOfTech(0);
             } else {
-                timePoint.setAmountOfTech(numberForEachRole.get((long) ROLE_TECH.getId()));
+                timePoint.setAmountOfTech(numberForEachRole.get((ROLE_TECH.getId())));
             }
         }
     }

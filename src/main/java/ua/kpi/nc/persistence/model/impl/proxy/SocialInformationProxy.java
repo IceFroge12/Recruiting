@@ -16,6 +16,7 @@ import ua.kpi.nc.service.SocialInformationService;
 public class SocialInformationProxy implements SocialInformation {
 
 
+    private static final long serialVersionUID = 8463245677164450837L;
     private Long id;
 
     private SocialInformationImpl socialInformation;

@@ -37,16 +37,16 @@
                     {{amountOfSoft}}
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-disabled="recruiting">
                 <h4>Select dates on calendar</h4>
                 <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
             </div>
-            <div id="calendar-sizing" class="row">
-                <table>
+            <div id="calendar-sizing" class="row" ng-disabled="recruiting">
+                <table ng-disabled="recruiting">
                     <tr>
                         <td>
-                            <uib-datepicker ng-model='activeDate' multi-select='selectedDates'
-                                            type=="range"></uib-datepicker>
+                            <uib-datepicker ng-model='activeDate'  multi-select='selectedDates'
+                                            type=="range" ng-disabled="recruiting"></uib-datepicker>
                         </td>
                         <td style='width:50px'>
                         </td>
@@ -79,11 +79,11 @@
 
             <div class="row info-text">
                 <button type="submit" class="btn btn-info search-element btn-left col-md-2"
-                        ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
+                        ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)" ng-disabled="recruiting">
                     Confirm days selection
                 </button>
                 <button type="submit" class="btn btn-info search-element btn-left col-md-2"
-                        ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
+                        ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)" ng-disabled="recruiting">
                     Cancel days selection
                 </button>
 
@@ -126,12 +126,6 @@
                         <button type="submit" class="btn btn-info search-element btn-left col-md-2"
                                 ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
                             Start schedule
-                        </button>
-                </div>
-                <div class="row info-text">
-                         <button type="submit" class="btn btn-sm btn-info search-element btn-left col-md-2"
-                                ng-disabled="schedulingForm.$invalid" ng-click="submitInterviewParameters()">
-                            Confirm interview parameters
                         </button>
                 </div>
             </form>

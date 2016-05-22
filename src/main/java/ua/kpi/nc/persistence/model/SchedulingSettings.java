@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 public class SchedulingSettings implements Serializable {
     private static final long serialVersionUID = 3756080692775410186L;
     private Long id;
-    Timestamp startDate;
-    Timestamp endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
 
 
     public SchedulingSettings() {

@@ -13,6 +13,5 @@ public enum TimePriorityTypeEnum {
 	public Long getId() {
 		return id;
 	}
-
 	
 }

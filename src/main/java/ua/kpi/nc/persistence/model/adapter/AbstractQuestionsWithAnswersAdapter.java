@@ -16,7 +16,8 @@ import java.util.Map;
 public abstract class AbstractQuestionsWithAnswersAdapter {
 
     protected Map<FormQuestion, JsonObject> generateQuestionsAndAnswers(List<FormAnswer> formAnswers) {
-        Map<FormQuestion, JsonObject> questionsMap = new TreeMap<FormQuestion, JsonObject>((o1, o2) -> {return Integer.compare(o1.getOrder(), o2.getOrder());});
+        Map<FormQuestion, JsonObject> questionsMap = new TreeMap<>((o1, o2) -> Integer.compare(o1.getOrder(),
+                o2.getOrder()));
         for (FormAnswer answer : formAnswers) {
             FormQuestion question = answer.getFormQuestion();
             if(!question.isEnable()) {

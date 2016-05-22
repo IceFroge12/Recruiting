@@ -3,10 +3,14 @@ package ua.kpi.nc.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.io.Serializable;
+
 /**
  * @author Korzh
  */
-public class SchedulingStatus {
+public class SchedulingStatus implements Serializable {
+
+    private static final long serialVersionUID = -4656348714213157794L;
 
     private Long id;
     private String title;

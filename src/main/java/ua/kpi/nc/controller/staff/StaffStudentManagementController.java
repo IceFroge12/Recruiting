@@ -145,6 +145,7 @@ public class StaffStudentManagementController {
 		}
 	}
 
+	//TODO delete interviewer
 	private JsonObject applicationFormToJson(ApplicationForm applicationForm, User interviewer) {
 		User student = applicationForm.getUser();
 		JsonObject jsonObject = new JsonObject();
@@ -184,13 +185,8 @@ public class StaffStudentManagementController {
 	}
 
 	private boolean isApplicaionFormActual(ApplicationForm applicationForm) {
-		if (!applicationForm.isActive()) {
-			return false;
-		}
-		if (!Objects.equals(applicationForm.getStatus().getId(), StatusEnum.APPROVED.getId())) {
-			return false;
-		}
-		return true;
+		return applicationForm.isActive() && Objects.equals(applicationForm.getStatus().getId(),
+				StatusEnum.APPROVED.getId());
 	}
 
 	private boolean isFormAssigned(ApplicationForm applicationForm, User interviewer) {

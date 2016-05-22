@@ -1,6 +1,8 @@
 package ua.kpi.nc.controller.admin;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,8 @@ import static ua.kpi.nc.persistence.model.enums.RoleEnum.*;
 @RestController
 @RequestMapping("/admin")
 public class AdminManagementStaffController {
+
+    private static Logger log = LoggerFactory.getLogger(AdminManagementStaffController.class);
 
     private UserService userService = ServiceFactory.getUserService();
 
@@ -65,12 +69,11 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.GET)
     public List<User> showFilteredEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                             @RequestParam boolean increase, @RequestParam Long idStart, @RequestParam Long idFinish,
-                                            @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer, @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
+                                            @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer,
+                                            @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
         List<Role> neededRoles = rolesId.stream().map(roleService::getRoleById).collect(Collectors.toList());
-        System.out.println(increase + " " + pageNum + " " + interviewer + " " + rolesId);
-        List<User> res = userService.getFilteredEmployees(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
-        for (User us : res) System.out.println(us);
-        return res;
+        return userService.getFilteredEmployees(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase,
+                idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
     }
 
     private Long calculateStartRow(int pageNum, Long rowsNum) {
@@ -85,10 +88,11 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "getCountOfEmployeeFiltered", method = RequestMethod.GET)
     public Long getCountOfEmployeeFiltered(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                            @RequestParam boolean increase, @RequestParam Long idStart, @RequestParam Long idFinish,
-                                           @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer, @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
+                                           @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer,
+                                           @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
         List<Role> neededRoles = rolesId.stream().map(roleService::getRoleById).collect(Collectors.toList());
-        System.out.println(increase + " " + pageNum + " " + interviewer + " " + rolesId);
-        return userService.getAllEmployeeCountFiltered(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
+        return userService.getAllEmployeeCountFiltered(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol,
+                increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
@@ -99,7 +103,6 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST)
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
-        System.out.println(userDto.toString());
         List<RoleImpl> roles = userDto.getRoleList();
         List<Role> userRoles = new ArrayList<>();
         for (Role role : roles) {
@@ -115,7 +118,6 @@ public class AdminManagementStaffController {
         user.setPassword(passwordEncoderGeneratorService.encode(password));
         user.setActive(true);
         user.setRegistrationDate(new Timestamp(date.getTime()));
-
         userService.insertUser(user, userRoles);
         user.setPassword(password);
         EmailTemplate emailTemplate = emailTemplateService.getById(STUDENT_REGISTRATION.getId());
@@ -126,9 +128,6 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST)
     public void editEmployeeParams(@RequestBody UserDto userDto) {
-//        System.out.println("Зашли в контроллер");
-//        System.out.println(userDto);
-
         User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());
@@ -139,11 +138,7 @@ public class AdminManagementStaffController {
             userRoles.add(roleService.getRoleByTitle("ROLE_" + role.getRoleName()));
         }
         user.setRoles(userRoles);
-        //System.out.println(user);
-        //userService.updateUser(user);
         userService.updateUserWithRole(user);
-//        User userl = userService.getUserByID(2536L);
-//        for(Role role:userl.getRoles())System.out.println(role.getRoleName());
     }
 
     @RequestMapping(value = "changeEmployeeStatus", method = RequestMethod.GET)
@@ -170,9 +165,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "deleteEmployee", method = RequestMethod.GET)
     public void deleteEmployee(@RequestParam String email) {
-        System.out.println(email);
         User user = userService.getUserByUsername(email);
-        System.out.println(user);
         userService.deleteUser(user);
     }
 
@@ -222,51 +215,28 @@ public class AdminManagementStaffController {
         } else {
             List<User> softList = userService.getActiveStaffByRole(new RoleImpl(ROLE_SOFT.getId()));
             List<User> techList = userService.getActiveStaffByRole(new RoleImpl(ROLE_TECH.getId()));
-            if (softList.size() == 0 & techList.size() == 0) {
+            if (softList.isEmpty() & techList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH_SOFT));
-            } else if (softList.size() == 0) {
+            } else if (softList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_SOFT));
-            } else if (techList.size() == 0) {
+            } else if (techList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH));
             } else {
                 Set<User> staff = new LinkedHashSet<>(softList);
                 staff.addAll(techList);
                 EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_INTERVIEW_SELECT.getId());
-
-//                for (User user : staff) {
-//                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
-//                    try {
-//                        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
-//                    } catch (MessagingException e) {
-//                        //TODO log
-//                    }
-//                }
+                for (User user : staff) {
+                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+                    try {
+                        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
+                    } catch (MessagingException e) {
+                        log.error("Cannot send email {}", e);
+                    }
+                }
                 userTimePriorityService.createStaffTimePriorities(staff);
                 return ResponseEntity.ok(null);
             }
         }
-
-//        Gson gson = new Gson();
-//        if (userTimePriorityService.isSchedulePrioritiesExistStudent()) {
-//            return gson.toJson(new MessageDto("Selection is already confirmed.",
-//                    MessageDtoType.ERROR));
-//        }
-//        Long appFormInReviewCount = applicationFormService.getCountInReviewAppForm();
-//        if (appFormInReviewCount != 0) {
-//            return gson.toJson(new MessageDto("You haven't reviewed all application forms. There are still "
-//                    + appFormInReviewCount + " unreviewed forms.", MessageDtoType.ERROR));
-//        }
-//        ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
-//        if (!timePointService.isScheduleDatesExists()) {
-//            return gson.toJson(new MessageDto("You have to choose dates for schedule before confirming selection.",
-//                    MessageDtoType.ERROR));
-//        }
-//        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-//        processApprovedStudents(recruitment);
-//        processRejectedStudentsSelection(recruitment);
-//        return gson.toJson(new MessageDto("Selection confirmed.",
-//                MessageDtoType.SUCCESS));
     }
-
 
 }

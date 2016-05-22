@@ -116,7 +116,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_GET_ALL_EMPLOYEES_FOR_ROWS = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date" +
             " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT + " )" +
-            " as uuiefnlnsnpctiard ORDER BY ";
+            " as temp ORDER BY ";
 
     private static final String SQL_QUERY_ENDING_ASC = " ASC OFFSET ? LIMIT ?;";
 
@@ -135,25 +135,25 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     private static final String SQL_DELETE_TOKEN = "Update \"user\" SET confirm_token = NULL  where id=?";
 
     private static final String SQL_SEARCH_EMPLOYEE_BY_NAME = "Select * from (Select DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE (ur.id_role = 2 OR ur.id_role = 5 OR ur.id_role = 1) AND ((u.id = ?) OR (u.last_name LIKE ?))) as uuiefnlnsnpctiard" +
+            "WHERE (ur.id_role = 2 OR ur.id_role = 5 OR ur.id_role = 1) AND ((u.id = ?) OR (u.last_name LIKE ?))) as temp" +
             " ORDER BY 2 OFFSET 0 LIMIT 10";
 
     private static final String SQL_SEARCH_STUDENT_BY_LAST_NAME = "Select * from (Select DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password,u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE (ur.id_role = 3) AND  ((u.id = ?) OR (u.last_name LIKE ?))) as uuiefnlnsnpctiard ORDER BY 2 OFFSET ? LIMIT ?";
+            "WHERE (ur.id_role = 3) AND  ((u.id = ?) OR (u.last_name LIKE ?))) as temp ORDER BY 2 OFFSET ? LIMIT ?";
 
 
     private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS = "SELECT * FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
             " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +
-            " AND u.id >= ? AND u.id <= ? AND ur.id_role = ANY(?::int[]) AND u.is_active = ANY (?::boolean[]))" +
-            " as uuiefnlnsnpctiard ORDER BY ";
+            " AND u.id >= ? AND u.id <= ? AND ur.id_role = ANY (?::int[]) AND u.is_active = ANY (?::boolean[]))" +
+            " as temp ORDER BY ";
 
 
     private static final String SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_COUNT = "SELECT count(*) FROM (SELECT DISTINCT u.id, u.email, " +
             "u.first_name, u.last_name, u.second_name, u.password, u.confirm_token, u.is_active, u.registration_date" +
             " FROM \"user\" u INNER JOIN user_role ur ON u.id = ur.id_user WHERE ur.id_role <>" + ROLE_STUDENT +
             " AND u.id >= ? AND u.id <= ? AND ur.id_role = ANY(?::int[]) AND u.is_active = ANY (?::boolean[]))" +
-            " as uuiefnlnsnpctiard ORDER BY ? ASC OFFSET ? LIMIT ?;";
+            " as temp ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
     private static final String SQL_GET_MAX_ID = "SELECT MAX(u.id) FROM \"user\" u;";
 
@@ -242,6 +242,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public int[] batchUpdate(List<User> users) {
+        log.info("Batch update users");
         Object[][] objects = new Object[users.size()][];
         int count = 0;
         for (User user : users) {
@@ -495,7 +496,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public Long getCountActiveDoubleRoleEmployee() {
         log.info("Looking for count of active double role employees");
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_DOUBLE_ROLE_EMPLOYEES,
-                resultSet -> resultSet.getLong(1) );
+                resultSet -> resultSet.getLong(1));
     }
 
     @Override
@@ -529,12 +530,12 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public List<User> getUsersWithoutInterview(Long roleId) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor,roleId);
+        return this.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor, roleId);
     }
 
     @Override
     public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE, extractor,scheduleTimePointId, roleId);
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE, extractor, scheduleTimePointId, roleId);
     }
 
 }

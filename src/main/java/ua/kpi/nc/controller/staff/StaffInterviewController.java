@@ -44,8 +44,10 @@ public class StaffInterviewController {
 
 	private static final Gson gson = new Gson();
 	
-	private static final String INTERVIEW_UPDATED_MESSAGE = gson.toJson(new MessageDto("Interview was updated.", MessageDtoType.SUCCESS));
-	private static final String NOT_ASSIGNED_MESSAGE = gson.toJson(new MessageDto("This student is not assigned to you.", MessageDtoType.ERROR));
+	private static final String INTERVIEW_UPDATED_MESSAGE = gson.toJson(new MessageDto(
+			"Interview was updated.", MessageDtoType.SUCCESS));
+	private static final String NOT_ASSIGNED_MESSAGE = gson.toJson(new MessageDto(
+			"This student is not assigned to you.", MessageDtoType.ERROR));
 	
 	public StaffInterviewController() {
 		formAnswerService = ServiceFactory.getFormAnswerService();
@@ -60,14 +62,13 @@ public class StaffInterviewController {
 	public String getApplicationForm(@PathVariable Long applicationFormId) {
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
 		Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-		String jsonResult = applicationFormGson.toJson(applicationForm);
-		return jsonResult;
+		return applicationFormGson.toJson(applicationForm);
 	}
 
 	@RequestMapping(value = "appForm/{applicationFormId}", method = RequestMethod.GET)
 	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
-		response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
+		response.setHeader("Content-Disposition", "inline; filename=ApplicationForm.pdf");
 		response.setContentType("application/pdf");
 		ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
 		pdfAppForm.export(applicationForm, response);
@@ -84,8 +85,7 @@ public class StaffInterviewController {
 			}
 		}
 		Gson interviewGson = GsonFactory.getInterviewGson();
-		String jsonResult = interviewGson.toJson(interview);
-		return jsonResult;
+		return interviewGson.toJson(interview);
 	}
 
 	@RequestMapping(value = "submitInterview", method = RequestMethod.POST)
@@ -128,16 +128,15 @@ public class StaffInterviewController {
 
     @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)
     public boolean getAdequateMark(@PathVariable Long applicationFormId) {
-        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         User interviewer = userService.getAuthorizedUser();
         return interviewService.haveNonAdequateMark(applicationFormId,interviewer.getId());
     }
-
+	//TODO duplicate
 	private void updateAnswers(FormQuestion formQuestion, List<FormAnswer> answers, List<StudentAnswerDto> answersDto,
 			Interview interview) {
 		String questionType = formQuestion.getQuestionType().getTypeTitle();
 		if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
-			int i = 0;
+			int i;
 			for (i = 0; i < answersDto.size() && i < answers.size(); i++) {
 				StudentAnswerDto answerDto = answersDto.get(i);
 				FormAnswer answer = answers.get(i);

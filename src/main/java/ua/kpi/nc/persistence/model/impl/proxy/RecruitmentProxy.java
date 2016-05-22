@@ -16,6 +16,7 @@ import java.sql.Timestamp;
  **/
 public class RecruitmentProxy implements Recruitment {
 
+    private static final long serialVersionUID = -3463375498462494737L;
     private Long id;
 
     private RecruitmentImpl recruitment;

@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 public class QuestionType implements Serializable {
 
+    private static final long serialVersionUID = -191062081481479636L;
+
     private Long id;
     private String typeTitle;
 

@@ -20,6 +20,7 @@ import java.util.Set;
  */
 public class UserProxy implements User {
 
+    private static final long serialVersionUID = -707606021441077440L;
     @JsonIgnore
     private Long id;
 

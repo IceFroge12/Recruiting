@@ -134,9 +134,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                                                    List<String> selectRadioAnswers, ApplicationForm applicationForm) {
 
         if (formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.INPUT.getTitle())) {
-            System.out.println(formQuestion.toString());
             for (FormAnswer answer : formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion)) {
-                System.out.println(answer.toString());
                 selectRadioQuestions.add(formQuestion.getTitle());
                 selectRadioAnswers.add(answer.getAnswer());
             }
@@ -145,7 +143,8 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                 ) {
             for (FormAnswerVariant formAnswerVariant : formQuestion.getFormAnswerVariants()) {
                 for (FormAnswer answer : formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion)) {
-                    if (String.valueOf(formAnswerVariant.getAnswer()).equals(String.valueOf(answer.getFormAnswerVariant().getAnswer()))) {
+                    if (String.valueOf(formAnswerVariant.getAnswer()).equals(String.valueOf(
+                            answer.getFormAnswerVariant().getAnswer()))) {
                         selectRadioQuestions.add(formQuestion.getTitle());
                         selectRadioAnswers.add(answer.getFormAnswerVariant().getAnswer());
                     }
@@ -155,7 +154,8 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
 
     }
 
-    private void insertRadioCheckboxAnswersAndQuestions(ApplicationForm applicationForm, Document document) throws Exception {
+    private void insertRadioCheckboxAnswersAndQuestions(ApplicationForm applicationForm, Document document)
+            throws Exception {
         try {
             for (FormQuestion formQuestion : applicationForm.getQuestions()) {
                 Paragraph paragraph = new Paragraph();
@@ -182,8 +182,10 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                     for (FormAnswerVariant formAnswerVariant : formQuestion.getFormAnswerVariants()) {
                         Paragraph paragraph1 = new Paragraph();
                         boolean flag = false;
-                        for (FormAnswer answer : formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion)) {
-                            if (String.valueOf(formAnswerVariant.getAnswer()).equals(String.valueOf(answer.getFormAnswerVariant().getAnswer()))) {
+                        for (FormAnswer answer : formAnswerService.getByApplicationFormAndQuestion(applicationForm,
+                                formQuestion)) {
+                            if (String.valueOf(formAnswerVariant.getAnswer()).equals(String.valueOf(
+                                    answer.getFormAnswerVariant().getAnswer()))) {
                                 flag = true;
                             }
                         }
@@ -209,8 +211,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                 }
             }
         } catch (DocumentException e) {
-            log.error("Error while inserting Radio and Checkbox Answers And Questions");
-            e.printStackTrace();
+            log.error("Error while inserting Radio and Checkbox Answers And Questions {}", e);
             throw new Exception();
         }
 
@@ -234,8 +235,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                 }
             }
         } catch (DocumentException e) {
-            log.error("Error while inserting TextArea Answers And Questions");
-            e.printStackTrace();
+            log.error("Error while inserting TextArea Answers And Questions {}", e);
             throw new Exception();
         }
     }
@@ -248,8 +248,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
             cellImg.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cellImg);
         } catch (IOException | BadElementException e) {
-            log.error("Error while inserting Student Image in Application Form");
-            e.printStackTrace();
+            log.error("Error while inserting Student Image in Application Form {}", e);
             throw new Exception();
         }
 

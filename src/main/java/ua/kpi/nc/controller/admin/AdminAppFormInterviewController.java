@@ -36,8 +36,7 @@ public class AdminAppFormInterviewController {
     public String getApplicationForm(@PathVariable Long studentId) {
         ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(studentId);
         Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-        String jsonResult = applicationFormGson.toJson(applicationForm);
-        return jsonResult;
+        return applicationFormGson.toJson(applicationForm);
     }
 
     @RequestMapping(value = "getOldApplicationForms/{studentId}", method = RequestMethod.POST)
@@ -75,13 +74,11 @@ public class AdminAppFormInterviewController {
             }
         }
         Gson interviewGson = GsonFactory.getInterviewGson();
-        String jsonResult = interviewGson.toJson(interview);
-        return jsonResult;
+        return interviewGson.toJson(interview);
     }
 
     @RequestMapping(value = "getAdequateMark/{applicationFormId}", method = RequestMethod.GET)
     public boolean getAdequateMark(@PathVariable Long applicationFormId) {
-        ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         return interviewService.haveNonAdequateMarkForAdmin(applicationFormId);
     }
 
@@ -89,10 +86,8 @@ public class AdminAppFormInterviewController {
     public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
-        response.setHeader("Content-Disposition", String.format("inline; filename=ApplicationForm.pdf"));
+        response.setHeader("Content-Disposition", "inline; filename=ApplicationForm.pdf");
         response.setContentType("application/pdf");
         pdfAppForm.export(applicationForm, response);
     }
-
-
 }

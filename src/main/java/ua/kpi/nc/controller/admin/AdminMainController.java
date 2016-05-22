@@ -20,15 +20,12 @@ public class AdminMainController {
 
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     public Recruitment getRecruitmentData() {
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        System.out.println(recruitment.toString());
-        return recruitment;
+        return recruitmentService.getCurrentRecruitmnet();
     }
 
     @RequestMapping(value = "getCurrentRecruitmentStudents", method = RequestMethod.GET)
     public Long getCurrentRecruitmentStudents() {
-        Long studentCount = applicationFormService.getCountRecruitmentStudents(recruitmentService.getCurrentRecruitmnet().getId());
-        return studentCount;
+        return applicationFormService.getCountRecruitmentStudents(recruitmentService.getCurrentRecruitmnet().getId());
     }
 
 }

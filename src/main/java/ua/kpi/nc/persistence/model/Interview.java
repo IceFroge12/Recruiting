@@ -8,36 +8,36 @@ import java.util.List;
  * Created by Алексей on 21.04.2016.
  */
 public interface Interview extends Serializable {
-    public Long getId();
+    Long getId();
 
-    public void setId(Long id);
+    void setId(Long id);
 
-    public Role getRole();
+    Role getRole();
 
-    public void setRole(Role role);
+    void setRole(Role role);
 
-    public List<FormAnswer> getAnswers();
+    List<FormAnswer> getAnswers();
 
-    public void setAnswers(List<FormAnswer> answers);
+    void setAnswers(List<FormAnswer> answers);
 
-    public Integer getMark();
+    Integer getMark();
 
-    public void setMark(Integer mark);
+    void setMark(Integer mark);
 
-    public Timestamp getDate();
+    Timestamp getDate();
 
-    public void setDate(Timestamp date);
+    void setDate(Timestamp date);
 
-    public User getInterviewer();
+    User getInterviewer();
 
-    public void setInterviewer(User user);
+    void setInterviewer(User user);
 
-    public Boolean isAdequateMark();
+    Boolean isAdequateMark();
 
-    public void setAdequateMark(Boolean adequateMark);
+    void setAdequateMark(Boolean adequateMark);
 
-    public ApplicationForm getApplicationForm();
+    ApplicationForm getApplicationForm();
 
-    public void setApplicationForm(ApplicationForm applicationForm);
+    void setApplicationForm(ApplicationForm applicationForm);
 
 }
