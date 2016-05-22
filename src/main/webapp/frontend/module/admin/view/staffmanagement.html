@@ -138,7 +138,7 @@
     </div>
 </div>
 
-<div id="deleteAssignedStudent" class="modal fade" style="z-index: 2000, ">
+<div id="deleteAssignedStudent" class="modal fade" style="z-index: 2000">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -340,7 +340,7 @@
                                            ng-click="toggleSelection(employee.roleName)"
                                            ng-checked="selection.indexOf(employee.roleName) > -1"
                                            ng-required="selection.length==0"/>
-                                    {{employee.roleName}}
+                                    {{roleEdit(employee.roleName)}}
                                 </div>
                             </td>
                         </tr>

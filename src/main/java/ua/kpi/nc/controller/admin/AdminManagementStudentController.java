@@ -164,7 +164,9 @@ public class AdminManagementStudentController {
     private List<Status> getPossibleStatus(Status status) {
         List<Status> statusList = new ArrayList<>();
 
-        if (status.getTitle().equals(valueOf(IN_REVIEW))) {
+        if (status.getTitle().equals(valueOf(REGISTERED))) {
+            statusList.add(new Status(valueOf(REGISTERED)));
+        }else  if (status.getTitle().equals(valueOf(IN_REVIEW))) {
             statusList.add(new Status(valueOf(IN_REVIEW)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(REJECTED)));
@@ -173,6 +175,7 @@ public class AdminManagementStudentController {
             statusList.add(new Status(valueOf(APPROVED_TO_ADVANCED_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_GENERAL_COURSES)));
             statusList.add(new Status(valueOf(APPROVED_TO_JOB)));
+            statusList.add(new Status(valueOf(REJECTED)));
         }
 
         return statusList;

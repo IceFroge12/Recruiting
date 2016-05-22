@@ -315,20 +315,28 @@ function studentManagementController($scope, $rootScope, $filter, studentManagem
         if ($scope.currentPage > 0) {
             $scope.currentPage--;
         }
+        $scope.checkedAll = false;
+        $scope.statusIdArray = [];
     };
 
     $scope.nextPage = function () {
         if ($scope.currentPage < $scope.itemsPerPage.amount - 1) {
             $scope.currentPage++;
         }
+        $scope.checkedAll = false;
+        $scope.statusIdArray = [];
     };
 
     $scope.setPage = function () {
+
         $scope.currentPage = this.n;
         if ($scope.filtered)
             $scope.showFilteredStudents($scope.currentPage);
         else
             $scope.showAllStudents($scope.currentPage);
+
+        $scope.checkedAll = false;
+        $scope.statusIdArray = [];
     };
 
     $scope.filter = function () {
