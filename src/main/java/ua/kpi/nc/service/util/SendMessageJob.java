@@ -26,6 +26,7 @@ public class SendMessageJob extends QuartzJobBean {
 
     private SenderService senderService = SenderServiceImpl.getInstance();
 
+    @Override
     protected void executeInternal(JobExecutionContext ctx) throws JobExecutionException {
         List<Message> messageServiceList = sendMessageService.getAll();
         for (Message message : messageServiceList) {
@@ -33,15 +34,13 @@ public class SendMessageJob extends QuartzJobBean {
             try {
                 sendMessageService.delete(message);
                 senderService.send(message.getEmail(), message.getSubject(), message.getText());
-
             } catch (MessagingException e) {
-                e.printStackTrace();
+                log.error("Cannot send message {}",e);
             }
         }
 
         JobKey jobKey = ctx.getJobDetail().getKey();
-        System.out.println(jobKey);
-
+        log.info("Job key: {}", jobKey);
     }
 
 }

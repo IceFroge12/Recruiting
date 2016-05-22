@@ -47,11 +47,6 @@ public class FormAnswerVariantServiceImpl implements FormAnswerVariantService {
 		return formAnswerVariantDao.deleteFormAnswerVariant(formVariant) != 0;
 	}
 
-	/**
-	 * Get Answer variant by id	 *
-	 * @param id the id by which answer variant will be taken
-	 * @return Answer variant
-	 */
 	@Override
 	public FormAnswerVariant getAnswerVariantById(Long id) {
 		return formAnswerVariantDao.getById(id);

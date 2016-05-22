@@ -37,11 +37,6 @@ public class StaffScheduleController {
 
     @RequestMapping(value = "saveVariants", method = RequestMethod.POST)
     public void saveAppropriateVariant(@RequestBody List<UserTimePriorityDto> userTimePriorityListDto) {
-
-        for (UserTimePriorityDto u:userTimePriorityListDto){
-            System.out.println(userTimePriorityListDto.toString());
-        }
-
         List<UserTimePriority> userTimePriorities = userTimePriorityService.getAllUserTimePriorities(getCurrentUser().getId());
         List<UserTimePriority> updatingUserTimePriorities = IntStream.range(0, userTimePriorityListDto.size())
                 .mapToObj(i -> {

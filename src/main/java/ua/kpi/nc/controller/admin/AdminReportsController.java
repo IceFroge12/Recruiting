@@ -32,70 +32,70 @@ import ua.kpi.nc.service.ServiceFactory;
 @RequestMapping("/admin")
 public class AdminReportsController {
 
-	private static final String CONTENT_DISPOSITION_NAME = "Content-Disposition";
-	private static final String JSON_MIME_TYPE = "application/json";
-	private static final String XLS_MIME_TYPE = "application/vnd.ms-excel";
-	private static final String XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-	
-	private ReportService service = ServiceFactory.getReportService();
-	
-	@RequestMapping(value = "reports/approved.{format}", method = RequestMethod.GET)
-	public void generateReportOfApproved(@PathVariable String format, HttpServletResponse response) throws IOException {
-		Report report = service.getReportOfApproved();
-		renderReport(report, format, response);
-	}
+    private static final String CONTENT_DISPOSITION_NAME = "Content-Disposition";
+    private static final String JSON_MIME_TYPE = "application/json";
+    private static final String XLS_MIME_TYPE = "application/vnd.ms-excel";
+    private static final String XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-	@RequestMapping(value = "reports/answers.{format}/{questionId}", method = RequestMethod.GET)
-	public void generateReportOfAnswers(@PathVariable String format, @PathVariable Long questionId,
-			HttpServletResponse response) throws IOException {
-		Report report = service.getReportOfAnswers(questionId);
-		renderReport(report, format, response);
-	}
+    private ReportService service = ServiceFactory.getReportService();
 
-	private void renderReport(Report report, String format, HttpServletResponse response) throws IOException {
-		ReportRenderer renderer = null;
-		String mimeType = null;
-		switch (format) {
-		case "json":
-			renderer = RendererFactory.getJSONRenderer();
-			mimeType = JSON_MIME_TYPE;
-			break;
-		case "xls":
-			renderer = RendererFactory.getXLSRenderer();
-			mimeType = XLS_MIME_TYPE;
-			response.setHeader(CONTENT_DISPOSITION_NAME,"inline; filename=\"" + report.getTitle() + ".xls\"");
-			break;
-		case "xlsx":
-			renderer = RendererFactory.getXLSXRenderer();
-			mimeType = XLSX_MIME_TYPE;
-			response.setHeader(CONTENT_DISPOSITION_NAME,"inline; filename=\"" + report.getTitle() + ".xlsx\"");
-			break;
-		}
-		if (mimeType != null) {
-			response.setContentType(mimeType);
-		}
-		if (renderer != null) {
-			renderer.render(report, response.getOutputStream());
-		}
-	}
+    @RequestMapping(value = "reports/approved.{format}", method = RequestMethod.GET)
+    public void generateReportOfApproved(@PathVariable String format, HttpServletResponse response) throws IOException {
+        Report report = service.getReportOfApproved();
+        renderReport(report, format, response);
+    }
 
-	@RequestMapping(value = "reports/answers/questions")
-	public String getQuestions() {
-		FormQuestionService questionService = ServiceFactory.getFormQuestionService();
-		RoleService roleService = ServiceFactory.getRoleService();
-		Role studentRole = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
-		List<FormQuestion> questions = questionService.getByRole(studentRole);
-		JsonArray jsonArray = new JsonArray();
-		for (FormQuestion formQuestion : questions) {
-			if (formQuestion.getFormAnswerVariants() != null && formQuestion.isEnable()) {
-				JsonObject jsonObject = new JsonObject();
-				jsonObject.addProperty("id", formQuestion.getId());
-				jsonObject.addProperty("title", formQuestion.getTitle());
-				jsonArray.add(jsonObject);
-			}
-		}
-		Gson gson = new Gson();
-		return gson.toJson(jsonArray);
-	}
+    @RequestMapping(value = "reports/answers.{format}/{questionId}", method = RequestMethod.GET)
+    public void generateReportOfAnswers(@PathVariable String format, @PathVariable Long questionId,
+                                        HttpServletResponse response) throws IOException {
+        Report report = service.getReportOfAnswers(questionId);
+        renderReport(report, format, response);
+    }
+
+    private void renderReport(Report report, String format, HttpServletResponse response) throws IOException {
+        ReportRenderer renderer = null;
+        String mimeType = null;
+        switch (format) {
+            case "json":
+                renderer = RendererFactory.getJSONRenderer();
+                mimeType = JSON_MIME_TYPE;
+                break;
+            case "xls":
+                renderer = RendererFactory.getXLSRenderer();
+                mimeType = XLS_MIME_TYPE;
+                response.setHeader(CONTENT_DISPOSITION_NAME, "inline; filename=\"" + report.getTitle() + ".xls\"");
+                break;
+            case "xlsx":
+                renderer = RendererFactory.getXLSXRenderer();
+                mimeType = XLSX_MIME_TYPE;
+                response.setHeader(CONTENT_DISPOSITION_NAME, "inline; filename=\"" + report.getTitle() + ".xlsx\"");
+                break;
+        }
+        if (mimeType != null) {
+            response.setContentType(mimeType);
+        }
+        if (renderer != null) {
+            renderer.render(report, response.getOutputStream());
+        }
+    }
+
+    @RequestMapping(value = "reports/answers/questions")
+    public String getQuestions() {
+        FormQuestionService questionService = ServiceFactory.getFormQuestionService();
+        RoleService roleService = ServiceFactory.getRoleService();
+        Role studentRole = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
+        List<FormQuestion> questions = questionService.getByRole(studentRole);
+        JsonArray jsonArray = new JsonArray();
+        for (FormQuestion formQuestion : questions) {
+            if (formQuestion.getFormAnswerVariants() != null && formQuestion.isEnable()) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("id", formQuestion.getId());
+                jsonObject.addProperty("title", formQuestion.getTitle());
+                jsonArray.add(jsonObject);
+            }
+        }
+        Gson gson = new Gson();
+        return gson.toJson(jsonArray);
+    }
 
 }

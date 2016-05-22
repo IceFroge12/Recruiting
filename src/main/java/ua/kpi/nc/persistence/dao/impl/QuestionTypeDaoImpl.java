@@ -47,7 +47,7 @@ public class QuestionTypeDaoImpl extends JdbcDaoSupport implements QuestionTypeD
     }
 
     public List<QuestionType> getAllQuestionType() {
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL,extractor);
+        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
     @Override

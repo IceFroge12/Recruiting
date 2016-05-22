@@ -6,6 +6,9 @@ import java.io.Serializable;
  * Created by Nikita on 24.04.2016.
  */
 public class ReportInfo implements Serializable {
+
+    private static final long serialVersionUID = 4682674283630923553L;
+
     private Long id;
     private String query;
     private String title;
@@ -34,6 +37,7 @@ public class ReportInfo implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -46,7 +46,7 @@ public class SenderServiceImpl implements SenderService {
         try {
             tlsSender.send(subject, text, email);
         } catch (MessagingException e) {
-                log.info("Message not resend");
+                log.info("Message not resend {}", e);
                 Message message = new Message(subject, text, email, false);
                 sendMessageService.insert(message);
         }

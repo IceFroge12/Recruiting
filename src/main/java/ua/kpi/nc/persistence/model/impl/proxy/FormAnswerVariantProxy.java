@@ -7,9 +7,11 @@ import ua.kpi.nc.service.FormAnswerVariantService;
 import ua.kpi.nc.service.ServiceFactory;
 
 /**
- @author Vova Korzh
+ * @author Vova Korzh
  **/
-public class FormAnswerVariantProxy implements FormAnswerVariant{
+public class FormAnswerVariantProxy implements FormAnswerVariant {
+
+    private static final long serialVersionUID = -4692963972854360647L;
     private Long id;
     private FormAnswerVariantImpl formAnswerVariant;
 
@@ -24,7 +26,7 @@ public class FormAnswerVariantProxy implements FormAnswerVariant{
 
     @Override
     public Long getId() {
-        return  id;
+        return id;
     }
 
     @Override
@@ -54,12 +56,13 @@ public class FormAnswerVariantProxy implements FormAnswerVariant{
         formAnswerVariant.setFormQuestion(formQuestion);
     }
 
-    private void checkFormAnswerVariant(){
+    private void checkFormAnswerVariant() {
         if (formAnswerVariant == null) {
             formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
             formAnswerVariant = downloadRecruitment();
         }
     }
+
     private FormAnswerVariantImpl downloadRecruitment() {
         return (FormAnswerVariantImpl) formAnswerVariantService.getAnswerVariantById(id);
     }

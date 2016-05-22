@@ -41,7 +41,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         recruitment.setNumberSoftInterviewers(resultSet.getInt("number_soft_interviewers"));
         recruitment.setNumberTechInterviewers(resultSet.getInt("number_tech_interviewers"));
         recruitment.setNumberOfDays(resultSet.getInt("number_of_hours"));
-        recruitment.setSchedulingStatus(new SchedulingStatus(resultSet.getString("title"),resultSet.getLong("scheduling_status")));
+        recruitment.setSchedulingStatus(new SchedulingStatus(resultSet.getString("title"), resultSet.getLong("scheduling_status")));
         return recruitment;
     };
 
@@ -65,7 +65,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
             "r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours, r.scheduling_status, \n" +
             "ss.title  " +
             "FROM \"recruitment\" r JOIN scheduling_status ss on (ss.id= r.scheduling_status)";
-    
+
     private static final String SQL_GET_ALL_SORTED = SQL_GET_ALL + " ORDER BY r.start_date";
 
     private static final String SQL_UPDATE = "UPDATE \"recruitment\" " +
@@ -120,7 +120,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(), recruitment.getTimeInterviewTech(), recruitment.getTimeInterviewSoft(),
                 recruitment.getNumberTechInterviewers(), recruitment.getNumberSoftInterviewers(),
-                recruitment.getNumberOfDays(),recruitment.getSchedulingStatus().getId(), recruitment.getId());
+                recruitment.getNumberOfDays(), recruitment.getSchedulingStatus().getId(), recruitment.getId());
     }
 
     @Override
@@ -156,11 +156,11 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_REGISTERED_COUNT, resultSet -> resultSet.getLong(1), recruitmentId);
     }
 
-	@Override
-	public List<Recruitment> getAllSorted() {
+    @Override
+    public List<Recruitment> getAllSorted() {
         log.info("Get sorted recruitments");
         return this.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
-	}
+    }
 
     @Override
     public Recruitment getLastRecruitment() {

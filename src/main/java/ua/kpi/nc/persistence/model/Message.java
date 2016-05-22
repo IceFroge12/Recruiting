@@ -3,10 +3,14 @@ package ua.kpi.nc.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.io.Serializable;
+
 /**
  * @author Korzh
  */
-public class Message {
+public class Message implements Serializable {
+
+    private static final long serialVersionUID = -1827405242957243162L;
 
     private Long id;
     private String subject;

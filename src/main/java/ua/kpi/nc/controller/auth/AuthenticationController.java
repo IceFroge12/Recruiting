@@ -26,7 +26,6 @@ public class AuthenticationController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public CurrentAuthUser getCurrentUser() {
-
         log.info("Looking authorized user");
         if (SecurityContextHolder.getContext().getAuthentication() instanceof UserAuthentication){
             User user = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails();

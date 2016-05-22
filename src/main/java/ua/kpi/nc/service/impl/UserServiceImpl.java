@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
             connection.commit();
         } catch (SQLException e) {
             if (log.isWarnEnabled()) {
-                log.warn("Cannot insert user", e);
+                log.error("Cannot insert user", e);
             }
             return false;
         }
@@ -80,9 +80,7 @@ public class UserServiceImpl implements UserService {
                 userDao.addRole(user, role, connection);
             connection.commit();
         } catch (SQLException e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Cannot update user", e);
-            }
+            log.error("Cannot update user {}", e);
             return false;
         }
         return true;
@@ -104,6 +102,7 @@ public class UserServiceImpl implements UserService {
         return userDao.getAllNotScheduleStudents();
     }
 
+    @Override
     public List<User> getActiveStaffByRole(Role role) {
         return userDao.getActiveStaffByRole(role);
     }
@@ -144,8 +143,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
-        return userDao.getFilteredEmployees(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer, notIntrviewer, notEvaluated);
+    public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                           Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
+                                           boolean notEvaluated) {
+        return userDao.getFilteredEmployees(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
+                notIntrviewer, notEvaluated);
     }
 
     @Override
@@ -191,8 +193,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long getAllEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
-        return userDao.getEmployeeCountFiltered(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer, notIntrviewer, notEvaluated);
+    public Long getAllEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                            Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
+                                            boolean notEvaluated) {
+        return userDao.getEmployeeCountFiltered(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles,
+                interviewer, notIntrviewer, notEvaluated);
     }
 
     @Override

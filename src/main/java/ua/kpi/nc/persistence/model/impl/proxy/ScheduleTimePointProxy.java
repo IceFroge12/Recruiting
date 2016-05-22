@@ -12,7 +12,7 @@ import ua.kpi.nc.service.ServiceFactory;
 
 public class ScheduleTimePointProxy implements ScheduleTimePoint {
 
-    private static final long serialVersionUID = 2160249328142111936L;
+    private static final long serialVersionUID = -3918415375041281959L;
 
     private Long id;
 

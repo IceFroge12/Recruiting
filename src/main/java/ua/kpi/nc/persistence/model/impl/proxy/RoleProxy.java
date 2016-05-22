@@ -16,6 +16,7 @@ import java.util.Set;
  */
 public class RoleProxy implements Role {
 
+    private static final long serialVersionUID = -2080439528365867845L;
     private Long id;
 
     private RoleImpl role;

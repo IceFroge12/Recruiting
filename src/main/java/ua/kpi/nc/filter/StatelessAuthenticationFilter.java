@@ -31,20 +31,11 @@ public class StatelessAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
             ServletException {
-        Authentication authentication = tokenAuthenticationService.getAuthentication((HttpServletRequest) req, (HttpServletResponse) res);
+        Authentication authentication = tokenAuthenticationService.getAuthentication((HttpServletRequest) req,
+                (HttpServletResponse) res);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//        if (null != authentication){
-//            redirect(req, res, authentication);
-//        }
         chain.doFilter(req, res);
 
     }
-
-//    public void redirect(ServletRequest request, ServletResponse response, Authentication authentication) throws IOException, ServletException {
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess((HttpServletRequest) request, (HttpServletResponse) response, authentication);
-//    }
-
 
 }

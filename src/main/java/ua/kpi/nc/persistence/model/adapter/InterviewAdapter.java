@@ -30,7 +30,6 @@ public class InterviewAdapter extends AbstractQuestionsWithAnswersAdapter implem
         jsonObject.addProperty("adequateMark", interview.isAdequateMark());
         jsonObject.addProperty("applicationForm", interview.getApplicationForm().getId());
         JsonArray jsonQuestions = new JsonArray();
-        System.out.println(interview.getAnswers().toString());
         Map<FormQuestion, JsonObject> questionsMap = generateQuestionsAndAnswers(interview.getAnswers());
         for (FormQuestion question : questionsMap.keySet()) {
             jsonQuestions.add(questionsMap.get(question));

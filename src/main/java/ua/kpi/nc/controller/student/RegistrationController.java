@@ -61,20 +61,13 @@ public class RegistrationController {
                     false,
                     new Timestamp(System.currentTimeMillis()),
                     token);
-            userService.insertUser(user,new ArrayList<>(roles));
-
+            userService.insertUser(user, new ArrayList<>(roles));
             String url = "http://localhost:8085/frontend/index.html#/registrationStudent/" + token;
-
             EmailTemplate emailTemplate = emailTemplateService.getById(2L);
-
             String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
-
-            String text = template +"\n"+ url;
-
+            String text = template + "\n" + url;
             String subject = emailTemplate.getTitle();
-
             senderService.send(user.getEmail(), subject, text);
-
             return ResponseEntity.ok(new UserDto(user.getEmail(), user.getFirstName()));
         }
     }

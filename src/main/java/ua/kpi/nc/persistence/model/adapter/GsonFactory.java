@@ -19,7 +19,8 @@ public class GsonFactory {
 
     public static Gson getApplicationFormGson() {
         if (applicationFormGson == null){
-            applicationFormGson = new GsonBuilder().registerTypeAdapter(ApplicationFormImpl.class, new ApplicationFormAdapter())
+            applicationFormGson = new GsonBuilder().registerTypeAdapter(ApplicationFormImpl.class,
+                    new ApplicationFormAdapter())
                     .setPrettyPrinting()
                     .create();
         }
@@ -33,15 +34,6 @@ public class GsonFactory {
                     .create();
         }
         return interviewGson;
-    }
-
-    public static Gson getUserGson(){
-        if (userGson == null) {
-            userGson = new GsonBuilder().registerTypeAdapter(UserImpl.class, new UserAdapter())
-                    .setPrettyPrinting()
-                    .create();
-        }
-        return userGson;
     }
 
     public static Gson getFormQuestionGson() {

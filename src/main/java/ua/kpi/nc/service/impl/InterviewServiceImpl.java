@@ -69,9 +69,7 @@ public class InterviewServiceImpl implements InterviewService {
             }
             connection.commit();
         } catch (SQLException e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Cannot insert Interview with answers");
-            }
+            log.error("Cannot insert Interview with answers {}",e);
             return false;
         }
         return true;

@@ -1,7 +1,5 @@
 package ua.kpi.nc.filter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,11 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
-import ua.kpi.nc.controller.auth.UserAuthentication;
-import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.persistence.model.adapter.GsonFactory;
-import ua.kpi.nc.persistence.model.adapter.UserAdapter;
-import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.util.AuthenticationSuccessHandlerService;
 import ua.kpi.nc.service.util.UserAuthService;
 
@@ -27,7 +20,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * Created by IO on 23.04.2016.
@@ -35,12 +27,10 @@ import java.util.Set;
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private final TokenAuthenticationService tokenAuthenticationService;
-    private final UserAuthService userAuthService;
 
     public StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService,
-                                   UserAuthService userAuthService, AuthenticationManager authManager) {
+                                   AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(urlMapping));
-        this.userAuthService = userAuthService;
         this.tokenAuthenticationService = tokenAuthenticationService;
          setAuthenticationManager(authManager);
         setAuthenticationSuccessHandler(AuthenticationSuccessHandlerService.getInstance());
@@ -60,8 +50,6 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         tokenAuthenticationService.addAuthentication(response, authentication);
-        //response.addHeader("redirectURL", determineTargetUrl(userAuthentication));
-//        super.successfulAuthentication(request, response, chain, authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess(request,response,authentication);
 
@@ -71,15 +59,5 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         super.doFilter(req, res, chain);
     }
-//
-//    private String determineTargetUrl(Authentication authentication) {
-//        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-//        if (authorities.contains("ADMIN")) {
-//            return "/admin";
-//        } else if (authorities.contains("STUDENT")) {
-//            return "/student";
-//        } else {
-//            throw new IllegalStateException();
-//        }
-//    }
+
 }

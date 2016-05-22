@@ -44,7 +44,7 @@ public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements Schedul
     }
 
     @Override
-    public int deleteAll(){
+    public int deleteAll() {
         log.info("Delete all rows from scheduling settings");
         return this.getJdbcTemplate().update(DELETE_ALL);
     }

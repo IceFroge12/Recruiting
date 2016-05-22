@@ -27,7 +27,8 @@ public class StudentFeedbackController {
 
     @RequestMapping(value = "saveFeedBack", method = RequestMethod.POST)
     public void getFeedback(@RequestParam String feedBack){
-        ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails().getId());
+        ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(
+                ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails().getId());
         applicationForm.setFeedback(feedBack);
         applicationFormService.updateApplicationForm(applicationForm);
     }

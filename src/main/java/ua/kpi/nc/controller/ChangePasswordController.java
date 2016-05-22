@@ -26,16 +26,12 @@ public class ChangePasswordController {
     @RequestMapping(value = "changepassword", method = RequestMethod.POST)
     public ResponseEntity<String> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
         String name = auth.getName();
-
         User user = userService.getUserByUsername(name);
-
         if (passwordEncoderGeneratorService.matches(user.getPassword(),oldPassword)) {
             user.setPassword(passwordEncoderGeneratorService.encode(newPassword));
             userService.updateUser(user);
         }
-        //TODO
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(null);
     }
 }

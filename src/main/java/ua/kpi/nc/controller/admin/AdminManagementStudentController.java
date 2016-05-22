@@ -48,20 +48,6 @@ public class AdminManagementStudentController {
     private ScheduleTimePointService scheduleTimePointService = ServiceFactory.getScheduleTimePointService();
     private DecisionService decisionService = ServiceFactory.getDecisionService();
 
-//    @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
-//    public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-//                                                @RequestParam boolean increase) {
-//        Long fromRow = (pageNum - 1) * rowsNum;
-//        List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
-//        List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationForms(fromRow, rowsNum, sortingCol, increase);
-//        for (ApplicationForm applicationForm : applicationForms) {
-//            studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
-//                    applicationForm.getId(), applicationForm.getUser().getFirstName(),
-//                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
-//                    getPossibleStatus(applicationForm.getStatus())));
-//        }
-//        return studentAppFormDtoList;
-//    }
 
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -76,8 +62,10 @@ public class AdminManagementStudentController {
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         DecisionService decisionService = ServiceFactory.getDecisionService();
         for (ApplicationForm applicationForm : applicationForms) {
-            Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, ROLE_SOFT.getId());
-            Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm, ROLE_TECH.getId());
+            Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
+                    ROLE_SOFT.getId());
+            Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
+                    ROLE_TECH.getId());
             Integer softMark = null;
             Integer techMark = null;
             Integer finalMark = null;
@@ -109,7 +97,6 @@ public class AdminManagementStudentController {
                                                         @RequestParam(value = "restrictions", required = false) String[] restrictions,
                                                         @RequestParam(value = "statuses", required = false) List<String> statuses,
                                                         @RequestParam boolean isActive) {
-        System.out.println(statuses);
         Long fromRow = (pageNum - 1) * rowsNum;
         List<FormQuestion> questions = new ArrayList<>();
         Gson questionGson = GsonFactory.getFormQuestionGson();
@@ -124,9 +111,7 @@ public class AdminManagementStudentController {
                     applicationForm.getId(), applicationForm.getUser().getFirstName(),
                     applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
                     getPossibleStatus(applicationForm.getStatus())));
-            System.out.println(studentAppFormDtoList.get(studentAppFormDtoList.size() - 1));
         }
-
         return studentAppFormDtoList;
     }
 
@@ -135,9 +120,7 @@ public class AdminManagementStudentController {
     public List<String> getAppFormQuestionsNonText(@RequestParam String role) {
         Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRoleNonText(roleTitle);
-
         List<String> adapterFormQuestionList = new ArrayList<>();
-
         for (FormQuestion formQuestion : formQuestionList) {
             Gson questionGson = GsonFactory.getFormQuestionGson();
             String jsonResult = questionGson.toJson(formQuestion);
@@ -150,15 +133,12 @@ public class AdminManagementStudentController {
     @RequestMapping(value = "changeSelectedStatuses", method = RequestMethod.POST)
     public void changeSelectedStatuses(@RequestParam String changeStatus,
                                        @RequestParam List<Long> appFormIdList) {
-        System.out.println(changeStatus);
         Status status = statusService.getByName(changeStatus);
-
         for (Long id : appFormIdList) {
             ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
             applicationForm.setStatus(status);
             applicationFormService.updateApplicationForm(applicationForm);
         }
-
     }
 
     private List<Status> getPossibleStatus(Status status) {
@@ -282,24 +262,26 @@ public class AdminManagementStudentController {
         sendMessage(rejectedForms, rejectedTemplate);
 
         Status approvedToJobStatus = statusService.getStatusById(APPROVED_TO_JOB.getId());
-        List<ApplicationForm> approvedToJobForms = applicationFormService.getByStatusAndRecruitment(approvedToJobStatus, recruitment);
+        List<ApplicationForm> approvedToJobForms = applicationFormService.getByStatusAndRecruitment(
+                approvedToJobStatus, recruitment);
         EmailTemplate approvedToJobTemplate = emailTemplateService.getById(INTERVIEW_RESULT_APPROVED_JOB.getId());
         sendMessage(approvedToJobForms, approvedToJobTemplate);
 
         Status approvedToAdvancedStatus = statusService.getStatusById(APPROVED_TO_ADVANCED_COURSES.getId());
-        List<ApplicationForm> approvedToAdvancedForms = applicationFormService.getByStatusAndRecruitment(approvedToAdvancedStatus, recruitment);
+        List<ApplicationForm> approvedToAdvancedForms = applicationFormService.getByStatusAndRecruitment(
+                approvedToAdvancedStatus, recruitment);
         EmailTemplate approvedToAdvancedTemplate = emailTemplateService.getById(INTERVIEW_RESULT_APPROVED_ADVANCED.getId());
         sendMessage(approvedToAdvancedForms, approvedToAdvancedTemplate);
 
         Status approvedToGeneralStatus = statusService.getStatusById(APPROVED_TO_GENERAL_COURSES.getId());
-        List<ApplicationForm> approvedToGeneralForms = applicationFormService.getByStatusAndRecruitment(approvedToGeneralStatus, recruitment);
+        List<ApplicationForm> approvedToGeneralForms = applicationFormService.getByStatusAndRecruitment(
+                approvedToGeneralStatus, recruitment);
         EmailTemplate approvedToGeneralTemplate = emailTemplateService.getById(INTERVIEW_RESULT_APPROVED.getId());
         sendMessage(approvedToGeneralForms, approvedToGeneralTemplate);
-
         return gson.toJson(new MessageDto("Results were announced.",
                 MessageDtoType.SUCCESS));
     }
-
+    //TODO duplicate
     private void sendMessage(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
         for (ApplicationForm applicationForm : applicationForms) {
             User student = applicationForm.getUser();
@@ -344,7 +326,6 @@ public class AdminManagementStudentController {
         List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
                 recruitment);
 
-
         for (ApplicationForm applicationForm : approvedForms) {
             User student = applicationForm.getUser();
             String subject = approvedTemplate.getTitle();
@@ -354,7 +335,7 @@ public class AdminManagementStudentController {
         }
     }
 
-
+    //TODO duplicate
     private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
         Status rejectedStatus = statusService.getStatusById(StatusEnum.REJECTED.getId());
         EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);

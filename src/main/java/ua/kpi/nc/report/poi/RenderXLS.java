@@ -27,9 +27,4 @@ public class RenderXLS extends AbsRender {
 		wb = new HSSFWorkbook();
 	}
 
-//	public static void main(String [] args) throws FileNotFoundException {
-//		ReportRenderer rr = RendererFactory.getXLSRenderer();
-//	ReportService rs=new ReportServiceImpl(DaoFactory.getReportDao());
-//	rr.render(rs.getReportOfAnswers(new FormQuestionProxy(1L)),new FileOutputStream("qwe.xls"));
-//}
 }

@@ -37,9 +37,7 @@ public interface FormQuestion extends Serializable {
 
     void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants);
 
-    public int getOrder();
+    int getOrder();
 
-	public void setOrder(int order);
-
-
+	void setOrder(int order);
 }

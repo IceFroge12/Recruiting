@@ -12,6 +12,8 @@ import ua.kpi.nc.service.ServiceFactory;
 
 public class ApplicationFormProxy implements ApplicationForm {
 
+	private static final long serialVersionUID = -6416370223822123449L;
+
 	private Long id;
 
 	private ApplicationFormImpl applicationFormImpl;

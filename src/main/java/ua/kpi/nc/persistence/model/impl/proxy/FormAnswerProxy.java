@@ -8,7 +8,10 @@ import ua.kpi.nc.service.ServiceFactory;
 /**
  * Created by Алексей on 21.04.2016.
  */
-public class FormAnswerProxy implements FormAnswer{
+public class FormAnswerProxy implements FormAnswer {
+
+    private static final long serialVersionUID = -6304555865417768920L;
+
     private Long id;
 
     private FormAnswerImpl formAnswer;
@@ -75,7 +78,8 @@ public class FormAnswerProxy implements FormAnswer{
     }
 
     public Interview getInterview() {
-        checkFormAnswer();return formAnswer.getInterview();
+        checkFormAnswer();
+        return formAnswer.getInterview();
     }
 
     public void setInterview(Interview interview) {
@@ -83,7 +87,7 @@ public class FormAnswerProxy implements FormAnswer{
         formAnswer.setInterview(interview);
     }
 
-    private void checkFormAnswer(){
+    private void checkFormAnswer() {
         if (formAnswer == null) {
             answerService = ServiceFactory.getFormAnswerService();
             formAnswer = downloadFormAnswer();

@@ -17,24 +17,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/img/**").addResourceLocations("/img/");
-        registry.addResourceHandler("/fonts/**").addResourceLocations("/fonts/");
-        registry.addResourceHandler("/fullcalendar/**").addResourceLocations("/fullcalendar/");
-        registry.addResourceHandler("/lib/**").addResourceLocations("/lib/");
-        registry.addResourceHandler("/slider/**").addResourceLocations("/slider/");
-        registry.addResourceHandler("/images/**").addResourceLocations("/images/");
-        registry.addResourceHandler("/photo/**").addResourceLocations("/photo/");
         registry.addResourceHandler("/frontend/**").addResourceLocations("/frontend/");
-    }
-
-    @Bean
-    public InternalResourceViewResolver setupViewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/jsp/");
-        resolver.setSuffix(".jsp");
-        return resolver;
     }
 
     @Bean(name = "multipartResolver")
@@ -44,6 +27,5 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         resolver.setMaxUploadSize(5000000);
         return resolver;
     }
-
 
 }

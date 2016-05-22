@@ -12,7 +12,7 @@ import java.util.List;
 
 public class InterviewProxy implements Interview {
 
-	private static final long serialVersionUID = 1092260058342461849L;
+	private static final long serialVersionUID = 5406265452413495228L;
 
 	private Long id;
 

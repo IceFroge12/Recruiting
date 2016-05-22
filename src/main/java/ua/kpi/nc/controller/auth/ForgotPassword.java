@@ -122,7 +122,7 @@ public class ForgotPassword {
             log.info("Token - {} parsing success", token);
             return claims.getSubject();
         } catch (ExpiredJwtException e) {
-            log.info("Token - {} parsing failed", token);
+            log.info("Token - {} parsing failed {}", token, e);
         }
         return null;
     }

@@ -33,7 +33,7 @@ public class AdminRecruitmentSettingsController {
     private SenderService senderService = SenderServiceImpl.getInstance();
 
     @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST)
-    private void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) throws MessagingException {
+    public void addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) throws MessagingException {
         if (null == recruitmentService.getCurrentRecruitmnet()) {
             Recruitment recruitment = new RecruitmentImpl();
             recruitment.setName(recruitmentDto.getName());
@@ -43,7 +43,6 @@ public class AdminRecruitmentSettingsController {
             recruitment.setScheduleChoicesDeadline(Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline()));
             recruitment.setMaxAdvancedGroup(recruitmentDto.getMaxAdvancedGroup());
             recruitment.setMaxGeneralGroup(recruitmentDto.getMaxGeneralGroup());
-
 
             recruitmentService.addRecruitment(recruitment);
             EmailTemplate newRecruitmentTemplate = emailTemplateService.getById(EmailTemplateEnum.CONFIRM_PARTICIPATE.getId());
@@ -73,7 +72,7 @@ public class AdminRecruitmentSettingsController {
     }
 
     @RequestMapping(value = "/getCurrentRecruitment", method = RequestMethod.GET)
-    private Recruitment getCurrentRecruitment() {
+    public Recruitment getCurrentRecruitment() {
         return recruitmentService.getCurrentRecruitmnet();
     }
 

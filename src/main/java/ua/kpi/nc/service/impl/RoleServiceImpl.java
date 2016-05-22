@@ -49,8 +49,8 @@ public class RoleServiceImpl implements RoleService {
     public int deleteRole(Role role) {
         return roleDao.deleteRole(role);
     }
-    
+
     public boolean isInterviewerRole(Role role) {
-		return RoleEnum.ROLE_SOFT.name().equals(role.getRoleName()) || RoleEnum.ROLE_TECH.name().equals(role.getRoleName());
-	}
+        return RoleEnum.ROLE_SOFT.name().equals(role.getRoleName()) || RoleEnum.ROLE_TECH.name().equals(role.getRoleName());
+    }
 }

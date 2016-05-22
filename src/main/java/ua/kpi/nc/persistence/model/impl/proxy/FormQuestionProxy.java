@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class FormQuestionProxy implements FormQuestion {
 
+    private static final long serialVersionUID = 1217478610799707306L;
     private Long id;
     private FormQuestionImpl formQuestion;
 

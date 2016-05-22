@@ -22,22 +22,16 @@ public class AdminNotificationController {
 
     @RequestMapping(value = "/getAllNotificationType", method = RequestMethod.POST)
     public Set<NotificationType> getAllNotificationType() {
-        Set<NotificationType> notificationTypes = notificationTypeService.getAll();
-        return notificationTypes;
+        return notificationTypeService.getAll();
     }
 
     @RequestMapping(value = "/showTemplate", method = RequestMethod.POST)
     public EmailTemplate showTemplate(@RequestParam String title) {
-        System.out.println(title);
-        EmailTemplate emailTemplate = emailTemplateService.getByTitle(title);
-        System.out.println(emailTemplate);
-        return emailTemplate;
+        return emailTemplateService.getByTitle(title);
     }
 
     @RequestMapping(value = "/changeNotification", method = RequestMethod.POST)
     public void changeNotification(@RequestBody EmailTemplate emailTemplate) {
-        System.out.println(emailTemplate);
         emailTemplateService.updateEmailTemplate(emailTemplate);
     }
-
 }
