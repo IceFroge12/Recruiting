@@ -94,7 +94,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     public Long insertFormQuestion(FormQuestion formQuestion, Connection connection) {
         log.info("Insert question with title, enable, mandatory = {}, {}, {}", formQuestion.getTitle(),
                 formQuestion.isEnable(), formQuestion.isMandatory());
-        return this.getJdbcTemplate().insert(SQL_INSERT, formQuestion.getTitle(), formQuestion.isEnable(),
+        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formQuestion.getTitle(), formQuestion.isEnable(),
                 formQuestion.isMandatory(), formQuestion.getQuestionType().getId(), formQuestion.getOrder());
     }
 
@@ -194,7 +194,19 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
                 formQuestion.getId());
     }
 
-	@Override
+    @Override
+    public int updateFormQuestion(FormQuestion formQuestion, Connection connection) {
+        if ((formQuestion.getId() == null) && (log.isDebugEnabled())) {
+            log.warn("Form question: don`t have id", formQuestion.getTitle());
+            return 0;
+        }
+        log.info("Updating Question with Id = {}", formQuestion.getId());
+        return this.getJdbcTemplate().update(SQL_UPDATE,connection, formQuestion.getTitle(), formQuestion.isEnable(),
+                formQuestion.getQuestionType().getId(), formQuestion.isMandatory(),formQuestion.getOrder(),
+                formQuestion.getId());
+    }
+
+    @Override
 	public Set<FormQuestion> getEnableByRoleAsSet(Role role) {
 		log.info("Looking for set of form questions by role = {}", role.getRoleName());
         return this.getJdbcTemplate().queryForSet(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());

@@ -70,7 +70,7 @@ function formSettingsService(http) {
         });
     };
 
-    service.editQuestion = function (id, question, type, enable, formAnswerVariants, role, order) {
+    service.editQuestion = function (id, question, type, enable, formAnswerVariants, role, order,mandatory) {
         console.log(formAnswerVariants);
         console.log(order);
         http({
@@ -84,7 +84,8 @@ function formSettingsService(http) {
                 enable: enable,
                 formAnswerVariants: formAnswerVariants,
                 role: role,
-                order: order
+                order: order,
+                mandatory: mandatory
             })
         });
     };

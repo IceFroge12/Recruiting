@@ -46,6 +46,20 @@ public class JdbcTemplate {
         }
     }
 
+    public int update(String sql, Connection connection, Object... objects) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            log.trace("Create prepared statement");
+            int rowNum = 1;
+            for (Object object : objects) {
+                statement.setObject(rowNum++, object);
+            }
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Cannot read objects ", e);
+            return 0;
+        }
+    }
+
     public Long insert(String sql, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

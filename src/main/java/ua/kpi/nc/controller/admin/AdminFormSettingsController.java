@@ -7,8 +7,11 @@ import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
+import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
+import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
+import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.util.FormQuestionComparator;
 import ua.kpi.nc.service.*;
 
@@ -76,16 +79,25 @@ public class AdminFormSettingsController {
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
 
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
-        for (String s : formQuestionDto.getFormAnswerVariants()) {
-            System.out.println(s);
-            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
-            formAnswerVariant.setAnswer(s);
-            formAnswerVariantList.add(formAnswerVariant);
+        if (questionType.getTypeTitle().equals(FormQuestionTypeEnum.CHECKBOX.getTitle()) ||
+                questionType.getTypeTitle().equals(FormQuestionTypeEnum.SELECT.getTitle()) ||
+                questionType.getTypeTitle().equals(FormQuestionTypeEnum.RADIO.getTitle())) {
+            for (String s : formQuestionDto.getFormAnswerVariants()) {
+                System.out.println(s);
+                FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
+                formAnswerVariant.setAnswer(s);
+                formAnswerVariantList.add(formAnswerVariant);
+            }
         }
-
-        FormQuestion formQuestion = new FormQuestionImpl(formQuestionDto.getId(), formQuestionDto.getQuestion(), questionType,
-                formAnswerVariantList, formQuestionDto.getOrder());
-        formQuestionService.updateFormQuestion(formQuestion);
+        FormQuestion formQuestion = new FormQuestionImpl();
+        formQuestion.setId(formQuestionDto.getId());
+        formQuestion.setTitle(formQuestionDto.getQuestion());
+        formQuestion.setQuestionType(questionType);
+        formQuestion.setFormAnswerVariants(formAnswerVariantList);
+        formQuestion.setOrder(formQuestionDto.getOrder());
+        formQuestion.setMandatory(formQuestionDto.isMandatory());
+        formQuestion.setEnable(formQuestionDto.isEnable());
+        formQuestionService.updateQuestions(formQuestion,formAnswerVariantList);
     }
 
     @RequestMapping(value = "getAllQuestionType")

@@ -16,6 +16,7 @@ import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.FormAnswerVariant;
 import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.RoleService;
@@ -27,6 +28,7 @@ import ua.kpi.nc.service.ServiceFactory;
 public class FormQuestionServiceImpl implements FormQuestionService {
 	private static Logger log = LoggerFactory.getLogger(FormQuestionServiceImpl.class.getName());
 	private FormQuestionDao formQuestionDao;
+	private FormAnswerVariantDao formAnswerVariantDao;
 
 	public FormQuestionServiceImpl(FormQuestionDao formQuestionDao) {
 		this.formQuestionDao = formQuestionDao;
@@ -111,6 +113,33 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 	@Override
 	public int updateFormQuestion(FormQuestion formQuestion) {
 		return formQuestionDao.updateFormQuestion(formQuestion);
+	}
+
+	@Override
+	public boolean updateQuestions(FormQuestion formQuestion, List<FormAnswerVariant> formAnswerVariants) {
+		try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+			connection.setAutoCommit(false);
+			formQuestionDao.updateFormQuestion(formQuestion, connection);
+			formAnswerVariantDao = DaoFactory.getFormAnswerVariantDao();
+			for (FormAnswerVariant formAnswerVariantFromDb : formAnswerVariantDao.getByQuestionId(formQuestion.getId())) {
+				formAnswerVariantDao.deleteFormAnswerVariant(formAnswerVariantFromDb);
+			}
+			if (formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.CHECKBOX.getTitle()) ||
+					formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.SELECT.getTitle()) ||
+					formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.RADIO.getTitle())) {
+				for (FormAnswerVariant formAnswerVariant : formAnswerVariants) {
+					formAnswerVariant.setFormQuestion(formQuestion);
+					formAnswerVariantDao.insertFormAnswerVariant(formAnswerVariant, connection);
+				}
+			}
+			connection.commit();
+		} catch (SQLException e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Transaction failed When Trying to update Form Question with Variants and Role");
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override

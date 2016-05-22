@@ -38,12 +38,26 @@ import ua.kpi.nc.service.UserService;
 @RequestMapping("/staff")
 public class StaffStudentManagementController {
 
-	private Gson gson = new Gson();
 	private InterviewService interviewService = ServiceFactory.getInterviewService();
 	private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 	private UserService userService = ServiceFactory.getUserService();
 	private RoleService roleService = ServiceFactory.getRoleService();
 
+	private static Gson gson = new Gson();
+
+	private static final String ASSIGNED_TO_YOU_MESSAGE = gson
+			.toJson(new MessageDto("This student is already assigned to you.", MessageDtoType.WARNING));
+	
+	private static final String ASSIGNED_TO_ANOTHER_MESSAGE = gson.toJson(
+			new MessageDto("This student is already assigned to another interviewer.", MessageDtoType.WARNING));
+	
+	private static final String CANNOT_ASSIGN_MESSAGE = gson.toJson(new MessageDto("Cannot assign this student.", MessageDtoType.ERROR));
+	private static final String MUST_CHOOSE_ROLE_MESSAGE =gson.toJson(new MessageDto("You must choose role to assign.", MessageDtoType.WARNING));
+	private static final String ASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("This student was assigned to you.", MessageDtoType.SUCCESS));
+	private static final String UNASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("Student was unassigned.", MessageDtoType.SUCCESS));;
+	private static final String UNASSIGN_ERROR_MESSAGE = gson.toJson(new MessageDto("Cannot deassign this application form.", MessageDtoType.ERROR));
+	
+	
 	@RequestMapping(value = "assigned", method = RequestMethod.GET)
 	public String getAssignedStudents() {
 		User interviewer = userService.getAuthorizedUser();
@@ -57,8 +71,6 @@ public class StaffStudentManagementController {
 		return gson.toJson(jsonStudents);
 	}
 
-
-
 	@RequestMapping(value = "getById/{id}", method = RequestMethod.GET)
 	public String getStudentById(@PathVariable Long id) {
 		User interviewer = userService.getAuthorizedUser();
@@ -69,9 +81,9 @@ public class StaffStudentManagementController {
 		JsonArray jsonInterviews = possibleInterviewsToJson(applicationForm, interviewer);
 		if (jsonInterviews.size() == 0) {
 			if (isFormAssigned(applicationForm, interviewer)) {
-				return gson.toJson(new MessageDto("This student is already assigned to you.", MessageDtoType.WARNING));
+				return ASSIGNED_TO_YOU_MESSAGE;
 			}
-			return gson.toJson(new MessageDto("This student is already assigned to another interviewer.", MessageDtoType.WARNING));
+			return ASSIGNED_TO_ANOTHER_MESSAGE;
 		} else {
 			JsonObject jsonStudent = applicationFormToJson(applicationForm, interviewer);
 			jsonStudent.add("interviews", jsonInterviews);
@@ -85,10 +97,10 @@ public class StaffStudentManagementController {
 		User interviewer = userService.getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(assigningDto.getId());
 		if (!isApplicaionFormActual(applicationForm)) {
-			return gson.toJson(new MessageDto("Cannot assign this student.", MessageDtoType.ERROR));
+			return CANNOT_ASSIGN_MESSAGE;
 		}
 		if (assigningDto.getRoles().length == 0) {
-			return gson.toJson(new MessageDto("You must choose role to assign.", MessageDtoType.WARNING));
+			return MUST_CHOOSE_ROLE_MESSAGE;
 		}
 		for (Long roleId : assigningDto.getRoles()) {
 			Role role = roleService.getRoleById(roleId);
@@ -97,7 +109,7 @@ public class StaffStudentManagementController {
 				createInterview(applicationForm, interviewer, role);
 			}
 		}
-		return gson.toJson(new MessageDto("This student was assigned to you.", MessageDtoType.SUCCESS));
+		return ASSIGN_SUCCESS_MESSAGE;
 	}
 
 	private boolean createInterview(ApplicationForm applicationForm, User interviewer, Role role) {
@@ -127,9 +139,9 @@ public class StaffStudentManagementController {
 		if (interview.getInterviewer().getId().equals(interviewer.getId())
 				&& isApplicaionFormActual(interview.getApplicationForm())) {
 			interviewService.deleteInterview(interview);
-			return gson.toJson(new MessageDto("Student was deassigned.", MessageDtoType.SUCCESS));
+			return UNASSIGN_SUCCESS_MESSAGE;
 		} else {
-			return gson.toJson(new MessageDto("Cannot deassign this application form.", MessageDtoType.ERROR));
+			return UNASSIGN_ERROR_MESSAGE;
 		}
 	}
 

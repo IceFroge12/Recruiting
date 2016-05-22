@@ -233,6 +233,10 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         console.log(variantArray);
 
         $scope.question.order = $scope.questionOrder;
+        
+        formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type,
+            $scope.question.enable, variantArray, "ROLE_STUDENT", $scope.question.order, $scope.question.mandatory);
+    };
 
         formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type, $scope.question.enable, variantArray, "ROLE_STUDENT", $scope.question.order);
     }

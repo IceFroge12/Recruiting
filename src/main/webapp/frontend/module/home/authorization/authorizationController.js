@@ -26,10 +26,11 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             $rootScope.id = data.id;
             $rootScope.role = data.role;
             $location.path(data.redirectURL);
+            $scope.errorcredential = false;
         }).error(function (data, status, headers) {
             console.log(data);
-            if(status===401){
-                $scope.authsuccess=true;
+            if (status == 401){
+                $scope.errorcredential = true;
             }
         });
         }

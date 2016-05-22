@@ -5,19 +5,13 @@ import ua.kpi.nc.persistence.model.*;
 import java.util.List;
 import java.util.Set;
 
-/**
- * QuestionForm service
- *
- * @author Yaroslav Kruk on 4/23/16. e-mail: yakruck@gmail.com GitHub:
- *         https://github.com/uakruk
- * @version 1.0
- * @since 1.7
- */
 public interface FormQuestionService {
 
 	public boolean insertFormQuestion(FormQuestion formQuestion, Role role);
 
 	int updateFormQuestion(FormQuestion formQuestion);
+
+	boolean updateQuestions (FormQuestion formQuestion,  List<FormAnswerVariant> formAnswerVariants);
 
 	boolean insertFormQuestion(FormQuestion formQuestion, Role role, List<FormAnswerVariant> formAnswerVariants);
 

@@ -93,13 +93,29 @@
                     <table class="table table-hover table-condensed">
                         <tr>
                             <td>
-                                Mark
+                                <label>Interviewer</label>
+                            </td>
+                            <td>
+                                <label>{{interviewTech.interviewer.lastName}} {{interviewTech.interviewer.firstName}}</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Mark</label>
                             </td>
                             <td>
                                 <label>{{interviewTech.mark}} </label>
                             </td>
                         </tr>
-
+                        <tr>
+                            <td>
+                                <label>Adequate Mark</label>
+                            </td>
+                            <td>
+                                <label ng-if="interviewTech.adequateMark">Not Adequate</label>
+                                <label ng-if="!interviewTech.adequateMark">Adequate</label>
+                            </td>
+                        </tr>
                         <tr ng-repeat="question in interviewTech.questions">
                             <td > {{question.questionTitle}}</td>
                             <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
@@ -118,10 +134,27 @@
                     <table class="table table-hover table-condensed">
                         <tr>
                             <td>
-                                Mark
+                                <label>Interviewer</label>
+                            </td>
+                            <td>
+                                <label>{{interviewSoft.interviewer.lastName}} {{interviewSoft.interviewer.firstName}}</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Mark</label>
                             </td>
                             <td>
                                 <label>{{interviewSoft.mark}} </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Adequate Mark</label>
+                            </td>
+                            <td>
+                                <label ng-if="interviewSoft.adequateMark">Not Adequate</label>
+                                <label ng-if="!interviewSoft.adequateMark">Adequate</label>
                             </td>
                         </tr>
                         <tr ng-repeat="question in interviewSoft.questions">

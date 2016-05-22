@@ -64,7 +64,7 @@ public class StudentScheduleController {
 	private static final String SCHEDULE_CHOICES_DEADLINE_MESSAGE = gson.toJson(
 			new MessageDto("You cannot update priorities after schedule choices deadline.", MessageDtoType.ERROR));
 
-	private static final String DATE_FORMAT = "dd/MM/yyyy hh:mm";
+	private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
 
 	@RequestMapping(value = "schedule", method = RequestMethod.GET)
 	public String getStudentSchedule() {

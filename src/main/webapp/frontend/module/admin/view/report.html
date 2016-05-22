@@ -17,9 +17,11 @@
                                             name="reportType" value="answers" id="answers">Report of
                     answers</label>
                 <select ng-model="$parent.question" name="question"
-                        ng-if="reportType == 'answers'">
-                    <option value="{{q.id}}" ng-repeat="q in questions">{{q.title}}</option>
+                        ng-if="reportType == 'answers'" ng-init="$parent.question = questions[0].id" ng-options="q.id as q.title for q in $parent.questions">
+                    
                 </select>
+                
+                
             </div>
             <div class="col-md-12">
                 <button class="btn btn-sm btn-info search-element col-md-2 btn-left"
@@ -29,11 +31,11 @@
 
             <div class="col-md-12">
                 <div>
-                    <label for="xls"><input ng-model="exportType" type="radio"
-                                            name="exportType" value="xls" id="xls" checked> XLS</label>
+                    <label for="xls"><input ng-model="exportType" type="radio" name="exportType"
+                                            name="exportType" value="xls" id="xls" checked="checked"> XLS</label>
                 </div>
                 <div>
-                    <label for="xlsx"><input ng-model="exportType" type="radio"
+                    <label for="xlsx"><input ng-model="exportType" type="radio" name="exportType"
                                              name="exportType" value="xlsx" id="xlsx"> XLSX</label>
                 </div>
             </div>
@@ -51,7 +53,7 @@
                         <td ng-repeat="cell in line.cells track by $index">{{cell}}</td>
                     </tr>
                 </table>
-                <canvas id="report-chart" width="800" height="1200">
+                <canvas id="report-chart" width="600" height="600">
                 </canvas>
             </div>
         </div>
