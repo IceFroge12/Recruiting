@@ -19,6 +19,7 @@ public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter
 		jsonObject.addProperty("id", applicationForm.getId());
 		jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
 		jsonObject.addProperty("active", applicationForm.isActive());
+		jsonObject.addProperty("feedback",applicationForm.getFeedback());
 		Recruitment recruitment = applicationForm.getRecruitment();
 		if (recruitment != null) {
 			JsonObject jsonRecruitment = new JsonObject();

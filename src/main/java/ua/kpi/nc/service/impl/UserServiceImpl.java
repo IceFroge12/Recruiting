@@ -241,6 +241,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<String> getNotMarkedInterviwers() {
+        return userDao.getNotMarkedInterviwers();
+    }
+
+    @Override
     public List<User> getUsersWithoutInterview(Long roleId) {
         return userDao.getUsersWithoutInterview(roleId);
     }

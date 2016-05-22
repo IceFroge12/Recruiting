@@ -190,6 +190,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             " and NOT EXISTS(SELECT 1 FROM user_time_final utf WHERE utf.id_user = u.id ) AND " +
             "(u.is_active='true' OR EXISTS(SELECT * FROM application_form af WHERE af.id_user=u.id AND af.id_status=3));\n";
 
+    private static final String SQL_GET_NOT_MARKED_INTERVIEWERS = "SELECT DISTINCT u.email " +
+            "FROM \"user\" u JOIN user_role ur ON ur.id_user = u.id " +
+            "  JOIN interview ON u.id = interview.id_interviewer " +
+            "  JOIN application_form af ON af.id = interview.id_application_form " +
+            "WHERE ur.id_role <> 3 AND u.is_active = TRUE and af.is_active = true and interview.mark is null;";
+
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -463,6 +470,18 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public Long getUserCount() {
         return this.getJdbcTemplate().queryWithParameters(SQL_GET_MAX_ID, resultSet -> resultSet.getLong(1));
+    }
+
+    @Override
+    public List<String> getNotMarkedInterviwers() {
+        return this.getJdbcTemplate().queryWithParameters(SQL_GET_NOT_MARKED_INTERVIEWERS, resultSet -> {
+            List<String> list = new ArrayList<>();
+            do {
+                list.add(resultSet.getString("email"));
+            } while (resultSet.next());
+            return list;
+        });
+
     }
 
     @Override
