@@ -1,5 +1,7 @@
 package ua.kpi.nc.controller.student;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,36 +18,29 @@ import ua.kpi.nc.service.UserService;
 @RequestMapping("/student")
 public class StudentFeedbackController {
 
-    private ApplicationFormService applicationFormService;
-    private UserService userService;
+    private static Logger log = LoggerFactory.getLogger(RegistrationController.class.getName());
 
-    public StudentFeedbackController() {
-        applicationFormService = ServiceFactory.getApplicationFormService();
-        userService = ServiceFactory.getUserService();
-        applicationFormService = ServiceFactory.getApplicationFormService();
-    }
+    private ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
+    private UserService userService = ServiceFactory.getUserService();
+
 
     @RequestMapping(value = "saveFeedBack", method = RequestMethod.POST)
     public void getFeedback(@RequestParam String feedBack){
+        log.info("Getting last application form");
         ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(
                 ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails().getId());
         applicationForm.setFeedback(feedBack);
+        log.info("Save feedback in application form id - {}", applicationForm.getId());
         applicationFormService.updateApplicationForm(applicationForm);
     }
 
     @RequestMapping(value = "getFeedBack", method = RequestMethod.GET)
     public ApplicationFormDto getFeedBack(@RequestParam String id){
         User user = userService.getUserByID(Long.parseLong(id));
-        //TODO
-        try{
-            if (null != user){
-                return new ApplicationFormDto(applicationFormService.getLastApplicationFormByUserId(user.getId()).getFeedback());
-            }else {
-                return null;
-            }
-        }catch (NullPointerException e){
-            //TODO log
+        if (null != user){
+            return new ApplicationFormDto(applicationFormService.getLastApplicationFormByUserId(user.getId()).getFeedback());
+        }else {
+            return null;
         }
-        return null;
     }
 }

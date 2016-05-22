@@ -35,7 +35,7 @@ import java.util.*;
 @RequestMapping(value = "/registrationStudent")
 public class RegistrationController {
 
-    private static Logger log = LoggerFactory.getLogger(ForgotPassword.class.getName());
+    private static Logger log = LoggerFactory.getLogger(RegistrationController.class.getName());
     private static final String USER_EXIST = "User with this email already exist";
     private static final String TOKEN_EXPIRED = "User token expired";
 
@@ -51,7 +51,7 @@ public class RegistrationController {
         log.info("Looking user with email - {}", userDto.getEmail());
         if (userService.isExist(userDto.getEmail())) {
             log.info("User with email - {} already exist", userDto.getEmail());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(USER_EXIST);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(USER_EXIST));
         } else {
             Role role = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
             Set<Role> roles = new HashSet<>();
@@ -68,7 +68,7 @@ public class RegistrationController {
             log.trace("Inserting user with email - {} in data base", userDto.getEmail());
             userService.insertUser(user, new ArrayList<>(roles));
 
-            String url = String.format("%s://%s:%d/registrationStudent/%s",request.getScheme(),  request.getServerName(), request.getServerPort(), token);
+            String url = String.format("%s://%s:%d/frontend/index.html#/registrationStudent/%s",request.getScheme(),  request.getServerName(), request.getServerPort(), token);
 
             EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.STUDENT_REGISTRATION.getId());
 
