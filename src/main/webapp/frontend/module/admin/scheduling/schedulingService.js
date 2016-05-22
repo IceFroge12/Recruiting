@@ -142,9 +142,6 @@ function schedulingService($http) {
         return $http({
             method : 'GET',
             url : '/scheduling/cancelSchedulingStatus',
-            params : {
-                idStatus : DATES
-            }
         })
     };
 
