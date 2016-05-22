@@ -164,14 +164,13 @@ public class AdminSchedulingController {
         }
     }
 
-    @RequestMapping(value = "cancelSchedulingStatus", method = RequestMethod.GET)
-    public ResponseEntity cancelSchedulingStatus(@RequestParam Long idStatus) {
-        switch (SchedulingStatusEnum.getStatusEnum(idStatus)) {
-            case DATES:
-                cancelDaySelectStatus();
-                break;
-        }
-        return ResponseEntity.ok(null);
+    @RequestMapping(value = "cancelDaySelect", method = RequestMethod.GET)
+    public void cancelDaySelect() {
+        schedulingSettingsService.deleteAll();
+        timePointService.deleteAll();
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        recruitment.setSchedulingStatus(SchedulingStatusEnum.getStatus(SchedulingStatusEnum.NOT_STARTED.getId()));
+        recruitmentService.updateRecruitment(recruitment);
     }
 
     @RequestMapping(value = "getInterviewParameters", method = RequestMethod.GET)
@@ -234,15 +233,6 @@ public class AdminSchedulingController {
             } while (!schedulingSettings.getStartDate().equals(schedulingSettings.getEndDate()));
         }
         timePointService.batchInsert(listForInsert);
-    }
-
-    private void cancelDaySelectStatus() {
-        //TODO need add mehtod to recruitmnet change status
-        schedulingSettingsService.deleteAll();
-        timePointService.deleteAll();
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        recruitment.setSchedulingStatus(SchedulingStatusEnum.getStatus(SchedulingStatusEnum.NOT_STARTED.getId()));
-        recruitmentService.updateRecruitment(recruitment);
     }
 
     private void setUsersNumberToEachRole(Map<Long, Long> numberForEachRole, ScheduleOverallDto timePoint) {
