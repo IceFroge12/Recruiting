@@ -31,6 +31,7 @@ public class AdminSchedulingController {
     private SchedulingSettingsService schedulingSettingsService = ServiceFactory.getSchedulingSettingsService();
     private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
     private DaoUtilService daoUtilService = ServiceFactory.getDaoUtilService();
+    private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
 
 
     private final static String SAVE_SELECTED_DAYS_ERROR = "Error during save selected days, try later";
@@ -41,6 +42,9 @@ public class AdminSchedulingController {
     private final static String CHANGE_STATUS_ERROR = "Acton has been not complete";
     private final static String GET_CURRENT_STATUS_ERROR = " Can't load current scheduling status, refresh page or try again later";
     private final static String RECRUITMENT_NOT_STARTED = "Any recruitment not started";
+    private final static String STAFF_STUDENT_NOT_CONFIRM = "Student and staff hasn't been confirm";
+    private final static String STAFF_NOT_CONFIRM = "Staff hasn't been confirm";
+    private final static String STUDENT_NOT_CONFIRM = "Student hasn't been confirm";
 
 
     @RequestMapping(value = "getCurrentStatus", method = RequestMethod.GET)
@@ -197,10 +201,18 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "startScheduling", method = RequestMethod.GET)
     public ResponseEntity startScheduling(){
-        ScheduleService scheduleService = new ScheduleService();
-        scheduleService.startScheduleForStudents();
-        scheduleService.startScheduleForStaff();
-        return ResponseEntity.ok(null);
+        if ((userTimePriorityService.isSchedulePrioritiesExistStudent() & userTimePriorityService.isSchedulePrioritiesExistStaff())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(STAFF_STUDENT_NOT_CONFIRM);
+        }else if (!userTimePriorityService.isSchedulePrioritiesExistStaff()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(STAFF_NOT_CONFIRM);
+        }else if (!userTimePriorityService.isSchedulePrioritiesExistStudent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(STUDENT_NOT_CONFIRM);
+        }else {
+            ScheduleService scheduleService = new ScheduleService();
+            scheduleService.startScheduleForStudents();
+            scheduleService.startScheduleForStaff();
+            return ResponseEntity.ok(null);
+        }
     }
 
     @RequestMapping(value = "getUsersWithoutInterview", method = RequestMethod.GET)
