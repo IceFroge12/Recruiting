@@ -1,7 +1,7 @@
 /**
  * Created by dima on 30.04.16.
  */
-function schedulingController($scope, schedulingService) {
+function schedulingController($scope, ngToast, schedulingService) {
 
     $scope.activeDate;
     $scope.selectedDates = [];
@@ -28,26 +28,58 @@ function schedulingController($scope, schedulingService) {
 
     $scope.currentStatus = '';
 
+    var getSuccessToast = function (message) {
+        var myToastMsg = ngToast.success({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
+
+    var getWarningToast = function (message) {
+        var myToastMsg = ngToast.warning({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
 
     $scope.removeFromSelected = function (dt) {
         $scope.selectedDates.splice(this.selectedDates.indexOf(dt), 1);
         if ($scope.map[dt].id != -1) {
-            schedulingService.deleteSelectedDayService($scope.map[dt].id).then(function (response) {
-                console.log(response);
-            })
+            schedulingService.deleteSelectedDayService($scope.map[dt].id)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (response) {
+                    getWarningToast('Cannot delete selected day');
+                });
+
         }
     };
-    
+
     $scope.getCurrentStatus = function () {
-        schedulingService.getCurrentStatusService().then(function (response) {
-            if (response.status === 200){
-                $scope.currentStatus = response.data.id;
-            }else if (response.status === 409){
-                console.log("Recruiting not started");
-            }else if (response.status === 500){
-                console.log("Server error");
-            }
-        })
+        schedulingService.getCurrentStatusService()
+            .then(function (response) {
+                if (response.status === 200) {
+                    $scope.currentStatus = response.data.id;
+                } else if (response.status === 409) {
+                    console.log("Recruiting not started");
+                } else if (response.status === 500) {
+                    console.log("Server error");
+                }
+            })
+            .catch(function (response) {
+                getWarningToast('Cannot get current status of recruiting');
+            });
     };
 
     $scope.edit = function (object, date) {
@@ -58,9 +90,14 @@ function schedulingController($scope, schedulingService) {
             hourEnd: object.endTime,
             changed: false
         };
-        schedulingService.editSelectedDayService(temp).then(function (response) {
-            console.log(response);
-        })
+        schedulingService.editSelectedDayService(temp)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Day has not been edited');
+            });
+
     };
 
     var currentSoft;
@@ -70,47 +107,59 @@ function schedulingController($scope, schedulingService) {
 
     $scope.setCurrentSoft = function (soft, timePoint) {
         currentSoft = soft;
-        currentTimePoint=timePoint;
+        currentTimePoint = timePoint;
     };
 
     $scope.setCurrentTech = function (tech, timePoint) {
         currentTech = tech;
-        currentTimePoint=timePoint;
+        currentTimePoint = timePoint;
     };
 
     $scope.setCurrentStudent = function (student, timePoint) {
         currentStudent = student;
-        currentTimePoint=timePoint;
+        currentTimePoint = timePoint;
     };
 
-    $scope.deleteSoftTimeFinal = function(){
-        schedulingService.deleteUserTimeFinal(currentSoft.id, currentTimePoint.id).then(function (response) {
-        if(response.status===200){
-            var index=$scope.softMap[currentTimePoint.id].indexOf(currentSoft);
-            $scope.softMap[currentTimePoint.id].splice(index,1);
-        }
-        });
-        console.log("delete Soft TimeFinal with id = "+currentSoft.id +" and timePoint id = "+currentTimePoint.id);
+    $scope.deleteSoftTimeFinal = function () {
+        schedulingService.deleteUserTimeFinal(currentSoft.id, currentTimePoint.id)
+            .then(function (response) {
+                if (response.status === 200) {
+                    var index = $scope.softMap[currentTimePoint.id].indexOf(currentSoft);
+                    $scope.softMap[currentTimePoint.id].splice(index, 1);
+                }
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Soft has not been deleted');
+            });
+        console.log("delete Soft TimeFinal with id = " + currentSoft.id + " and timePoint id = " + currentTimePoint.id);
     };
 
-    $scope.deleteTechTimeFinal = function(){
-        schedulingService.deleteUserTimeFinal(currentTech.id, currentTimePoint.id).then(function (response) {
-            if(response.status===200){
-                var index=$scope.techMap[currentTimePoint.id].indexOf(currentTech);
-                $scope.techMap[currentTimePoint.id].splice(index,1);
-            }
-        });
-        console.log("delete Tech TimeFinal with id = "+currentTech.id +" and timePoint id = "+currentTimePoint.id);
+    $scope.deleteTechTimeFinal = function () {
+        schedulingService.deleteUserTimeFinal(currentTech.id, currentTimePoint.id)
+            .then(function (response) {
+                if (response.status === 200) {
+                    var index = $scope.techMap[currentTimePoint.id].indexOf(currentTech);
+                    $scope.techMap[currentTimePoint.id].splice(index, 1);
+                }
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Tech has not been deleted');
+            });
+        console.log("delete Tech TimeFinal with id = " + currentTech.id + " and timePoint id = " + currentTimePoint.id);
     };
 
-    $scope.deleteStudentTimeFinal = function(){
-        schedulingService.deleteUserTimeFinal(currentStudent.id, currentTimePoint.id).then(function (response) {
-            if(response.status===200){
-                var index=$scope.studentMap[currentTimePoint.id].indexOf(currentStudent);
-                $scope.studentMap[currentTimePoint.id].splice(index,1);
-            }
-        });
-        console.log("delete Student TimeFinal with id = "+currentStudent.id +" and timePoint id = "+currentTimePoint.id);
+    $scope.deleteStudentTimeFinal = function () {
+        schedulingService.deleteUserTimeFinal(currentStudent.id, currentTimePoint.id)
+            .then(function (response) {
+                if (response.status === 200) {
+                    var index = $scope.studentMap[currentTimePoint.id].indexOf(currentStudent);
+                    $scope.studentMap[currentTimePoint.id].splice(index, 1);
+                }
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Student has not been deleted');
+            });
+        console.log("delete Student TimeFinal with id = " + currentStudent.id + " and timePoint id = " + currentTimePoint.id);
     };
 
     $scope.setTime = function (object, date) {
@@ -121,9 +170,13 @@ function schedulingController($scope, schedulingService) {
                 hourEnd: object.endTime,
                 changed: false
             };
-            schedulingService.saveSelectedDayService(temp).then(function (response) {
-                $scope.map[date].id = response.data;
-            });
+            schedulingService.saveSelectedDayService(temp)
+                .then(function (response) {
+                    $scope.map[date].id = response.data;
+                })
+                .catch(function (response) {
+                    getWarningToast('Error! Day has not been saved');
+                });
         }
     };
 
@@ -135,21 +188,25 @@ function schedulingController($scope, schedulingService) {
     };
 
     $scope.init = function () {
-        schedulingService.getSelectedDayService().then(function (response) {
-            $scope.selectedDates.length = 0;
-            $scope.timeResult.length = 0;
-            angular.forEach(response.data, function (value, key) {
-                var foo = new Date(value.startDate).setHours(0, 0, 0, 0);
-                $scope.selectedDates.push(foo);
-                $scope.map[foo] = {
-                    id: value.id,
-                    startTime: new Date(value.startDate).getHours(),
-                    endTime: new Date(value.endDate).getHours()
-                };
-                console.log(response.data);
+        schedulingService.getSelectedDayService()
+            .then(function (response) {
+                $scope.selectedDates.length = 0;
+                $scope.timeResult.length = 0;
+                angular.forEach(response.data, function (value, key) {
+                    var foo = new Date(value.startDate).setHours(0, 0, 0, 0);
+                    $scope.selectedDates.push(foo);
+                    $scope.map[foo] = {
+                        id: value.id,
+                        startTime: new Date(value.startDate).getHours(),
+                        endTime: new Date(value.endDate).getHours()
+                    };
+                    console.log(response.data);
+                });
+                console.log($scope.map);
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Cannot get selected day');
             });
-            console.log($scope.map);
-        });
     };
 
     $scope.setStartHours = function (date, startTime) {
@@ -165,11 +222,15 @@ function schedulingController($scope, schedulingService) {
             }
         }
     };
-    
+
     $scope.startScheduling = function () {
-        schedulingService.startSchedulingService().then(function (response) {
-            console.log(response);      
-        })
+        schedulingService.startSchedulingService()
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Scheduling has not been started');
+            });
     };
 
 
@@ -195,37 +256,58 @@ function schedulingController($scope, schedulingService) {
     });
 
     $scope.getSoft = function (idTimePoint) {
-        schedulingService.getSoftService(idTimePoint).then(function (response) {
-            $scope.softMap[idTimePoint] = response.data;
-        })
+        schedulingService.getSoftService(idTimePoint)
+            .then(function (response) {
+                $scope.softMap[idTimePoint] = response.data;
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Cannot get soft by timepoint');
+            });
     };
 
     $scope.getTech = function (idTimePoint) {
-        schedulingService.getTechService(idTimePoint).then(function (response) {
-            $scope.techMap[idTimePoint] = response.data;
-        })
+        schedulingService.getTechService(idTimePoint)
+            .then(function (response) {
+                $scope.techMap[idTimePoint] = response.data;
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Cannot get tech by timepoint');
+            });
     };
 
     $scope.getStudent = function (idTimePoint) {
-        schedulingService.getStudentService(idTimePoint).then(function (response) {
-            $scope.studentMap[idTimePoint] = response.data;
-        })
+        schedulingService.getStudentService(idTimePoint)
+            .then(function (response) {
+                $scope.studentMap[idTimePoint] = response.data;
+            })
+            .catch(function (response) {
+                getWarningToast('Error! Cannot get student by timepoint');
+            });
     };
 
     $scope.submitDaysSelection = function () {
         schedulingService.confirmDaysSelectionService().then(function (response) {
             if (response.status === 200) {
                 $scope.currentStatus = schedulingService.getConfirmDaysSelectionStatus();
+                getSuccessToast('Days selection confirmed');
             }
+            else {
+                getWarningToast('Error! Days selection has not been confirmed');
+            }
+
         })
     };
 
     $scope.cancelDaysSelection = function () {
         schedulingService.cancelDaysSelectionService().then(function (response) {
-            if (response.status == 200){
+            if (response.status == 200) {
                 $scope.map.length = 0;
                 $scope.selectedDates.length = 0;
                 $scope.currentStatus = 5;
+                getSuccessToast('Days selection has been cancelled')
+            }
+            else {
+                getWarningToast('Error! Days selection has not been cancelled')
             }
         })
 
@@ -233,6 +315,12 @@ function schedulingController($scope, schedulingService) {
 
     $scope.saveInterviewParameters = function (softDuration, techDuration) {
         schedulingService.saveInterviewParametersService(softDuration, techDuration).then(function (response) {
+            if (response.status == 200) {
+                getSuccessToast('Interview parameters have been saved')
+            }
+            else {
+                getWarningToast('Error! Interview parameters have not been saved')
+            }
 
         })
     };
@@ -243,61 +331,84 @@ function schedulingController($scope, schedulingService) {
                 $scope.softDuration = response.data.softDuration;
                 $scope.techDuration = response.data.techDuration;
             }
+            else{
+                getWarningToast('Error! Cannot get interview parameters')
+            }
         })
     };
 
     $scope.submitInterviewParameters = function () {
         schedulingService.confirmInterviewParametersService().then(function (response) {
-            if (response.status === 200){
+            if (response.status === 200) {
                 $scope.currentStatus = schedulingService.getConfirmInterviewParametersStatus();
+                getSuccessToast('Interview parameters have been confirmed');
+            }
+            else {
+                getWarningToast('Interview parameters have not been confirmed')
             }
         })
     };
 
     $scope.possibleToAdd = [];
 
-    schedulingService.getUsersWithoutInterview($scope.roleSoft).then(function success(data){
-        $scope.possibleToAdd[$scope.roleSoft] = data;
-        console.log($scope.possibleToAdd);
-    });
-
-    schedulingService.getUsersWithoutInterview($scope.roleTech).then(function success(data){
-        $scope.possibleToAdd[$scope.roleTech] = data;
-    });
-
-    schedulingService.getUsersWithoutInterview($scope.roleStudent).then(function success(data){
-        $scope.possibleToAdd[$scope.roleStudent] = data;
-        console.log($scope.possibleToAdd);
-    });
-
-    $scope.addUserToTimepoint = function addUserToTimepoint(id,idTimePoint){
-        schedulingService.addUserToTimepoint(id,idTimePoint).then(function(){
-            var index = findInPossible(id, $scope.possibleToAdd[$scope.roleToShow].data);
-            $scope.possibleToAdd[$scope.roleToShow].data.splice(index, 1);
-            switch($scope.roleToShow){
-                case $scope.roleSoft:
-                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfSoft++;
-                    break;
-                case $scope.roleTech:
-                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfTech++;
-                    break;
-                case $scope.roleStudent:
-                    $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfStudents++;
-                    break;
-            }
+    schedulingService.getUsersWithoutInterview($scope.roleSoft)
+        .then(function success(data) {
+            $scope.possibleToAdd[$scope.roleSoft] = data;
+            console.log($scope.possibleToAdd);
+        })
+        .catch(function (response) {
+            getWarningToast('Cannot get possible Soft');
         });
+
+    schedulingService.getUsersWithoutInterview($scope.roleTech)
+        .then(function success(data) {
+            $scope.possibleToAdd[$scope.roleTech] = data;
+        })
+        .catch(function (response) {
+            getWarningToast('Cannot get possible Tech');
+        });
+
+    schedulingService.getUsersWithoutInterview($scope.roleStudent)
+        .then(function success(data) {
+            $scope.possibleToAdd[$scope.roleStudent] = data;
+            console.log($scope.possibleToAdd);
+        })
+        .catch(function (response) {
+            getWarningToast('Cannot get possible Students');
+        });
+
+    $scope.addUserToTimepoint = function addUserToTimepoint(id, idTimePoint) {
+        schedulingService.addUserToTimepoint(id, idTimePoint)
+            .then(function () {
+                var index = findInPossible(id, $scope.possibleToAdd[$scope.roleToShow].data);
+                $scope.possibleToAdd[$scope.roleToShow].data.splice(index, 1);
+                switch ($scope.roleToShow) {
+                    case $scope.roleSoft:
+                        $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfSoft++;
+                        break;
+                    case $scope.roleTech:
+                        $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfTech++;
+                        break;
+                    case $scope.roleStudent:
+                        $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfStudents++;
+                        break;
+                }
+            })
+            .catch(function (response) {
+                getWarningToast('Cannot add user to timepoint');
+            });
     };
 
-    var findInPossible = function findInPossible(id, list){
-        for(var i=0; i< list.length; i++){
-          if(list[i].id===id)
-          return i;
-      }
+    var findInPossible = function findInPossible(id, list) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].id === id)
+                return i;
+        }
         return -1;
     };
 
     $scope.modalShown = false;
-    $scope.toggleModal = function(idRole, timePointToChange) {
+    $scope.toggleModal = function (idRole, timePointToChange) {
         $scope.timePointToChange = timePointToChange;
         $scope.roleToShow = idRole;
         $scope.modalShown = !$scope.modalShown;
@@ -305,7 +416,7 @@ function schedulingController($scope, schedulingService) {
 
 }
 
-angular.module('appScheduling').directive('modalDialog', function() {
+angular.module('appScheduling').directive('modalDialog', function () {
     return {
         restrict: 'E',
         scope: {
@@ -313,7 +424,7 @@ angular.module('appScheduling').directive('modalDialog', function() {
         },
         replace: true,
         transclude: true,
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             scope.dialogStyle = {};
 
             if (attrs.width) {
@@ -324,7 +435,7 @@ angular.module('appScheduling').directive('modalDialog', function() {
                 scope.dialogStyle.height = attrs.height;
             }
 
-            scope.hideModal = function() {
+            scope.hideModal = function () {
                 scope.show = false;
             };
         },
@@ -338,5 +449,18 @@ angular.module('appScheduling').directive('modalDialog', function() {
     };
 });
 
+angular.module('appScheduling').directive('tooltip', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            $(element).hover(function(){
+                $(element).tooltip('show');
+            }, function(){
+                $(element).tooltip('hide');
+            });
+        }
+    };
+});
+
 angular.module('appScheduling')
-    .controller('schedulingController', ['$scope', 'schedulingService', schedulingController]);
+    .controller('schedulingController', ['$scope', 'ngToast', 'schedulingService', schedulingController]);

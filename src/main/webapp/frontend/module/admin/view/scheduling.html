@@ -11,85 +11,92 @@
             <div class="tab-content">
                 <div id="schedSettings" class="tab-pane fade in active">
 
-                    <div class="row">
-                        <h4>
-                            To create a schedule, set the input parameters
-                        </h4>
-                    </div>
-                    <div class="row info-text">
-                        <div class="col-md-2">
-                            Amount of participants:
-                        </div>
-                        <div class="col-md-2">
-                            Amount of students:
-                            {{countStudent}}
-                        </div>
-                        <div class="col-md-2">
-                            Amount of tech:
-                            {{amountOfTech}}
-                        </div>
-                        <div class="col-md-2">
-                            Amount of soft:
-                            {{amountOfSoft}}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <h4>Select dates on calendar</h4>
-                        <p class="marks-cell"><b>0/30</b> hours selected</p>
-                    </div>
-                    <div id="calendar-sizing" class="row">
-                        <table>
-                            <tr>
-                                <td>
-                                    <uib-datepicker ng-model='activeDate' multi-select='selectedDates'
-                                                    type=="range"></uib-datepicker>
-                                </td>
-                                <td style='width:50px'>
-                                </td>
-                                <td>
-                                    <div>
-                                        Selected Dates:
-                                        <div class='well well-sm'>
-                                            <div ng-repeat='d in selectedDates track by $index'>
-                                                {{d | date : 'fullDate'}}
-                                                <button class='btn btn-xs btn-warning' style='margin:5px'
-                                                        ng-click='removeFromSelected(d)' ng-init="createMap(d)">Remove
-                                                </button>
-                                                <!--<uib-timepicker ng-model="startTime" ng-init="startTime = map[d].startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>-->
-                                                <!--<uib-timepicker ng-model="endTime" ng-init="endTime = map[d].endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>-->
-                                                <input type="number" ng-model="map[d].startTime">
-                                                <input type="number" ng-model="map[d].endTime">
-                                                <button class='btn btn-xs btn-warning' style='margin:5px'
-                                                        ng-click='setTime(map[d], d)' ng-hide="map[d].id != -1">Save
-                                                </button>
-                                                <button class='btn btn-xs btn-warning' style='margin:5px'
-                                                        ng-click='edit(map[d], d)' ng-hide="map[d].id === -1">Edit
-                                                </button>
-                                            </div>
-                                        </div>
+            <div class="row">
+                <h4>
+                    To create a schedule, set the input parameters.
+                <span class="glyphicon glyphicon-question-sign"
+                        title="You can change this parameters by selection users in Staff/Student management"
+                        data-toggle="tooltip" data-placement="top" tooltip></span>
+                </h4>
+
+            </div>
+            <div class="row info-text">
+                <div class="col-md-2">
+                    Amount of participants:
+                </div>
+                <div class="col-md-2">
+                    Amount of students:
+                    {{countStudent}}
+                </div>
+                <div class="col-md-2">
+                    Amount of tech:
+                    {{amountOfTech}}
+                </div>
+                <div class="col-md-2">
+                    Amount of soft:
+                    {{amountOfSoft}}
+                </div>
+            </div>
+            <div class="row">
+                <h4>Select dates on calendar</h4>
+                <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
+            </div>
+            <div id="calendar-sizing" class="row">
+                <table>
+                    <tr>
+                        <td>
+                            <uib-datepicker ng-model='activeDate' multi-select='selectedDates'
+                                            type=="range"></uib-datepicker>
+                        </td>
+                        <td style='width:50px'>
+                        </td>
+                        <td>
+                            <div>
+                                Selected Dates:
+                                <div class='well well-sm'>
+                                    <div ng-repeat='d in selectedDates track by $index'>
+                                        {{d | date : 'fullDate'}}
+                                        <button class='btn btn-xs btn-warning' style='margin:5px'
+                                                ng-click='removeFromSelected(d)' ng-init="createMap(d)">Remove
+                                        </button>
+                                        <!--<uib-timepicker ng-model="startTime" ng-init="startTime = map[d].startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>-->
+                                        <!--<uib-timepicker ng-model="endTime" ng-init="endTime = map[d].endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>-->
+                                        <input type="number" ng-model="map[d].startTime">
+                                        <input type="number" ng-model="map[d].endTime">
+                                        <button class='btn btn-xs btn-warning' style='margin:5px'
+                                                ng-click='setTime(map[d], d)' ng-hide="map[d].id != -1">Save
+                                        </button>
+                                        <button class='btn btn-xs btn-warning' style='margin:5px'
+                                                ng-click='edit(map[d], d)' ng-hide="map[d].id === -1">Edit
+                                        </button>
                                     </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="row info-text">
-                        <button type="submit" class="btn btn-info search-element btn-left"
-                                ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
-                            Confirm days selection
-                        </button>
-                        <button type="submit" class="btn btn-info search-element btn-left"
-                                ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
-                            Cancel days selection
-                        </button>
-
-                    </div>
-
-                    <form name="schedulingForm" ng-init="getInterviewParameters()">
-                        <div class="row info-text">
-                            <div class="col-md-2">
-                                Duration for each interview:
+                                </div>
                             </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row info-text">
+                <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                        ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)">
+                    Confirm days selection
+                </button>
+                <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                        ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)">
+                    Cancel days selection
+                </button>
+
+            </div>
+
+            <form name="schedulingForm" ng-init="getInterviewParameters()">
+                <div class="row info-text">
+                    <h4>
+                        Set the interview parameters:
+                    </h4>
+                    <div class="col-md-2">
+                        Duration for each interview:
+                    </div>
 
                             <div class="col-md-2">
                                 Tech duration:
@@ -107,30 +114,27 @@
                                 <span ng-show="schedulingForm.softDuration.$error.required">required</span>
                                 <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2 time-result">
-                                Needed hours: 100
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                        ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
-                                    Start schedule
-                                </button>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                        ng-disabled="schedulingForm.$invalid"
-                                        ng-click="saveInterviewParameters(softDuration, techDuration)">
-                                    Save interview parameters
-                                </button>
-                                <button type="submit" class="btn btn-sm btn-info search-element btn-left"
-                                        ng-disabled="schedulingForm.$invalid" ng-click="submitInterviewParameters()">
-                                    Confirm interview parameters
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                </div>
+                <div class="row info-text">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                ng-disabled="schedulingForm.$invalid"
+                                ng-click="saveInterviewParameters(softDuration, techDuration)">
+                            Save interview parameters
+                        </button>
+                </div>
+                <div class="row info-text">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
+                            Start schedule
+                        </button>
+                </div>
+                <div class="row info-text">
+                         <button type="submit" class="btn btn-sm btn-info search-element btn-left col-md-2"
+                                ng-disabled="schedulingForm.$invalid" ng-click="submitInterviewParameters()">
+                            Confirm interview parameters
+                        </button>
+                </div>
+            </form>
                 </div>
                 <div id="currSched" class="tab-pane fade">
                     <div class="row">
@@ -149,7 +153,7 @@
                             <tbody>
                             <tr ng-repeat="timePoint in schedulePoints">
                                 <td class="col-md-3">
-                                    {{timePoint.timePoint | date:"MM/dd/yyyy 'at' h:mma" }}
+                                    {{timePoint.timePoint | date:"MM/dd/yyyy 'at' h:mma"  }}
                                 </td>
                                 <td class="col-md-3">
                                     <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]"
@@ -164,10 +168,8 @@
                                             <div class="col-md-8">id:{{soft.id}} {{soft.firstName}} {{soft.secondName}}
                                                 {{soft.lastName}}
                                             </div>
-                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2"
-                                                    data-toggle="modal"
-                                                    data-target="#deleteSoft"
-                                                    ng-click="setCurrentSoft(soft, timePoint)">Delete
+                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
+                                                    data-target="#deleteSoft" ng-click="setCurrentSoft(soft, timePoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
@@ -188,10 +190,8 @@
                                             <div class="col-md-8">id:{{tech.id}} {{tech.firstName}} {{tech.secondName}}
                                                 {{tech.lastName}}
                                             </div>
-                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2"
-                                                    data-toggle="modal"
-                                                    data-target="#deleteTech"
-                                                    ng-click="setCurrentTech(tech, timePoint)">Delete
+                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
+                                                    data-target="#deleteTech" ng-click="setCurrentTech(tech, timePoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
@@ -212,10 +212,8 @@
                                             <div class="col-md-8">id:{{student.id}} {{student.firstName}}
                                                 {{student.secondName}} {{student.lastName}}
                                             </div>
-                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2"
-                                                    data-toggle="modal"
-                                                    data-target="#deleteStudent"
-                                                    ng-click="setCurrentStudent(student, timePoint)">Delete
+                                            <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
+                                                    data-target="#deleteStudent" ng-click="setCurrentStudent(student, timePoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
@@ -228,13 +226,13 @@
                         </table>
                     </div>
                     <div class="row info-text">
-                        <button type="submit" class="btn btn-info search-element btn-left" ng-click="saveSelectedDay()">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" ng-click="saveSelectedDay()">
                             Save
                         </button>
-                        <button type="submit" class="btn btn-info search-element btn-left" disabled>Send notification to
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" disabled>Send notification to
                             all
                         </button>
-                        <button type="submit" class="btn btn-info search-element btn-left" disabled>Export
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" disabled>Export
                         </button>
                     </div>
                 </div>
