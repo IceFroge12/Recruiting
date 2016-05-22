@@ -227,12 +227,7 @@
                     </div>
                     <div class="row info-text">
                         <button type="submit" class="btn btn-info search-element btn-left col-md-2" ng-click="saveSelectedDay()">
-                            Save
-                        </button>
-                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" disabled>Send notification to
-                            all
-                        </button>
-                        <button type="submit" class="btn btn-info search-element btn-left col-md-2" disabled>Export
+                            Save and save notification to all
                         </button>
                     </div>
                 </div>
@@ -242,7 +237,7 @@
     <modal-dialog show='modalShown' width='400px'>
         <h4>Add new user to interview timepoint</h4>
 
-        <p>{{timePointToChange.timePoint | date:"MM/dd/yyyy 'at' h:mma"}</p>
+        <p>{{timePointToChange.timePoint | date:"MM/dd/yyyy 'at' h:mma"}}</p>
         <table class="table table-condensed table-hover col-md-8">
             <thead>
             <tr>
@@ -252,7 +247,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat='user in possibleToAdd[roleToShow].data track by $index'>
+            <tr ng-repeat='user in possibleToAdd[roleToShow].data | startFrom: startingItem() | limitTo: itemsPerPage'>
                 <td>{{user.id}}</td>
                 <td>{{user.lastName +" "+ user.firstName +" "+ user.secondName}}</td>
                 <td>
@@ -263,6 +258,11 @@
             </tr>
             </tbody>
         </table>
+        <div id="pagination">
+            <button class="pull-left btn btn-primary btn-sm" ng-disabled="firstPage()" ng-click="pageBack()">This way</button>
+            <span>{{currentPage+1}} of {{numberOfPages()}}</span>
+            <button class="pull-right  btn btn-primary btn-sm" ng-disabled="lastPage()" ng-click="pageForward()">That way</button>
+        </div>
     </modal-dialog>
     <div id="deleteSoft" class="modal fade" style="z-index: 2000">
         <div class="modal-dialog">

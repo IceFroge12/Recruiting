@@ -112,7 +112,9 @@ h4 {
     padding: 0px;
     width: 100%;
 }
-
+#logout{
+    margin-right: 20px;
+}
 
 #my_menuMain {
     padding: 0px !important;
@@ -419,7 +421,7 @@ h4 {
     width: 50%; /* Default */
 
     /* Center the dialog */
-    top: 50%;
+    top: 50vh;
     left: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
@@ -442,4 +444,8 @@ h4 {
     display: inline-block;
     font-weight: bold;
     font-family: 'arial', 'sans-serif';
+}
+#pagination {
+    text-align: center;
+    margin-bottom: 10px;
 }
