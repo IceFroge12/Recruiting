@@ -8,9 +8,12 @@ function reportController($scope, $http) {
 	$scope.question = 0;
 	$http.get('../../admin/reports/answers/questions').success(function(data) {
 		$scope.questions = data;
+		$scope.question = $scope.questions[0].id;
 		console.log($scope.questions);
+		console.log('QQQ');
+		console.log($scope.question);
 	});
-	
+	$scope.exportType = 'xls';
 	$scope.generateReport = function() {
 		var url;
 		if ($scope.reportType == "approved") {
