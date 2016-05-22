@@ -35,12 +35,11 @@ import java.util.Set;
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private final TokenAuthenticationService tokenAuthenticationService;
-    private final UserAuthService userAuthService;
 
-    public StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService,
-                                   UserAuthService userAuthService, AuthenticationManager authManager) {
+
+    public StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(urlMapping));
-        this.userAuthService = userAuthService;
+
         this.tokenAuthenticationService = tokenAuthenticationService;
          setAuthenticationManager(authManager);
         setAuthenticationSuccessHandler(AuthenticationSuccessHandlerService.getInstance());
