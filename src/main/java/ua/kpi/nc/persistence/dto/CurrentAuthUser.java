@@ -19,6 +19,8 @@ public class CurrentAuthUser {
         this.roles = roles;
     }
 
+
+
     public Set<Role> getRoles() {
         return roles;
     }

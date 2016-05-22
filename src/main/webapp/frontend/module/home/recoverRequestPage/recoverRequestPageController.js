@@ -4,6 +4,7 @@
 
 function recoverRequestPageController($scope, $http) {
     $scope.emailSend = false;
+    $scope.userExist = false;
 
     $scope.sendEmail = function () {
         console.log($scope.email);
@@ -13,17 +14,19 @@ function recoverRequestPageController($scope, $http) {
             contentType: 'application/json',
             data: {email: $scope.email}
         }).success(function (data, status) {
-            console.log(data);
-            console.log(status);
-            if(status != 409){
-                $scope.emailSend = true;
-                $scope.email = data.email;
-            }
+            $scope.emailSend = true;
+            $scope.email = data.email;
+            $scope.username = data.firstName;
+            $scope.userExist = false;
+
+
         }).error(function (data, status, headers) {
-            console.log(data);
+            if (status === 409) {
+                $scope.userExist = true;
+            }
         });
     }
-    
+
 }
 
 angular.module('appRecoverRequestPage')

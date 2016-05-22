@@ -40,6 +40,8 @@ public class UserDto {
         this.firstName = firstName;
     }
 
+
+
     public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
         this.email = email;
         this.firstName = firstName;

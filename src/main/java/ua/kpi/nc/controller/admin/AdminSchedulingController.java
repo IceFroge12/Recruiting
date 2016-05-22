@@ -34,7 +34,7 @@ public class AdminSchedulingController {
     private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
 
 
-    private final static String SAVE_SELECTED_DAYS_ERROR = "Error during save selected days, try later";
+    private final static String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
     private final static String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
     private final static String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
     private final static String EDIT_SELECTED_DAY_ERROR = "Error during edit selected day, refresh page or try again later";
@@ -52,7 +52,7 @@ public class AdminSchedulingController {
         if (null != recruitment) {
             return ResponseEntity.ok(recruitment.getSchedulingStatus());
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(RECRUITMENT_NOT_STARTED);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(RECRUITMENT_NOT_STARTED));
         }
     }
 
@@ -201,11 +201,11 @@ public class AdminSchedulingController {
     @RequestMapping(value = "startScheduling", method = RequestMethod.GET)
     public ResponseEntity startScheduling(){
         if ((userTimePriorityService.isSchedulePrioritiesExistStudent() & userTimePriorityService.isSchedulePrioritiesExistStaff())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(STAFF_STUDENT_NOT_CONFIRM);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STAFF_STUDENT_NOT_CONFIRM));
         }else if (!userTimePriorityService.isSchedulePrioritiesExistStaff()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(STAFF_NOT_CONFIRM);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STAFF_NOT_CONFIRM));
         }else if (!userTimePriorityService.isSchedulePrioritiesExistStudent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(STUDENT_NOT_CONFIRM);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STUDENT_NOT_CONFIRM));
         }else {
             ScheduleService scheduleService = new ScheduleService();
             scheduleService.startScheduleForStudents();
