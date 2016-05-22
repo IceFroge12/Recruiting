@@ -419,7 +419,37 @@ function schedulingController($scope, ngToast, schedulingService) {
         $scope.modalShown = !$scope.modalShown;
     };
 
+    //modal pagination
+    $scope.currentPage = 0;
+    $scope.itemsPerPage = 10;
+    $scope.firstPage = function() {
+        return $scope.currentPage == 0;
+    };
+    $scope.lastPage = function() {
+        var lastPageNum = Math.ceil($scope.possibleToAdd[$scope.roleToShow].data.length / $scope.itemsPerPage - 1);
+        return $scope.currentPage == lastPageNum;
+    };
+    $scope.numberOfPages = function(){
+        return Math.ceil($scope.possibleToAdd[$scope.roleToShow].data.length / $scope.itemsPerPage);
+    };
+    $scope.startingItem = function() {
+        return $scope.currentPage * $scope.itemsPerPage;
+    };
+    $scope.pageBack = function() {
+        $scope.currentPage = $scope.currentPage - 1;
+    };
+    $scope.pageForward = function() {
+        $scope.currentPage = $scope.currentPage + 1;
+    }
+
 }
+
+angular.module('appScheduling').filter('startFrom', function(){
+    return function(input, start){
+        start = +start;
+        return input.slice(start);
+    }
+});
 
 angular.module('appScheduling').directive('modalDialog', function () {
     return {

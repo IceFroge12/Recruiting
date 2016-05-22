@@ -13,17 +13,11 @@
                         <span class="glyphicon glyphicon-log-in hidden-lg small-menu-btn"></span>
                 </button>
             </li>
-            <!--<li ng-show="authenticated" class="col-md-4 no-padding">-->
-                <!--<button class="btn btn-primary top-button menu-btn"><span-->
-                        <!--class="glyphicon glyphicon-envelope visible-lg"> Homepage</span>-->
-                    <!--<span class="glyphicon glyphicon-envelope hidden-lg small-menu-btn"></span>-->
-                <!--</button>-->
-            <!--</li>-->
-            <li ng-show="authenticated" class="col-md-6 no-padding menu-btn"><span
+            <li ng-show="authenticated" class="col-md-7 no-padding menu-btn"><span
                     class="glyphicon glyphicon-user top-button hello visible-lg">
                 Hi,{{username}}</span>
             </li>
-            <li ng-show="authenticated" class="col-md-3 no-padding">
+            <li id="logout" ng-show="authenticated" class="col-md-3 no-padding">
                 <button ng-click="logOut()" class="btn btn-primary top-button menu-btn"
                         value="go"
                 ><span
