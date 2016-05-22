@@ -125,7 +125,7 @@ public class JdbcTemplate {
         } catch (SQLException e) {
             log.error("Cannot insert objects ", e);
         }
-        return null;
+        return 0L;
     }
 
     public int[] batchUpdate(String sql, Object[][] objects) {

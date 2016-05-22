@@ -26,9 +26,8 @@ function staffManagementService(http) {
     service.hasNotMarked = function (emails) {
         console.log("Service hasNotMarked");
         return http({
-            method: 'GET',
+            method: 'POST',
             url: '/admin/hasNotMarked',
-            params: {emails: emails}
         })
     };
 

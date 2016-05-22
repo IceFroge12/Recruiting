@@ -11,7 +11,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            Registration</h3>
+                            Forget password</h3>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -23,6 +23,7 @@
                                         <input ng-model="email" type="text" class="form-control" placeholder="Email" required
                                                autofocus/>
                                     </div>
+                                    <p class="alert-danger" ng-show="userExist">User with this email not found</p>
                                     <p>
                                 </form>
                             </div>
@@ -33,7 +34,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <button type="button" class="btn btn-labeled btn-info" value="go"
                                         ng-click="sendEmail()">
-                                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Register
+                                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Recover password
                                 </button>
                             </div>
                         </div>

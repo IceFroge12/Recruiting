@@ -20,7 +20,6 @@ public class TokenHandler {
 
     private final String secret;
     private final UserAuthService userService;
-
     private static Logger log = LoggerFactory.getLogger(TokenHandler.class);
 
     private final long epriretime = 60 * 1000 * 60;
@@ -31,6 +30,7 @@ public class TokenHandler {
     }
 
     public User parseUserFromToken(String token) {
+        log.info("Start parsing tokne - {}", token);
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(secret)
@@ -44,6 +44,7 @@ public class TokenHandler {
     }
 
     public String createTokenForUser(User user) {
+        log.info("Start create token for user - {}", user.getEmail());
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .signWith(SignatureAlgorithm.HS512, secret)

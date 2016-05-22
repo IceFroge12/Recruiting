@@ -210,22 +210,9 @@ public class AdminManagementStaffController {
         return userService.getUserCount();
     }
 
-    @RequestMapping(value = "hasNotMarked", method = RequestMethod.GET)
-    public List<String> hasNotMarked(@RequestParam List<String> emails) {
-        List<String> notMarkedAll = new ArrayList<>();
-        for (String email : emails) {
-            User user = userService.getUserByUsername(email);
-            List<Interview> interviews = interviewService.getByInterviewer(user);
-            boolean foundNotMarked = false;
-            for (Interview interview : interviews) {
-                if (null == interview.getMark())
-                    foundNotMarked = true;
-            }
-            if (foundNotMarked)
-                notMarkedAll.add(email);
-        }
-
-        return notMarkedAll;
+    @RequestMapping(value = "hasNotMarked", method = RequestMethod.POST)
+    public List<String> hasNotMarked() {
+        return userService.getNotMarkedInterviwers();
     }
 
     @RequestMapping(value = "confirmStaff", method = RequestMethod.GET)

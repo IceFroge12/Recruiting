@@ -4,33 +4,36 @@
 
 'use strict';
 
-function recoverPasswordPageController($scope, $http, $routeParams){
-    $scope.passwordChange = false;
+function recoverPasswordPageController($scope, $http, $routeParams) {
 
+    $scope.passwordChange = false;
+    $scope.username = '';
+    $scope.userExist = false;
+    $scope.errorMessage = '';
     $scope.init = function () {
         $scope.email = $routeParams.email;
         console.log($scope.passwordSecond);
-        
 
     };
 
     $scope.changePassword = function () {
         console.log($scope.passwordSecond);
-        
         $http({
             method: 'POST',
             url: '/changePassword',
             contentType: 'application/json',
-            data: {password : $scope.passwordSecond}
+            data: {password: $scope.passwordSecond}
         }).success(function (data, status) {
             console.log(data);
             console.log(status);
-            if(status != 409){
-                $scope.passwordChange = true;
-                $scope.username = data.username;
-            }
+            $scope.passwordChange = true;
+            $scope.username = data.firstName;
+            $scope.userExist = true;
         }).error(function (data, status, headers) {
-            console.log(data);
+            if (status == 409){
+                $scope.userExist = this;
+                $scope.message = data.message;
+            }
         });
     }
 }
