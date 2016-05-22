@@ -85,19 +85,20 @@ public class RegistrationController {
         }
     }
 
+
     @RequestMapping(value = "/{token}", method = RequestMethod.GET)
-    public ResponseEntity registrationConfirm(@PathVariable("token") String token) {
-        log.info("Looking user with token - {}", token);
+    public String registrationConfirm(@PathVariable("token") String token) {
         User user = userService.getUserByToken(token);
+        Gson gson = new Gson();
         if (null == user) {
-            log.info("Token expired");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TOKEN_EXPIRED));
-        }else {
-            log.info("Make user with email - {} active", user.getEmail());
-            user.setActive(true);
-            userService.updateUser(user);
-            userService.deleteToken(user.getId());
+            String json = "error";
+            return gson.toJson(json);
         }
-        return ResponseEntity.ok(null);
+        user.setActive(true);
+        userService.updateUser(user);
+        userService.deleteToken(user.getId());
+
+        String json = "ok";
+        return gson.toJson(json);
     }
 }

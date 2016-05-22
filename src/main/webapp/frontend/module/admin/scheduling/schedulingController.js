@@ -382,20 +382,20 @@ function schedulingController($scope, ngToast, schedulingService) {
     $scope.possibleToAdd = [];
 
 
-    $scope.addUserToTimepoint = function addUserToTimepoint(id, idTimePoint) {
-        schedulingService.addUserToTimepoint(id, idTimePoint)
+    $scope.addUserToTimepoint = function addUserToTimepoint(user, TimePoint) {
+        schedulingService.addUserToTimepoint(user.id, TimePoint.id)
             .then(function () {
-                var index = findInPossible(id, $scope.possibleToAdd[$scope.roleToShow].data);
+                var index = findInPossible(user.id, $scope.possibleToAdd[$scope.roleToShow].data);
                 $scope.possibleToAdd[$scope.roleToShow].data.splice(index, 1);
                 switch ($scope.roleToShow) {
                     case $scope.roleSoft:
-                        $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfSoft++;
+                        $scope.schedulePoints[findInPossible(TimePoint.id, $scope.schedulePoints)].amountOfSoft++;
                         break;
                     case $scope.roleTech:
-                        $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfTech++;
+                        $scope.schedulePoints[findInPossible(TimePoint.id, $scope.schedulePoints)].amountOfTech++;
                         break;
                     case $scope.roleStudent:
-                        $scope.schedulePoints[findInPossible(idTimePoint, $scope.schedulePoints)].amountOfStudents++;
+                        $scope.schedulePoints[findInPossible(TimePoint.id, $scope.schedulePoints)].amountOfStudents++;
                         break;
                 }
             })

@@ -197,7 +197,7 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "startScheduling", method = RequestMethod.GET)
     public ResponseEntity startScheduling() {
-        if ((userTimePriorityService.isSchedulePrioritiesExistStudent() & userTimePriorityService.isSchedulePrioritiesExistStaff())) {
+        if (!(userTimePriorityService.isSchedulePrioritiesExistStudent() & userTimePriorityService.isSchedulePrioritiesExistStaff())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STAFF_STUDENT_NOT_CONFIRM));
         } else if (!userTimePriorityService.isSchedulePrioritiesExistStaff()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(STAFF_NOT_CONFIRM));
