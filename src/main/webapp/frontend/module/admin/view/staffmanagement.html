@@ -261,7 +261,7 @@
                         </tr>
                         <tr>
                             <td> Email</td>
-                            <td><input type="text" ng-model="emailEdit" id="emailEdit" name="email" required ng-pattern="/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/"></td>
+                            <td><input type="text" ng-model="emailEdit" id="emailEdit" name="email" required ng-pattern="/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/"></td>
                               <td><span ng-show="editEmployeeForm.email.$error.required" class="text-danger">The field can not be empty.</span>
                                 <span ng-show="editEmployeeForm.email.$error.pattern" class="text-danger">Invalid email.</span></td>
                         </tr>
@@ -327,7 +327,7 @@
                         </tr>
                         <tr>
                             <td> Email</td>
-                            <td><input ng-model="email" id="email" type="text" name="email" required ng-pattern="/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/"></td>
+                            <td><input ng-model="email" id="email" type="text" name="email" required ng-pattern="/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/"></td>
                             <td><span ng-show="addEmployeeForm.email.$error.required" class="text-danger">The field can not be empty.</span>
                             <span ng-show="addEmployeeForm.email.$error.pattern" class="text-danger">Invalid email.</span></td>
                         </tr>
