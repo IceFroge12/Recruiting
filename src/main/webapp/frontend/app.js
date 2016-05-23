@@ -41,6 +41,7 @@ angular.module('app', [
     'appConfirmRegistration',
     'appError',
     'serverError'
+    
 ]).controller('appController', function ($scope, $http, $rootScope) {
     $scope.init = function () {
         $http.get('/currentUser')
