@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STAFF_INTERVIEW_SELECT;
+import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STAFF_REGISTRATION;
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STUDENT_REGISTRATION;
 import static ua.kpi.nc.persistence.model.enums.RoleEnum.*;
 
@@ -120,7 +121,7 @@ public class AdminManagementStaffController {
         user.setRegistrationDate(new Timestamp(date.getTime()));
         userService.insertUser(user, userRoles);
         user.setPassword(password);
-        EmailTemplate emailTemplate = emailTemplateService.getById(STUDENT_REGISTRATION.getId());
+        EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_REGISTRATION.getId());
         String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
         senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
     }
