@@ -41,36 +41,36 @@
                 <h4>Select dates on calendar</h4>
                 <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
             </div>
-            <div id="calendar-sizing" class="row" ng-disabled="recruiting">
+            <div id="calendar-sizing" ng-disabled="recruiting">
                 <table ng-disabled="recruiting">
                     <tr>
                         <td>
                             <uib-datepicker ng-model='activeDate'  multi-select='selectedDates'
                                             type=="range" ng-disabled="recruiting"></uib-datepicker>
                         </td>
-                        <td style='width:50px'>
-                        </td>
-                        <td>
-                            <div>
+                        <td class="col-md-10">
                                 Selected Dates:
-                                <div class='well well-sm'>
-                                    <div ng-repeat='d in selectedDates track by $index'>
+                                <div>
+                                    <div ng-repeat='d in selectedDates track by $index' class="col-md-2">
                                         {{d | date : 'fullDate'}}
-                                        <button class='btn btn-xs btn-warning' style='margin:5px'
+                                            <div class="col-md-12 no-padding">
+                                        <button class='btn btn-xs btn-warning' style='margin:5px;'
                                                 ng-click='removeFromSelected(d)' ng-init="createMap(d)">Remove
                                         </button>
+                                            </div>
                                         <!--<uib-timepicker ng-model="startTime" ng-init="startTime = map[d].startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>-->
                                         <!--<uib-timepicker ng-model="endTime" ng-init="endTime = map[d].endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>-->
-                                        <input type="number" ng-model="map[d].startTime">
-                                        <input type="number" ng-model="map[d].endTime">
-                                        <button class='btn btn-xs btn-warning' style='margin:5px'
+                                        <input type="number" ng-model="map[d].startTime" style='width: 130px'>
+                                        <input type="number" ng-model="map[d].endTime" style='width: 130px'>
+                                            <div class="col-md-12 no-padding">
+                                        <button class='btn btn-xs btn-warning time-result' style='margin:5px'
                                                 ng-click='setTime(map[d], d)' ng-hide="map[d].id != -1">Save
                                         </button>
-                                        <button class='btn btn-xs btn-warning' style='margin:5px'
+                                        <button class='btn btn-xs btn-warning time-result' style='margin:5px'
                                                 ng-click='edit(map[d], d)' ng-hide="map[d].id === -1">Edit
                                         </button>
+                                            </div>
                                     </div>
-                                </div>
                             </div>
                         </td>
                     </tr>
