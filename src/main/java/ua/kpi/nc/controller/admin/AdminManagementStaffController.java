@@ -60,6 +60,8 @@ public class AdminManagementStaffController {
 
     private final static String TIME_PRIORITY_ALREADY_EXIST = "Time priority already exist";
 
+    private final static String CAN_NOT_DELETE = "Can't remove assignet user";
+
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
     public List<User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -171,12 +173,13 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "deleteAssignedStudent", method = RequestMethod.POST)
-    public void deleteAssignedStudent(@RequestParam String idInterview) {
+    public ResponseEntity deleteAssignedStudent(@RequestParam String idInterview) {
         Interview interview = interviewService.getById(Long.parseLong(idInterview));
         if (null == interview) {
-            //// TODO: 12.05.2016 someaction;
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(CAN_NOT_DELETE);
         } else {
             interviewService.deleteInterview(interview);
+            return ResponseEntity.ok().body(null);
         }
     }
 

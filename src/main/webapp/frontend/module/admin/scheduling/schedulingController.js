@@ -141,8 +141,16 @@ function schedulingController($scope, ngToast, schedulingService) {
 
                 schedulingService.getInterviewParametersService().then(function (response) {
                     if (response.status === 200) {
-                        $scope.softDuration = response.data.softDuration;
-                        $scope.techDuration = response.data.techDuration;
+                        if (response.data.softDuration === undefined){
+                            $scope.softDuration = '';    
+                        }else {
+                            $scope.softDuration = response.data.softDuration;
+                        }
+                        if (response.data.techDuration === undefined){
+                            $scope.techDuration = '';
+                        }else{
+                            $scope.techDuration = response.data.techDuration;    
+                        }
                     }
                     else {
                         getWarningToast('Error! Cannot get interview parameters')
