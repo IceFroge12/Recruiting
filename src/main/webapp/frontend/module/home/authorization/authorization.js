@@ -34,11 +34,10 @@ angular.module('appAuthorization', ['angular-loading-bar'])
             if (error.status === 403) {
                 $location.path('/accessDenied');
             }else if (error.status === 500){
-                alert("error");
+                $location.path("/serverError");
             }else if (error.status === 504){
                 alert(error.data.message);
             }
-            //TODO error page
             return $q.reject(error);
         }
     };
