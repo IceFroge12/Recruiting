@@ -18,74 +18,66 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Registration deadline</td>
+                        <td>Registration deadline </td>
                         <td>
                             <div class="form-group">
                                 <div class="input-group date">
-                                    <input datetimepicker  class="form-control" ng-model="date1"
-                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="date1" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
-                                    <span ng-show="recruitmentForm.date1.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</span>
+                                    <input ng-show="passedRegDeadline"  class="form-control" ng-model="registrationDeadline"
+                                           name="registrationDeadline" ng-readonly="passedRegDeadline"/>
+                                    <input ng-show = "!passedRegDeadline" datetimepicker  class="form-control" ng-model="registrationDeadline"
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="registrationDeadline"
+                                           required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
+                                        <span ng-show="passedRegDeadline">Passed</span>
 									</span>
                                 </div>
+                                <h5 ng-show="recruitmentForm.registrationDeadline.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</h5>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>Choosing schedule time deadline</td>
                         <td>
-
-                                <div class="input-group">
-                                    <input datetimepicker  class="form-control" ng-model="date2"
-                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="date2" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
-                                    <span ng-show="recruitmentForm.date2.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</span>
+                            <div class="form-group">
+                                <div class="input-group date">
+                                    <input ng-show="passedScheduleDeadline" class="form-control" ng-model="scheduleChoicesDeadline"
+                                           name="scheduleChoicesDeadline" ng-readonly="passedScheduleDeadline"/>
+                                    <input ng-show="!passedScheduleDeadline" datetimepicker  class="form-control" ng-model="scheduleChoicesDeadline"
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="scheduleChoicesDeadline"
+                                           required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
 									<span class="input-group-addon">
-									<span class="glyphicon glyphicon-calendar"></span>
-									</span>
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                        <span ng-show="passedScheduleDeadline">Passed</span>
+                                    </span>
                                 </div>
-
+                            <h5 ng-show="recruitmentForm.scheduleChoicesDeadline.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</h5>
+                            </div>
                         </td>
+
                     </tr>
                     <tr>
                         <td>End of recruitment</td>
                         <td>
                             <div class="form-group">
                                 <div class="input-group date">
-                                    <input datetimepicker  class="form-control" ng-model="date3"
-                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="date3" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
-                                    <span ng-show="recruitmentForm.date3.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</span>
+                                    <input datetimepicker  class="form-control" ng-model="endDate"
+                                           datetime-picker date-only
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="endDate" required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
 									<span class="input-group-addon">
 									<span class="glyphicon glyphicon-calendar"></span>
 									</span>
                                 </div>
+                                <h5 ng-show="recruitmentForm.endDate.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</h5>
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>Number of students to general group</td>
-                        <td>
-                            <input ng-model="general" class="input-nums" type="text" name="general" required ng-minlength="1" ng-maxlength="5" ng-pattern="/^\d+$/">
-                            <span ng-show="recruitmentForm.general.$error.required" class="text-danger">The field can not be empty.</span>
-                            <span ng-show="recruitmentForm.general.$error.minlength" class="text-danger">Must be at least 1 characters.</span>
-                            <span ng-show="recruitmentForm.general.$error.maxlength" class="text-danger">Must be no more than 5 characters.</span>
-                            <span ng-show="recruitmentForm.general.$error.pattern" class="text-danger">Must contain only numbers.</span></td>
-                    </tr>
-                    <br>
-                    <tr>
-                        <td>Number of students to advanced group</td>
-                        <td>
-                            <input ng-model="advanced" class="input-nums" type="text" name="advanced" required ng-minlength="1" ng-maxlength="5" ng-pattern="/^\d+$/">
-                            <span ng-show="recruitmentForm.advanced.$error.required" class="text-danger">The field can not be empty.</span>
-                            <span ng-show="recruitmentForm.advanced.$error.minlength" class="text-danger">Must be at least 1 characters.</span>
-                            <span ng-show="recruitmentForm.advanced.$error.maxlength" class="text-danger">Must be no more than 5 characters.</span>
-                            <span ng-show="recruitmentForm.advanced.$error.pattern" class="text-danger">Must contain only numbers.</span></td>
-                    </tr>
+
                 </table>
-                <button ng-click="save()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Add new
+                <button ng-if="newRecruitment" ng-click="save()" type="submit" class="btn btn-sm btn-info search-element col-md-1">Add new
                     Recruitment
                 </button>
-                <button ng-click="edit()" type="submit" class="btn btn-sm btn-info search-element col-md-1" ng-disabled="recruitmentForm.$invalid">Edit
+                <button ng-if="!newRecruitment" ng-click="edit()" type="submit" class="btn btn-sm btn-info search-element col-md-1" ng-disabled="recruitmentForm.$invalid">Edit
                     Recruitment
                 </button>
             </form>

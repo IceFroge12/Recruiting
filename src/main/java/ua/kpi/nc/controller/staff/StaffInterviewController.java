@@ -1,6 +1,7 @@
 package ua.kpi.nc.controller.staff;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.DocumentException;
 import org.springframework.web.bind.annotation.*;
 
 import ua.kpi.nc.persistence.dto.InterviewDto;
@@ -23,6 +24,7 @@ import ua.kpi.nc.util.export.ExportApplicationForm;
 import ua.kpi.nc.util.export.ExportApplicationFormImp;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +68,7 @@ public class StaffInterviewController {
 	}
 
 	@RequestMapping(value = "appForm/{applicationFormId}", method = RequestMethod.GET)
-	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
+	public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws IOException, DocumentException {
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
 		response.setHeader("Content-Disposition", "inline; filename=ApplicationForm.pdf");
 		response.setContentType("application/pdf");

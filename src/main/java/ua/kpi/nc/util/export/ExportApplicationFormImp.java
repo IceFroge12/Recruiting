@@ -17,10 +17,12 @@ import ua.kpi.nc.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * @author Korzh
@@ -32,9 +34,9 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
     private final static String PHOTO_PATH = "photodir.path";
     private final static char CHECKED = '\u00FE';
     private final static char UNCHECKED = '\u00A8';
-    private Font font;
-    private Font font1;
-    private Font font2;
+    private Font fontCheckboxes;
+    private Font fontBig;
+    private Font fontMiddle;
 
     private UserService userService = ServiceFactory.getUserService();
     private FormAnswerService formAnswerService = ServiceFactory.getFormAnswerService();
@@ -43,15 +45,18 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
 
     public ExportApplicationFormImp() throws IOException, DocumentException {
         //Initializing fonts
-        font1 = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_BIG, Font.BOLD);
-        font2 = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_MIDDLE, Font.BOLD);
+        fontBig = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_BIG, Font.BOLD);
+        fontMiddle = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_MIDDLE, Font.BOLD);
         URL urlFont = Thread.currentThread().getContextClassLoader().getResource(CHECKBOX_FONT_PATH);
-        BaseFont base = BaseFont.createFont(urlFont.getPath(), BaseFont.IDENTITY_H, false);
-        font = new Font(base, 16f, Font.BOLD);
+        BaseFont base = null;
+        if (urlFont != null) {
+            base = BaseFont.createFont(urlFont.getPath(), BaseFont.IDENTITY_H, false);
+        } else throw new FileNotFoundException();
+        fontCheckboxes = new Font(base, 16f, Font.BOLD);
     }
 
     @Override
-    public void export(ApplicationForm applicationForm, HttpServletResponse response) throws Exception {
+    public void export(ApplicationForm applicationForm, HttpServletResponse response) throws IOException, DocumentException {
         //getting output stream and creating document
         User user = userService.getUserByID(applicationForm.getUser().getId());
 
@@ -61,8 +66,8 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
 
         //writing ID and name of Student
         String appFormId = "# " + applicationForm.getId();
-        document.add(new Paragraph(appFormId, font1));
-        document.add(new Paragraph(user.getLastName() + " " + user.getFirstName() + " " + user.getSecondName(), font1));
+        document.add(new Paragraph(appFormId, fontBig));
+        document.add(new Paragraph(user.getLastName() + " " + user.getFirstName() + " " + user.getSecondName(), fontBig));
         LineSeparator line2 = new LineSeparator(1, 100, null, Element.ALIGN_CENTER, -10);
         document.add(line2);
         document.add(new Paragraph("  "));
@@ -154,8 +159,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
 
     }
 
-    private void insertRadioCheckboxAnswersAndQuestions(ApplicationForm applicationForm, Document document)
-            throws Exception {
+    private void insertRadioCheckboxAnswersAndQuestions(ApplicationForm applicationForm, Document document) throws DocumentException {
         try {
             for (FormQuestion formQuestion : applicationForm.getQuestions()) {
                 Paragraph paragraph = new Paragraph();
@@ -171,13 +175,13 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                     cell.setBorder(PdfPCell.NO_BORDER);
                     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
                     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                    cell.setPhrase(new Phrase(formQuestion.getTitle(), font2));
+                    cell.setPhrase(new Phrase(formQuestion.getTitle(), fontMiddle));
                     qTable.addCell(cell);
                     PdfPCell cellTableLeft = new PdfPCell(qTable);
                     cellTableLeft.setBorder(PdfPCell.NO_BORDER);
                     qaTable.addCell(cellTableLeft);
 
-                    Phrase phrase = new Phrase(formQuestion.getTitle(), font2);
+                    Phrase phrase = new Phrase(formQuestion.getTitle(), fontMiddle);
                     paragraph.add(phrase);
                     for (FormAnswerVariant formAnswerVariant : formQuestion.getFormAnswerVariants()) {
                         Paragraph paragraph1 = new Paragraph();
@@ -190,10 +194,10 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
                             }
                         }
                         if (flag) {
-                            Phrase phraseCheck = new Phrase(String.valueOf(CHECKED), font);
+                            Phrase phraseCheck = new Phrase(String.valueOf(CHECKED), fontCheckboxes);
                             paragraph1.add(phraseCheck);
                         } else {
-                            Phrase phraseUnCheck = new Phrase(String.valueOf(UNCHECKED), font);
+                            Phrase phraseUnCheck = new Phrase(String.valueOf(UNCHECKED), fontCheckboxes);
                             paragraph1.add(phraseUnCheck);
                         }
                         Phrase variant = new Phrase(formAnswerVariant.getAnswer());
@@ -212,17 +216,17 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
             }
         } catch (DocumentException e) {
             log.error("Error while inserting Radio and Checkbox Answers And Questions {}", e);
-            throw new Exception();
+            throw new DocumentException();
         }
 
     }
 
-    private void insertTextAreaAnswersAndQuestions(ApplicationForm applicationForm, Document document) throws Exception {
+    private void insertTextAreaAnswersAndQuestions(ApplicationForm applicationForm, Document document) throws DocumentException {
         try {
             for (FormQuestion formQuestion : applicationForm.getQuestions()) {
                 if (formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.TEXTAREA.getTitle())) {
                     for (FormAnswer answer : formAnswerService.getByApplicationFormAndQuestion(applicationForm, formQuestion)) {
-                        Paragraph paragraph = new Paragraph(formQuestion.getTitle(), font2);
+                        Paragraph paragraph = new Paragraph(formQuestion.getTitle(), fontMiddle);
                         paragraph.setAlignment(Element.ALIGN_CENTER);
 
                         document.add(paragraph);
@@ -236,20 +240,23 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
             }
         } catch (DocumentException e) {
             log.error("Error while inserting TextArea Answers And Questions {}", e);
-            throw new Exception();
+            throw new DocumentException();
         }
     }
 
-    private void insertImage(PdfPTable table, URL url) throws Exception {
+    private void insertImage(PdfPTable table, URL url) throws IOException,BadElementException {
         try {
             PdfPCell cellImg;
             cellImg = new PdfPCell(getImage(url));
             cellImg.setBorder(PdfPCell.NO_BORDER);
             cellImg.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cellImg);
-        } catch (IOException | BadElementException e) {
+        } catch (IOException e) {
             log.error("Error while inserting Student Image in Application Form {}", e);
-            throw new Exception();
+            throw new IOException();
+        } catch (BadElementException e) {
+            log.error("Error while inserting Student Image in Application Form {}", e);
+            throw new BadElementException("Inserting Student Image Error");
         }
 
     }

@@ -1,6 +1,7 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.DocumentException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ import ua.kpi.nc.util.export.ExportApplicationForm;
 import ua.kpi.nc.util.export.ExportApplicationFormImp;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +85,7 @@ public class AdminAppFormInterviewController {
     }
 
     @RequestMapping(value = "appForm/{applicationFormId}", method = RequestMethod.GET)
-    public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
+    public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws IOException, DocumentException {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
         response.setHeader("Content-Disposition", "inline; filename=ApplicationForm.pdf");

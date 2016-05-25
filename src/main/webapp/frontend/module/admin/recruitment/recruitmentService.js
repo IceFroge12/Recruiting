@@ -7,9 +7,9 @@ function recruitmentService(http) {
 
     var service = {};
 
-    service.addRecruitment  = function (name,registrationDeadline, scheduleChoicesDeadline, endDate,maxGeneralGroup, maxAdvancedGroup) {
-        console.log(registrationDeadline+scheduleChoicesDeadline+maxAdvancedGroup);
-        http({
+    service.addRecruitment  = function (name,registrationDeadline, scheduleChoicesDeadline, endDate) {
+        console.log(registrationDeadline+scheduleChoicesDeadline);
+       return http({
             method : 'POST',
             url : '/admin/addRecruitment',
             contentType: 'application/json',
@@ -17,15 +17,13 @@ function recruitmentService(http) {
                 name:name,
                 registrationDeadline: registrationDeadline,
                 scheduleChoicesDeadline: scheduleChoicesDeadline,
-                endDate: endDate,
-                maxGeneralGroup: maxGeneralGroup,
-                maxAdvancedGroup: maxAdvancedGroup
+                endDate: endDate
             })
         });
     };
 
-    service.editRecruitment  = function (id, name,registrationDeadline, scheduleChoicesDeadline, endDate,maxGeneralGroup, maxAdvancedGroup) {
-        http({
+    service.editRecruitment  = function (id, name,registrationDeadline, scheduleChoicesDeadline, endDate) {
+       return http({
             method : 'POST',
             url : '/admin/editRecruitment',
             contentType: 'application/json',
@@ -34,9 +32,7 @@ function recruitmentService(http) {
                 name:name,
                 registrationDeadline: registrationDeadline,
                 scheduleChoicesDeadline: scheduleChoicesDeadline,
-                endDate: endDate,
-                maxGeneralGroup: maxGeneralGroup,
-                maxAdvancedGroup: maxAdvancedGroup
+                endDate: endDate
             })
         });
     };

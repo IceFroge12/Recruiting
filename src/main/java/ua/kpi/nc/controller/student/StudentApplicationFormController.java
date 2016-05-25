@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.itextpdf.text.DocumentException;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -365,7 +366,7 @@ public class StudentApplicationFormController {
     }
 
     @RequestMapping(value = "appform/{applicationFormId}", method = RequestMethod.GET)
-    public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws Exception {
+    public void exportAppform(@PathVariable Long applicationFormId, HttpServletResponse response) throws IOException, DocumentException {
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "inline; filename=ApplicationForm.pdf");
