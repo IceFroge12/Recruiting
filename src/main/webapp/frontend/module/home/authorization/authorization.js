@@ -42,3 +42,20 @@ angular.module('appAuthorization', ['angular-loading-bar'])
         }
     };
 });
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId      : '586710581492768',
+        xfbml      : true,
+        version    : 'v2.4'
+    });
+};
+
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+    console.log('FB init');
+}(document, 'script', 'facebook-jssdk'));

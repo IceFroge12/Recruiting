@@ -42,15 +42,23 @@ angular.module('app', [
     'appError',
     'serverError'
     
-]).controller('appController', function ($scope, $http, $rootScope) {
+]).controller('appController', function ($scope, $http, $rootScope, TokenStorage) {
     $scope.init = function () {
+        $rootScope.authenticated = false;
+        $rootScope.username = null;
+        $rootScope.id = null;
         $http.get('/currentUser')
             .success(function (user) {
-                $rootScope.authenticated = true;
-                $rootScope.id = user.id;
-                $rootScope.username = user.firstName;
-                $rootScope.roles = user.roles;
-                console.log(user.roles);
+                if (TokenStorage.retrieve() != undefined){
+                    $rootScope.authenticated = true;
+                    $rootScope.id = user.id;
+                    $rootScope.username = user.firstName;
+                    $rootScope.roles = user.roles;
+                    console.log(user.roles);
+                }
+            })
+            .error(function () {
+                TokenStorage.clear();
             });
     };
 }).config(function ($routeProvider, $httpProvider) {
