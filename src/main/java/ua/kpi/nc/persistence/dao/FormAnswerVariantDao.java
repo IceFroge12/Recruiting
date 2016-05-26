@@ -22,6 +22,8 @@ public interface FormAnswerVariantDao {
 
 	int deleteFormAnswerVariant(FormAnswerVariant formVariant);
 
+	int deleteFormAnswerVariant(FormAnswerVariant formVariant, Connection connection);
+
 	List<FormAnswerVariant> getAll();
 
 	FormAnswerVariant getAnswerVariantByTitleAndQuestion(String title, FormQuestion question);

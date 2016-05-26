@@ -122,7 +122,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 			formQuestionDao.updateFormQuestion(formQuestion, connection);
 			formAnswerVariantDao = DaoFactory.getFormAnswerVariantDao();
 			for (FormAnswerVariant formAnswerVariantFromDb : formAnswerVariantDao.getByQuestionId(formQuestion.getId())) {
-				formAnswerVariantDao.deleteFormAnswerVariant(formAnswerVariantFromDb); // TODO connection
+				formAnswerVariantDao.deleteFormAnswerVariant(formAnswerVariantFromDb,connection);
 			}
 			if (formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.CHECKBOX.getTitle()) ||
 					formQuestion.getQuestionType().getTypeTitle().equals(FormQuestionTypeEnum.SELECT.getTitle()) ||

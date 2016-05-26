@@ -100,6 +100,12 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
     }
 
     @Override
+    public int deleteFormAnswerVariant(FormAnswerVariant formVariant, Connection connection) {
+        log.info("Delete formVariant with id = {}", formVariant.getId());
+        return this.getJdbcTemplate().update(SQL_DELETE, connection, formVariant.getId());
+    }
+
+    @Override
     public List<FormAnswerVariant> getAll() {
         log.info("Get all FormAnswerVariant");
         return this.getJdbcTemplate().queryForList(SQL_GET, extractor);
