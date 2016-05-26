@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.MessageDto;
+import ua.kpi.nc.persistence.dto.StaffFiltrationParamsDto;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.dto.UserRateDto;
 import ua.kpi.nc.persistence.model.*;
@@ -69,14 +70,16 @@ public class AdminManagementStaffController {
         return userService.getEmployeesFromToRows(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase);
     }
 
-    @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.GET)
-    public List<User> showFilteredEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                            @RequestParam boolean increase, @RequestParam Long idStart, @RequestParam Long idFinish,
-                                            @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer,
-                                            @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
-        List<Role> neededRoles = rolesId.stream().map(roleService::getRoleById).collect(Collectors.toList());
-        return userService.getFilteredEmployees(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase,
-                idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
+    @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.POST)
+    public List<User> showFilteredEmployees(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
+        List<Role> neededRoles = staffFiltrationParamsDto.getRolesId()
+                .stream().map(roleService::getRoleById).collect(Collectors.toList());
+        Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(),staffFiltrationParamsDto.getRowsNum());
+        return userService.getFilteredEmployees(fromRow, staffFiltrationParamsDto.getRowsNum(),
+                staffFiltrationParamsDto.getSortingCol(), staffFiltrationParamsDto.isIncrease(),
+                staffFiltrationParamsDto.getIdStart(), staffFiltrationParamsDto.getIdFinish(),
+                neededRoles, staffFiltrationParamsDto.isInterviewer(),
+                staffFiltrationParamsDto.isNotInterviewer(), staffFiltrationParamsDto.isNotEvaluated());
     }
 
     private Long calculateStartRow(int pageNum, Long rowsNum) {

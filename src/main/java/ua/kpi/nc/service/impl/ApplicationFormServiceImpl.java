@@ -13,8 +13,6 @@ import ua.kpi.nc.persistence.dao.DataSourceSingleton;
 import ua.kpi.nc.persistence.dao.FormAnswerDao;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.service.ApplicationFormService;
-import ua.kpi.nc.service.ServiceFactory;
-import ua.kpi.nc.service.UserService;
 
 public class ApplicationFormServiceImpl implements ApplicationFormService {
 

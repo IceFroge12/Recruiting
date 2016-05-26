@@ -400,7 +400,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
                 sbTotal.append(sb.toString());
             }
         }
-        if (!(statuses == null)) {
+        if (!statuses.isEmpty()) {
             sbTotal.append("(s.title = ANY ('{");
             for (String status : statuses) {
                 sbTotal.append(status + ",");

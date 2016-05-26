@@ -270,8 +270,7 @@ function studentManagementController($scope, $rootScope, $filter, studentManagem
     };
 
     $scope.showFilteredStudents = function showFilteredStudents(pageNum) {
-        studentManagementService.showFilteredStudents(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder,
-            $scope.sort.reverse, $scope.restrictions, $scope.statusesTitle, $scope.isActive).success(function (data) {
+        studentManagementService.showFilteredStudents(makeFiltrationObj(pageNum)).success(function (data) {
                 $scope.allStudents = data;
                 var list = [];
                 //checkStatus($scope.allStudents.possibleStatus, $scope.allStudents.status);
@@ -281,6 +280,28 @@ function studentManagementController($scope, $rootScope, $filter, studentManagem
             });
     };
 
+    var makeFiltrationObj = function(pageNum){
+        var filtrationParams = {
+            pageNum:pageNum,
+            rowsNum: $scope.itemsPerPage,
+            sortingCol: $scope.sort.sortingOrder,
+            increase: $scope.sort.reverse,
+            restrictions: toStringList($scope.restrictions),
+            statuses: $scope.statusesTitle,
+            active: $scope.isActive
+            };
+        console.log(filtrationParams);
+        console.log($scope.isActive);
+    return filtrationParams;
+    };
+
+    var toStringList = function(object){
+        var resultArray=[];
+        angular.forEach(object, function(item,i){
+            resultArray.push(JSON.stringify(item));
+        });
+        return resultArray;
+    };
 
     $scope.searchStudent = function (studentName) {
         console.log(studentName);

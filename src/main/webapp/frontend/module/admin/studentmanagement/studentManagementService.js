@@ -93,7 +93,7 @@ function studentManagementService(http) {
              method: 'GET',
              url: '/admin/getTimePoints'
          })
-    }
+    };
     
     service.confirmSelection = function () {
         return http({
@@ -107,7 +107,7 @@ function studentManagementService(http) {
              method: 'POST',
              url: '/admin/announceResults'
          })
-    }
+    };
     
     service.calculateStatuses = function() {
    	 return http({
@@ -139,13 +139,13 @@ function studentManagementService(http) {
         return ( request.then(handleSuccess) );
     };
 
-    service.showFilteredStudents = function (pageNum, rowsNum, sortingCol, increase, restrictions, statuses, isActive) {
+    service.showFilteredStudents = function (filtrationParams) {
         console.log("Service showFilteredStudents");
         return http({
-            method: 'GET',
+            method: 'POST',
             url: '/admin/showFilteredStudents',
-            params: {pageNum: pageNum, rowsNum: rowsNum, sortingCol: sortingCol, increase: increase,
-                restrictions: restrictions, statuses: statuses, isActive: isActive}
+            contentType: 'application/json',
+            data: filtrationParams
         })
     };
 

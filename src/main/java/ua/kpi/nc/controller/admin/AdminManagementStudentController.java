@@ -1,14 +1,8 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ua.kpi.nc.persistence.dto.MessageDto;
-import ua.kpi.nc.persistence.dto.MessageDtoType;
-import ua.kpi.nc.persistence.dto.RecruitmentStatusDto;
-import ua.kpi.nc.persistence.dto.StudentAppFormDto;
+import org.springframework.web.bind.annotation.*;
+import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
@@ -52,7 +46,7 @@ public class AdminManagementStudentController {
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
     public List<StudentAppFormDto> showStudents(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
                                                 @RequestParam boolean increase) {
-        Long fromRow = (pageNum - 1) * rowsNum;
+        Long fromRow = calculateStartRow(pageNum, rowsNum);
         List<ApplicationForm> applicationForms = applicationFormService.getApplicationFormsSorted(fromRow, rowsNum,
                 sortingCol, increase);
         return getAllStudent(applicationForms);
@@ -91,30 +85,39 @@ public class AdminManagementStudentController {
         return studentAppFormDtoList;
     }
 
-    @RequestMapping(value = "showFilteredStudents", method = RequestMethod.GET)
-    public List<StudentAppFormDto> showFilteredStudents(@RequestParam int pageNum, @RequestParam Long rowsNum,
-                                                        @RequestParam Long sortingCol, @RequestParam boolean increase,
-                                                        @RequestParam(value = "restrictions", required = false) String[] restrictions,
-                                                        @RequestParam(value = "statuses", required = false) List<String> statuses,
-                                                        @RequestParam boolean isActive) {
-        Long fromRow = (pageNum - 1) * rowsNum;
+    @RequestMapping(value = "showFilteredStudents", method = RequestMethod.POST)
+    public List<StudentAppFormDto> showFilteredStudents(@RequestBody StudentFiltrationParamsDto studentFiltrationParamsDto) {
+
+        Long fromRow = calculateStartRow(studentFiltrationParamsDto.getPageNum(), studentFiltrationParamsDto.getRowsNum());
         List<FormQuestion> questions = new ArrayList<>();
+
         Gson questionGson = GsonFactory.getFormQuestionGson();
-        for (String question : restrictions) {
+        for (String question : studentFiltrationParamsDto.getRestrictions()) {
             questions.add(questionGson.fromJson(question, FormQuestionImpl.class));
         }
+
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();
         List<ApplicationForm> applicationForms = applicationFormService.getCurrentsApplicationFormsFiltered(fromRow,
-                rowsNum, sortingCol, increase, questions, statuses, isActive);
+                studentFiltrationParamsDto.getRowsNum(), studentFiltrationParamsDto.getSortingCol(), studentFiltrationParamsDto.isIncrease(),
+                questions, studentFiltrationParamsDto.getStatuses(), studentFiltrationParamsDto.isActive());
         for (ApplicationForm applicationForm : applicationForms) {
-            studentAppFormDtoList.add(new StudentAppFormDto(applicationForm.getUser().getId(),
-                    applicationForm.getId(), applicationForm.getUser().getFirstName(),
-                    applicationForm.getUser().getLastName(), applicationForm.getStatus().getTitle(),
-                    getPossibleStatus(applicationForm.getStatus())));
+            StudentAppFormDto studentAppFormDto = new StudentAppFormDto();
+
+            studentAppFormDto.setId(applicationForm.getUser().getId());
+            studentAppFormDto.setAppFormId(applicationForm.getId());
+            studentAppFormDto.setFirstName(applicationForm.getUser().getFirstName());
+            studentAppFormDto.setLastName(applicationForm.getUser().getLastName());
+            studentAppFormDto.setStatus(applicationForm.getStatus().getTitle());
+            studentAppFormDto.setPossibleStatus(getPossibleStatus(applicationForm.getStatus()));
+
+            studentAppFormDtoList.add(studentAppFormDto);
         }
         return studentAppFormDtoList;
     }
 
+    private Long calculateStartRow(int pageNum, Long rowsNum) {
+        return (pageNum - 1) * rowsNum;
+    }
 
     @RequestMapping(value = "getapplicationquestionsnontext", method = RequestMethod.POST)
     public List<String> getAppFormQuestionsNonText(@RequestParam String role) {
@@ -146,7 +149,7 @@ public class AdminManagementStudentController {
 
         if (status.getTitle().equals(valueOf(REGISTERED))) {
             statusList.add(new Status(valueOf(REGISTERED)));
-        }else  if (status.getTitle().equals(valueOf(IN_REVIEW))) {
+        } else if (status.getTitle().equals(valueOf(IN_REVIEW))) {
             statusList.add(new Status(valueOf(IN_REVIEW)));
             statusList.add(new Status(valueOf(APPROVED)));
             statusList.add(new Status(valueOf(REJECTED)));
@@ -242,7 +245,7 @@ public class AdminManagementStudentController {
                 Integer softMark = interviewSoft.getMark();
                 Integer techMark = interviewTech.getMark();
                 int finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
-                if (finalMark > 0){
+                if (finalMark > 0) {
                     Status finalStatus = decisionService.getStatusByFinalMark(finalMark);
                     applicationForm.setStatus(finalStatus);
                     applicationFormService.updateApplicationForm(applicationForm);
@@ -281,6 +284,7 @@ public class AdminManagementStudentController {
         return gson.toJson(new MessageDto("Results were announced.",
                 MessageDtoType.SUCCESS));
     }
+
     //TODO duplicate
     private void sendMessage(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
         for (ApplicationForm applicationForm : applicationForms) {
@@ -353,7 +357,7 @@ public class AdminManagementStudentController {
     @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
     public List<StudentAppFormDto> searchStudentById(@RequestParam String lastName,
                                                      @RequestParam int pageNum, @RequestParam Long rowsNum) {
-        Long fromRow = (pageNum - 1) * rowsNum;
+        Long fromRow = calculateStartRow(pageNum, rowsNum);
         List<ApplicationForm> applicationForms = applicationFormService.getSearchAppFormByNameFromToRows(lastName,
                 fromRow, rowsNum);
         return getAllStudent(applicationForms);

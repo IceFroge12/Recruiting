@@ -3,11 +3,11 @@
  */
 function staffManagementController($scope, $rootScope, ngToast, $filter, $http, staffManagementService) {
 
-
     $scope.sort = {
         sortingOrder: 1,
         reverse: true
     };
+
     $scope.gap = 5;
     $scope.filtered = false;
     $scope.filteredItems = [];
@@ -22,7 +22,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
     $scope.rolesChoosen = [1, 2, 5];
     $scope.interviewer = true;
     $scope.notInterviewer = true;
-    $scope.notEvaluated = true; //TODO
+    $scope.notEvaluated = true;
     $scope.assignedStudents = [];
     $scope.notMarked = [];
 
@@ -103,9 +103,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
     };
 
     $scope.showFilteredEmployees = function showFilteredEmployees(pageNum) {
-        staffManagementService.showFilteredEmployees(pageNum, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
-            $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
-            $scope.notEvaluated).success(function (data) { //TODO
+        staffManagementService.showFilteredEmployees(makeFiltrationObj(pageNum)).success(function (data) { //TODO
             angular.forEach(data, function (value1, key1) {
                 angular.forEach(value1.roles, function (value2, key2) {
                     value2.roleName = value2.roleName.slice(5);
@@ -116,6 +114,22 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         }, function error() {
             console.log("error");
         });
+    };
+
+    var makeFiltrationObj = function(pageNum){
+        var filtrationParams = {
+            pageNum:pageNum,
+            rowsNum:$scope.itemsPerPage,
+            sortingCol:$scope.sort.sortingOrder,
+            increase:$scope.sort.reverse,
+            idStart:$scope.startId,
+            idFinish:$scope.finishId,
+            rolesId:$scope.rolesChoosen,
+            interviewer:$scope.interviewer,
+            notInterviewer:$scope.notInterviewer,
+            notEvaluated:$scope.notEvaluated
+        };
+        return filtrationParams;
     };
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
@@ -354,7 +368,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
             $scope.max = data;
             console.log(data);
             $scope.slider = {
-                minValue: 10,
+                minValue: 0,
                 maxValue: $scope.max,
                 options: {
                     floor: 0,
