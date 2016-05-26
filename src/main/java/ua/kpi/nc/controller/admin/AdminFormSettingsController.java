@@ -1,13 +1,14 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.FormQuestionDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
-import ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.persistence.util.FormQuestionComparator;
@@ -16,6 +17,8 @@ import ua.kpi.nc.service.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum.*;
 
 /**
  * Created by dima on 23.04.16.
@@ -47,15 +50,15 @@ public class AdminFormSettingsController {
         return adapterFormQuestionList;
     }
 
-    @RequestMapping(value = "addAppFormQuestion")
-    public void addAppFormQuestion(@RequestBody FormQuestionDto formQuestionDto) {
+    @RequestMapping(value = "addFormQuestion", method = RequestMethod.POST)
+    public ResponseEntity addFormQuestion(@RequestBody FormQuestionDto formQuestionDto) {
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
         List<Role> roleList = new ArrayList<>();
         roleList.add(role);
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
-        for (String s : formQuestionDto.getFormAnswerVariants()) {
-            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(s);
+        for (String formAnswerVariantString : formQuestionDto.getFormAnswerVariants()) {
+            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(formAnswerVariantString);
             formAnswerVariantList.add(formAnswerVariant);
         }
         FormQuestion formQuestion = new FormQuestionImpl();
@@ -63,19 +66,19 @@ public class AdminFormSettingsController {
         formQuestion.setQuestionType(questionType);
         formQuestion.setEnable(formQuestionDto.isEnable());
         formQuestion.setMandatory(formQuestionDto.isMandatory());
-        formQuestion.setRoles(roleList);
         formQuestion.setFormAnswerVariants(formAnswerVariantList);
-        formQuestion.setOrder(formQuestion.getOrder());
+        formQuestion.setOrder(formQuestionDto.getOrder());
         formQuestionService.insertFormQuestion(formQuestion, role, formAnswerVariantList);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST)
     public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
-        if (questionType.getTypeTitle().equals(FormQuestionTypeEnum.CHECKBOX.getTitle()) ||
-                questionType.getTypeTitle().equals(FormQuestionTypeEnum.SELECT.getTitle()) ||
-                questionType.getTypeTitle().equals(FormQuestionTypeEnum.RADIO.getTitle())) {
+        if (questionType.getTypeTitle().equals(CHECKBOX.getTitle()) ||
+                questionType.getTypeTitle().equals(SELECT.getTitle()) ||
+                questionType.getTypeTitle().equals(RADIO.getTitle())) {
             for (String s : formQuestionDto.getFormAnswerVariants()) {
                 FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
                 formAnswerVariant.setAnswer(s);

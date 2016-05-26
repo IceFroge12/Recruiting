@@ -30,7 +30,6 @@ function formSettingsService(http) {
     };
     
     service.changeQuestionStatus = function (id) {
-       // var request = http({
         return http({
             method: "GET",
             url: "/admin/changeQuestionStatus",
@@ -38,11 +37,9 @@ function formSettingsService(http) {
                 id: id
             }
         });
-       // return ( request.then(handleSuccess) );
     };
 
     service.changeQuestionMandatoryStatus = function (id) {
-        //var request = http({
         return http({
             method: "GET",
             url: "/admin/changeQuestionMandatoryStatus",
@@ -50,13 +47,12 @@ function formSettingsService(http) {
                 id: id
             }
         });
-        //return ( request.then(handleSuccess) );
     };
     
     service.addQuestion = function (question, type, enable,mandatory, formAnswerVariants, role, order) {
-        http({
+       return http({
             method: 'POST',
-            url: '/admin/addAppFormQuestion',
+            url: '/admin/addFormQuestion',
             contentType: 'application/json',
             data: JSON.stringify({
                 question: question,

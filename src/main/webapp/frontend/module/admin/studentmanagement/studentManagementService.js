@@ -24,7 +24,6 @@ function studentManagementService(http) {
     };
 
     service.changeSelectedStatuses = function (changeStatus, appFormIdList) {
-        console.log("STATUSE"+changeStatus+appFormIdList);
         return http({
             method: 'POST',
             url: '/admin/changeSelectedStatuses',

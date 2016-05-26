@@ -6,6 +6,44 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     $scope.questionRole;
 
+
+    var getSuccessToast = function (message) {
+        var myToastMsg = ngToast.success({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
+
+    var getWarningToast = function (message) {
+        var myToastMsg = ngToast.warning({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
+
+    var getInfoToast = function (message) {
+        var myToastMsg = ngToast.info({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
+
+
     $scope.getMandatory = function () {
         var role = "ROLE_STUDENT";
         $scope.questionRole = "Student question";
@@ -70,7 +108,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     $scope.roles = ["ROLE_STUDENT", "ROLE_TECH", "ROLE_SOFT"];
     $scope.sce = $sce;
-
+    
     var selectedValue;
     $scope.showSelectValue = function (mySelect) {
         console.log(mySelect);
@@ -79,29 +117,19 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             $scope.canMoveForward = true;
             $scope.addVariant = null;
         } else {
-            var myToastMsg = ngToast.info({
-                content: 'You have to input variants separated by comma',
-                timeout: 5000,
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                dismissOnClick: true,
-                combineDuplications: true,
-                maxNumber: 2
-            });
+            getInfoToast("You have to input variants separated by comma");
             $scope.canMoveForward = false;
         }
     };
 
-    var selectActiveValue;
+    $scope.selectActiveValue;
     $scope.showSelectActiveValue = function (myActiveSelect) {
-        console.log(myActiveSelect);
-        selectActiveValue = myActiveSelect;
+        $scope.selectActiveValue = myActiveSelect;
     };
 
-    var selectMandatoryValue;
-    $scope.showSelectActiveValue = function (myMandatorySelect) {
-        console.log(myMandatorySelect);
-        selectMandatoryValue = myMandatorySelect;
+    $scope.selectMandatoryValue;
+    $scope.showSelectMandatoryValue = function (myMandatorySelect) {
+        $scope.selectMandatoryValue = myMandatorySelect;
     };
 
     function splitString(stringToSplit, separator) {
@@ -126,51 +154,33 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
 
     $scope.changeOrder = function (addOrder) {
-
         var x = 0;
         var length = $scope.questions.length;
         while (x < length) {
             console.log($scope.questions[x].order);
-
             if (addOrder == $scope.questions[x].order) {
                 console.log("error");
-                var myToastMsg = ngToast.info({
-                    content: 'Duplicate order number',
-                    timeout: 5000,
-                    horizontalPosition: 'center',
-                    verticalPosition: 'bottom',
-                    dismissOnClick: true,
-                    combineDuplications: true,
-                    maxNumber: 2
-                });
+                getInfoToast("Duplicate order number");
                 $scope.cantAddQuestion = true;
                 break;
             } else {
+                $scope.addOrder = addOrder;
                 $scope.cantAddQuestion = false;
                 x++;
             }
             console.log("break");
         }
+        
     };
 
     $scope.changeEditOrder = function (questionOrder) {
-
         var x = 0;
         var length = $scope.questions.length;
         while (x < length) {
             console.log($scope.questions[x].order);
-
             if (questionOrder == $scope.questions[x].order) {
                 console.log("error");
-                var myToastMsg = ngToast.info({
-                    content: 'Duplicate order number',
-                    timeout: 5000,
-                    horizontalPosition: 'center',
-                    verticalPosition: 'bottom',
-                    dismissOnClick: true,
-                    combineDuplications: true,
-                    maxNumber: 2
-                });
+                getInfoToast("Duplicate order number");
                 $scope.cantEditQuestion = true;
                 break;
             } else {
@@ -189,7 +199,6 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         } else {
             $scope.cantEditVariant = false;
         }
-
     };
 
 
@@ -197,11 +206,9 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         var comma = ',';
         if ($scope.addVariant != null) {
             var variantArray = splitString($scope.addVariant, comma);
-
         } else {
             variantArray = [];
         }
-        
         var role;
         if ($scope.questionRole == "Student question") {
             role = "ROLE_STUDENT";
@@ -213,7 +220,17 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             role = "ROLE_SOFT";
         }
         
-        formAppService.addQuestion($scope.addText, selectedValue, selectMandatoryValue, selectActiveValue, variantArray, role, $scope.addOrder);
+        console.log($scope.addText+" "+ selectedValue+" "+$scope.selectActiveValue+" "+
+            $scope.selectMandatoryValue+" "+ variantArray+" "+ role+" " +$scope.addOrder);
+        
+        formAppService.addQuestion($scope.addText, selectedValue,$scope.selectActiveValue,
+            $scope.selectMandatoryValue, variantArray, role, $scope.addOrder).then(function (response) {
+            if (response.status === 200) {
+                getInfoToast("Question added");
+            }
+        }).catch(function () {
+            getInfoToast("Question not added");
+        });
     };
 
 
@@ -233,7 +250,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         console.log(variantArray);
 
         $scope.question.order = $scope.questionOrder;
-        
+
         formAppService.editQuestion($scope.question.id, $scope.question.title, $scope.question.type,
             $scope.question.enable, variantArray, "ROLE_STUDENT", $scope.question.order, $scope.question.mandatory);
     };
