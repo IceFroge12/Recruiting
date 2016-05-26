@@ -18,13 +18,8 @@ import java.io.OutputStream;
  */
 public class RenderXLS extends AbsRender {
 
-	public RenderXLS(String filename) {
-		this.filename = filename;
-		wb = new HSSFWorkbook();
-	}
-
-	public RenderXLS() {
-		wb = new HSSFWorkbook();
-	}
+    public RenderXLS() {
+        wb = new HSSFWorkbook();
+    }
 
 }

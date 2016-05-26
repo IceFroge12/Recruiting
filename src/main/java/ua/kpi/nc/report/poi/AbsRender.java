@@ -18,42 +18,52 @@ import java.util.List;
 /**
  * Created by Алексей on 28.04.2016.
  */
+
+
 public abstract class AbsRender implements ReportRenderer {
     protected Workbook wb;
-    protected String filename;
-    protected List<Object> rows;
-    protected List<Line> cells;
+    protected List<Object> header;
+    protected List<Line> lines;
     protected static Logger log = LoggerFactory.getLogger(AbsRender.class.getName());
 
-    @Override
-    public void render(Report report, OutputStream out) {
-        rows = report.getHeader().getCells();
-        cells = report.getLines();
-        write(rows, cells, out);
-    }
-
-    protected void write(List<Object> objects, List<Line> lines, OutputStream out) {
-        List<Object> rows = objects;
-        List<Line> cells = lines;
-        log.trace("rows and cells initialization was successful");
-        Sheet sheet = wb.createSheet();
+    private void autoSize(Sheet sheet, int columnSize) {
         if (sheet instanceof SXSSFSheet) {
             SXSSFSheet sxSheet = (SXSSFSheet) sheet;
             sxSheet.trackAllColumnsForAutoSizing();
         }
+        sheet.autoSizeColumn(columnSize);
+    }
+
+    private void writeHeader(Sheet sheet, List<Object> header) {
         Row row = sheet.createRow(0);
-        for (int i = 0; i < rows.size(); i++) {
+        for (int i = 0; i < header.size(); i++) {
             Cell cell = row.createCell(i);
-            cell.setCellValue(rows.get(i) + "");
-            sheet.autoSizeColumn(i);
+            cell.setCellValue(header.get(i) + "");
+            autoSize(sheet, i);
         }
-        for (int i = 1; i <= cells.size(); i++) {
-            Row roww = sheet.createRow(i);
-            for (int j = 0; j < rows.size(); j++) {
-                Cell cell = roww.createCell(j);
-                cell.setCellValue(cells.get(i - 1).getCells().get(j) + "");
+    }
+
+    private void writeLines(Sheet sheet, List<Line> lines) {
+        for (int i = 1; i <= lines.size(); i++) {
+            Row row = sheet.createRow(i);
+            for (int j = 0; j < lines.get(0).getCells().size(); j++) {
+                Cell cell = row.createCell(j);
+                cell.setCellValue(lines.get(i - 1).getCells().get(j) + "");
             }
         }
+    }
+
+    @Override
+    public void render(Report report, OutputStream out) {
+        header = report.getHeader().getCells();
+        lines = report.getLines();
+        write(header, lines, out);
+    }
+
+    protected void write(List<Object> header, List<Line> lines, OutputStream out) {
+        Sheet sheet = wb.createSheet();
+        writeHeader(sheet, header);
+        writeLines(sheet, lines);
         try {
             wb.write(out);
             log.trace("Write data into Workbook was successful");
@@ -65,7 +75,7 @@ public abstract class AbsRender implements ReportRenderer {
                     out.close();
                     log.trace("OutputStream closed.");
                 } catch (IOException e) {
-                    log.error("Cannot close OutputStreamm", e);
+                    log.error("Cannot close OutputStream", e);
                 }
             }
         }

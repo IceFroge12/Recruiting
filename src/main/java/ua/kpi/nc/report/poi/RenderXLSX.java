@@ -7,11 +7,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
  */
 public class RenderXLSX extends AbsRender {
 
-	public RenderXLSX(String filename) {
-		this.filename = filename;
-		wb = new SXSSFWorkbook();
-	}
-
 	public RenderXLSX() {
 		wb = new SXSSFWorkbook();
 	}
