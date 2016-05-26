@@ -217,7 +217,8 @@
                         <tr>
                             <td> Active</td>
                             <td>
-                                <select ng-model="myActiveSelect" ng-change="showSelectActiveValue(myActiveSelect)">
+                                <select ng-model="myActiveSelect"
+                                        ng-change="showSelectActiveValue(myActiveSelect)">
                                     <option selected>true</option>
                                     <option>false</option>
                                 </select>
@@ -242,7 +243,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" ng-click="saveForm()" type="button"
-                        ng-disabled="cantAddQuestion" data-dismiss="modal">Save changes
+                        ng-disabled="cantAddQuestion" data-dismiss="modal">Save question
                 </button>
             </div>
         </div>

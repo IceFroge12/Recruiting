@@ -86,6 +86,10 @@
                                     </p>
                                 </td>
                             </tr>
+                            <tr ng-if="appForm.feedback !=undefined" >
+                                <td>Feedback from Student</td>
+                                <td>{{appForm.feedback}}</td>
+                            </tr>
                     </table>
                     <button ng-click = "exportAppForm(appForm)" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
                 </div>

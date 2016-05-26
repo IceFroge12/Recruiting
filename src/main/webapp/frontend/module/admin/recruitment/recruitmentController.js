@@ -82,8 +82,8 @@ function recruitmentController($scope, ngToast, recruitmentService) {
         console.log($scope.registrationDeadline);
         console.log($scope.scheduleChoicesDeadline);
         console.log($scope.endDate);
-        recruitmentService.editRecruitment($scope.recId, $scope.recruitmentName, $scope.registrationDeadline + zeroSeconds, $scope.scheduleChoicesDeadline + zeroSeconds,
-            $scope.endDate+ zeroSeconds).then(function (response) {
+        recruitmentService.editRecruitment($scope.recId, $scope.recruitmentName, $scope.registrationDeadline + zeroSeconds, 
+            $scope.scheduleChoicesDeadline + zeroSeconds, $scope.endDate+ zeroSeconds).then(function (response) {
             if (response.status === 200) {
                 getSuccessToast('Recruitment Updated');
             }

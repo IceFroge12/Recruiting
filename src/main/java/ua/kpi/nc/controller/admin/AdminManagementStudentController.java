@@ -1,6 +1,16 @@
 package ua.kpi.nc.controller.admin;
 
 import com.google.gson.Gson;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.nc.persistence.dto.MessageDto;
+import ua.kpi.nc.persistence.dto.MessageDtoType;
+import ua.kpi.nc.persistence.dto.RecruitmentStatusDto;
+import ua.kpi.nc.persistence.dto.StudentAppFormDto;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
@@ -134,14 +144,15 @@ public class AdminManagementStudentController {
 
 
     @RequestMapping(value = "changeSelectedStatuses", method = RequestMethod.POST)
-    public void changeSelectedStatuses(@RequestParam String changeStatus,
-                                       @RequestParam List<Long> appFormIdList) {
+    public ResponseEntity changeSelectedStatuses(@RequestParam String changeStatus,
+                                                 @RequestParam List<Long> appFormIdList) {
         Status status = statusService.getByName(changeStatus);
         for (Long id : appFormIdList) {
             ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
             applicationForm.setStatus(status);
             applicationFormService.updateApplicationForm(applicationForm);
         }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     private List<Status> getPossibleStatus(Status status) {

@@ -2,7 +2,7 @@
  * Created by dima on 29.04.16.
  */
 
-function studentManagementController($scope, $rootScope, $filter, studentManagementService) {
+function studentManagementController($scope,ngToast, studentManagementService) {
     $scope.sort = {
         sortingOrder: 1,
         reverse: false
@@ -17,7 +17,31 @@ function studentManagementController($scope, $rootScope, $filter, studentManagem
     $scope.filtered = false;
     $scope.checkedAll = false;
     $scope.isActive = true;
+    
+    var getSuccessToast = function (message) {
+        var myToastMsg = ngToast.success({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
 
+    var getWarningToast = function (message) {
+        var myToastMsg = ngToast.warning({
+            content: message,
+            timeout: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            dismissOnClick: true,
+            combineDuplications: true,
+            maxNumber: 2
+        });
+    };
+    
     function getAllQuestions() {
         studentManagementService.getAllQuestions().then(function success(data) {
             for (var i = 0, len = data.length; i < len; i++) {
@@ -258,11 +282,13 @@ function studentManagementController($scope, $rootScope, $filter, studentManagem
 
     $scope.applyStatus = function () {
         console.log("Apply");
-        studentManagementService.changeSelectedStatuses(selectedValue, $scope.statusIdArray);
-        angular.forEach($scope.statusIdArray, function (item, i) {
-            // console.log("ITEMM"+item);
-            //console.log(selectedValue);
-        });
+        studentManagementService.changeSelectedStatuses(selectedValue, $scope.statusIdArray).then(function (response) {
+                if (response.status === 200) {
+                    getSuccessToast('Statuses Updated');
+                }
+            }).catch(function () {
+                getWarningToast("Error updating statuses");
+            });
     };
 
     $scope.changeStatus = function (status, appFormId) {
@@ -455,6 +481,6 @@ angular.module('appStudentManagement').directive("customSortStud", function () {
 
 
 angular.module('appStudentManagement')
-    .controller('studentManagementController', ['$scope', '$rootScope', '$filter', 'studentManagementService', studentManagementController]);
+    .controller('studentManagementController', ['$scope','ngToast', 'studentManagementService', studentManagementController]);
 
 
