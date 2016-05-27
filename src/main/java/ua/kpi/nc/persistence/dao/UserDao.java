@@ -29,13 +29,15 @@ public interface UserDao {
 
     int updateUser(User user);
 
+    int updateUser(User user, Connection connection);
+
     boolean addRole(User user, Role role);
 
     boolean addRole(User user, Role role, Connection connection);
 
     int deleteRole(User user, Role role);
 
-    int deleteAllRoles(User user);
+    int deleteAllRoles(User user, Connection connection);
 
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 

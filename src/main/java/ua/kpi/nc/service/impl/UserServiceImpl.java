@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService {
     public boolean updateUserWithRole(User user) {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
-            userDao.updateUser(user);
-            userDao.deleteAllRoles(user);
+            userDao.updateUser(user, connection);
+            userDao.deleteAllRoles(user, connection);
             for (Role role : user.getRoles())
                 userDao.addRole(user, role, connection);
             connection.commit();
