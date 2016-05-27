@@ -12,7 +12,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
     $scope.filtered = false;
     $scope.filteredItems = [];
     $scope.groupedItems = [];
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 15;
     $scope.currentPage = 1;
     $scope.items = [];
     $scope.amount = 0;
@@ -25,6 +25,10 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
     $scope.notEvaluated = true;
     $scope.assignedStudents = [];
     $scope.notMarked = [];
+
+    function countAmountOfPages(allNum) {
+        $scope.amount = Math.ceil(allNum / $scope.itemsPerPage);
+    }
 
     // init the sorted items
     $scope.$watch("sort.reverse", function () {
@@ -52,9 +56,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
             $scope.showAllEmployees($scope.currentPage);
     });
 
-    staffManagementService.showFilteredEmployees(1, 10, $scope.sort.sortingOrder, $scope.sort.reverse,
-        $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
-        $scope.notEvaluated).success(function (data) { //TODO
+    staffManagementService.showFilteredEmployees(makeFiltrationObj($scope.currentPage)).success(function (data) {
         angular.forEach(data, function (value1, key1) {
             angular.forEach(value1.roles, function (value2, key2) {
                 value2.roleName = value2.roleName.slice(5);
@@ -93,12 +95,12 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
     };
 
     staffManagementService.getCountOfEmployee().success(function (data) {
-        $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        countAmountOfPages(data)
     });
 
     $scope.getCountOfEmployee = function () {
         staffManagementService.getCountOfEmployee().success(function (data) {
-            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+            countAmountOfPages(data)
         });
     };
 
@@ -116,7 +118,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         });
     };
 
-    var makeFiltrationObj = function(pageNum){
+    function makeFiltrationObj(pageNum){
         var filtrationParams = {
             pageNum:pageNum,
             rowsNum:$scope.itemsPerPage,
@@ -130,7 +132,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
             notEvaluated:$scope.notEvaluated
         };
         return filtrationParams;
-    };
+    }
 
     $scope.showAllEmployees = function showAllEmployees(pageNum) {
 
@@ -217,7 +219,7 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
     };
 
     $scope.nextPage = function () {
-        if ($scope.currentPage < $scope.pageItems.amount - 1) {
+        if ($scope.currentPage < countAmountOfPages($scope.amount) - 1) {
             $scope.currentPage++;
         }
     };
@@ -427,10 +429,8 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         $scope.currentPage = 1;
         $scope.showFilteredEmployees($scope.currentPage);
 
-        staffManagementService.getCountOfEmployeeFiltered($scope.currentPage, $scope.itemsPerPage, $scope.sort.sortingOrder, $scope.sort.reverse,
-            $scope.startId, $scope.finishId, $scope.rolesChoosen, $scope.interviewer, $scope.notInterviewer,
-            $scope.notEvaluated).success(function (data) {
-            $scope.amount = Math.ceil(data / $scope.itemsPerPage);
+        staffManagementService.getCountOfEmployeeFiltered(makeFiltrationObj($scope.currentPage)).success(function (data) {
+            countAmountOfPages(data)
         });
         $scope.filtered = true;
     };

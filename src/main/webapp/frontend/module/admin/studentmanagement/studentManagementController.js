@@ -306,7 +306,7 @@ function studentManagementController($scope,ngToast, studentManagementService) {
             });
     };
 
-    var makeFiltrationObj = function(pageNum){
+    function makeFiltrationObj(pageNum){
         var filtrationParams = {
             pageNum:pageNum,
             rowsNum: $scope.itemsPerPage,
@@ -319,7 +319,7 @@ function studentManagementController($scope,ngToast, studentManagementService) {
         console.log(filtrationParams);
         console.log($scope.isActive);
     return filtrationParams;
-    };
+    }
 
     var toStringList = function(object){
         var resultArray=[];

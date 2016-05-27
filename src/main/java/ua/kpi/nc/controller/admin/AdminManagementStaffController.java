@@ -72,9 +72,12 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.POST)
     public List<User> showFilteredEmployees(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
-        List<Role> neededRoles = staffFiltrationParamsDto.getRolesId()
-                .stream().map(roleService::getRoleById).collect(Collectors.toList());
+        List<Role> neededRoles = new ArrayList<>();
+        for(Long roleId: staffFiltrationParamsDto.getRolesId())
+            neededRoles.add(roleService.getRoleById(roleId));
+
         Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(),staffFiltrationParamsDto.getRowsNum());
+
         return userService.getFilteredEmployees(fromRow, staffFiltrationParamsDto.getRowsNum(),
                 staffFiltrationParamsDto.getSortingCol(), staffFiltrationParamsDto.isIncrease(),
                 staffFiltrationParamsDto.getIdStart(), staffFiltrationParamsDto.getIdFinish(),
@@ -91,14 +94,19 @@ public class AdminManagementStaffController {
         return userService.getAllEmployeeCount();
     }
 
-    @RequestMapping(value = "getCountOfEmployeeFiltered", method = RequestMethod.GET)
-    public Long getCountOfEmployeeFiltered(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                           @RequestParam boolean increase, @RequestParam Long idStart, @RequestParam Long idFinish,
-                                           @RequestParam("rolesId") List<Long> rolesId, @RequestParam boolean interviewer,
-                                           @RequestParam boolean notInterviewer, @RequestParam boolean notEvaluated) {
-        List<Role> neededRoles = rolesId.stream().map(roleService::getRoleById).collect(Collectors.toList());
-        return userService.getAllEmployeeCountFiltered(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol,
-                increase, idStart, idFinish, neededRoles, interviewer, notInterviewer, notEvaluated);
+    @RequestMapping(value = "getCountOfEmployeeFiltered", method = RequestMethod.POST)
+    public Long getCountOfEmployeeFiltered(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
+        List<Role> neededRoles = new ArrayList<>();
+        for(Long roleId: staffFiltrationParamsDto.getRolesId())
+            neededRoles.add(roleService.getRoleById(roleId));
+
+        Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(),staffFiltrationParamsDto.getRowsNum());
+
+        return userService.getAllEmployeeCountFiltered(fromRow, staffFiltrationParamsDto.getRowsNum(),
+                staffFiltrationParamsDto.getSortingCol(), staffFiltrationParamsDto.isIncrease(),
+                staffFiltrationParamsDto.getIdStart(), staffFiltrationParamsDto.getIdFinish(),
+                neededRoles, staffFiltrationParamsDto.isInterviewer(), staffFiltrationParamsDto.isNotInterviewer(),
+                staffFiltrationParamsDto.isNotEvaluated());
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)

@@ -49,23 +49,12 @@ function staffManagementService(http) {
         })
     };
 
-    service.getCountOfEmployeeFiltered = function (pageNum, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
-                                                   notInterviewer, notEvaluated) {
+    service.getCountOfEmployeeFiltered = function (filtrationParams) {
         return http({
-            method: 'GET',
+            method: 'POST',
             url: '/admin/getCountOfEmployeeFiltered',
-            params: {
-                pageNum: pageNum,
-                rowsNum: rowsNum,
-                sortingCol: sortingCol,
-                increase: increase,
-                idStart: idStart,
-                idFinish: idFinish,
-                rolesId: roles,
-                interviewer: interviewer,
-                notInterviewer: notInterviewer,
-                notEvaluated: notEvaluated
-            }
+            contentType: 'application/json',
+            data: filtrationParams
         })
     };
 
