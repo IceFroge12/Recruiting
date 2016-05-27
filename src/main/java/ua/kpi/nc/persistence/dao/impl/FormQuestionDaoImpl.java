@@ -68,6 +68,11 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
 
     private static final String SQL_GET_ENABLE_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
             + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ? AND fq." + ENABLE_COL + " = true";
+    
+	private static final String SQL_GET_WITH_VARIANTS_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME
+			+ " fqr ON fqr." + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr."
+			+ ROLE_MAP_TABLE_ROLE_ID
+			+ " = ? AND EXISTS (SELECT 1 FROM form_answer_variant fav WHERE fav.id_question = fq." + ID_COL + ")";
 
     private static final String SQL_GET_BY_APPLICATION_FORM = SQL_GET_ALL + " INNER JOIN form_answer fa ON fa.id_question = fq.id WHERE fa.id_application_form = ?;";
 
@@ -227,5 +232,11 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     public List<FormQuestion> getEnableUnconnectedQuestion(Role role, ApplicationForm applicationForm) {
         return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED, extractor, applicationForm.getId());
     }
+
+	@Override
+	public List<FormQuestion> getWithVariantsByRole(Role role) {
+		log.trace("Getting form questions with variants and role = {}", role.getRoleName());
+		return this.getJdbcTemplate().queryForList(SQL_GET_WITH_VARIANTS_BY_ROLE, extractor, role.getId());
+	}
 
 }

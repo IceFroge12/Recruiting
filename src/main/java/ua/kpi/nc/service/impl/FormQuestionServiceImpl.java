@@ -163,4 +163,9 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 		Role role = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
 		return formQuestionDao.getEnableUnconnectedQuestion(role, applicationForm);
 	}
+
+	@Override
+	public List<FormQuestion> getWithVariantsByRole(Role role) {
+		return formQuestionDao.getWithVariantsByRole(role);
+	}
 }

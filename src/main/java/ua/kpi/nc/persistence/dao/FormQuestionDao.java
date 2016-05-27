@@ -43,5 +43,7 @@ public interface FormQuestionDao {
 
 	List<FormQuestion> getEnableUnconnectedQuestion(Role role, ApplicationForm applicationForm);
 
+	List<FormQuestion> getWithVariantsByRole(Role role);
+
 
 }

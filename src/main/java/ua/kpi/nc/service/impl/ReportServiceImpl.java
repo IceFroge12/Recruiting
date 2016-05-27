@@ -67,11 +67,13 @@ public class ReportServiceImpl implements ReportService {
 		}
 		FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
 		FormQuestion formQuestion = formQuestionService.getById(idQuestion);
-		List<FormAnswerVariant> variants = variantService.getAnswerVariantsByQuestion(formQuestion);
-		for (FormAnswerVariant variant : variants) {
-			Line line = reportDao.getAnswerVariantLine(reportInfo, formQuestion, variant);
-			line.addFirstCell(variant.getAnswer());
-			report.addRow(line);
+		if (formQuestion != null) {
+			List<FormAnswerVariant> variants = variantService.getAnswerVariantsByQuestion(formQuestion);
+			for (FormAnswerVariant variant : variants) {
+				Line line = reportDao.getAnswerVariantLine(reportInfo, formQuestion, variant);
+				line.addFirstCell(variant.getAnswer());
+				report.addRow(line);
+			}
 		}
 		return report;
 	}
