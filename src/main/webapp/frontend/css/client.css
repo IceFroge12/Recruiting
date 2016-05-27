@@ -449,6 +449,8 @@ h4 {
     text-align: center;
     margin-bottom: 10px;
 }
-/*.btn {*/
-    /*white-space: normal !important;*/
-/*}*/
+.btn-info {
+    white-space: normal !important;
+    background-color: #2e6da4;
+    border-color: #1A4469;
+}

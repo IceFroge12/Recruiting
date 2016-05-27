@@ -16,15 +16,15 @@
                 <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
             </div>
             <div class="row">
-                <button type="button"  ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists" ng-click="confirmSelectionInfo()" class="btn btn-info btn-sm search-element col-md-1" data-toggle="modal" data-target="#confirmSelection">
+                <button type="button"  ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists" ng-click="confirmSelectionInfo()" class="btn btn-info search-element col-md-1" data-toggle="modal" data-target="#confirmSelection">
                     Confirm selection
                 </button>
                 
-                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="announceResults()" class="btn btn-info btn-sm search-element col-md-1">Announce results
+                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="announceResults()" class="btn btn-info search-element col-md-1">Announce results
                 </button>
-                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="calculateStatuses()" class="btn btn-info btn-sm search-element col-md-1">Calculate statuses
+                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="calculateStatuses()" class="btn btn-info search-element col-md-1">Calculate statuses
                 </button>
-            <button ng-click="showFiltration()" class="btn btn-info btn-sm col-md-1 col-md-offset-7" type="button"
+            <button ng-click="showFiltration()" class="btn btn-info col-md-1 col-md-offset-7" type="button"
                     data-toggle="modal"
                     data-target="#filtration">
                 Filter table
@@ -47,12 +47,11 @@
                 <select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
                     <option ng-repeat="st in statusTemp">{{st.title}}</option>
                 </select>
-                    <button type="button" ng-click="applyStatus()" class="btn btn-sm btn-info search-element">Apply Status to checked</button>
+                    <button type="button" ng-click="applyStatus()" class="btn btn-info search-element">Apply Status to checked</button>
                     </div>
                     <div class="col-md-3 info-text search-block">Search:
                     <input ng-model-options="{ debounce: 1000 }"
                            ng-model="studentName" ng-change="searchStudent(studentName)">
-                    </div>
                     </div>
                 </div>
             <table class="table table-condensed table-hover col-md-8">
@@ -190,7 +189,7 @@
 					<button type="button"
 						ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists"
 						ng-click="confirmSelection()"
-						class="btn btn-info btn-sm search-element">
+						class="btn btn-info search-element">
 						Confirm</button>
 				</div>
 			
