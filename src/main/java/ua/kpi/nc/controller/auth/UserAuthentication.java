@@ -2,7 +2,12 @@ package ua.kpi.nc.controller.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import ua.kpi.nc.persistence.model.SocialInformation;
+import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.enums.SocialNetworkEnum;
+import ua.kpi.nc.persistence.model.impl.real.SocialInformationImpl;
+import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 
 import java.util.Collection;
 
@@ -12,8 +17,17 @@ import java.util.Collection;
 public class UserAuthentication implements Authentication {
 
 
-    private final User user;
+    private User user;
     private boolean authenticated = true;
+
+    public UserAuthentication(String email, Long idSocialNetwork) {
+        user = new UserImpl();
+        SocialInformation socialInformation = new SocialInformationImpl
+                (
+                        idSocialNetwork, SocialNetworkEnum.getSocialNetwork(idSocialNetwork)
+                );
+        user.setEmail(email);
+    }
 
     public UserAuthentication(User user) {
         this.user = user;

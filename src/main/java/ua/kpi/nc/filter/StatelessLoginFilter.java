@@ -8,10 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.social.security.SocialAuthenticationFilter;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
-import ua.kpi.nc.service.util.AuthenticationSuccessHandlerService;
-import ua.kpi.nc.service.util.UserAuthService;
+import ua.kpi.nc.controller.auth.AuthenticationSuccessHandlerService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,22 +28,26 @@ import java.io.IOException;
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private final TokenAuthenticationService tokenAuthenticationService;
+    private static final String LOGIN_TITLE = "email";
+    private static final String PASSWORD_TITLE = "password";
 
     public StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService,
-                                   AuthenticationManager authManager) {
+                                   AuthenticationManager authenticationManager) {
         super(new AntPathRequestMatcher(urlMapping));
         this.tokenAuthenticationService = tokenAuthenticationService;
-         setAuthenticationManager(authManager);
+        setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(AuthenticationSuccessHandlerService.getInstance());
+        setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
     }
+
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-        JsonParser jsonParser = new JsonParser();
-        JsonObject obj = (JsonObject) jsonParser.parse(request.getReader());
-        final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
-                obj.get("email").getAsString(), obj.get("password").getAsString());
+        JsonObject obj = (JsonObject) new JsonParser().parse(request.getReader());
+        UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
+                getLogin(obj), getPassword(obj));
         return getAuthenticationManager().authenticate(loginToken);
     }
 
@@ -55,9 +60,11 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 
     }
 
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        super.doFilter(req, res, chain);
+    private static String getLogin(JsonObject jsonObject){
+        return jsonObject.get(LOGIN_TITLE).getAsString();
     }
 
+    private static String getPassword(JsonObject jsonObject){
+        return jsonObject.get(PASSWORD_TITLE).getAsString();
+    }
 }

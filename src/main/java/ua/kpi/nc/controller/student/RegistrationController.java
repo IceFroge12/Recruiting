@@ -1,15 +1,11 @@
 package ua.kpi.nc.controller.student;
 
-import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.controller.auth.ForgotPassword;
-import ua.kpi.nc.controller.auth.TokenAuthenticationService;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.UserDto;
 import ua.kpi.nc.persistence.model.EmailTemplate;
@@ -22,7 +18,7 @@ import ua.kpi.nc.service.EmailTemplateService;
 import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
-import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
+import ua.kpi.nc.controller.auth.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 

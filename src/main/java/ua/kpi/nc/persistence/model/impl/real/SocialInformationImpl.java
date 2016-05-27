@@ -17,8 +17,12 @@ public class SocialInformationImpl implements SocialInformation {
     private User user;
     private SocialNetwork socialNetwork;
 
-    public SocialInformationImpl() {
+    public SocialInformationImpl(Long id, SocialNetwork socialNetwork) {
+        this.id = id;
+        this.socialNetwork = socialNetwork;
     }
+
+
 
     public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork) {
         this.id = id;

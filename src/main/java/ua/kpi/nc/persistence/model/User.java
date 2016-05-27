@@ -1,6 +1,8 @@
 package ua.kpi.nc.persistence.model;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
 import ua.kpi.nc.service.UserService;
 
 import java.io.Serializable;
@@ -11,7 +13,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-public interface User extends Serializable, UserDetails {
+public interface User extends Serializable, UserDetails, SocialUserDetails {
 
     Long getId();
 

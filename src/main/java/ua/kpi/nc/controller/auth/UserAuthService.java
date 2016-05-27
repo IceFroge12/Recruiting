@@ -1,4 +1,4 @@
-package ua.kpi.nc.service.util;
+package ua.kpi.nc.controller.auth;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,19 +11,20 @@ import ua.kpi.nc.service.UserService;
  */
 public class UserAuthService implements UserDetailsService {
 
-    private static UserAuthService userAuthService;
     private UserService userService;
 
-    private UserAuthService() {
+    private UserAuthService(){
         userService = ServiceFactory.getUserService();
     }
 
-    public static UserAuthService getInstance() {
-        if (userAuthService == null) {
-            userAuthService = new UserAuthService();
-        }
-        return userAuthService;
+    private static class UserAuthServiceHolder{
+        private static final UserAuthService HOLDER = new UserAuthService();
     }
+
+    public static UserAuthService getInstance(){
+        return UserAuthServiceHolder.HOLDER;
+    }
+
 
     @Override
     public User loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -33,8 +34,6 @@ public class UserAuthService implements UserDetailsService {
             throw new UsernameNotFoundException("Username not found");
         }
         return user;
-
     }
-
 }
 

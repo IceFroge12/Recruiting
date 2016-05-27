@@ -33,9 +33,9 @@ angular.module('appAuthorization', ['angular-loading-bar'])
         responseError: function (error) {
             if (error.status === 403) {
                 $location.path('/accessDenied');
-            }else if (error.status === 500){
+            } else if (error.status === 500) {
                 $location.path("/serverError");
-            }else if (error.status === 504){
+            } else if (error.status === 504) {
                 alert(error.data.message);
             }
             return $q.reject(error);
@@ -47,7 +47,7 @@ window.fbAsyncInit = function() {
     FB.init({
         appId      : '586710581492768',
         xfbml      : true,
-        version    : 'v2.4'
+        version    : 'v2.6'
     });
 };
 
@@ -57,5 +57,4 @@ window.fbAsyncInit = function() {
     js = d.createElement(s); js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
-    console.log('FB init');
 }(document, 'script', 'facebook-jssdk'));

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
-import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
+import ua.kpi.nc.controller.auth.PasswordEncoderGeneratorService;
 
 /**
  * Created by dima on 06.05.16.

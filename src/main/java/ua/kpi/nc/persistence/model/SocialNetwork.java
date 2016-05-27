@@ -43,7 +43,7 @@ public class SocialNetwork implements Serializable {
 
     @Override
     public String toString() {
-        return "SocialNetwork: " +
+        return "SocialNetworkEnum: " +
                 " title= " + title;
     }
 

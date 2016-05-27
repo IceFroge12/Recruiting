@@ -3,9 +3,7 @@ package ua.kpi.nc.controller.auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.service.util.UserAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TokenAuthenticationService {
 
-
     private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
     private static Logger log = LoggerFactory.getLogger(TokenAuthenticationService.class.getName());
     private final TokenHandler tokenHandler;
+
+
+
 
 
     public TokenAuthenticationService(String secret, UserAuthService userAuthService) {
@@ -26,7 +26,6 @@ public class TokenAuthenticationService {
     }
 
     public String addAuthentication(HttpServletResponse response, Authentication authentication) {
-
         User user = (User) authentication.getDetails();
         return addToken(user, response);
     }

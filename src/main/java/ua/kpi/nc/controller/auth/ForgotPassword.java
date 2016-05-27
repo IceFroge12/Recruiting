@@ -10,23 +10,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.PasswordChangeDto;
 import ua.kpi.nc.persistence.dto.UserDto;
-import ua.kpi.nc.persistence.model.EmailTemplate;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.EmailTemplateService;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.UserService;
-import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**

@@ -1,11 +1,9 @@
 package ua.kpi.nc.filter;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
-import ua.kpi.nc.service.util.AuthenticationSuccessHandlerService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * Created by IO on 23.04.2016.

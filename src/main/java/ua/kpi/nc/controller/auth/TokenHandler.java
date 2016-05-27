@@ -8,7 +8,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.service.util.UserAuthService;
 
 import java.util.Date;
 

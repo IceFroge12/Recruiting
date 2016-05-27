@@ -5,56 +5,66 @@
 'use strict';
 
 function authorizationController($scope, TokenStorage, $http, $rootScope, $location) {
-    
+
     // $scope.authsuccess = false;
 
     $scope.login = function () {
 
-        if($scope.password === undefined){
+        if ($scope.password === undefined) {
             console.log("Auth error");
-        }else{
-        $http({
-            method: 'POST',
-            url: '/loginIn',
-            contentType: 'application/json',
-            data: {email: $scope.email, password: $scope.password}
-        }).success(function (data, status, headers) {
-            TokenStorage.store(headers('X-AUTH-TOKEN'));
-            $rootScope.username = data.username;
-            $rootScope.id = data.id;
-            $rootScope.role = data.role;
-            $location.path(data.redirectURL);
-            $scope.errorcredential = false;
-        }).error(function (data, status, headers) {
-            console.log(data);
-            if (status == 401){
-                $scope.errorcredential = true;
-            }
-        });
+        } else {
+            $http({
+                method: 'POST',
+                url: '/loginIn',
+                contentType: 'application/json',
+                data: {email: $scope.email, password: $scope.password}
+            }).success(function (data, status, headers) {
+                TokenStorage.store(headers('X-AUTH-TOKEN'));
+                $rootScope.username = data.username;
+                $rootScope.id = data.id;
+                $rootScope.role = data.role;
+                $location.path(data.redirectURL);
+                $scope.errorcredential = false;
+            }).error(function (data, status, headers) {
+                console.log(data);
+                if (status == 401) {
+                    $scope.errorcredential = true;
+                }
+            });
         }
     };
-    
+
     $scope.facebookLogin = function () {
         FB.login(function (response) {
-            if (response.authResponse) {
-                console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function (response) {
-                    console.log(response);
-                    console.log(response.email);
-                    /*setting the user object*/
-                    //$cookieStore.put('userObj', response);
+                if (response.authResponse) {
+                    console.log('Welcome!  Fetching your information.... ');
+                    FB.api('/me?fields=name,email', function (response) {
+                        console.log(response);
+                        console.log(response.email);
+                        /*setting the user object*/
+                        //$cookieStore.put('userObj', response);
 
-                    /*get the access token*/
-                    var FBAccessToken = FB.getAuthResponse();
-                    console.log('access token', FBAccessToken);
-                    //authFact.setAccessToken(FBAccessToken);
-                    //$location.path('/dashboard');
-                    $scope.$apply();
-                });
-            } else {
-                console.log('User cancelled login or did not fully authorize.');
-            }
-        });
+                        /*get the access token*/
+                        var FBAccessToken = FB.getAuthResponse();
+                        console.log(FBAccessToken);
+                        $http({
+                            method: 'POST',
+                            url: '/socialAuth/facebookAuth',
+                            contentType: 'application/json',
+                            data: {info: FBAccessToken,
+                                    user : response
+                            }
+                        }).then(function (response) {
+                            console.log(response);
+                        });
+                        $scope.$apply();
+                    });
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, 
+            {scope: 'public_profile, email, user_birthday, user_location'}
+        );
     };
 
     $scope.registration = function () {

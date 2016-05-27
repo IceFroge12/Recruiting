@@ -1,26 +1,23 @@
 package ua.kpi.nc.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ua.kpi.nc.controller.auth.DataBaseAuthenticationProvider;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import ua.kpi.nc.controller.auth.LoginPasswordAuthenticationManager;
+import ua.kpi.nc.controller.auth.SocialNetworkAuthenticationManager;
 import ua.kpi.nc.controller.auth.TokenAuthenticationService;
+import ua.kpi.nc.filter.SocialLoginFilter;
 import ua.kpi.nc.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.filter.StatelessLoginFilter;
-import ua.kpi.nc.service.util.UserAuthService;
+import ua.kpi.nc.controller.auth.UserAuthService;
+import ua.kpi.nc.persistence.model.SocialNetwork;
 
-//import javax.ws.rs.GET;
 
 /**
  * Created by IO on 22.04.16.
@@ -31,17 +28,19 @@ import ua.kpi.nc.service.util.UserAuthService;
 @ComponentScan(basePackages = "ua.kpi.nc")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    DataBaseAuthenticationProvider dataBaseAuthenticationProvider;
+    private static final String SECRET_KEY = "verySecret";
+
+    private LoginPasswordAuthenticationManager loginPasswordAuthenticationManager = LoginPasswordAuthenticationManager.getInstance();
+
+    private SocialNetworkAuthenticationManager socialNetworkAuthenticationManager = SocialNetworkAuthenticationManager.getInstance();
 
     private UserAuthService userAuthService = UserAuthService.getInstance();
 
-    private TokenAuthenticationService tokenAuthenticationService;
+    private TokenAuthenticationService tokenAuthenticationService = new TokenAuthenticationService(SECRET_KEY, userAuthService);
+
 
 
     public SecurityConfig() {
-
-        tokenAuthenticationService = new TokenAuthenticationService("verySecret", userAuthService);
     }
 
     @Override
@@ -67,11 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")
                 .antMatchers("/staff/appForm/**").permitAll()
                 .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
+
                 .and()
 
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, loginPasswordAuthenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager), UsernamePasswordAuthenticationFilter.class)
 
 
                 .exceptionHandling().and()
@@ -82,20 +82,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userAuthService).passwordEncoder(new BCryptPasswordEncoder());
-        auth.authenticationProvider(dataBaseAuthenticationProvider);
     }
 
-    @Override
-    protected UserAuthService userDetailsService() {
-        return userAuthService;
-    }
 }

@@ -14,7 +14,7 @@ import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.RoleImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.*;
-import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
+import ua.kpi.nc.controller.auth.PasswordEncoderGeneratorService;
 import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STAFF_INTERVIEW_SELECT;
 import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STAFF_REGISTRATION;
-import static ua.kpi.nc.persistence.model.enums.EmailTemplateEnum.STUDENT_REGISTRATION;
 import static ua.kpi.nc.persistence.model.enums.RoleEnum.*;
 
 /**

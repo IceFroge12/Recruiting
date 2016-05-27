@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.social.security.SocialUser;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.ServiceFactory;
@@ -30,6 +31,7 @@ public class UserProxy implements User {
     private UserService userService;
 
     public UserProxy() {
+        super();
     }
 
     public UserProxy(Long id) {
@@ -223,7 +225,6 @@ public class UserProxy implements User {
     }
 
 
-
     private void checkUserForExist() {
         if (user == null) {
             userService = ServiceFactory.getUserService();
@@ -234,4 +235,11 @@ public class UserProxy implements User {
     private UserImpl downloadUser() {
         return (UserImpl) userService.getUserByID(id);
     }
+
+    @Override
+    public String getUserId() {
+        checkUserForExist();
+        return user.getEmail();
+    }
+
 }

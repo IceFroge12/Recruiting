@@ -326,6 +326,10 @@ public class UserImpl implements User {
                 .toHashCode();
     }
 
+    @Override
+    public String getUserId() {
+        return email;
+    }
 
     /** userAuth/
      *

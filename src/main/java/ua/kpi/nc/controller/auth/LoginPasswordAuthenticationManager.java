@@ -2,36 +2,34 @@ package ua.kpi.nc.controller.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import ua.kpi.nc.persistence.model.User;
-import ua.kpi.nc.service.util.PasswordEncoderGeneratorService;
-import ua.kpi.nc.service.util.UserAuthService;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by IO on 24.04.2016.
  */
-@Component
-public class DataBaseAuthenticationProvider implements AuthenticationProvider {
 
-    private static Logger log = LoggerFactory.getLogger(DataBaseAuthenticationProvider.class.getName());
+public class LoginPasswordAuthenticationManager implements AuthenticationManager {
+
+    private static Logger log = LoggerFactory.getLogger(LoginPasswordAuthenticationManager.class.getName());
 
     private UserAuthService userAuthService;
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 
-    public DataBaseAuthenticationProvider() {
+    private LoginPasswordAuthenticationManager() {
         this.userAuthService = UserAuthService.getInstance();
         this.passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
+    }
+
+    private static class LoginPasswordAuthenticationProviderHolder{
+        private static final LoginPasswordAuthenticationManager HOLDER = new LoginPasswordAuthenticationManager();
+    }
+
+    public static LoginPasswordAuthenticationManager getInstance(){
+        return LoginPasswordAuthenticationProviderHolder.HOLDER;
     }
 
     @Override
@@ -60,8 +58,4 @@ public class DataBaseAuthenticationProvider implements AuthenticationProvider {
         return new UserAuthentication(user);
     }
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return true;
-    }
 }

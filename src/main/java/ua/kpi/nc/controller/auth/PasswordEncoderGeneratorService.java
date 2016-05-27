@@ -1,8 +1,7 @@
-package ua.kpi.nc.service.util;
+package ua.kpi.nc.controller.auth;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class PasswordEncoderGeneratorService {
