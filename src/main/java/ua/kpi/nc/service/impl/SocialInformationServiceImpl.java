@@ -44,4 +44,9 @@ public class SocialInformationServiceImpl implements SocialInformationService {
     public int deleteSocialInformation(SocialInformation socialInformation) {
         return socialInformationDao.deleteSocialInformation(socialInformation);
     }
+
+    @Override
+    public boolean isExist(String email, Long idSocialNetwork) {
+        return socialInformationDao.isExist(email, idSocialNetwork);
+    }
 }

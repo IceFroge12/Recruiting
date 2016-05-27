@@ -19,4 +19,6 @@ public interface SocialInformationService {
     int updateSocialInformation(SocialInformation socialInformation);
 
     int deleteSocialInformation(SocialInformation socialInformation);
+
+    boolean isExist(String email, Long idSocialNetwork);
 }

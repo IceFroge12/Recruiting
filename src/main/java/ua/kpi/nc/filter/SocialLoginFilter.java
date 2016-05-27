@@ -45,7 +45,7 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-
+        System.out.println();
     }
 
     private Long getSocialNetworkId(String requestURL) {

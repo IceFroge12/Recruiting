@@ -46,14 +46,13 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
 
                         /*get the access token*/
                         var FBAccessToken = FB.getAuthResponse();
+                        var data = angular.extend(response, FBAccessToken);
                         console.log(FBAccessToken);
                         $http({
                             method: 'POST',
                             url: '/socialAuth/facebookAuth',
                             contentType: 'application/json',
-                            data: {info: FBAccessToken,
-                                    user : response
-                            }
+                            data: {info: data}
                         }).then(function (response) {
                             console.log(response);
                         });

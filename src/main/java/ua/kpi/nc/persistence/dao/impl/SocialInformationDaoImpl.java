@@ -1,7 +1,5 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -52,6 +50,8 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
 
     private static final String SQL_DELETE = "DELETE FROM \"social_information\" WHERE \"social_information\".id = ?";
 
+    private static final String SQL_IS_EXIST = "SELECT si.id, si.id_social_network, si.id_user, si.access_info, sn.title FROM public.user u JOIN public.social_information si ON u.id = si.id_user JOIN public.social_network sn ON si.id_social_network = sn.id WHERE u.email = ? AND si.id_social_network = ?;";
+
     @Override
     public SocialInformation getById(Long id) {
         log.trace("Looking for social information with id = ", id);
@@ -82,5 +82,11 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
     public int deleteSocialInformation(SocialInformation socialInformation) {
         log.trace("Deleting social information with id = ", socialInformation.getId());
         return this.getJdbcTemplate().update(SQL_DELETE, socialInformation.getId());
+    }
+
+    @Override
+    public boolean isExist(String email, Long idSocialNetwork) {
+        log.trace("Search user social information by email = {}", email);
+        return this.getJdbcTemplate().queryWithParameters(SQL_IS_EXIST, extractor, email, idSocialNetwork) != null;
     }
 }

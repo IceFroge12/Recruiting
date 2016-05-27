@@ -19,4 +19,6 @@ public interface SocialInformationDao {
 	int updateSocialInformation(SocialInformation socialInformation);
 
 	int deleteSocialInformation(SocialInformation socialInformation);
+
+	boolean isExist(String email, Long idSocialNetwork);
 }

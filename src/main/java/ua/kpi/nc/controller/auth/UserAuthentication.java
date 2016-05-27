@@ -10,6 +10,7 @@ import ua.kpi.nc.persistence.model.impl.real.SocialInformationImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /**
  * Created by IO on 23.04.2016.
@@ -26,6 +27,8 @@ public class UserAuthentication implements Authentication {
                 (
                         idSocialNetwork, SocialNetworkEnum.getSocialNetwork(idSocialNetwork)
                 );
+        user.setSocialInformations(new LinkedHashSet<>());
+        user.getSocialInformations().add(socialInformation);
         user.setEmail(email);
     }
 
