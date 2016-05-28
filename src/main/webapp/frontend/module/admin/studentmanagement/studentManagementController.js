@@ -74,6 +74,7 @@ function studentManagementController($scope,ngToast, studentManagementService) {
         studentManagementService.calculateStatuses().success(function (data) {
             console.log('Confirm selection');
             console.log(data);
+            showResultMessageToast(data);
         })
     };
 
@@ -421,10 +422,21 @@ function studentManagementController($scope,ngToast, studentManagementService) {
         });
     };
 
+    function loadRecruitmentStatus() {
+    	studentManagementService.getRecruitmentStatus().then(function success(data) {
+            $scope.recruitmentStatus = data.data;
+            console.log('Recruitment status:');
+            console.log($scope.recruitmentStatus);
+        });
+    }
+    loadRecruitmentStatus();
+    
     $scope.confirmSelection = function () {
         studentManagementService.confirmSelection().success(function (data) {
             console.log('Confirm selection');
             console.log(data);
+            showResultMessageToast(data);
+            loadRecruitmentStatus();
         })
     };
 
@@ -432,15 +444,33 @@ function studentManagementController($scope,ngToast, studentManagementService) {
         studentManagementService.announceResults().success(function (data) {
             console.log('Confirm selection');
             console.log(data);
+            $scope.resultMessage = data;
+            showResultMessageToast(data);
         })
+        
+           
     };
 
-    studentManagementService.getRecruitmentStatus().then(function success(data) {
-        $scope.recruitmentStatus = data.data;
-        console.log('Recruitment status:');
-        console.log($scope.recruitmentStatus);
-    });
+   
 
+	function showResultMessageToast(data) {
+		var toastMessage = {
+                content: data.message,
+                timeout: 5000,  
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                dismissOnClick: true,
+                combineDuplications: true,
+                maxNumber: 2
+            };
+		if (data.type == 'ERROR' || data.type == 'WARNING') {
+			var myToastMsg = ngToast.warning(toastMessage);
+		}
+		else if (data.type == 'SUCCESS') {
+			var myToastMsg = ngToast.success(toastMessage);
+		}
+	       
+	}
 
 }
 

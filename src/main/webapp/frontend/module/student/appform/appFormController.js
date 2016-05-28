@@ -4,17 +4,21 @@
 
 function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
 
-    appFormService.loadAppFormData().then(function success(data) {
-		$scope.id = data.id;
-        $scope.questions = data.questions;
-        $scope.user = data.user;
-        $scope.status = data.status;
-        $scope.data = data;
-        console.log($scope.data);
+	function loadAppForm() {
+		 appFormService.loadAppFormData().then(function success(data) {
+				$scope.id = data.id;
+		        $scope.questions = data.questions;
+		        $scope.user = data.user;
+		        $scope.status = data.status;
+		        $scope.data = data;
+		        console.log($scope.data);
 
-    }, function error() {
-        console.log("error");
-    });
+		    }, function error() {
+		        console.log("error");
+		    });
+	}
+	loadAppForm();
+   
 
     $scope.submit = function () {
         var req =  $http({
@@ -111,6 +115,7 @@ function appFormController($scope,ngToast, $http, appFormService,  Upload ) {
 			}
 			else if ($scope.resultMessage.type == 'SUCCESS') {
 				var myToastMsg = ngToast.success(toastMessage);
+				loadAppForm();
 			}
 		});
 

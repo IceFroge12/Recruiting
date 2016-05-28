@@ -49,8 +49,10 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     private static final String INSERT_USER_TIME_PRIORITY = "INSERT INTO user_time_priority (id_user, id_time_point, id_priority_type) VALUES (?,?,?);";
     private static final String UPDATE_USER_TIME_PRIORITY = "UPDATE user_time_priority p set id_priority_type = ? WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String DELETE_USER_TIME_PRIORITY = "DELETE FROM public.user_time_priority p WHERE p.id_user = ? and p.id_time_point = ?;";
-    private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
-            "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) Where p.id_user = ?;";
+	private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice "
+			+ "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) "
+			+ "INNER JOIN schedule_time_point stp on stp.id = p.id_time_point "
+			+ " WHERE p.id_user = ? ORDER BY stp.time_point";
     private static final String IS_PRIORITIES_EXIST_FOR_STAFF = "SELECT EXISTS(SELECT 1\n" +
             "              FROM user_time_priority utp\n" +
             "JOIN \"user\" u on utp.id_user = u.id\n" +
