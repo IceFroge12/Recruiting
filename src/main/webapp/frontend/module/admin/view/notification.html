@@ -11,7 +11,7 @@
                     <div class="col-md-1 marks-cell">
                         <select ng-model="selectedType" ng-change="showSelectValue(selectedType)">
                             <option selected></option>
-                            <option  ng-repeat="type in types">{{type.title}}</option>
+                            <option ng-repeat="type in types">{{type.title}}</option>
                         </select>
                     </div>
                 </div>
@@ -30,7 +30,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="submit" ng-click="save()" class="btn btn-info search-element col-md-3 btn-left">Save</button>
+                        <button type="submit" ng-click="save()" class="btn btn-info search-element col-md-3 btn-left">
+                            Save
+                        </button>
                     </div>
                 </div>
             </form>

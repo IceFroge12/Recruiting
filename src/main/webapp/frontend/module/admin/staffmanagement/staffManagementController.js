@@ -189,6 +189,8 @@ function staffManagementController($scope, $rootScope, ngToast, $filter, $http, 
         angular.forEach($scope.selection, function (item, i) {
             roleArray.push({roleName: item})
         });
+        
+        
 
         staffManagementService.addEmployee($scope.firstName, $scope.secondName,
             $scope.lastName, $scope.email, roleArray);

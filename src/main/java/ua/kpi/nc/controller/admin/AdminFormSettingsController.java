@@ -36,8 +36,8 @@ public class AdminFormSettingsController {
     private QuestionTypeService questionTypeService = ServiceFactory.getQuestionTypeService();
 
 
-    @RequestMapping(value = "getapplicationquestions", method = RequestMethod.POST)
-    public List<String> getAppFormQuestions(@RequestParam String role) {
+    @RequestMapping(value = "getQuestions", method = RequestMethod.POST)
+    public List<String> getQuestions(@RequestParam String role) {
         Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
         Collections.sort(formQuestionList, new FormQuestionComparator());
@@ -50,8 +50,8 @@ public class AdminFormSettingsController {
         return adapterFormQuestionList;
     }
 
-    @RequestMapping(value = "addFormQuestion", method = RequestMethod.POST)
-    public ResponseEntity addFormQuestion(@RequestBody FormQuestionDto formQuestionDto) {
+    @RequestMapping(value = "addQuestion", method = RequestMethod.POST)
+    public ResponseEntity addQuestion(@RequestBody FormQuestionDto formQuestionDto) {
         Role role = roleService.getRoleByTitle(formQuestionDto.getRole());
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
         List<Role> roleList = new ArrayList<>();
@@ -73,7 +73,7 @@ public class AdminFormSettingsController {
     }
 
     @RequestMapping(value = "updateAppFormQuestion", method = RequestMethod.POST)
-    public void updateAppFormQuestions(@RequestBody FormQuestionDto formQuestionDto) {
+    public void updateQuestions(@RequestBody FormQuestionDto formQuestionDto) {
         QuestionType questionType = questionTypeService.getQuestionTypeByName(formQuestionDto.getType());
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         if (questionType.getTypeTitle().equals(CHECKBOX.getTitle()) ||
@@ -126,6 +126,13 @@ public class AdminFormSettingsController {
     public String saveDecisionMatrix(@RequestBody List<Decision> decisionMatrix) {
         decisionService.updateDecisionMatrix(decisionMatrix);
         return new Gson().toJson(new MessageDto("Decision matrix was updated", MessageDtoType.SUCCESS));
+    }
+
+    @RequestMapping(value = "deleteQuestion", method = RequestMethod.GET)
+    public ResponseEntity delete(@RequestParam Long id){
+        FormQuestion formQuestion = formQuestionService.getById(id);
+        formQuestionService.deleteFormQuestion(formQuestion);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 }

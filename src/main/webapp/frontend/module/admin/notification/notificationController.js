@@ -21,8 +21,6 @@ function notificationController($scope, http, notificationService) {
             $scope.emailTemplate = data;
             return data;
         });
-        // var data = notificationService.showTemplate(selectedType);
-        //   console.log(data);
     };
 
     $scope.save = function () {
