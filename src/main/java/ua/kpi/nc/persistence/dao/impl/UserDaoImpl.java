@@ -177,7 +177,9 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             "INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE ur.id_role = ? AND u.is_active = TRUE;";
 
-    private static final String SQL_DISABLE_STAFF = "UPDATE \"user\" SET is_active = FALSE WHERE \"user\".id IN (SELECT ur.id_user FROM \"user_role\" ur WHERE ur.id_role <> 1 AND ur.id_role <> 3);";
+    private static final String SQL_DISABLE_STAFF = "UPDATE \"user\" u   SET is_active = FALSE  FROM \"user_role\" ur " +
+            "WHERE u.id=ur.id_user and ((ur.id_role = 2 or ur.id_role = 5) and (select  not Exists (select ur.id_user" +
+            " FROM \"user_role\" ur, \"user\" us WHERE us.id=ur.id_user and  ur.id_role = 1 and us.id=u.id) ))";
 
     private static final String SQL_UNCONNECTED_FORMS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +

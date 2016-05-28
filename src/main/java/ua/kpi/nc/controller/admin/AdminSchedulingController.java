@@ -118,9 +118,9 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "deleteUserTimeFinal", method = RequestMethod.POST)
-    public ResponseEntity deleteUserTimeFinal(@RequestParam long id1, @RequestParam long id2) {
-        User user = userService.getUserByID(id1);
-        ScheduleTimePoint stp = timePointService.getScheduleTimePointById(id2);
+    public ResponseEntity deleteUserTimeFinal(@RequestParam long userId, @RequestParam long timePointId) {
+        User user = userService.getUserByID(userId);
+        ScheduleTimePoint stp = timePointService.getScheduleTimePointById(timePointId);
         timePointService.deleteUserTimeFinal(user, stp);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

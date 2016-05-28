@@ -121,6 +121,24 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             $scope.canMoveForward = false;
         }
     };
+    
+  
+    $scope.currentQuestion;
+    $scope.getQuestion = function (question) {
+        console.log(question);
+        $scope.currentQuestion = question;
+    };
+    
+    $scope.deleteQuestion = function() {
+        console.log("delete"+ $scope.currentQuestion.id);
+        formAppService.deleteQuestion( $scope.currentQuestion.id).then(function (response) {
+            if (response.status === 200) {
+                getInfoToast("Question deleted")
+            }
+        }).catch(function () {
+            getInfoToast("Question not deleted");
+        });
+    };
 
     $scope.selectActiveValue;
     $scope.showSelectActiveValue = function (myActiveSelect) {

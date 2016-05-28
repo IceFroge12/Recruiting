@@ -38,19 +38,22 @@ public class AdminReportsController {
     private static final String XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     private ReportService service = ServiceFactory.getReportService();
-
+    private Gson gson = new Gson();
+    
     @RequestMapping(value = "reports/approved.{format}", method = RequestMethod.GET)
     public void generateReportOfApproved(@PathVariable String format, HttpServletResponse response) throws IOException {
         Report report = service.getReportOfApproved();
         renderReport(report, format, response);
     }
 
-    @RequestMapping(value = "reports/answers.{format}/{questionId}", method = RequestMethod.GET)
-    public void generateReportOfAnswers(@PathVariable String format, @PathVariable Long questionId,
-                                        HttpServletResponse response) throws IOException {
-        Report report = service.getReportOfAnswers(questionId);
-        renderReport(report, format, response);
-    }
+	@RequestMapping(value = "reports/answers.{format}/{questionId}", method = RequestMethod.GET)
+	public void generateReportOfAnswers(@PathVariable String format, @PathVariable Long questionId,
+			HttpServletResponse response) throws IOException {
+		if (questionId != null) {
+			Report report = service.getReportOfAnswers(questionId);
+			renderReport(report, format, response);
+		}
+	}
 
     private void renderReport(Report report, String format, HttpServletResponse response) throws IOException {
         ReportRenderer renderer = null;
@@ -84,18 +87,20 @@ public class AdminReportsController {
         FormQuestionService questionService = ServiceFactory.getFormQuestionService();
         RoleService roleService = ServiceFactory.getRoleService();
         Role studentRole = roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT));
-        List<FormQuestion> questions = questionService.getByRole(studentRole);
-        JsonArray jsonArray = new JsonArray();
-        for (FormQuestion formQuestion : questions) {
-            if (formQuestion.getFormAnswerVariants() != null && formQuestion.isEnable()) {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("id", formQuestion.getId());
-                jsonObject.addProperty("title", formQuestion.getTitle());
-                jsonArray.add(jsonObject);
-            }
-        }
-        Gson gson = new Gson();
-        return gson.toJson(jsonArray);
+        List<FormQuestion> questions = questionService.getWithVariantsByRole(studentRole);
+        return gson.toJson(questionsToJson(questions));
     }
 
+	private JsonArray questionsToJson(List<FormQuestion> formQuestions) {
+		JsonArray jsonArray = new JsonArray();
+		for (FormQuestion formQuestion : formQuestions) {
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("id", formQuestion.getId());
+			jsonObject.addProperty("title", formQuestion.getTitle());
+			jsonArray.add(jsonObject);
+
+		}
+		return jsonArray;
+	}
+    
 }

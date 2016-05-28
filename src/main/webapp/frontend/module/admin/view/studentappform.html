@@ -42,6 +42,12 @@
                         </li>
                     </ul>
                 </li>
+                <li ng-show="appForm.feedback !=undefined" ng-class="{active:tab===5}" class="dropdown" >
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 5">
+                        Feedback
+                        <b class="caret"></b>
+                    </a>
+                </li>
             </ul>
             <div  class="tab-content">
                 <div ng-show="tab === 1"  class="tab-pane fade in active">
@@ -220,7 +226,13 @@
                     </table>
                     <button ng-click = "exportAppForm(oldForms[0])" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
                 </div>
-            </div>
+                <div ng-show="tab === 5"  class="tab-pane fade in active">
+                    <div>
+                        <h3>Feedback from Student</h3>
+                        <h4 align="left">{{appForm.feedback}}</h4>
+                    </div>
+                </div>
+                </div>
         </div>
     </div>
 </div>

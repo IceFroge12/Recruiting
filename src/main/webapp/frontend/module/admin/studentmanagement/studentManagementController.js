@@ -284,6 +284,13 @@ function studentManagementController($scope,ngToast, studentManagementService) {
         console.log("Apply");
         studentManagementService.changeSelectedStatuses(selectedValue, $scope.statusIdArray).then(function (response) {
                 if (response.status === 200) {
+                    angular.forEach($scope.allStudents, function (itemS, iS) {
+                        angular.forEach($scope.statusIdArray, function (item, i) {
+                            if (itemS.appFormId == item) {
+                                $scope.allStudents[iS].status = selectedValue;
+                            }
+                        });
+                    });
                     getSuccessToast('Statuses Updated');
                 }
             }).catch(function () {

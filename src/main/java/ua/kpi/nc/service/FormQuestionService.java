@@ -36,4 +36,6 @@ public interface FormQuestionService {
 	Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
 	
 	List<FormQuestion> getEnableUnconnectedQuestion(ApplicationForm applicationForm);
+	
+	List<FormQuestion> getWithVariantsByRole(Role role);
 }

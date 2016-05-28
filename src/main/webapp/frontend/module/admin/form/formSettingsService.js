@@ -21,13 +21,24 @@ function formSettingsService(http) {
     service.getAllQuestion = function (role) {
         var request = http({
             method: "POST",
-            url: "/admin/getapplicationquestions",
+            url: "/admin/getQuestions",
             params: {
                 role: role
             }
         });
         return ( request.then(handleSuccess) );
     };
+
+    service.deleteQuestion = function (id) {
+        return http({
+            method: "GET",
+            url: "/admin/deleteQuestion",
+            params: {
+                id: id
+            }
+        });
+    };
+    
     
     service.changeQuestionStatus = function (id) {
         return http({
@@ -52,7 +63,7 @@ function formSettingsService(http) {
     service.addQuestion = function (question, type, enable,mandatory, formAnswerVariants, role, order) {
        return http({
             method: 'POST',
-            url: '/admin/addFormQuestion',
+            url: '/admin/addQuestion',
             contentType: 'application/json',
             data: JSON.stringify({
                 question: question,

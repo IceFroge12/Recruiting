@@ -34,6 +34,7 @@
                                 <th>Mandatory</th>
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
@@ -63,6 +64,13 @@
                                             data-toggle="modal"
                                             data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button data-toggle="modal"
+                                            data-target="#deleteQuestion" ng-click="getQuestion(question)"
+                                            class="btn btn-danger"
+                                            type="button">Delete
                                     </button>
                                 </td>
                             </tr>
@@ -81,6 +89,7 @@
                                 <th>Mandatory</th>
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
@@ -110,6 +119,13 @@
                                             data-toggle="modal"
                                             data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button data-toggle="modal"
+                                            data-target="#deleteQuestion" ng-click="getQuestion(question)"
+                                            class="btn btn-danger"
+                                            type="button">Delete
                                     </button>
                                 </td>
                             </tr>
@@ -127,6 +143,7 @@
                                 <th>Mandatory</th>
                                 <th>Answer Variant</th>
                                 <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
@@ -156,6 +173,13 @@
                                             data-toggle="modal"
                                             data-target="#editQuestion">
                                         <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button data-toggle="modal"
+                                            data-target="#deleteQuestion" ng-click="getQuestion(question)"
+                                            class="btn btn-danger"
+                                            type="button">Delete
                                     </button>
                                 </td>
                             </tr>
@@ -296,4 +320,22 @@
 
     </div>
 </div>
+
+<div id="deleteQuestion" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button ng-click="deleteQuestion(question)" data-dismiss="modal" class="btn btn-link">Yes
+                </button>
+                <button class="btn btn-link" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div app-footer></div>

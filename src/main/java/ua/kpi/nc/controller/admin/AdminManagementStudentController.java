@@ -200,19 +200,13 @@ public class AdminManagementStudentController {
         return af.getStatus();
     }
 
-    @RequestMapping(value = "getUniverse", method = RequestMethod.GET)
-    public FormAnswer getUniverseById(@RequestParam Long id) {
-        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
-        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(8L));
-        return formAnswer.get(0);
-    }
-
-
-    @RequestMapping(value = "getCourse", method = RequestMethod.GET)
-    public FormAnswer getCourseById(@RequestParam Long id) {
-        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(id);
-        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(9L));
-        return formAnswer.get(0);
+    @RequestMapping(value = "getQuestionAnswer", method = RequestMethod.GET)
+    public ResponseEntity<FormAnswer> getUniverseById(@RequestParam Long userId, @RequestParam Long questionId) {
+        ApplicationForm af = applicationFormService.getCurrentApplicationFormByUserId(userId);
+        List<FormAnswer> formAnswer = formAnswerService.getByApplicationFormAndQuestion(af, formQuestionService.getById(questionId));
+        if (null == formAnswer.get(0))
+            return new ResponseEntity<FormAnswer>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<FormAnswer>(formAnswer.get(0), HttpStatus.OK);
     }
 
     @RequestMapping(value = "getRejectCount", method = RequestMethod.GET)

@@ -3,10 +3,13 @@ package ua.kpi.nc.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.kpi.nc.persistence.dao.RoleDao;
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.service.RoleService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,4 +56,9 @@ public class RoleServiceImpl implements RoleService {
     public boolean isInterviewerRole(Role role) {
         return RoleEnum.ROLE_SOFT.name().equals(role.getRoleName()) || RoleEnum.ROLE_TECH.name().equals(role.getRoleName());
     }
+
+	@Override
+	public List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer) {
+		return roleDao.getPossibleInterviewsRoles(applicationForm, interviewer);
+	}
 }

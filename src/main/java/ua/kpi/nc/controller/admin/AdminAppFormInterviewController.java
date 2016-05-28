@@ -65,7 +65,7 @@ public class AdminAppFormInterviewController {
         return interviewRoles;
     }
 
-    @RequestMapping(value = "getInterview/{applicationFormId}/{role}", method = RequestMethod.POST)
+    @RequestMapping(value = "getInterview/{applicationFormId}/{role}", method = RequestMethod.GET)
     public String getInterview(@PathVariable Long applicationFormId, @PathVariable Long role) {
         Interview interview = null;
         ApplicationForm applicationForm = applicationFormService.getApplicationFormById(applicationFormId);

@@ -23,9 +23,17 @@ import ua.kpi.nc.service.util.SenderService;
 import ua.kpi.nc.service.util.SenderServiceImpl;
 
 import javax.mail.MessagingException;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/registrationStudent")
@@ -64,7 +72,7 @@ public class RegistrationController {
             log.trace("Inserting user with email - {} in data base", userDto.getEmail());
             userService.insertUser(user, new ArrayList<>(roles));
 
-            String url = String.format("%s://%s:%d/frontend/index.html#/registrationStudent/%s",request.getScheme(),  request.getServerName(), request.getServerPort(), token);
+            String url = String.format("%s://%s:%d/frontend/index.html#/registrationStudent/%s", request.getScheme(), request.getServerName(), request.getServerPort(), token);
 
             EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.STUDENT_REGISTRATION.getId());
 
@@ -88,7 +96,7 @@ public class RegistrationController {
         if (null == user) {
             log.info("Token expired");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TOKEN_EXPIRED));
-        }else {
+        } else {
             log.info("Make user with email - {} active", user.getEmail());
             user.setActive(true);
             userService.updateUser(user);
@@ -96,4 +104,33 @@ public class RegistrationController {
         }
         return ResponseEntity.ok(null);
     }
+
+    @RequestMapping(value = "domainVerify", method = RequestMethod.GET)
+    public boolean domainVerify(@RequestParam String email) {
+        String[] splitEmail = email.split("@");
+        String domain = splitEmail[1];
+        try {
+            if (doLookup(domain) != 0) {
+                log.info("Mail server exist");
+                return true;
+            } else {
+                log.info("Mail server not exist");
+                return false;
+            }
+        } catch (Exception e) {
+            log.info("DNS name not found");
+            return false;
+        }
+    }
+
+    private int doLookup(String hostName) throws NamingException {
+        Hashtable<String, String> env = new Hashtable<>();
+        env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
+        DirContext initialDirContext = new InitialDirContext(env);
+        Attributes attrs = initialDirContext.getAttributes(hostName, new String[]{"MX"});
+        Attribute attr = attrs.get("MX");
+        if (attr == null) return (0);
+        return (attr.size());
+    }
+
 }

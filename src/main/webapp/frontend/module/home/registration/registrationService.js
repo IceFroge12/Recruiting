@@ -7,9 +7,8 @@ function registrationService(http) {
 
     var service = {};
 
-
     return service;
 }
 
 angular.module('appRegistration')
-    .service('registrationService', ['$http', registrationService])
+    .service('registrationService', ['$http', registrationService]);

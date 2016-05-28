@@ -10,8 +10,6 @@ function reportController($scope, $http) {
 		$scope.questions = data;
 		$scope.question = $scope.questions[0].id;
 		console.log($scope.questions);
-		console.log('QQQ');
-		console.log($scope.question);
 	});
 	$scope.exportType = 'xls';
 	$scope.generateReport = function() {
@@ -57,7 +55,7 @@ function reportController($scope, $http) {
 					scales : {
 						yAxes : [ {
 							ticks : {
-								beginAtZero : true
+								beginAtZero : false
 							}
 						} ]
 					}
