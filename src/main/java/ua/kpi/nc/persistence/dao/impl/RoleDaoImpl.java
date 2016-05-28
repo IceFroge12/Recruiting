@@ -1,6 +1,7 @@
 package ua.kpi.nc.persistence.dao.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ua.kpi.nc.persistence.dao.RoleDao;
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
@@ -44,6 +46,11 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
     private static final String SQL_UPDATE = "UPDATE role set role = ? WHERE role.id = ?";
 
     private static final String SQL_DELETE = "DELETE FROM \"role\" WHERE \"role\".id = ?";
+    
+	private static final String SQL_GET_POSSIBLE_INTERVIEWS = "SELECT r.id, r.role FROM \"role\" r "
+			+ " INNER JOIN user_role ur ON ur.id_role = r.id " + " WHERE r.id IN (2,5) AND "
+			+ "  ur.id_user = ? AND " + " r.id NOT IN "
+			+ "(SELECT i.interviewer_role  FROM interview i WHERE i.id_application_form = ?)";
 
     public RoleDaoImpl(DataSource dataSource) {
         this.setJdbcTemplate(new JdbcTemplate(dataSource));
@@ -95,4 +102,10 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
         log.trace("Getting all roles");
         return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
     }
+
+	@Override
+	public List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer) {
+		log.trace("Looking for possible interviews roles for application form with id = {} and interviewer with id = {}", applicationForm.getId(), interviewer.getId());
+		return this.getJdbcTemplate().queryForList(SQL_GET_POSSIBLE_INTERVIEWS, extractor, interviewer.getId(), applicationForm.getId());
+	}
 }

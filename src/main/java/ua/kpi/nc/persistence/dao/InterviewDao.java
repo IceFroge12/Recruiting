@@ -33,4 +33,6 @@ public interface InterviewDao {
     boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
 
     boolean haveNonAdequateMarkForAdmin (Long applicationFormID);
+
+	boolean isFormAssigned(ApplicationForm applicationForm, User interviewer);
 }

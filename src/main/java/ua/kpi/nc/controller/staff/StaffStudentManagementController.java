@@ -51,8 +51,9 @@ public class StaffStudentManagementController {
 	private static final String ASSIGNED_TO_ANOTHER_MESSAGE = gson.toJson(
 			new MessageDto("This student is already assigned to another interviewer.", MessageDtoType.WARNING));
 	
+	private static final String STUDENT_NOT_FOUND_MESSAGE = gson.toJson(new MessageDto("Student not found.", MessageDtoType.WARNING));
 	private static final String CANNOT_ASSIGN_MESSAGE = gson.toJson(new MessageDto("Cannot assign this student.", MessageDtoType.ERROR));
-	private static final String MUST_CHOOSE_ROLE_MESSAGE =gson.toJson(new MessageDto("You must choose role to assign.", MessageDtoType.WARNING));
+	private static final String MUST_CHOOSE_ROLE_MESSAGE = gson.toJson(new MessageDto("You must choose role to assign.", MessageDtoType.WARNING));
 	private static final String ASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("This student was assigned to you.", MessageDtoType.SUCCESS));
 	private static final String UNASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("Student was unassigned.", MessageDtoType.SUCCESS));;
 	private static final String UNASSIGN_ERROR_MESSAGE = gson.toJson(new MessageDto("Cannot deassign this application form.", MessageDtoType.ERROR));
@@ -62,13 +63,7 @@ public class StaffStudentManagementController {
 	public String getAssignedStudents() {
 		User interviewer = userService.getAuthorizedUser();
 		List<ApplicationForm> assignedForms = applicationFormService.getByInterviewer(interviewer);
-		JsonArray jsonStudents = new JsonArray();
-		for (ApplicationForm applicationForm : assignedForms) {
-			JsonObject jsonStudent = applicationFormToJson(applicationForm, interviewer);
-			jsonStudent.add("interviews", assignedInterviewsToJson(applicationForm, interviewer));
-			jsonStudents.add(jsonStudent);
-		}
-		return gson.toJson(jsonStudents);
+		return gson.toJson(assignedFormsToJson(assignedForms, interviewer));
 	}
 
 	@RequestMapping(value = "getById/{id}", method = RequestMethod.GET)
@@ -76,18 +71,17 @@ public class StaffStudentManagementController {
 		User interviewer = userService.getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(id);
 		if (applicationForm == null || !isApplicaionFormActual(applicationForm)) {
-			return null;
+			return STUDENT_NOT_FOUND_MESSAGE;
 		}
-		JsonArray jsonInterviews = possibleInterviewsToJson(applicationForm, interviewer);
-		if (jsonInterviews.size() == 0) {
-			if (isFormAssigned(applicationForm, interviewer)) {
+		List<Role> possibleRolesToInterviews = roleService.getPossibleInterviewsRoles(applicationForm, interviewer);
+		if (possibleRolesToInterviews.isEmpty()) {
+			if (interviewService.isFormAssigned(applicationForm, interviewer)) {
 				return ASSIGNED_TO_YOU_MESSAGE;
+			} else {
+				return ASSIGNED_TO_ANOTHER_MESSAGE;
 			}
-			return ASSIGNED_TO_ANOTHER_MESSAGE;
 		} else {
-			JsonObject jsonStudent = applicationFormToJson(applicationForm, interviewer);
-			jsonStudent.add("interviews", jsonInterviews);
-			return gson.toJson(jsonStudent);
+			return gson.toJson(studentToJson(applicationForm, possibleRolesToInterviews));
 		}
 
 	}
@@ -96,7 +90,7 @@ public class StaffStudentManagementController {
 	public String assignStudent(@RequestBody AssigningDto assigningDto) {
 		User interviewer = userService.getAuthorizedUser();
 		ApplicationForm applicationForm = applicationFormService.getApplicationFormById(assigningDto.getId());
-		if (!isApplicaionFormActual(applicationForm)) {
+		if (applicationForm == null && !isApplicaionFormActual(applicationForm)) {
 			return CANNOT_ASSIGN_MESSAGE;
 		}
 		if (assigningDto.getRoles().length == 0) {
@@ -104,33 +98,13 @@ public class StaffStudentManagementController {
 		}
 		for (Long roleId : assigningDto.getRoles()) {
 			Role role = roleService.getRoleById(roleId);
-			if (roleService.isInterviewerRole(role)
-					&& !applicationFormService.isAssignedForThisRole(applicationForm, role)) {
-				createInterview(applicationForm, interviewer, role);
+			if (role != null) {
+				interviewService.assignStudent(applicationForm, interviewer, role);
 			}
 		}
 		return ASSIGN_SUCCESS_MESSAGE;
 	}
 
-	private boolean createInterview(ApplicationForm applicationForm, User interviewer, Role role) {
-		Interview interview = new InterviewImpl();
-		interview.setInterviewer(interviewer);
-		interview.setApplicationForm(applicationForm);
-		interview.setDate(new Timestamp(System.currentTimeMillis()));
-		interview.setRole(role);
-		FormQuestionService questionService = ServiceFactory.getFormQuestionService();
-		List<FormQuestion> questions = questionService.getEnableByRole(role);
-		List<FormAnswer> answers = new ArrayList<>();
-		for (FormQuestion formQuestion : questions) {
-			if (formQuestion.isEnable()) {
-				FormAnswer formAnswer = new FormAnswerImpl();
-				formAnswer.setFormQuestion(formQuestion);
-				formAnswer.setInterview(interview);
-				answers.add(formAnswer);
-			}
-		}
-		return interviewService.insertInterviewWithAnswers(interview, answers);
-	}
 
 	@RequestMapping(value = "deassign/{id}", method = RequestMethod.GET)
 	public String deassignStudent(@PathVariable Long id) {
@@ -145,8 +119,12 @@ public class StaffStudentManagementController {
 		}
 	}
 
-	//TODO delete interviewer
-	private JsonObject applicationFormToJson(ApplicationForm applicationForm, User interviewer) {
+	private boolean isApplicaionFormActual(ApplicationForm applicationForm) {
+		return applicationForm.isActive() && Objects.equals(applicationForm.getStatus().getId(),
+				StatusEnum.APPROVED.getId());
+	}
+	
+	private JsonObject applicationFormToJson(ApplicationForm applicationForm) {
 		User student = applicationForm.getUser();
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id", applicationForm.getId());
@@ -171,31 +149,31 @@ public class StaffStudentManagementController {
 		return jsonInterviews;
 	}
 
-	private JsonArray possibleInterviewsToJson(ApplicationForm applicationForm, User interviewer) {
+	private JsonArray possibleInterviewsToJson(List<Role> possibleRoles) {
 		JsonArray jsonInterviews = new JsonArray();
-		for (Role role : interviewer.getRoles()) {
-			if (roleService.isInterviewerRole(role)
-					&& !applicationFormService.isAssignedForThisRole(applicationForm, role)) {
+		for (Role role : possibleRoles) {
 				JsonObject jsonInterview = new JsonObject();
 				jsonInterview.addProperty("role", role.getId());
 				jsonInterviews.add(jsonInterview);
-			}
 		}
 		return jsonInterviews;
 	}
 
-	private boolean isApplicaionFormActual(ApplicationForm applicationForm) {
-		return applicationForm.isActive() && Objects.equals(applicationForm.getStatus().getId(),
-				StatusEnum.APPROVED.getId());
-	}
 
-	private boolean isFormAssigned(ApplicationForm applicationForm, User interviewer) {
-		for (Interview interview : interviewService.getByApplicationForm(applicationForm)) {
-			if (!Objects.equals(interview.getInterviewer().getId(), interviewer.getId())) {
-				return false;
-			}
+	private JsonArray assignedFormsToJson(List<ApplicationForm> assignedForms, User interviewer) {
+		JsonArray jsonStudents = new JsonArray();
+		for (ApplicationForm applicationForm : assignedForms) {
+			JsonObject jsonStudent = applicationFormToJson(applicationForm);
+			jsonStudent.add("interviews", assignedInterviewsToJson(applicationForm, interviewer));
+			jsonStudents.add(jsonStudent);
 		}
-		return true;
+		return jsonStudents;
 	}
 
+	private JsonObject studentToJson(ApplicationForm applicationForm, List<Role> possibleRolesToInterviews) {
+		JsonObject jsonStudent = applicationFormToJson(applicationForm);
+		jsonStudent.add("interviews", possibleInterviewsToJson(possibleRolesToInterviews));
+		return jsonStudent;
+	}
+	
 }

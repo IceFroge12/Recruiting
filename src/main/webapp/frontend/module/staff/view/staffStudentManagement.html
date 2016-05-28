@@ -59,7 +59,7 @@
 				<div>
 					<form class="navbar-form navbar-left" role="search">
 						<p>Enter application's form id:</p>
-						<input ng-model-options="{ debounce: 1000 }" id="candidateName"
+						<input type="number" ng-model-options="{ debounce: 1000 }" id="candidateName"
 							ng-model="newFormId" ng-change="searchApplicationForm(newFormId)">
 					</form>
 					{{search.resultMessage.message}}

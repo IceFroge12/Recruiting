@@ -34,4 +34,8 @@ public interface InterviewService {
 	boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
 
 	boolean haveNonAdequateMarkForAdmin (Long applicationFormID);
+	
+	boolean isFormAssigned(ApplicationForm applicationForm, User interviewer);
+	
+	public void assignStudent(ApplicationForm applicationForm, User interviewer, Role role);
 }
