@@ -22,9 +22,7 @@ import java.util.List;
 
 public abstract class AbsRender implements ReportRenderer {
     protected Workbook wb;
-    protected List<Object> header;
-    protected List<Line> lines;
-    protected static Logger log = LoggerFactory.getLogger(AbsRender.class.getName());
+    private static Logger log = LoggerFactory.getLogger(AbsRender.class.getName());
 
     private void autoSize(Sheet sheet, int columnSize) {
         if (sheet instanceof SXSSFSheet) {
@@ -55,12 +53,12 @@ public abstract class AbsRender implements ReportRenderer {
 
     @Override
     public void render(Report report, OutputStream out) {
-        header = report.getHeader().getCells();
-        lines = report.getLines();
+        List<Object> header = report.getHeader().getCells();
+        List<Line> lines = report.getLines();
         write(header, lines, out);
     }
 
-    protected void write(List<Object> header, List<Line> lines, OutputStream out) {
+    private void write(List<Object> header, List<Line> lines, OutputStream out) {
         Sheet sheet = wb.createSheet();
         writeHeader(sheet, header);
         writeLines(sheet, lines);
