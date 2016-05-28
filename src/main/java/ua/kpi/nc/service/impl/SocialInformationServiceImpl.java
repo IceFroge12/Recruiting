@@ -6,6 +6,7 @@ import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.service.SocialInformationService;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -31,8 +32,8 @@ public class SocialInformationServiceImpl implements SocialInformationService {
     }
 
     @Override
-    public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork) {
-        return socialInformationDao.insertSocialInformation(socialInformation, user, socialNetwork);
+    public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork, Timestamp writeTime) {
+        return socialInformationDao.insertSocialInformation(socialInformation, user, socialNetwork, writeTime);
     }
 
     @Override
@@ -46,7 +47,14 @@ public class SocialInformationServiceImpl implements SocialInformationService {
     }
 
     @Override
+    public SocialInformation getByUserEmailSocialNetworkType(String email, Long socialNetworkId) {
+        return socialInformationDao.getByUserEmailSocialType(email, socialNetworkId);
+    }
+
+    @Override
     public boolean isExist(String email, Long idSocialNetwork) {
         return socialInformationDao.isExist(email, idSocialNetwork);
+
+
     }
 }

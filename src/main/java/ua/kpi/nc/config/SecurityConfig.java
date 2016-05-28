@@ -7,15 +7,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ua.kpi.nc.controller.auth.LoginPasswordAuthenticationManager;
-import ua.kpi.nc.controller.auth.SocialNetworkAuthenticationManager;
-import ua.kpi.nc.controller.auth.TokenAuthenticationService;
+import ua.kpi.nc.controller.auth.*;
 import ua.kpi.nc.filter.SocialLoginFilter;
 import ua.kpi.nc.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.filter.StatelessLoginFilter;
-import ua.kpi.nc.controller.auth.UserAuthService;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 
 
@@ -33,6 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private LoginPasswordAuthenticationManager loginPasswordAuthenticationManager = LoginPasswordAuthenticationManager.getInstance();
 
     private SocialNetworkAuthenticationManager socialNetworkAuthenticationManager = SocialNetworkAuthenticationManager.getInstance();
+
+    private AuthenticationSuccessHandler authenticationSuccessHandler = AuthenticationSuccessHandlerService.getInstance();
 
     private UserAuthService userAuthService = UserAuthService.getInstance();
 
@@ -70,8 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, loginPasswordAuthenticationManager), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, loginPasswordAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
 
 
                 .exceptionHandling().and()

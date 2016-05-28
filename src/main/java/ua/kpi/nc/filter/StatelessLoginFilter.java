@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.social.security.SocialAuthenticationFilter;
@@ -32,12 +33,12 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     private static final String PASSWORD_TITLE = "password";
 
     public StatelessLoginFilter(String urlMapping, TokenAuthenticationService tokenAuthenticationService,
-                                   AuthenticationManager authenticationManager) {
+                                AuthenticationManager authenticationManager, AuthenticationSuccessHandler authenticationSuccessHandler) {
         super(new AntPathRequestMatcher(urlMapping));
         this.tokenAuthenticationService = tokenAuthenticationService;
         setAuthenticationManager(authenticationManager);
-        setAuthenticationSuccessHandler(AuthenticationSuccessHandlerService.getInstance());
-        setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
+        setAuthenticationSuccessHandler(authenticationSuccessHandler);
+//        setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
     }
 
 
@@ -57,6 +58,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
         tokenAuthenticationService.addAuthentication(response, authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess(request,response,authentication);
+
 
     }
 

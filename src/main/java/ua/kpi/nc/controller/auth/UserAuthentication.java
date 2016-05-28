@@ -9,6 +9,7 @@ import ua.kpi.nc.persistence.model.enums.SocialNetworkEnum;
 import ua.kpi.nc.persistence.model.impl.real.SocialInformationImpl;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -21,11 +22,11 @@ public class UserAuthentication implements Authentication {
     private User user;
     private boolean authenticated = true;
 
-    public UserAuthentication(String email, Long idSocialNetwork) {
+    public UserAuthentication(String email, SocialNetwork socialNetwork, String accessToken) {
         user = new UserImpl();
         SocialInformation socialInformation = new SocialInformationImpl
                 (
-                        idSocialNetwork, SocialNetworkEnum.getSocialNetwork(idSocialNetwork)
+                        socialNetwork, accessToken, new Timestamp(System.currentTimeMillis())
                 );
         user.setSocialInformations(new LinkedHashSet<>());
         user.getSocialInformations().add(socialInformation);
@@ -34,7 +35,7 @@ public class UserAuthentication implements Authentication {
 
     public UserAuthentication(User user) {
         this.user = user;
-        user.getRoles();
+//        user.getRoles();
     }
 
     @Override

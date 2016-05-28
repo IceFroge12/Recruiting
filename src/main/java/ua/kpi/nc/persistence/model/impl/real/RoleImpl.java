@@ -26,6 +26,11 @@ public class RoleImpl implements Role{
         this.users = users;
     }
 
+    public RoleImpl(Long id, String roleName) {
+        this.id = id;
+        this.roleName = roleName;
+    }
+
     public RoleImpl(String roleName, Set<User> users) {
         this.roleName = roleName;
         this.users = users;

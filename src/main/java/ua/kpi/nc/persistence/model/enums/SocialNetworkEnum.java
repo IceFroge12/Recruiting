@@ -8,7 +8,7 @@ import ua.kpi.nc.persistence.model.SocialNetwork;
 public enum SocialNetworkEnum {
     FaceBook(1L);
 
-    private Long id;
+    private final Long id;
 
     SocialNetworkEnum(Long id) {
         this.id = id;
@@ -21,6 +21,15 @@ public enum SocialNetworkEnum {
     public static SocialNetwork getSocialNetwork(Long id){
         switch (Math.toIntExact(id)){
             case 1:
+                return new SocialNetwork(FaceBook.getId(), "FaceBook");
+            default:
+                throw new IllegalStateException("Social network not found");
+        }
+    }
+
+    public static SocialNetwork getSocialNetwork(String title){
+        switch (title){
+            case "facebookAuth":
                 return new SocialNetwork(FaceBook.getId(), "FaceBook");
             default:
                 throw new IllegalStateException("Social network not found");

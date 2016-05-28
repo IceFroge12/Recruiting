@@ -31,7 +31,7 @@ public class UserAuthService implements UserDetailsService {
 
         User user = userService.getUserByUsername(userName);
         if (user == null) {
-            throw new UsernameNotFoundException("Username not found");
+            return null;
         }
         return user;
     }

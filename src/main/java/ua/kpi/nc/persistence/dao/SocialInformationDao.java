@@ -1,5 +1,6 @@
 package ua.kpi.nc.persistence.dao;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 import ua.kpi.nc.persistence.model.SocialInformation;
@@ -10,11 +11,14 @@ import ua.kpi.nc.persistence.model.User;
  * Created by Chalienko on 15.04.2016.
  */
 public interface SocialInformationDao {
+
 	SocialInformation getById(Long id);
+
+	SocialInformation getByUserEmailSocialType(String email, Long idSocialType);
 
 	Set<SocialInformation> getByUserId(Long id);
 
-	Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork);
+	Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork, Timestamp writeTime);
 
 	int updateSocialInformation(SocialInformation socialInformation);
 

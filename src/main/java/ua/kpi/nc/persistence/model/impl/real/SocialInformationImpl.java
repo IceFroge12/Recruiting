@@ -6,6 +6,8 @@ import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.User;
 
+import java.sql.Timestamp;
+
 
 /**
  * Created by Chalienko on 15.04.2016.
@@ -16,19 +18,28 @@ public class SocialInformationImpl implements SocialInformation {
     private String accessInfo;
     private User user;
     private SocialNetwork socialNetwork;
+    private Timestamp writeTime;
 
-    public SocialInformationImpl(Long id, SocialNetwork socialNetwork) {
+    public SocialInformationImpl(Long id, SocialNetwork socialNetwork, String accessInfo) {
         this.id = id;
         this.socialNetwork = socialNetwork;
+        this.accessInfo = accessInfo;
+    }
+
+    public SocialInformationImpl(SocialNetwork socialNetwork, String accessInfo, Timestamp writeTime) {
+        this.socialNetwork = socialNetwork;
+        this.accessInfo = accessInfo;
+        this.writeTime = writeTime;
     }
 
 
 
-    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork) {
+    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork, Timestamp writeTime) {
         this.id = id;
         this.accessInfo = accessInfo;
         this.user = user;
         this.socialNetwork = socialNetwork;
+        this.writeTime = writeTime;
     }
 
     public SocialInformationImpl(String accessInfo, User user, SocialNetwork socialNetwork) {
