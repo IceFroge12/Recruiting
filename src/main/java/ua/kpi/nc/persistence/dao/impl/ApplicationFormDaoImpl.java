@@ -106,7 +106,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE ORDER BY ? ASC OFFSET ? LIMIT ?;";
 
-    private static final String SQL_GET_All_APP_FORMS_SORTED = "SELECT apl.id, u.first_name, apl.id_status, apl.is_active,\n" +
+    private static final String SQL_GET_All_APP_FORMS_SORTED = "SELECT apl.id, u.last_name, apl.id_status, apl.is_active,\n" +
             "  apl.id_recruitment, apl.photo_scope, apl.id_user, apl.date_create, apl.feedback, s.title\n" +
             "from \"user\" u INNER JOIN application_form apl on apl.id_user= u.id\n" +
             "  INNER JOIN recruitment r on apl.id_recruitment = r.id\n" +
