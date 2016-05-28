@@ -72,7 +72,7 @@
                  'studenttoadvanced' : student.status == 'Approved to advanced courses' }" >
                     <td><input type="checkbox" ng-click="checkStudentStatus(student)" ng-checked="checkedAll" ng-model="student.Selected"></td>
                     <td><a href="index.html#/admin/studentform/{{student.id}}">{{student.appFormId}}</a></td>
-                    <td>{{student.firstName +" "+ student.lastName}}</td>
+                    <td>{{student.lastName +" "+ student.firstName}}</td>
                     <td>
                         <select ng-model="student.status" ng-change="changeStatus(student.status,student.appFormId)">
                             <option ng-repeat="stat in student.possibleStatus" ng-checked="stat.title==student.status">{{stat.title}}</option> <!--Don`t touch This  !!!!! -->
@@ -143,7 +143,7 @@
                             Status
                         </td>
                         <td>
-                            <span ng-repeat="st in statusTemp track by $index">
+                            <span ng-repeat="st in statuses track by $index">
                                 <p>
                                     <input type="checkbox" ng-checked="existsItem(st, statusesChoosen)"
                                            ng-click="toggleItem(st, statusesChoosen)">{{st.title}}

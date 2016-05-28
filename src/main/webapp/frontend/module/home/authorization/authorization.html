@@ -10,60 +10,64 @@
                         <h3 class="panel-title">
                             Authorization</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" style="min-height: 150px;">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 separator social-login-box"><br/>
+                            <div class="col-xs-4 col-sm-4 col-md-4 separator social-login-box"><br/>
                                 <a ng-click="facebookLogin()" class="btn facebook btn-block" role="button">Log in
                                     with Facebook</a>
                                 <br/>
                                 <!--<a href="staffMain.html" class="btn twitter btn-block" role="button">Log in with-->
-                                    <!--Twitter</a>-->
+                                <!--Twitter</a>-->
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 login-box">
-                            <div class="col-xs-12 col-sm-12 col-md-12 login-box">
-                                <form name="authForm" role="form">
-                                    <div class="input-group">
+                            <div class="col-xs-8 col-sm-8 col-md-8 login-box">
+                                <div class="col-xs-12 col-sm-12 col-md-12 login-box">
+                                    <form name="authForm" role="form">
+                                        <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-user"></span></span>
-                                        <input ng-model="email" name="userEmail" type="email" class="form-control" placeholder="Email"
-                                               required
-                                               autofocus/>
-                                    </div>
+                                            <input ng-model="email" name="userEmail" type="email" class="form-control"
+                                                   placeholder="Email"
+                                                   required
+                                                   autofocus/>
+                                        </div>
 
-                                    <div class="input-group">
+                                        <div class="input-group">
                                                 <span class="input-group-addon"><span
                                                         class="glyphicon glyphicon-lock"></span></span>
-                                        <input ng-model="password" name="password" type="password" class="form-control"
-                                               placeholder="Password" ng-maxlength="16" ng-minlength="4"
-                                               required/>
-                                    </div>
+                                            <input ng-model="password" name="password" type="password"
+                                                   class="form-control"
+                                                   placeholder="Password" ng-maxlength="16" ng-minlength="4"
+                                                   required/>
+                                        </div>
 
-                                    <div ng-show="errorcredential">
-                                        <p class="alert-danger">Wrong email or password</p>
-                                    </div>
+                                        <div ng-show="errorcredential">
+                                            <p class="alert-danger">Wrong email or password</p>
+                                        </div>
 
-                                    <div ng-messages="authForm.userEmail.$error">
-                                        <div ng-message="email">Your email address is invalid</div>
-                                    </div>
-                                    </br>
-                                    <div ng-messages="authForm.password.$error">
-                                        <div ng-message="maxlength">Password must not exceed 16 characters</div>
-                                        <div ng-message="minlength">Password must be over 4 characters</div>
-                                    </div>
-                                    <div>
-                                    <p class="text-danger" ng-show="authsuccess">Authorisation Error</p>
-                                    <div class="col-md-6">
-                                    <a ng-click="recoverPassword()">Forget your password?</a>
-                                    </div>
-                                    <div class="col-md-6">
-                                    <a ng-click="registration()">Register me</a>
-                                    </div>
-                                    </div>
-                                </form>
+                                        <div ng-messages="authForm.userEmail.$error">
+                                            <div ng-message="email">Your email address is invalid</div>
+                                        </div>
+                                        </br>
+                                        <div ng-messages="authForm.password.$error">
+                                            <div ng-message="maxlength">Password must not exceed 16 characters</div>
+                                            <div ng-message="minlength">Password must be over 4 characters</div>
+                                        </div>
+                                        <div>
+                                            <p class="text-danger" ng-show="authsuccess">Authorisation Error</p>
+
+                                            <div class="col-md-6 col-xs-8">
+                                                <a ng-click="recoverPassword()">Forget your password?</a>
+                                            </div>
+                                            <div class="col-md-6 col-xs-4">
+                                                <a ng-click="registration()">Register me</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer">
+                    <div class="panel-footer" style="min-height: 60px;">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <button ng-click="login()" type="button" class="btn btn-labeled btn-info btn-lg"
@@ -78,4 +82,3 @@
             </div>
         </div>
     </div>
-</div>

@@ -66,11 +66,8 @@ function studentManagementController($scope,ngToast, studentManagementService) {
         $scope.questions = [];
         $scope.restrictions = [];
         $scope.statusesChoosen = [];
-        console.log($scope.statusesChoosen);
-        console.log("Finding questions");
+        getAllStatuses();
         getAllQuestions();
-        console.log($scope.restrictions);
-        console.log($scope.questions);
     };
 
     $scope.calculateStatuses = function () {
@@ -81,12 +78,14 @@ function studentManagementController($scope,ngToast, studentManagementService) {
     };
 
 
-    studentManagementService.getAllStatuses().success(function (data) {
-        $scope.statuses = data;
-        console.log($scope.statuses);
-    }, function error() {
-        console.log("error with getting allStatus");
-    });
+    function getAllStatuses() {
+        studentManagementService.getAllStatuses().success(function (data) {
+            $scope.statuses = data;
+            console.log($scope.statuses);
+        }, function error() {
+            console.log("error with getting allStatus");
+        });
+    }
 
     $scope.toggle = function (variant, question) {
         var x = 0;
