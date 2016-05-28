@@ -15,18 +15,23 @@ function staffStudentManagementController($scope, ngToast, $http, staffStudentMa
         $http.get('../../staff/getById/' + id).success(function (data) {
             console.log(data);
             console.log($scope.foundStudent);
-            if(data == ""){
-                var myToastMsg = ngToast.info({
-                    content: 'Student not found ',
-                    timeout: 5000, 
-                    horizontalPosition: 'center',
-                    verticalPosition: 'bottom',
-                    dismissOnClick: true,
-                    combineDuplications: true,
-                    maxNumber: 2
-                });
-            }
             $scope.search.resultMessage = data;
+            var toastMessage = {
+	                content: $scope.search.resultMessage.message,
+	                timeout: 5000,  
+	                horizontalPosition: 'center',
+	                verticalPosition: 'bottom',
+	                dismissOnClick: true,
+	                combineDuplications: true,
+	                maxNumber: 2
+	            };
+			if ($scope.search.resultMessage.type == 'ERROR' || $scope.search.resultMessage.type == 'WARNING') {
+				var myToastMsg = ngToast.warning(toastMessage);
+			}
+			else if ($scope.search.resultMessage.type == 'SUCCESS') {
+				var myToastMsg = ngToast.success(toastMessage);
+			}
+            
             if ($scope.search.resultMessage.type != 'WARNING') {
                 $scope.search.resultMessage.message == null;
                 $scope.foundStudent = data;

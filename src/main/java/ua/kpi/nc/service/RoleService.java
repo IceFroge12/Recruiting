@@ -1,7 +1,10 @@
 package ua.kpi.nc.service;
 
+import ua.kpi.nc.persistence.model.ApplicationForm;
 import ua.kpi.nc.persistence.model.Role;
+import ua.kpi.nc.persistence.model.User;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,4 +25,6 @@ public interface RoleService {
 	int deleteRole(Role role);
 
 	public boolean isInterviewerRole(Role role);
+	
+	List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
 }

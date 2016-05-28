@@ -38,6 +38,8 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
     private static final String SQL_GET_BY_APPLICATION_FORM_AND_INTERVIEWER_ROLE_ID = "SELECT i.id, i.mark, i.date," +
             " i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form FROM interview i " +
             "WHERE i.id_application_form = ? and i.interviewer_role=?;";
+    private static final String SQL_IS_ASSIGNED = "SELECT EXISTS (SELECT 1 FROM interview i WHERE i.id_application_form = ? AND i.id_interviewer = ?)";
+    
 
     private static Logger log = LoggerFactory.getLogger(InterviewDaoImpl.class.getName());
 
@@ -145,5 +147,12 @@ public class InterviewDaoImpl extends JdbcDaoSupport implements InterviewDao {
             return formAnswerProxy;
         }, interviewId);
     }
+
+	@Override
+	public boolean isFormAssigned(ApplicationForm applicationForm, User interviewer) {
+		log.trace("Checking is form with id = {} assigned to inteviewer with id = {}", applicationForm.getId(), interviewer.getId());
+		return this.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1), applicationForm.getId(), interviewer.getId());
+	}
+
 
 }
