@@ -10,7 +10,13 @@ function recoverPasswordPageController($scope, $http, $routeParams) {
     $scope.username = '';
     $scope.userExist = false;
     $scope.errorMessage = '';
+    $scope.t =  $routeParams.token;
     $scope.init = function () {
+        $http({
+            method: 'GET',
+            url: '/recoverPassword/' + '?token=' +$scope.t,
+            contentType: 'application/json'
+        });
         $scope.email = $routeParams.email;
         console.log($scope.passwordSecond);
 
@@ -18,6 +24,7 @@ function recoverPasswordPageController($scope, $http, $routeParams) {
 
     $scope.changePassword = function () {
         console.log($scope.passwordSecond);
+
         $http({
             method: 'POST',
             url: '/changePassword',

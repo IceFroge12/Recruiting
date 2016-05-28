@@ -53,7 +53,7 @@ public class ForgotPassword {
             userDto.setFirstName(user.getFirstName());
             log.info("User with email - {} found", userDto.getEmail());
             String token = createToken(userDto.getEmail());
-            String url = String.format("%s://%s:%d/recoverPassword/?token=%s",request.getScheme(),  request.getServerName(), request.getServerPort(), token);
+            String url = String.format("%s://%s:%d/frontend/index.html#/recoverPasswordPage/?token=%s",request.getScheme(),  request.getServerName(), request.getServerPort(), token);
             String text = url;
             String subject = "Recover your password";
             log.info("Letter sent on email - {}", user.getEmail());
@@ -85,13 +85,13 @@ public class ForgotPassword {
         String email = (String) request.getSession().getAttribute("email");
         if (null == email){
             log.info("Session has been expired");
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(SESSION_ERROR);
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(new MessageDto(SESSION_ERROR));
         }
         log.info("User email found");
         User user = userService.getUserByUsername(email);
         if (null == user){
             log.info("User with email - {} not found", email);
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(USER_NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(USER_NOT_FOUND));
         }else {
             log.info("Change password for user - {}", email);
             user.setPassword(passwordEncoderGeneratorService.encode(passwordChangeDto.getPassword()));

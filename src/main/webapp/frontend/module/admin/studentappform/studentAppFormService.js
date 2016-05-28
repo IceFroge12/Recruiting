@@ -25,7 +25,7 @@ function studentAppFormService(http) {
     service.getInterview = function (appFormId, role) {
         console.log("Service getInterview");
         return http({
-            method: 'POST',
+            method: 'GET',
             url: '/admin/getInterview/' + appFormId + '/' + role
         })
     };

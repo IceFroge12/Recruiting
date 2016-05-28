@@ -14,10 +14,10 @@ public class UserRateDto {
     private String firstName;
     private String secondName;
     private String lastName;
-    private int mark;
+    private Integer mark;
     private String interviewType;
 
-    public UserRateDto(User user, int mark, Role role, Long idInterview) {
+    public UserRateDto(User user, Integer mark, Role role, Long idInterview) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.secondName = user.getSecondName();
@@ -27,7 +27,7 @@ public class UserRateDto {
         this.idInterview = idInterview;
     }
 
-    public UserRateDto(String firstName, long id, String interviewType, String lastName, int mark, String secondName) {
+    public UserRateDto(String firstName, long id, String interviewType, String lastName, Integer mark, String secondName) {
         this.firstName = firstName;
         this.id = id;
         this.interviewType = interviewType;
@@ -78,11 +78,11 @@ public class UserRateDto {
         this.lastName = lastName;
     }
 
-    public int getMark() {
+    public Integer getMark() {
         return mark;
     }
 
-    public void setMark(int mark) {
+    public void setMark(Integer  mark) {
         this.mark = mark;
     }
 
