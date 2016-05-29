@@ -55,7 +55,12 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
         SecurityContextHolder.getContext().setAuthentication(authResult);
         AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess(request,response,authResult);
     }
-    
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        super.unsuccessfulAuthentication(request, response, failed);
+    }
+
     private SocialNetwork getSocialNetworkId(String requestURL) {
         String array[] = requestURL.split("/");
         return SocialNetworkEnum.getSocialNetwork(array[array.length - 1]);

@@ -34,6 +34,7 @@ public class UserAuthentication implements Authentication {
         user.setSocialInformations(new LinkedHashSet<>());
         user.getSocialInformations().add(socialInformation);
         user.setEmail(email);
+        socialInformation.setUser(user);
         this.idUserSocialNetwork = userSocialId;
         this.idNetwork = socialNetwork.getId();
     }

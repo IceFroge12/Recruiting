@@ -5,8 +5,11 @@ import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import ua.kpi.nc.controller.auth.Utils.FaceBookUtils;
@@ -37,6 +40,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
     private UserAuthServiceSocial userAuthServiceSocial;
     private UserService userService;
     private SocialInformationService socialInformationService;
+    private UserAuthServiceLoginPassword userDetailsService = UserAuthServiceLoginPassword.getInstance();
 
 
     private SocialNetworkAuthenticationManager() {
@@ -63,42 +67,18 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         if (Objects.equals(socialNetwork.getTitle(), SocialNetworkEnum.FaceBook.getTitle())) {
             User user = userAuthServiceSocial.loadUserBySocialIdNetworkId(socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
             if (null == user) {
+                user = userDetailsService.loadUserByUsername(socialInformation.getUser().getEmail());
+                if (null != user){
+                    socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork());
+                }
                 return registerFaceBookUser(socialInformation);
             } else {
                 updateFaceBookUser(socialNetwork.getId(), socialInformation.getIdUserInSocialNetwork(), socialInformation.getAccessInfo());
-                changeSocialInformation(SocialNetworkEnum.FaceBook.getId(), user, socialInformation.getAccessInfo());
+                changeSocialInformation(socialInformation.getSocialNetwork().getId(), user, socialInformation.getAccessInfo());
                 return new UserAuthentication(user, socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
             }
         }
-
-
-//        Long id = getSocialUserId(userAuthentication.getDetails().getSocialInformations().iterator().next().getAccessInfo());
-//        Long idSocialNetwork = getSocialNetworkId(userAuthentication.getDetails().getSocialInformations().iterator().next());
-//        User user = ((User) authentication.getDetails());
-//        SocialInformation socialInformation = user.getSocialInformations().iterator().next();
-//        User existUser = userAuthServiceLoginPassword.loadUserByUsername(user.getEmail());
-//
-//
-//        if (null != existUser) {
-//            if (socialInformationService.isExist(user.getEmail(), user.getSocialInformations().iterator().next().getSocialNetwork().getId())) {
-//                updateFaceBookUser(socialInformation.getAccessInfo(), existUser);
-//                return new UserAuthentication(existUser);
-//            } else {
-//                return new UserAuthentication(existUser);
-//            }
-//        } else {
-//            return registerFaceBookUser(socialInformation);
-//        }
         return null;
-    }
-
-
-    private void registerNewUser(SocialInformation socialInformation) {
-//        Long socialNetworkId = getSocialNetworkId(socialInformation);
-//        if (Objects.equals(socialNetworkId, SocialNetworkEnum.FaceBook.getId())) {
-//        }
-//        //user.getSocialInformations().add(socialInformation);
-//        socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork());
     }
 
     private UserAuthentication registerFaceBookUser(SocialInformation socialInformation) {
@@ -113,6 +93,9 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
 
     private void updateFaceBookUser(Long idSocialNetwork, Long idSocialUser, String info) {
         int i = socialInformationService.updateSocialInformation(idSocialNetwork, idSocialUser, info);
+        if (0 == i){
+            throw new AuthenticationServiceException("Can not update social information");
+        }
     }
 
     private User createNewUser(org.springframework.social.facebook.api.User profile) {
