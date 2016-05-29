@@ -30,19 +30,16 @@ function staffSchedulingController($scope,ngToast, staffSchedulingService) {
     };
 
 
-    staffSchedulingService.getUserFinalTimePoints().then(function success(data) {
-        $scope.finalTimePoints = data;
-        console.log($scope.finalTimePoints);
-    });
+  
 
     staffSchedulingService.getUserTimePriorities().then(function success(data) {
         
         $scope.timePoints = data;
         
-        $scope.show = true;
-        if($scope.timePoints == ""){
-            $scope.show = false;
-        }
+        // $scope.show = true;
+        // if($scope.timePoints == ""){
+        //     $scope.show = false;
+        // }
         
         angular.forEach($scope.timePoints, function (item, i) {
             item.i = i;
@@ -50,6 +47,14 @@ function staffSchedulingController($scope,ngToast, staffSchedulingService) {
         console.log($scope.timePoints);
     });
     
+    staffSchedulingService.getUserFinalTimePoints().then(function success(data) {
+        $scope.finalTimePoints = data;
+        $scope.showTimePriority = true;
+        if($scope.finalTimePoints != null){
+            $scope.showTimePriority = false;
+        }
+            console.log($scope.finalTimePoints);
+    });
     
   
     $scope.save = function () {

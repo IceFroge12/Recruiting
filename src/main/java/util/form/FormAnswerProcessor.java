@@ -81,16 +81,7 @@ public class FormAnswerProcessor {
 			}
 		} else {
 			FormAnswer formAnswer = createFormAnswer();
-			if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
-					|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
-				StudentAnswerDto answerDto = answersDto.get(0);
-				FormAnswerVariant variant = formAnswerVariantService
-						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-				formAnswer.setFormAnswerVariant(variant);
-			} else {
-				formAnswer.setAnswer(answersDto.get(0).getAnswer());
-			}
-			answers.add(formAnswer);
+			processSingleAnswer(formAnswer, answersDto, questionType);
 		}
 	}
 
@@ -116,18 +107,22 @@ public class FormAnswerProcessor {
 			}
 		} else {
 			FormAnswer formAnswer = existingAnswers.get(0);
-			if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
-					|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
-
-				StudentAnswerDto answerDto = answersDto.get(0);
-				FormAnswerVariant variant = formAnswerVariantService
-						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-				formAnswer.setFormAnswerVariant(variant);
-			} else {
-				formAnswer.setAnswer(answersDto.get(0).getAnswer());
-			}
-			answers.add(formAnswer);
+			processSingleAnswer(formAnswer, answersDto, questionType);
 		}
+	}
+
+	private void processSingleAnswer(FormAnswer formAnswer, List<StudentAnswerDto> answersDto, String questionType) {
+		if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
+				|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
+
+			StudentAnswerDto answerDto = answersDto.get(0);
+			FormAnswerVariant variant = formAnswerVariantService
+					.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
+			formAnswer.setFormAnswerVariant(variant);
+		} else {
+			formAnswer.setAnswer(answersDto.get(0).getAnswer());
+		}
+		answers.add(formAnswer);
 	}
 
 }

@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.nc.persistence.dto.UserTimePriorityDto;
-import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.ScheduleTimePoint;
+import ua.kpi.nc.persistence.model.TimePriorityType;
+import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.UserTimePriority;
 import ua.kpi.nc.persistence.model.enums.SchedulingStatusEnum;
 import ua.kpi.nc.persistence.model.impl.proxy.ScheduleTimePointProxy;
 import ua.kpi.nc.service.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

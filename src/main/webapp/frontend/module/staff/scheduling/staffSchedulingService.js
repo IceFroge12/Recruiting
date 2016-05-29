@@ -16,6 +16,7 @@ function staffSchedulingService(http) {
 
     service.getUserFinalTimePoints = function () {
         return http.get('/staff/getFinalTimePoints').then(function (response) {
+            console.log(response.data);
             return response.data;
         })
     };

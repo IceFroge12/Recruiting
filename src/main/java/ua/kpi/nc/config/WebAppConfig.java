@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
@@ -23,7 +21,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver createMultipartResolver() {
-        CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("utf-8");
         resolver.setMaxUploadSize(5000000);
         return resolver;

@@ -8,14 +8,14 @@ function notificationService(http) {
     var service = {};
 
     service.getAllNotificationType = function () {
-        return http.post('/admin/getAllNotificationType').then(function (response) {
+        return http.get('/admin/getAllNotificationType').then(function (response) {
             return response.data;
         });
     };
 
     service.showTemplate = function (title) {
-        http({
-            method : 'POST',
+      return  http({
+            method : 'GET',
             url : '/admin/showTemplate',
             params : {title:title}
         }).success(function (data) {
@@ -25,7 +25,7 @@ function notificationService(http) {
     };
 
     service.saveNotification = function (emailTemplate) {
-        http({
+       return http({
             method : 'POST',
             url : '/admin/changeNotification',
             data : emailTemplate
