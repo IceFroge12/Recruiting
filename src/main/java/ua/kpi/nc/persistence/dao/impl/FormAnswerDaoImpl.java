@@ -67,6 +67,7 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + ANSWER_COL + " = ?, " + ID_VARIANT_COL
             + " = ? WHERE " + ID_COL + "= ?;";
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = ?;";
+    private static final String SQL_DELETE_NOT_PRESENTED = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_APPLICATION_FORM_COL + " = ? ";
     private static Logger log = LoggerFactory.getLogger(FormAnswerDaoImpl.class.getName());
 
     public FormAnswerDaoImpl(DataSource dataSource) {
@@ -163,4 +164,26 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
         return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, formAnswer.getAnswer(),
                 formAnswer.getFormQuestion().getId(), variant != null ? variant.getId() : null, formAnswer.getInterview().getId());
     }
+
+	@Override
+	public void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm, Connection connection) {
+		log.trace("Deleting form answers from appliction form {}", applicationForm.getId());
+		String sql = SQL_DELETE_NOT_PRESENTED;
+		if(!presentedAnswers.isEmpty()) {
+			StringBuilder notInQuery = new StringBuilder(" AND " + ID_COL + " NOT IN (");
+			int i = 0;
+			for(FormAnswer formAnswer : presentedAnswers ) {
+				if (formAnswer.getId() != null) {
+					if (i++ == 0)
+						notInQuery.append(Long.toString(formAnswer.getId()));
+					else
+						notInQuery.append("," + formAnswer.getId());
+				}
+			}
+			notInQuery.append(')');
+			sql += notInQuery;
+			System.out.println(sql);
+		}		
+		jdbcDaoSupport.getJdbcTemplate().update(sql, connection, applicationForm.getId());
+	}
 }

@@ -73,4 +73,6 @@ public interface ApplicationFormDao {
 	List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
 
 	Long getCountApprovedAppForm();
+
+	int updateApplicationForm(ApplicationForm applicationForm, Connection connection);
 }

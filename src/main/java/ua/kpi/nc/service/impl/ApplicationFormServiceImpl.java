@@ -188,4 +188,29 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	public Long getCountApprovedAppForm() {
 		return applicationFormDao.getCountApprovedAppForm();
 	}
+	
+	@Override
+	public boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm) {
+		try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+			connection.setAutoCommit(false);
+			applicationFormDao.updateApplicationForm(applicationForm, connection);
+			FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
+			formAnswerDao.deleteNotPresented(applicationForm.getAnswers(), applicationForm, connection);
+			for (FormAnswer formAnswer : applicationForm.getAnswers()) {
+				if (formAnswer.getId() == null) {
+					formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
+							applicationForm, connection);
+				} else {
+					formAnswerDao.updateFormAnswer(formAnswer);
+				}
+			}
+			connection.commit();
+		} catch (SQLException e) {
+			if (log.isWarnEnabled()) {
+				log.error("Cannot update Application form", e);
+			}
+			return false;
+		}
+		return true;
+	}
 }

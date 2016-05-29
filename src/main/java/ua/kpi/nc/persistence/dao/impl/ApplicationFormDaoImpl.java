@@ -454,4 +454,13 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
                 resultSet -> resultSet.getLong(1), StatusEnum.APPROVED.getId());
     }
+    
+	@Override
+	public int updateApplicationForm(ApplicationForm applicationForm, Connection connection) {
+		log.info("Updating application forms with id = {}" + applicationForm.getId());
+        Recruitment recruitment = applicationForm.getRecruitment();
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, applicationForm.getStatus().getId(),
+                applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
+                applicationForm.getFeedback(), recruitment != null ? recruitment.getId() : null, applicationForm.getId());
+	}
 }

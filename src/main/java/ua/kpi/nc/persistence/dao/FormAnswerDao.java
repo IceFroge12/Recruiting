@@ -35,4 +35,6 @@ public interface FormAnswerDao {
 
 	Long insertFormAnswerForInterview(FormAnswer formAnswer);
 
+	void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm, Connection connection);
+
 }

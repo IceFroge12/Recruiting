@@ -70,4 +70,6 @@ public interface ApplicationFormService {
     List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 
     List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
+
+	boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm);
 }
