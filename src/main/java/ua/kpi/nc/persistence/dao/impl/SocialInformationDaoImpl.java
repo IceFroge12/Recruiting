@@ -79,7 +79,7 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
         log.trace("Inserting social information with id_user, id_social_network  = ", user.getId(),
                 socialNetwork.getId());
         return this.getJdbcTemplate().insert(SQL_INSERT, socialInformation.getAccessInfo(), user.getId(),
-                socialNetwork.getId());
+                socialNetwork.getId(), socialInformation.getIdUserInSocialNetwork());
     }
 
     @Override

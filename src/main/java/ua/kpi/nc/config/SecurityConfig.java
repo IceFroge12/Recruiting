@@ -35,7 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserAuthServiceLoginPassword userAuthServiceLoginPassword = UserAuthServiceLoginPassword.getInstance();
 
-    private TokenAuthenticationService tokenAuthenticationService = new TokenAuthenticationService(SECRET_KEY, userAuthServiceLoginPassword);
+    private TokenHandler tokenHandlerLoginPassword = TokenHandlerLoginPassword.getInstance();
+
+    private TokenHandler tokenHandlerSocial = TokenHandlerSocial.getInstance();
+
+    private TokenAuthenticationService tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
+
+    private TokenAuthenticationService tokenAuthenticationServiceSocial = new TokenAuthenticationService(tokenHandlerSocial);
 
 
 
@@ -68,9 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, loginPasswordAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager, authenticationSuccessHandler, tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword, tokenAuthenticationServiceSocial), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword, loginPasswordAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager, authenticationSuccessHandler, tokenAuthenticationServiceSocial), UsernamePasswordAuthenticationFilter.class)
 
 
                 .exceptionHandling().and()

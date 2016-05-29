@@ -19,7 +19,8 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                 contentType: 'application/json',
                 data: {email: $scope.email, password: $scope.password}
             }).success(function (data, status, headers) {
-                TokenStorage.store(headers('X-AUTH-TOKEN'));
+                TokenStorage.clear();
+                TokenStorage.store(headers('X-AUTH-TOKEN_LOGIN_PASSWORD'), 'X-AUTH-TOKEN_LOGIN_PASSWORD');
                 $rootScope.username = data.username;
                 $rootScope.id = data.id;
                 $rootScope.role = data.role;
@@ -54,7 +55,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                             contentType: 'application/json',
                             data: {info: data}
                         }).success(function (data, status, headers) {
-                            TokenStorage.store(headers('X-AUTH-TOKEN'));
+                            TokenStorage.store(headers('X-AUTH-TOKEN_SOCIAL'), 'X-AUTH-TOKEN_SOCIAL');
                             $rootScope.username = data.username;
                             $rootScope.id = data.id;
                             $rootScope.role = data.role;

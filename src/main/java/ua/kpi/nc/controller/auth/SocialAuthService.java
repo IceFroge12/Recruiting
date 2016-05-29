@@ -27,8 +27,6 @@ public class SocialAuthService implements SocialUserDetailsService {
         return SocialAuthServiceHolder.HOLDER;
     }
 
-
-
     //TODO log
 
     @Override

@@ -45,7 +45,7 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         JsonObject obj = (JsonObject) new JsonParser().parse(request.getReader());
-        return getAuthenticationManager().authenticate(new UserAuthentication(getEmail(obj), getSocialNetworkId(request.getRequestURI()), getSocialNetworkInfo(obj)));
+        return getAuthenticationManager().authenticate(new UserAuthentication(getEmail(obj), getSocialNetworkId(request.getRequestURI()), getSocialNetworkInfo(obj), getUserSocialId(obj)));
     }
 
     @Override
@@ -86,5 +86,9 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private String getSocialNetworkInfo(JsonObject jsonObject){
         return jsonObject.getAsJsonObject(SOCiAL_NETWORK_INFO).toString();
+    }
+
+    private Long getUserSocialId(JsonObject jsonObject){
+        return jsonObject.getAsJsonObject(INFO_OBJECT).get("userID").getAsLong();
     }
 }

@@ -15,40 +15,18 @@ import java.util.Date;
 /**
  * Created by IO on 23.04.2016.
  */
-public class TokenHandler {
+public abstract class TokenHandler{
 
-    private final String secret;
-    private final UserAuthServiceLoginPassword userService;
-    private static Logger log = LoggerFactory.getLogger(TokenHandler.class);
+    protected Long epriretime;
+    protected String secret;
 
-    private final long epriretime = 60 * 1000 * 60;
-
-    public TokenHandler(String secret, UserAuthServiceLoginPassword userAuthServiceLoginPassword) {
-        this.secret = StringConditions.checkNotBlank(secret);
-        this.userService = Preconditions.checkNotNull(userAuthServiceLoginPassword);
+    public TokenHandler(){
+        this.epriretime = epriretime = 60L * 60L * 1000L;
+        this.secret = "verysecret";
     }
 
-    public User parseUserFromToken(String token) {
-        log.info("Start parsing tokne - {}", token);
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-            return userService.loadUserByUsername(claims.getSubject());
-        } catch (ExpiredJwtException e) {
-            log.error("Token expired", e);
-        }
-        return null;
-    }
 
-    public String createTokenForUser(User user) {
-        log.info("Start create token for user - {}", user.getEmail());
-        return Jwts.builder()
-                .setSubject(user.getUsername())
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .setExpiration(new Date(new Date().getTime() + epriretime))
-                .compact();
-    }
+    public abstract User parseUserFromToken(String token);
 
+    public abstract String createTokenForUser(UserAuthentication userAuthentication);
 }

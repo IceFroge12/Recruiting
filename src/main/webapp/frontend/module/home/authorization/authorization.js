@@ -5,28 +5,52 @@
 
 angular.module('appAuthorization', ['angular-loading-bar'])
     .factory('TokenStorage', function ($rootScope) {
-        var storageToken = 'auth_token';
+        var storageTokenLP = 'auth-tokenLP';
+        var storageTokenSN = 'auth-tokenSN';
+        
+        
         return {
-            store: function (token) {
+            store: function (token, title) {
                 $rootScope.authenticated = true;
-                return localStorage.setItem(storageToken, token);
+                if(title === 'X-AUTH-TOKEN_LOGIN_PASSWORD'){
+                    return localStorage.setItem(storageTokenLP, token);
+                }else if (title === 'X-AUTH-TOKEN_SOCIAL') {
+                    return localStorage.setItem(storageTokenSN, token);
+                }
+                
             },
             retrieve: function () {
-                return localStorage.getItem(storageToken);
+                if (localStorage.getItem(storageTokenLP) != undefined){
+                    return localStorage.getItem(storageTokenLP);
+                }else if (localStorage.getItem(storageTokenSN) != undefined) {
+                    return localStorage.getItem(storageTokenSN);
+                }else {
+                    return undefined;
+                }
             },
             clear: function () {
                 $rootScope.authenticated = false;
                 $rootScope.username = null;
                 $rootScope.id = null;
-                return localStorage.removeItem(storageToken);
+                localStorage.removeItem(storageTokenSN);
+                return localStorage.removeItem(storageTokenLP);
+                
             }
         };
     }).factory('TokenAuthInterceptor', function ($q, TokenStorage, $location) {
+    var storageTokenLP = 'auth-tokenLP';
+    var storageTokenSN = 'auth-tokenSN';
     return {
         request: function (config) {
             var authToken = TokenStorage.retrieve();
-            if (authToken) {
-                config.headers['X-AUTH-TOKEN'] = authToken;
+            if (authToken){
+                if (localStorage.getItem(storageTokenLP) != undefined){
+                    config.headers['X-AUTH-TOKEN_LOGIN_PASSWORD'] = authToken;
+                }else if (localStorage.getItem(storageTokenSN) != undefined) {
+                    config.headers['X-AUTH-TOKEN_SOCIAL'] = authToken;
+                }else {
+                    return config;
+                }
             }
             return config;
         },
