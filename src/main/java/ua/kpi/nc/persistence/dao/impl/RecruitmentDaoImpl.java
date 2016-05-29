@@ -18,11 +18,14 @@ import java.util.List;
 /**
  * Created by Chalienko on 22.04.2016.
  */
-public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO {
+public class RecruitmentDaoImpl implements RecruitmentDAO {
     private static Logger log = LoggerFactory.getLogger(RecruitmentDaoImpl.class.getName());
 
+    private final JdbcDaoSupport jdbcDaoSupport;
+
     public RecruitmentDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private ResultSetExtractor<Recruitment> extractor = resultSet -> {
@@ -103,19 +106,19 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
     @Override
     public Recruitment getRecruitmentById(Long id) {
         log.info("Looking for recruitment with id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_ID, extractor, id);
     }
 
     @Override
     public Recruitment getRecruitmentByName(String name) {
         log.info("Looking for recruitment with name = {}", name);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_NAME, extractor, name);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_RECRUITMENT_BY_NAME, extractor, name);
     }
 
     @Override
     public int updateRecruitment(Recruitment recruitment) {
         log.info("Update recruitment with name = {}", recruitment.getName());
-        return this.getJdbcTemplate().update(SQL_UPDATE, recruitment.getName(), recruitment.getStartDate(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, recruitment.getName(), recruitment.getStartDate(),
                 recruitment.getEndDate(), recruitment.getMaxGeneralGroup(), recruitment.getMaxAdvancedGroup(),
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(), recruitment.getTimeInterviewTech(), recruitment.getTimeInterviewSoft(),
@@ -126,7 +129,7 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
     @Override
     public boolean addRecruitment(Recruitment recruitment) {
         log.info("Insert recruitment with name = {}", recruitment.getName());
-        return this.getJdbcTemplate().insert(SQL_INSERT, recruitment.getName(), recruitment.getStartDate(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, recruitment.getName(), recruitment.getStartDate(),
                 recruitment.getEndDate(), recruitment.getMaxGeneralGroup(), recruitment.getMaxAdvancedGroup(),
                 recruitment.getRegistrationDeadline(), recruitment.getScheduleChoicesDeadline(),
                 recruitment.getStudentsOnInterview(), recruitment.getTimeInterviewTech(), recruitment.getTimeInterviewSoft(),
@@ -136,37 +139,35 @@ public class RecruitmentDaoImpl extends JdbcDaoSupport implements RecruitmentDAO
     @Override
     public int deleteRecruitment(Recruitment recruitment) {
         log.info("Delete Recruitment with id = {}", recruitment.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, recruitment.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, recruitment.getId());
     }
 
     @Override
     public List<Recruitment> getAll() {
         log.info("Get all recruitment");
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
     @Override
     public Recruitment getCurrentRecruitmnet() {
         log.trace("Getting current recruitment");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor);
     }
 
     private Long getRegisteredNumbers(Long recruitmentId) {
         log.info("Get Registered number");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_REGISTERED_COUNT, resultSet -> resultSet.getLong(1), recruitmentId);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_REGISTERED_COUNT, resultSet -> resultSet.getLong(1), recruitmentId);
     }
 
     @Override
     public List<Recruitment> getAllSorted() {
         log.info("Get sorted recruitments");
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
     }
 
     @Override
     public Recruitment getLastRecruitment() {
         log.info("Get last recruitment");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST_N_RECRUITMENT, extractor, 1);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_LAST_N_RECRUITMENT, extractor, 1);
     }
-
-
 }

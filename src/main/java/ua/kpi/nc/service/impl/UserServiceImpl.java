@@ -57,9 +57,7 @@ public class UserServiceImpl implements UserService {
             }
             connection.commit();
         } catch (SQLException e) {
-            if (log.isWarnEnabled()) {
-                log.error("Cannot insert user", e);
-            }
+            log.error("Cannot insert user {}", e);
             return false;
         }
         return true;

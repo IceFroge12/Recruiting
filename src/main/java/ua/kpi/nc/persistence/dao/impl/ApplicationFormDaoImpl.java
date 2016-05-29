@@ -19,18 +19,20 @@ import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
-public class ApplicationFormDaoImpl extends JdbcDaoSupport implements ApplicationFormDao {
+public class ApplicationFormDaoImpl implements ApplicationFormDao {
 
-    static final String ID_COL = "id";
-    static final String ID_STATUS_COL = "id_status";
-    static final String IS_ACTIVE_COL = "is_active";
-    static final String ID_RECRUITMENT_COL = "id_recruitment";
-    static final String PHOTO_SCOPE_COL = "photo_scope";
-    static final String ID_USER_COL = "id_user";
-    static final String DATE_CREATE_COL = "date_create";
-    static final String FEEDBACK = "feedback";
+    private final JdbcDaoSupport jdbcDaoSupport;
 
-    static final String TABLE_NAME = "application_form";
+    private static final String ID_COL = "id";
+    private static final String ID_STATUS_COL = "id_status";
+    private static final String IS_ACTIVE_COL = "is_active";
+    private static final String ID_RECRUITMENT_COL = "id_recruitment";
+    private static final String PHOTO_SCOPE_COL = "photo_scope";
+    private static final String ID_USER_COL = "id_user";
+    private static final String DATE_CREATE_COL = "date_create";
+    private static final String FEEDBACK = "feedback";
+
+    private static final String TABLE_NAME = "application_form";
 
     private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
         ApplicationForm applicationForm = new ApplicationFormImpl();
@@ -176,7 +178,10 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
 
-    private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =? and id_status=?";
+    private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount " +
+            "from application_form WHERE id_recruitment =?";
+    private static final String SQL_GET_APPROVED_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount " +
+            "from application_form WHERE id_recruitment =? and id_status=?";
 
     private static final String SQL_GET_All = "SELECT a.id,  a.id_status, a.is_active,a."
             + "id_recruitment, a.photo_scope, a.id_user, a.date_create, a.feedback, s.title \n" + "FROM \""
@@ -186,7 +191,8 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     public ApplicationFormDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
@@ -197,45 +203,45 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return this.getJdbcTemplate().queryForList(SQL_GET_SEARCH_APP_FORMS, extractor, id, "%" + lastName + "%",
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_SEARCH_APP_FORMS, extractor, id, "%" + lastName + "%",
                 fromRows, rowsNum);
     }
 
     @Override
     public ApplicationForm getById(Long id) {
         log.info("Looking for application form with id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<ApplicationForm> getByUserId(Long id) {
         log.info("Looking for application forms of user with id = {}", id);
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_USER_ID, extractor, id);
     }
 
     @Override
     public List<ApplicationForm> getByStatus(String status) {
         log.info("Looking for application forms with status = ", status);
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATUS, extractor, status);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_STATUS, extractor, status);
     }
 
     @Override
     public List<ApplicationForm> getByState(boolean state) {
         log.info("Looking for application forms with is_active = {}", state);
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_STATE, extractor, state);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_STATE, extractor, state);
     }
 
     @Override
     public int deleteApplicationForm(ApplicationForm applicationForm) {
         log.info("Deleting application form with id = ", applicationForm.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, applicationForm.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, applicationForm.getId());
     }
 
     @Override
     public Long insertApplicationForm(ApplicationForm applicationForm, Connection connection) {
         log.info("Inserting application forms with user_id = " + applicationForm.getUser().getId());
         Recruitment recruitment = applicationForm.getRecruitment();
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, applicationForm.getStatus().getId(),
                 applicationForm.isActive(), recruitment != null ? recruitment.getId() : null,
                 applicationForm.getPhotoScope(), applicationForm.getUser().getId(), applicationForm.getDateCreate(),
                 applicationForm.getFeedback());
@@ -245,7 +251,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     public int updateApplicationForm(ApplicationForm applicationForm) {
         log.info("Updating application forms with id = {}" + applicationForm.getId());
         Recruitment recruitment = applicationForm.getRecruitment();
-        return this.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, applicationForm.getStatus().getId(),
                 applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
                 applicationForm.getFeedback(), recruitment != null ? recruitment.getId() : null, applicationForm.getId());
     }
@@ -253,37 +259,37 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     @Override
     public List<ApplicationForm> getAll() {
         log.info("Get all application forms");
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
     @Override
     public Long getCountRejectedAppForm() {
         log.info("Looking for Count Rejected AppForm");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(8));
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(8));
     }
 
     @Override
     public Long getCountToWorkAppForm() {
         log.info("Looking for Count To Work AppForm");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(5));
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(5));
     }
 
     @Override
     public Long getCountGeneralAppForm() {
         log.info("Looking for Count General AppForm");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(6));
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(6));
     }
 
     @Override
     public Long getCountAdvancedAppForm() {
         log.info("Looking for Count Advanced AppForm");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(7));
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(7));
     }
 
     ;
 
     private List<Interview> getInterviews(Long applicationFormId) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, (ResultSetExtractor<Interview>) resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, (ResultSetExtractor<Interview>) resultSet -> {
             InterviewProxy interviewProxy = new InterviewProxy(resultSet.getLong("id"));
             return interviewProxy;
         }, applicationFormId);
@@ -292,14 +298,14 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     private static final String SQL_GET_ANSWERS = "SELECT fa.id\n FROM \"form_answer\" fa\n WHERE fa.id_application_form = ?;";
 
     private List<FormAnswer> getAnswers(Long applicationFormId) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
             FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
             return formAnswerProxy;
         }, applicationFormId);
     }
 
     private List<FormQuestion> getQuestions(Long applicationFormId) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT distinct q.id from form_question q join form_answer "
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT distinct q.id from form_question q join form_answer "
                 + "a on (q.id= a.id_question) where a.id_application_form = ?;", resultSet -> {
             List<FormQuestion> questions = new ArrayList<>();
             do {
@@ -312,47 +318,49 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     @Override
     public ApplicationForm getCurrentApplicationFormByUserId(Long id) {
         log.trace("Looking for current application form with user id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_CURRENT, extractor, id);
     }
 
     @Override
     public List<ApplicationForm> getOldApplicationFormsByUserId(Long id) {
         log.trace("Looking for current application form with user id = {}", id);
-        return this.getJdbcTemplate().queryForList(SQL_GET_All, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_All, extractor, id);
     }
 
 
     @Override
     public ApplicationForm getLastApplicationFormByUserId(Long id) {
         log.trace("Looking for last application form with user id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_LAST, extractor, id, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_LAST, extractor, id, id);
     }
 
     @Override
     public List<ApplicationForm> getByInterviewer(User interviewer) {
         log.trace("Looking for application forms, thar are assigned for interviewer with id = {}", interviewer.getId());
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEWER, extractor, interviewer.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEWER, extractor, interviewer.getId());
     }
 
     @Override
     public boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role) {
-        return this.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1),
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1),
                 role.getId(), applicationForm.getId());
     }
 
     @Override
     public int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus) {
-        return this.getJdbcTemplate().update(SQL_CHANGE_STATUS, toIdStatus, fromIdStatus);
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_CHANGE_STATUS, toIdStatus, fromIdStatus);
     }
 
     @Override
     public Long getCountRecruitmentStudents(Long id) {
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS, new ResultSetExtractor<Long>() {
-            @Override
-            public Long extractData(ResultSet resultSet) throws SQLException {
-                return resultSet.getLong("rowcount");
-            }
-        }, id, 3);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS,
+                resultSet -> resultSet.getLong("rowcount"), id);
+    }
+
+    @Override
+    public Long getApprovedStudentsByRecruitmentId(Long id) {
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_APPROVED_RECRUITMENT_STUDENTS,
+                resultSet -> resultSet.getLong("rowcount"), id, 3);
     }
 
 
@@ -360,13 +368,13 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
     public List<ApplicationForm> getCurrentApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase) {
         log.info("Looking for current application  forms");
         String sql = increase ? SQL_GET_CURRENT_APP_FORMS_ASC : SQL_GET_CURRENT_APP_FORMS_DESC;
-        return this.getJdbcTemplate().queryForList(sql, extractor, sortingCol, fromRow, rowsNum);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(sql, extractor, sortingCol, fromRow, rowsNum);
     }
 
     @Override
     public List<ApplicationForm> getCurrentApplicationForms() {
         log.info("Looking for current application  forms");
-        return this.getJdbcTemplate().queryForList(SQL_GET_CURRENT_APP_FORMS, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_CURRENT_APP_FORMS, extractor);
     }
 
     @Override
@@ -375,7 +383,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         String sql = SQL_GET_All_APP_FORMS_SORTED;
         sql += sortingCol.toString();
         sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
-        return this.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(sql, extractor, fromRow, rowsNum);
     }
 
     @Override
@@ -414,36 +422,36 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
         sql += sortingCol.toString();
         sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
 
-        return this.getJdbcTemplate().queryForList(sql, extractor, isActive, fromRow, rowsNum);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(sql, extractor, isActive, fromRow, rowsNum);
     }
 
     @Override
     public Long getCountInReviewAppForm() {
         log.info("Looking for Count In review AppForm");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
                 resultSet -> resultSet.getLong(1), StatusEnum.IN_REVIEW.getId());
     }
 
     @Override
     public List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment) {
-        return getJdbcTemplate().queryForList(SQL_GET_BY_STATUS_RECRUITMENT, extractor, status.getId(),
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_STATUS_RECRUITMENT, extractor, status.getId(),
                 recruitment.getId());
     }
 
     @Override
     public List<ApplicationForm> getByRecruitment(Recruitment recruitment) {
-        return getJdbcTemplate().queryForList(SQL_GET_RECRUITMENT, extractor, recruitment.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_RECRUITMENT, extractor, recruitment.getId());
     }
 
     @Override
     public List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment) {
-        return getJdbcTemplate().queryForList(SQL_GET_REJECTED_AFTER_INTERVIEW, extractor, recruitment.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_REJECTED_AFTER_INTERVIEW, extractor, recruitment.getId());
     }
 
     @Override
     public Long getCountApprovedAppForm() {
         log.info("Looking for Count of approved AppForm");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
                 resultSet -> resultSet.getLong(1), StatusEnum.APPROVED.getId());
     }
 }

@@ -4,95 +4,188 @@ import ua.kpi.nc.persistence.dao.DaoFactory;
 import ua.kpi.nc.service.impl.*;
 
 /**
- * Created by dima on 20.04.16.
+ * Created by Chalienko on 20.04.16.
  */
 public class ServiceFactory {
+    private static UserService userService;
+    private static RoleService roleService;
+    private static RecruitmentService recruitmentService;
+    private static ApplicationFormService applicationFormService;
+    private static DecisionService decisionService;
+    private static EmailTemplateService emailTemplateService;
+    private static FormAnswerService formAnswerService;
+    private static FormAnswerVariantService formAnswerVariantService;
+    private static FormQuestionService formQuestionService;
+    private static InterviewService interviewService;
+    private static NotificationTypeService notificationTypeService;
+    private static QuestionTypeService questionTypeService;
+    private static ReportService reportService;
+    private static ScheduleTimePointService scheduleTimePointService;
+    private static SocialInformationService socialInformationService;
+    private static SocialNetworkService socialNetworkService;
+    private static StatusService statusService;
+    private static TimePriorityTypeService timePriorityTypeService;
+    private static UserTimePriorityService userTimePriorityService;
+    private static SendMessageService sendMessageService;
+    private static SchedulingSettingsService schedulingSettingsService;
+    private static DaoUtilService daoUtilService;
+
+
+    private ServiceFactory() {
+    }
 
     public static UserService getUserService() {
-        return new UserServiceImpl(DaoFactory.getUserDao());
+        if(userService == null){
+            userService = new UserServiceImpl(DaoFactory.getUserDao());
+        }
+        return userService;
     }
 
     public static RoleService getRoleService() {
-        return new RoleServiceImpl(DaoFactory.getRoleDao());
+        if (roleService == null){
+            roleService = new RoleServiceImpl(DaoFactory.getRoleDao());
+        }
+        return roleService;
     }
 
     public static RecruitmentService getRecruitmentService() {
-        return new RecruitmentServiceImpl(DaoFactory.getRecruitmentDao());
+        if (recruitmentService == null) {
+            recruitmentService = new RecruitmentServiceImpl(DaoFactory.getRecruitmentDao());
+        }
+        return recruitmentService;
     }
 
     public static ApplicationFormService getApplicationFormService() {
-        return new ApplicationFormServiceImpl(DaoFactory.getApplicationFormDao());
+        if (applicationFormService == null) {
+            applicationFormService = new ApplicationFormServiceImpl(DaoFactory.getApplicationFormDao());
+        }
+        return applicationFormService;
     }
 
     public static DecisionService getDecisionService() {
-        return new DecisionServiceImpl(DaoFactory.getDecisionDao());
+        if (decisionService == null) {
+            decisionService = new DecisionServiceImpl(DaoFactory.getDecisionDao());
+        }
+        return decisionService;
     }
 
     public static EmailTemplateService getEmailTemplateService() {
-        return new EmailTemplateServiceImpl(DaoFactory.getEmailTemplateDao());
+        if (emailTemplateService == null) {
+            emailTemplateService = new EmailTemplateServiceImpl(DaoFactory.getEmailTemplateDao());
+        }
+        return emailTemplateService;
     }
 
     public static FormAnswerService getFormAnswerService() {
-        return new FormAnswerServiceImpl(DaoFactory.getFormAnswerDao());
+        if (formAnswerService == null) {
+            formAnswerService = new FormAnswerServiceImpl(DaoFactory.getFormAnswerDao());
+        }
+        return formAnswerService;
     }
 
     public static FormAnswerVariantService getFormAnswerVariantService() {
-        return new FormAnswerVariantServiceImpl(DaoFactory.getFormAnswerVariantDao(), DaoFactory.getFormQuestionDao());
+        if (formAnswerVariantService == null) {
+            formAnswerVariantService = new FormAnswerVariantServiceImpl(DaoFactory.getFormAnswerVariantDao(),
+                    DaoFactory.getFormQuestionDao());
+        }
+        return formAnswerVariantService;
     }
 
     public static FormQuestionService getFormQuestionService() {
-        return new FormQuestionServiceImpl(DaoFactory.getFormQuestionDao());
+        if (formQuestionService == null) {
+            formQuestionService = new FormQuestionServiceImpl(DaoFactory.getFormQuestionDao());
+        }
+        return formQuestionService;
     }
 
     public static InterviewService getInterviewService() {
-        return new InterviewServiceImpl(DaoFactory.getInterviewDao());
+        if (interviewService == null) {
+            interviewService = new InterviewServiceImpl(DaoFactory.getInterviewDao());
+        }
+        return interviewService;
     }
 
     public static NotificationTypeService getNotificationTypeService() {
-        return new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
+        if (notificationTypeService == null) {
+            notificationTypeService = new NotificationTypeServiceImpl(DaoFactory.getNotificationTypeDao());
+        }
+        return notificationTypeService;
     }
 
     public static QuestionTypeService getQuestionTypeService() {
-        return new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
+        if (questionTypeService == null) {
+            questionTypeService = new QuestionTypeServiceImpl(DaoFactory.getQuestionTypeDao());
+        }
+        return questionTypeService;
     }
 
     public static ReportService getReportService() {
-        return new ReportServiceImpl(DaoFactory.getReportDao());
+        if (reportService == null) {
+            reportService = new ReportServiceImpl(DaoFactory.getReportDao());
+        }
+        return reportService;
     }
 
     public static ScheduleTimePointService getScheduleTimePointService() {
-        return new ScheduleTimePointServiceImpl(DaoFactory.getScheduleTimePointDao());
+        if(scheduleTimePointService == null){
+            scheduleTimePointService = new ScheduleTimePointServiceImpl(DaoFactory.getScheduleTimePointDao());
+        }
+        return scheduleTimePointService;
     }
 
     public static SocialInformationService getSocialInformationService() {
-        return new SocialInformationServiceImpl(DaoFactory.getSocialInformationDao());
+        if (socialInformationService == null) {
+            socialInformationService = new SocialInformationServiceImpl(DaoFactory.getSocialInformationDao());
+        }
+        return socialInformationService;
     }
 
     public static SocialNetworkService getSocialNetworkService() {
-        return new SocialNetworkServiceImpl(DaoFactory.getSocialNetworkDao());
+        if (socialNetworkService == null) {
+            socialNetworkService = new SocialNetworkServiceImpl(DaoFactory.getSocialNetworkDao());
+        }
+        return socialNetworkService;
     }
 
     public static StatusService getStatusService() {
-        return new StatusServiceImpl(DaoFactory.getStatusDao());
+        if (statusService == null) {
+            statusService = new StatusServiceImpl(DaoFactory.getStatusDao());
+        }
+        return statusService;
     }
 
     public static TimePriorityTypeService getTimePriorityTypeService() {
-        return new TimePriorityTypeServiceImpl(DaoFactory.getTimePriorityDao());
+        if (timePriorityTypeService == null) {
+            timePriorityTypeService = new TimePriorityTypeServiceImpl(DaoFactory.getTimePriorityDao());
+        }
+        return timePriorityTypeService;
     }
 
     public static UserTimePriorityService getUserTimePriorityService() {
-        return new UserTimePriorityServiceImpl(DaoFactory.getUserTimePriorityDao());
+        if (userTimePriorityService == null) {
+            userTimePriorityService = new UserTimePriorityServiceImpl(DaoFactory.getUserTimePriorityDao());
+        }
+        return userTimePriorityService;
     }
 
     public static SendMessageService getResendMessageService() {
-        return new SendMessageServiceImpl(DaoFactory.getResendMessageDao());
+        if (sendMessageService == null) {
+            sendMessageService = new SendMessageServiceImpl(DaoFactory.getResendMessageDao());
+        }
+        return sendMessageService;
     }
 
     public static SchedulingSettingsService getSchedulingSettingsService() {
-        return new SchedulingSettingsServiceImpl(DaoFactory.getSchedulingSettingsDao());
+        if (schedulingSettingsService == null) {
+            schedulingSettingsService = new SchedulingSettingsServiceImpl(DaoFactory.getSchedulingSettingsDao());
+        }
+        return schedulingSettingsService;
     }
 
-    public static DaoUtilService getDaoUtilService(){
-        return new DaoUtilServiceImpl(DaoFactory.getDaoUtil());
+    public static DaoUtilService getDaoUtilService() {
+        if (daoUtilService == null) {
+            daoUtilService = new DaoUtilServiceImpl(DaoFactory.getDaoUtil());
+        }
+        return daoUtilService;
     }
 }

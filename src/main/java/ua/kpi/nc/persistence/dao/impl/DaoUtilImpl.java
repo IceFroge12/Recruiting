@@ -9,19 +9,21 @@ import javax.sql.DataSource;
 /**
  * Created by IO on 21.05.2016.
  */
-public class DaoUtilImpl extends JdbcDaoSupport implements DaoUtil {
+public class DaoUtilImpl implements DaoUtil {
 
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static final String SQL_CONNECTION_TEST = "SELECT VERSION()";
 
     public DaoUtilImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private ResultSetExtractor<String> extractor = resultSet -> resultSet.getString("version");
 
     @Override
     public boolean checkConnection() {
-        return null != this.getJdbcTemplate().queryWithParameters(SQL_CONNECTION_TEST, extractor);
+        return null != jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_CONNECTION_TEST, extractor);
     }
 }

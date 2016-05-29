@@ -15,7 +15,9 @@ import java.util.List;
 /**
  * @author Korzh
  */
-public class ResendMessageDaoImpl extends JdbcDaoSupport implements ResendMessageDao {
+public class ResendMessageDaoImpl implements ResendMessageDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<ResendMessage> extractor = resultSet -> {
         ResendMessage resendMessage = new ResendMessage();
@@ -43,38 +45,38 @@ public class ResendMessageDaoImpl extends JdbcDaoSupport implements ResendMessag
     private static Logger log = LoggerFactory.getLogger(RecruitmentDaoImpl.class.getName());
 
     public ResendMessageDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public ResendMessage getById(Long id) {
-        log.info("Getting Resend Messages with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        log.info("Getting Resend Messages with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public ResendMessage getBySubject(String subject) {
-        log.info("Getting Resend Messages with subject = ", subject);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_SUBJECT, extractor, subject);
+        log.info("Getting Resend Messages with subject = {}", subject);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_SUBJECT, extractor, subject);
     }
 
     @Override
     public Long insert(ResendMessage resendMessage) {
-        log.info("Inserting Resend Messages with id = ", resendMessage.getId());
-        return this.getJdbcTemplate().insert(SQL_INSERT, resendMessage.getId(), resendMessage.getSubject(),
+        log.info("Inserting Resend Messages with id = {}", resendMessage.getId());
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, resendMessage.getId(), resendMessage.getSubject(),
                 resendMessage.getText(), resendMessage.getEmail());
     }
 
     @Override
     public int delete(ResendMessage resendMessage) {
-        log.info("Deleting Resend Messages with Id = ", resendMessage.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, resendMessage.getId());
+        log.info("Deleting Resend Messages with Id = {}", resendMessage.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, resendMessage.getId());
     }
 
     @Override
     public List<ResendMessage> getAll() {
         log.info("Getting all Resend Messages");
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
-
 }

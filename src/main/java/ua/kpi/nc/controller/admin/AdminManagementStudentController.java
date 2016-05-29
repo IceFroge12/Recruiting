@@ -186,7 +186,6 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "getCountOfStudents", method = RequestMethod.GET)
     public Long getCountOfStudents() {
-
         return userService.getAllStudentCount();
     }
 

@@ -39,10 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private TokenAuthenticationService tokenAuthenticationService = new TokenAuthenticationService(SECRET_KEY, userAuthService);
 
 
-
-    public SecurityConfig() {
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

@@ -15,7 +15,9 @@ import java.util.List;
 /**
  * @author Korzh
  */
-public class SendMessageDaoImpl extends JdbcDaoSupport implements SendMessageDao {
+public class SendMessageDaoImpl implements SendMessageDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     static final String TABLE_NAME = "resend_message";
     static final String ID_COL = "id";
@@ -40,62 +42,51 @@ public class SendMessageDaoImpl extends JdbcDaoSupport implements SendMessageDao
 
 
     public SendMessageDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
 
     @Override
     public Message getById(Long id) {
-        if (log.isInfoEnabled()) {
-            log.info("Getting Resend Messages with id = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new ResendMessageExtractor(), id);
+        log.info("Getting Resend Messages with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new ResendMessageExtractor(), id);
     }
 
     @Override
     public Message getBySubject(String subject) {
-        if (log.isInfoEnabled()) {
-            log.info("Getting Resend Messages with subject = " + subject);
-        }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_SUBJECT, new ResendMessageExtractor(), subject);
+        log.info("Getting Resend Messages with subject = {}", subject);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_SUBJECT, new ResendMessageExtractor(), subject);
     }
 
     @Override
     public Long insert(Message message) {
-        if (log.isInfoEnabled()) {
-            log.info("Inserting Resend Messages with id = " + message.getId());
-        }
-        return this.getJdbcTemplate().insert(SQL_INSERT, message.getSubject(),
+        log.info("Inserting Resend Messages with id = {}", message.getId());
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, message.getSubject(),
                 message.getText(), message.getEmail(), message.getStatus());
     }
 
     @Override
     public int delete(Message message) {
-        if (log.isInfoEnabled()) {
-            log.info("Deleting Resend Messages with Id = " + message.getId());
-        }
-        return this.getJdbcTemplate().update(SQL_DELETE, message.getId());
+        log.info("Deleting Resend Messages with Id = {}", message.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, message.getId());
     }
 
     @Override
     public List<Message> getAll() {
-        if (log.isInfoEnabled()) {
-            log.info("Getting all Resend Messages");
-        }
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, new ResendMessageExtractor());
+        log.info("Getting all Resend Messages");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, new ResendMessageExtractor());
     }
 
     @Override
     public int update(Message message) {
-        if (log.isInfoEnabled()) {
-            log.info("Update Resend Messages" + message.getId());
-        }
-        return this.getJdbcTemplate().update(SQL_UPDATE, message.getStatus(), message.getId());
+        log.info("Update Resend Messages {}", message.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, message.getStatus(), message.getId());
     }
 
     @Override
     public boolean isExist(Message message) {
-        int cnt = this.getJdbcTemplate().update(SQL_EXIST, message.getId());
+        int cnt = jdbcDaoSupport.getJdbcTemplate().update(SQL_EXIST, message.getId());
         return cnt > 0;
     }
 

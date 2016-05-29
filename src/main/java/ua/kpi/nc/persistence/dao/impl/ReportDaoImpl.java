@@ -23,7 +23,9 @@ import ua.kpi.nc.report.Line;
 /**
  * Created by Nikita on 24.04.2016.
  */
-public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
+public class ReportDaoImpl implements ReportDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static final String SQL_GET_BY_ID = "SELECT r.id, r.query, r.title \n FROM report r\n WHERE r.id = ?";
     private static final String SQL_GET_BY_TITLE = "SELECT r.id, r.query, r.title \n FROM report r\n WHERE r.title = ?";
@@ -34,56 +36,45 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
     private static Logger log = LoggerFactory.getLogger(ReportDaoImpl.class.getName());
 
     public ReportDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public ReportInfo getByID(Long id) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for report with id = " + id);
-        }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new ReportInfoExtractor(), id);
+        log.info("Looking for report with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, new ReportInfoExtractor(), id);
     }
 
     @Override
     public ReportInfo getByTitle(String title) {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for report with title = " + title);
-        }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE, new ReportInfoExtractor(), title);
+        log.info("Looking for report with title = {}", title);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE, new ReportInfoExtractor(), title);
     }
 
     @Override
     public Set<ReportInfo> getAll() {
-        if (log.isTraceEnabled()) {
-            log.trace("Get all reports");
-        }
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, new ReportInfoExtractor());
+        log.info("Get all reports");
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL, new ReportInfoExtractor());
     }
 
     @Override
     public Long insertReport(ReportInfo report) {
-        if (log.isTraceEnabled()) {
-            log.trace("Inserting report with title = " + report.getTitle());
-        }
-        return this.getJdbcTemplate().insert(SQL_INSERT, report.getQuery(), report.getTitle());
+        log.info("Inserting report with title = {}", report.getTitle());
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, report.getQuery(), report.getTitle());
     }
 
     @Override
     public int updateReport(ReportInfo report) {
-        if (log.isTraceEnabled()) {
-            log.trace("Updating report with id = " + report.getId());
-        }
-        return this.getJdbcTemplate().update(SQL_UPDATE, report.getQuery(), report.getTitle(), report.getId());
+        log.info("Updating report with id = {}", report.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, report.getQuery(), report.getTitle(), report.getId());
 
     }
 
     @Override
     public int deleteReport(ReportInfo report) {
-        if (log.isTraceEnabled()) {
-            log.trace("Delete report with id = " + report.getId());
-        }
-        return this.getJdbcTemplate().update(SQL_DELETE, report.getId());
+        log.info("Delete report with id = {}", report.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, report.getId());
     }
 
     private final class ReportInfoExtractor implements ResultSetExtractor<ReportInfo> {
@@ -102,7 +93,7 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
 
     @Override
     public List<Line> extractWithMetaData(ReportInfo reportInfo) {
-        return this.getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportWithMetaDataExtractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), reportWithMetaDataExtractor);
     }
 
     private final ResultSetExtractor<List<Line>> reportWithMetaDataExtractor = resultSet -> {
@@ -129,7 +120,7 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
     @Override
     public Line getAnswerVariantLine(ReportInfo reportInfo, FormQuestion question,
                                      FormAnswerVariant formAnswerVariant) {
-        return this.getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(reportInfo.getQuery(), resultSet -> {
             Line line = new Line();
             do {
                 line.addCell(resultSet.getObject(AMOUNT_COL));
@@ -137,5 +128,4 @@ public class ReportDaoImpl extends JdbcDaoSupport implements ReportDao {
             return line;
         }, question.getId(), formAnswerVariant.getId());
     }
-
 }

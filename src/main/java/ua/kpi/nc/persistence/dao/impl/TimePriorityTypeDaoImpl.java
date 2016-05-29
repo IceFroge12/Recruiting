@@ -15,7 +15,10 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 /**
  * @author Korzh
  */
-public class TimePriorityTypeDaoImpl extends JdbcDaoSupport implements TimePriorityTypeDao {
+public class TimePriorityTypeDaoImpl implements TimePriorityTypeDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
+
     private static Logger log = LoggerFactory.getLogger(TimePriorityTypeDaoImpl.class.getName());
     private static final String GET_BY_ID = "SELECT t.id, t.choice FROM public.time_priority_type t WHERE t.id = ?;";
     private static final String GET_ALL = "SELECT t.id, t.choice FROM public.time_priority_type t";
@@ -29,24 +32,25 @@ public class TimePriorityTypeDaoImpl extends JdbcDaoSupport implements TimePrior
     };
 
     public TimePriorityTypeDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public TimePriorityType getByID(Long id) {
-        log.trace("Looking for form Time Priority type with id  = ", id);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
+        log.info("Looking for form Time Priority type with id  = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
     }
 
     @Override
     public TimePriorityType getByPriority(String choice) {
-        log.trace("Looking for form Time Priority type with priority  = ", choice);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_PRIORITY, extractor, choice);
+        log.info("Looking for form Time Priority type with priority  = {}", choice);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_PRIORITY, extractor, choice);
     }
 
     @Override
     public List<TimePriorityType> getAll() {
-        log.trace("Get all time priorities");
-        return this.getJdbcTemplate().queryForList(GET_ALL, extractor);
+        log.info("Get all time priorities");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL, extractor);
     }
 }

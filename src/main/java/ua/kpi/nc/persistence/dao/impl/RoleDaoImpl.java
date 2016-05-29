@@ -22,7 +22,9 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
  * Created by Chalienko on 13.04.2016.
  */
 
-public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
+public class RoleDaoImpl implements RoleDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<Role> extractor = resultSet -> {
         Role role = new RoleImpl();
@@ -53,23 +55,24 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 			+ "(SELECT i.interviewer_role  FROM interview i WHERE i.id_application_form = ?)";
 
     public RoleDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public Role getByID(Long id) {
-        log.trace("Looking for role with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        log.info("Looking for role with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public Role getByTitle(String title) {
-        log.trace("Looking for role with title = ", title);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE, extractor, title);
+        log.info("Looking for role with title = {}", title);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE, extractor, title);
     }
 
     private Set<User> getUsers(Long roleId) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT u.id\n" + "FROM \"user\" u\n"
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT u.id\n" + "FROM \"user\" u\n"
                 + "INNER JOIN user_role ur on ur.id_user = u.id WHERE ur.id_role = ?;", resultSet -> {
             Set<User> set = new HashSet<>();
             do {
@@ -81,31 +84,31 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 
     @Override
     public Long insertRole(Role role) {
-        log.trace("Inserting role with name = ", role.getRoleName());
-        return this.getJdbcTemplate().insert(SQL_INSERT, role.getRoleName());
+        log.info("Inserting role with name = {}", role.getRoleName());
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, role.getRoleName());
     }
 
     @Override
     public int updateRole(Role role) {
-        log.trace("Updating role with id = ", role.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, role.getRoleName(), role.getId());
+        log.info("Updating role with id = ", role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, role.getRoleName(), role.getId());
     }
 
     @Override
     public int deleteRole(Role role) {
-        log.trace("Deleting role with id = ", role.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, role.getId());
+        log.info("Deleting role with id = ", role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, role.getId());
     }
 
     @Override
     public Set<Role> getAll() {
-        log.trace("Getting all roles");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
+        log.info("Getting all roles");
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
     }
 
 	@Override
 	public List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer) {
-		log.trace("Looking for possible interviews roles for application form with id = {} and interviewer with id = {}", applicationForm.getId(), interviewer.getId());
-		return this.getJdbcTemplate().queryForList(SQL_GET_POSSIBLE_INTERVIEWS, extractor, interviewer.getId(), applicationForm.getId());
+		log.info("Looking for possible interviews roles for application form with id = {} and interviewer with id = {}", applicationForm.getId(), interviewer.getId());
+		return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_POSSIBLE_INTERVIEWS, extractor, interviewer.getId(), applicationForm.getId());
 	}
 }

@@ -21,7 +21,9 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 /**
  * @author Korzh
  */
-public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements ScheduleTimePointDao {
+public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(ScheduleTimePointDaoImpl.class.getName());
 
@@ -35,7 +37,8 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
     };
 
     public ScheduleTimePointDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private static final String GET_BY_ID = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.id = ?;";
@@ -81,54 +84,54 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
             objects[count] = new Object[]{scheduleTimePoint};
             count++;
         }
-        return this.getJdbcTemplate().batchUpdate(INSERT_SCHEDULE_TIME_POINT, objects);
+        return jdbcDaoSupport.getJdbcTemplate().batchUpdate(INSERT_SCHEDULE_TIME_POINT, objects);
     }
 
     @Override
     public int deleteAll() {
         log.info("Delete all rows from schedule time point");
-        return this.getJdbcTemplate().update(DELETE_ALL);
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_ALL);
     }
 
     @Override
     public ScheduleTimePoint getFinalTimePointById(Long id) {
-        log.trace("Looking for Schedule time Point with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
+        log.info("Looking for Schedule time Point with id = ", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<ScheduleTimePoint> getFinalTimePointByUserId(Long id) {
-        log.trace("Looking for Schedule time Point with User_id = ", id);
-        return this.getJdbcTemplate().queryForList(FINAL_TIME_POINT_BY_USER_ID, extractor, id);
+        log.info("Looking for Schedule time Point with User_id = ", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(FINAL_TIME_POINT_BY_USER_ID, extractor, id);
     }
 
     @Override
     public Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        log.trace("Inserting Schedule time Point with id = ", scheduleTimePoint.getId());
-        return this.getJdbcTemplate().insert(INSERT_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint());
+        log.info("Inserting Schedule time Point with id = ", scheduleTimePoint.getId());
+        return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint());
     }
 
     @Override
     public int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        log.trace("Updating Schedule time Point with id = ", scheduleTimePoint.getId());
-        return this.getJdbcTemplate().update(UPDATE_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint(),
+        log.info("Updating Schedule time Point with id = ", scheduleTimePoint.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(UPDATE_SCHEDULE_TIME_POINT, scheduleTimePoint.getTimePoint(),
                 scheduleTimePoint.getId());
     }
 
     @Override
     public int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        log.trace("Deleting Schedule time Point with id = ", scheduleTimePoint.getId());
-        return this.getJdbcTemplate().update(DELETE_SCHEDULE_TIME_POINT, scheduleTimePoint.getId());
+        log.info("Deleting Schedule time Point with id = ", scheduleTimePoint.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_SCHEDULE_TIME_POINT, scheduleTimePoint.getId());
     }
 
     @Override
     public int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint) {
-        log.trace("Deleting user_time_final with user id = ", user.getId());
-        return this.getJdbcTemplate().update(DELETE_USER_TIME_FINAL, user.getId(), scheduleTimePoint.getId());
+        log.info("Deleting user_time_final with user id = ", user.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_USER_TIME_FINAL, user.getId(), scheduleTimePoint.getId());
     }
 
     private Set<User> getUsersFinalInTimePoint(Long timeID) {
-        return this.getJdbcTemplate().queryWithParameters(USERS_FINAL_TIME_QUERY, resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(USERS_FINAL_TIME_QUERY, resultSet -> {
             Set<User> set = new HashSet<>();
             do {
                 set.add(new UserProxy(resultSet.getLong("id")));
@@ -138,7 +141,7 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
     }
 
     private Set<UserTimePriority> getUserTimePriority(Long timeID, ScheduleTimePoint scheduleTimePoint) {
-        return this.getJdbcTemplate().queryWithParameters(USER_TIME_PRIORITY, resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(USER_TIME_PRIORITY, resultSet -> {
             Set<UserTimePriority> set = new HashSet<>();
             do {
                 set.add(new UserTimePriority(new UserProxy(resultSet.getLong("id_user")), scheduleTimePoint,
@@ -150,38 +153,32 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
     @Override
     public ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp) {
-        log.trace("Looking for Schedule time Point with timestamp = ", timestamp);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_TIMEPOINT, extractor, timestamp);
+        log.info("Looking for Schedule time Point with timestamp = ", timestamp);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_TIMEPOINT, extractor, timestamp);
     }
 
     @Override
     public List<ScheduleTimePoint> getAll() {
-        if (log.isTraceEnabled()) {
-            log.trace("Looking for all Schedule time Points");
-        }
-        return this.getJdbcTemplate().queryForList(GET_ALL, extractor);
+        log.info("Looking for all Schedule time Points");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL, extractor);
     }
 
     @Override
     public boolean isScheduleExists() {
-        if (log.isTraceEnabled()) {
-            log.trace("Checking the the existence of schedule final time points.");
-        }
-        return this.getJdbcTemplate().queryWithParameters(SQL_IS_SCHEDULE_EXISTS, resultSet -> resultSet.getBoolean(1));
+        log.info("Checking the the existence of schedule final time points.");
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_IS_SCHEDULE_EXISTS, resultSet -> resultSet.getBoolean(1));
     }
 
     @Override
     public boolean isScheduleDatesExists() {
-        if (log.isTraceEnabled()) {
-            log.trace("Checking the the existence of schedule dates.");
-        }
-        return this.getJdbcTemplate().queryWithParameters(SQL_IS_SCHEDULE_DATES_EXIST, resultSet -> resultSet.getBoolean(1));
+        log.info("Checking the the existence of schedule dates.");
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_IS_SCHEDULE_DATES_EXIST, resultSet -> resultSet.getBoolean(1));
     }
 
     @Override
     public Map<Long, Long> getUsersNumberInFinalTimePoint(Timestamp timePoint) {
-        log.trace("Getting number of users in time point");
-        return this.getJdbcTemplate().queryWithParameters(USERS_COUNT_IN_FINAL_TIME, resultSet -> {
+        log.info("Getting number of users in time point");
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(USERS_COUNT_IN_FINAL_TIME, resultSet -> {
             Map<Long, Long> set = new HashMap<Long, Long>();
             do set.put(resultSet.getLong(2), resultSet.getLong(1)); while (resultSet.next());
             return set;
@@ -190,7 +187,7 @@ public class ScheduleTimePointDaoImpl extends JdbcDaoSupport implements Schedule
 
     @Override
     public Long addUserToTimepoint(User user, ScheduleTimePoint timePoint) {
-        log.trace("Adding user to final timepoint");
-        return this.getJdbcTemplate().insert(INSERT_USER_TIME_FINAL, user.getId(), timePoint.getId());
+        log.info("Adding user to final timepoint");
+        return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_USER_TIME_FINAL, user.getId(), timePoint.getId());
     }
 }

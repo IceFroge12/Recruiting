@@ -136,6 +136,11 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
+	public Long getCountApprovedStudentsByRecruitmentId(Long id){
+		return applicationFormDao.getApprovedStudentsByRecruitmentId(id);
+	}
+
+	@Override
 	public List<ApplicationForm> getCurrentsApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase) {
 		return applicationFormDao.getCurrentApplicationForms(fromRow, rowsNum, sortingCol, increase);
 	}

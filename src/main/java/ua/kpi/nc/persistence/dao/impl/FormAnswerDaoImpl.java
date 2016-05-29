@@ -22,7 +22,9 @@ import java.util.List;
 /**
  * Created by Nikita on 22.04.2016.
  */
-public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
+public class FormAnswerDaoImpl implements FormAnswerDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<FormAnswer> extractor = resultSet -> {
         FormAnswer formAnswer = new FormAnswerImpl();
@@ -68,19 +70,20 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
     private static Logger log = LoggerFactory.getLogger(FormAnswerDaoImpl.class.getName());
 
     public FormAnswerDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public FormAnswer getById(Long id) {
         log.info("Looking for answer with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question) {
         log.info("Looking for answer with interview_id, question= ", interview.getId(), question.getTitle());
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEW_AND_QUESTION, extractor, interview.getId(),
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_INTERVIEW_AND_QUESTION, extractor, interview.getId(),
                 question.getId());
     }
 
@@ -91,7 +94,7 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
                 "Inserting form answer with interview_id, question_id, application form id,"
                         + "form answer variant id=",
                 interview.getId(), question.getTitle(), applicationForm.getId(), answerVariant.getId());
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formAnswer.getAnswer(), question.getId(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, formAnswer.getAnswer(), question.getId(),
                 applicationForm.getId(), answerVariant.getId(), interview.getId());
     }
 
@@ -99,20 +102,20 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
     public int updateFormAnswer(FormAnswer formAnswer) {
         log.info("Update form answer with id = ", formAnswer.getId());
         FormAnswerVariant variant = formAnswer.getFormAnswerVariant();
-        return this.getJdbcTemplate().update(SQL_UPDATE, formAnswer.getAnswer(), variant != null ? variant.getId() : null,
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, formAnswer.getAnswer(), variant != null ? variant.getId() : null,
                 formAnswer.getId());
     }
 
     @Override
     public int deleteFormAnswer(FormAnswer formAnswer) {
         log.info("Delete form answer with id = ", formAnswer.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, formAnswer.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, formAnswer.getId());
     }
 
     @Override
     public Long insertFormAnswerForApplicationForm(FormAnswer formAnswer) {
         log.info("Insert form answer with id = ", formAnswer.getId());
-        return this.getJdbcTemplate()
+        return jdbcDaoSupport.getJdbcTemplate()
                 .insert("INSERT INTO " + TABLE_NAME + " (" + ID_QUESTION_COL + ", " + ID_APPLICATION_FORM_COL + ", "
                                 + ID_VARIANT_COL + ") \n" + "VALUES (?,?,?);", formAnswer.getFormQuestion().getId(),
                         formAnswer.getApplicationForm().getId(), formAnswer.getFormAnswerVariant().getId());
@@ -121,7 +124,7 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
     @Override
     public Long insertBlankFormAnswerForApplicationForm(FormAnswer formAnswer) {
         log.info("Insert form answer with id = ", formAnswer.getId());
-        return this.getJdbcTemplate()
+        return jdbcDaoSupport.getJdbcTemplate()
                 .insert("INSERT INTO " + TABLE_NAME + " (" + ID_QUESTION_COL + ", " + ID_APPLICATION_FORM_COL + ") "
                                 + "VALUES (?,?);", formAnswer.getFormQuestion().getId(),
                         formAnswer.getApplicationForm().getId());
@@ -133,7 +136,7 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
         log.info("Inserting form answer with question_id, application form id, form answer variant id= ",
                 question.getTitle(), applicationForm.getId());
         FormAnswerVariant variant = formAnswer.getFormAnswerVariant();
-        return this.getJdbcTemplate().insert(SQL_INSERT_FOR_APPLICATION_FORM, connection, formAnswer.getAnswer(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT_FOR_APPLICATION_FORM, connection, formAnswer.getAnswer(),
                 question.getId(), applicationForm.getId(), variant != null ? variant.getId() : null);
     }
 
@@ -142,13 +145,13 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
                                              FormAnswerVariant answerVariant, Interview interview, Connection connection) {
         log.info("Inserting form answer with interview_id, question_id, form answer variant id= ", interview.getId(),
                 question.getTitle(), answerVariant != null ? answerVariant.getId() : null);
-        return this.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, connection, formAnswer.getAnswer(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, connection, formAnswer.getAnswer(),
                 question.getId(), answerVariant != null ? answerVariant.getId() : null, interview.getId());
     }
 
     @Override
     public List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_APPLICATION_FORM_AND_QUESTION, extractor,
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_APPLICATION_FORM_AND_QUESTION, extractor,
                 applicationForm.getId(), question.getId());
     }
 
@@ -157,7 +160,7 @@ public class FormAnswerDaoImpl extends JdbcDaoSupport implements FormAnswerDao {
         FormAnswerVariant variant = formAnswer.getFormAnswerVariant();
         log.info("Inserting form answer with interview_id, question_id, form answer variant id= ", formAnswer.getInterview().getId(),
                 formAnswer.getFormQuestion().getTitle(), variant != null ? variant.getId() : null);
-        return this.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, formAnswer.getAnswer(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT_FOR_INTERVIEW, formAnswer.getAnswer(),
                 formAnswer.getFormQuestion().getId(), variant != null ? variant.getId() : null, formAnswer.getInterview().getId());
     }
 }

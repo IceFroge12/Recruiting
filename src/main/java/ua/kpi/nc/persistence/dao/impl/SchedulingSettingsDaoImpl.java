@@ -13,7 +13,9 @@ import java.util.List;
 /**
  * @author Korzh
  */
-public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements SchedulingSettingsDao {
+public class SchedulingSettingsDaoImpl implements SchedulingSettingsDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(SchedulingSettingsDaoImpl.class.getName());
 
@@ -26,7 +28,8 @@ public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements Schedul
     };
 
     public SchedulingSettingsDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private static final String GET_BY_ID = "select ss.id, ss.start_time, ss.end_time from scheduling_settings ss where id = ?;";
@@ -39,38 +42,38 @@ public class SchedulingSettingsDaoImpl extends JdbcDaoSupport implements Schedul
 
     @Override
     public SchedulingSettings getById(Long id) {
-        log.trace("Looking for Scheduling Setting with id = {} = ", id);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
+        log.info("Looking for Scheduling Setting with id = {} ", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
     }
 
     @Override
     public int deleteAll() {
         log.info("Delete all rows from scheduling settings");
-        return this.getJdbcTemplate().update(DELETE_ALL);
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_ALL);
     }
 
     @Override
     public Long insertTimeRange(SchedulingSettings schedulingSettings) {
-        log.trace("Inserting Scheduling Setting with startDate = {} ", schedulingSettings.getStartDate());
-        return this.getJdbcTemplate().insert(INSERT_TIME_RANGE, schedulingSettings.getStartDate(),
+        log.info("Inserting Scheduling Setting with startDate = {} ", schedulingSettings.getStartDate());
+        return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_TIME_RANGE, schedulingSettings.getStartDate(),
                 schedulingSettings.getEndDate());
     }
 
     @Override
     public int updateTimeRange(SchedulingSettings schedulingSettings) {
-        log.trace("Updating Scheduling Setting with id = {} ", schedulingSettings.getId());
-        return this.getJdbcTemplate().update(UPDATE_TIME_RANGE, schedulingSettings.getStartDate(), schedulingSettings.getEndDate(), schedulingSettings.getId());
+        log.info("Updating Scheduling Setting with id = {} ", schedulingSettings.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(UPDATE_TIME_RANGE, schedulingSettings.getStartDate(), schedulingSettings.getEndDate(), schedulingSettings.getId());
     }
 
     @Override
     public int deleteTimeRange(Long id) {
-        log.trace("Delete Scheduling Setting with id = {}", id);
-        return this.getJdbcTemplate().update(DELETE_TIME_RANGE, id);
+        log.info("Delete Scheduling Setting with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_TIME_RANGE, id);
     }
 
     @Override
     public List<SchedulingSettings> getAll() {
-        log.trace("Getting All of Scheduling Settings ");
-        return this.getJdbcTemplate().queryForList(GET_ALL, extractor);
+        log.info("Getting All of Scheduling Settings ");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL, extractor);
     }
 }
