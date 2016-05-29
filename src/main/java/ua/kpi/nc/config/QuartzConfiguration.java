@@ -19,7 +19,7 @@ import java.util.Map;
 public class QuartzConfiguration {
 
     @Bean
-    public JobDetailFactoryBean jobDetailFactoryBean() {
+    public JobDetailFactoryBean jobDetailResendMessage() {
         JobDetailFactoryBean factory = new JobDetailFactoryBean();
         factory.setJobClass(SendMessageJob.class);
         Map<String, Object> map = new HashMap<>();
@@ -30,22 +30,23 @@ public class QuartzConfiguration {
         return factory;
     }
 
-
     @Bean
-    public CronTriggerFactoryBean cronTriggerFactoryBean() {
+    public CronTriggerFactoryBean cronTriggerResendMessage() {
         CronTriggerFactoryBean stFactory = new CronTriggerFactoryBean();
-        stFactory.setJobDetail(jobDetailFactoryBean().getObject());
+        stFactory.setJobDetail(jobDetailResendMessage().getObject());
         stFactory.setStartDelay(3000);
         stFactory.setName("mytrigger");
-        stFactory.setGroup("mygroup");
+        stFactory.setGroup("myGroup");
         stFactory.setCronExpression("0 0/1 * 1/1 * ? *");
         return stFactory;
     }
 
+    
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() {
+    public SchedulerFactoryBean schedulerResendMessage() {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
-        scheduler.setTriggers(cronTriggerFactoryBean().getObject());
+        scheduler.setTriggers(cronTriggerResendMessage().getObject());
         return scheduler;
     }
+
 }

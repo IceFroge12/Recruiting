@@ -35,15 +35,15 @@ public class StaffScheduleController {
     @RequestMapping(value = "getUserTimePriorities", method = RequestMethod.POST)
     public List<UserTimePriorityDto> getUserTimePriorities() {
         Long statusId = recruitmentService.getLastRecruitment().getSchedulingStatus().getId();
-        if(SchedulingStatusEnum.DATES.getId().equals(statusId)){
+        if (SchedulingStatusEnum.DATES.getId().equals(statusId)) {
             return userTimePriorityService.getAllTimePriorityForUserById(getCurrentUser().getId());
-        }else{
+        } else {
             return null;
         }
     }
 
     @RequestMapping(value = "getFinalTimePoints", method = RequestMethod.GET)
-    public List<Timestamp> getFinalTimePoint(){
+    public List<Timestamp> getFinalTimePoint() {
         User user = getCurrentUser();
         List<ScheduleTimePoint> scheduleTimePoints = scheduleTimePointService.getFinalTimePointByUserId(user.getId());
         List<Timestamp> finalTimePointList = scheduleTimePoints.stream().map(ScheduleTimePoint::getTimePoint).collect(Collectors.toList());

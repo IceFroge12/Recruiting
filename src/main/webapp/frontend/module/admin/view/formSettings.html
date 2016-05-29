@@ -38,7 +38,7 @@
                             </tr>
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
-                                <td>{{question.title}}</td>
+                                <td>{{question.question}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
                                     <button ng-click="changeStatus(question)"
@@ -56,7 +56,7 @@
                                 </td>
                                 <td>
                                     <ul ng-repeat="variant in question.variants track by $index ">
-                                        <li>{{variant.variant}}</li>
+                                        <li>{{variant}}</li>
                                     </ul>
                                 </td>
                                 <td>
@@ -93,7 +93,7 @@
                             </tr>
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
-                                <td>{{question.title}}</td>
+                                <td>{{question.question}}</td>
                                 <td>{{question.type}}</td>
                                 <td>
                                     <button ng-click="changeStatus(question)"
@@ -111,7 +111,7 @@
                                 </td>
                                 <td>
                                     <ul ng-repeat="variant in question.variants track by $index ">
-                                        <li>{{variant.variant}}</li>
+                                        <li>{{variant}}</li>
                                     </ul>
                                 </td>
                                 <td>
@@ -148,7 +148,7 @@
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
                                 <td>{{question.title}}</td>
-                                <td>{{question.type}}</td>
+                                <td>{{question.question}}</td>
                                 <td>
                                     <button ng-click="changeStatus(question)"
                                             ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"
@@ -165,7 +165,7 @@
                                 </td>
                                 <td>
                                     <ul ng-repeat="variant in question.variants track by $index ">
-                                        <li>{{variant.variant}}</li>
+                                        <li>{{variant}}</li>
                                     </ul>
                                 </td>
                                 <td>

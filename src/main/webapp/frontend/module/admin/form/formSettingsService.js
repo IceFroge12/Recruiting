@@ -9,18 +9,19 @@ function formSettingsService(http) {
     var service = {};
 
     service.getAllQuestionType = function () {
-        return http.post('/admin/getAllQuestionType').then(function (response) {
-            return response;
+        return http.get('/admin/getAllQuestionType').then(function (response) {
+            console.log(response.data);
+            return response.data;
         });
     };
 
     function handleSuccess(response) {
-        return ( JSON.parse("[" + response.data + "]") );
+        return response.data;
     };
 
     service.getAllQuestion = function (role) {
         var request = http({
-            method: "POST",
+            method: "GET",
             url: "/admin/getQuestions",
             params: {
                 role: role
