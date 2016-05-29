@@ -2,6 +2,7 @@ package ua.kpi.nc.persistence.dao.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import ua.kpi.nc.persistence.dao.SocialInformationDao;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
@@ -61,6 +62,9 @@ public class SocialInformationDaoImpl implements SocialInformationDao {
     private static final String SQL_EXIST_ID_IN_SOCIAL_NETWORK_AND_SOCIAL_TYPE = "SELECT EXISTS( SELECT si.id, si.access_info, si.id_user, si.id_social_network, sn.title, si.id_user_in_social_network \" +\n" +
             "            \"FROM public.social_information si JOIN public.social_network sn ON si.id_social_network = sn.id WHERE si.id_social_network = ? and si.id_user_in_social_network = ?);";
 
+    private static final String SQL_UPDATE_SOCIAL_INFORMATION = "UPDATE public.social_information si SET(si.access_info = ?)" +
+            " WHERE si.id_social_network = ? AND si.id_user_in_social_network = ?;";
+
     @Override
     public SocialInformation getById(Long id) {
         log.info("Looking for social information with id = {}", id);
@@ -117,6 +121,12 @@ public class SocialInformationDaoImpl implements SocialInformationDao {
     public boolean isExist(Long idUserInSocialNetwork, Long idSocialNetwork) {
         log.info("Search user exists social information by Id User In Social Network and Social Type = {}, {}",idUserInSocialNetwork,idSocialNetwork);
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST_ID_IN_SOCIAL_NETWORK_AND_SOCIAL_TYPE, resultSet -> resultSet.getBoolean(1),idSocialNetwork,idUserInSocialNetwork );
+    }
+
+    @Override
+    public int updateSocialInformation(Long idNetwork, Long idUser, String info) {
+        log.info("Update user social information by Id User In Social Network and Social Type = {}, {}", idUser, idNetwork);
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE_SOCIAL_INFORMATION, info, idNetwork, idUser);
     }
 
     @Override

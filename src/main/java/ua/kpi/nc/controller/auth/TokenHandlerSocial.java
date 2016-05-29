@@ -20,11 +20,11 @@ public class TokenHandlerSocial extends TokenHandler {
     private UserAuthServiceSocial userAuthServiceSocial;
     private Logger log = LoggerFactory.getLogger(TokenHandlerSocial.class);
 
-    private static class TokenHandlerSocialHolder{
+    private static class TokenHandlerSocialHolder {
         private static final TokenHandlerSocial HOLDER = new TokenHandlerSocial();
     }
 
-    public static TokenHandlerSocial getInstance(){
+    public static TokenHandlerSocial getInstance() {
         return TokenHandlerSocialHolder.HOLDER;
     }
 
@@ -36,23 +36,15 @@ public class TokenHandlerSocial extends TokenHandler {
 
     @Override
     public UserAuthentication parseUserFromToken(String token) {
-        try{
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-            try{
-                JsonObject jsonObject = ((JsonObject) new JsonParser().parse(claims.getSubject()));
-                Long idUserSocial = jsonObject.get("idUserSocial").getAsLong();
-                Long idNetwork = jsonObject.get("idNetwork").getAsLong();
-                User user =  userAuthServiceSocial.loadUserBySocialIdNetworkId(idUserSocial, idNetwork);
-                if (null != user){
-                    return new UserAuthentication(user, idUserSocial, idNetwork);
-                }
-            }catch (UnsupportedOperationException e){
-                System.out.println(e.getMessage());
+        try {
+            String subject = parse(token);
+            JsonObject jsonObject = ((JsonObject) new JsonParser().parse(subject));
+            Long idUserSocial = jsonObject.get("idUserSocial").getAsLong();
+            Long idNetwork = jsonObject.get("idNetwork").getAsLong();
+            User user = userAuthServiceSocial.loadUserBySocialIdNetworkId(idUserSocial, idNetwork);
+            if (null != user) {
+                return new UserAuthentication(user, idUserSocial, idNetwork);
             }
-
         } catch (ExpiredJwtException e) {
             log.error("Token expired", e);
         }
@@ -64,10 +56,6 @@ public class TokenHandlerSocial extends TokenHandler {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("idUserSocial", userAuthentication.getIdUserSocialNetwork());
         jsonObject.addProperty("idNetwork", userAuthentication.getIdNetwork());
-        return Jwts.builder()
-                .setSubject(jsonObject.toString())
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .setExpiration(new Date(new Date().getTime() + epriretime))
-                .compact();
+        return createToken(jsonObject.toString());
     }
 }

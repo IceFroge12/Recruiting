@@ -30,19 +30,17 @@ public class TokenHandlerLoginPassword extends TokenHandler {
         log = LoggerFactory.getLogger(TokenHandlerLoginPassword.class);
     }
 
-    public static TokenHandlerLoginPassword getInstance(){
+    public static TokenHandlerLoginPassword getInstance() {
         return TokenHandlerLoginPasswordHolder.HOLDER;
     }
 
     public UserAuthentication parseUserFromToken(String token) {
+
         log.info("Start parsing tokne - {}", token);
         try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-            User user = userService.loadUserByUsername(claims.getSubject());
-            if (null != user){
+            String subject = parse(token);
+            User user = userService.loadUserByUsername(subject);
+            if (null != user) {
                 return new UserAuthentication(user);
             }
         } catch (ExpiredJwtException e) {
@@ -54,11 +52,8 @@ public class TokenHandlerLoginPassword extends TokenHandler {
     public String createTokenForUser(UserAuthentication userAuthentication) {
         User user = userAuthentication.getDetails();
         log.info("Start create token for user - {}", user.getEmail());
-        return Jwts.builder()
-                .setSubject(user.getUsername())
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .setExpiration(new Date(new Date().getTime() + epriretime))
-                .compact();
+        return createToken(user.getUsername());
+
     }
 
 }

@@ -170,9 +170,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAuthorizedUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        return getUserByUsername(name);
+        return ((User) SecurityContextHolder.getContext().getAuthentication().getDetails());
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import ua.kpi.nc.controller.auth.Utils.FaceBookUtils;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
@@ -29,7 +30,6 @@ import java.util.*;
 public class SocialNetworkAuthenticationManager implements AuthenticationManager {
 
     private static Logger log = LoggerFactory.getLogger(SocialNetworkAuthenticationManager.class.getName());
-    private final static String ACCESS_TOKEN_TITLE = "accessToken";
     private final static boolean IS_ACTIVE = true;
     private final static String NO_PASSWORD = "";
     private final static String NO_CONFIRM_TOKEN = "";
@@ -58,21 +58,21 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserAuthentication userAuthentication = ((UserAuthentication) authentication);
         SocialInformation socialInformation = getSocialInformation(userAuthentication);
-        socialInformation.setIdUserInSocialNetwork(getSocialUserIdFaceBook(socialInformation.getAccessInfo()));
+        socialInformation.setIdUserInSocialNetwork(FaceBookUtils.getSocialUserId(socialInformation.getAccessInfo()));
         SocialNetwork socialNetwork = SocialNetworkEnum.getSocialNetwork(getSocialNetworkId(socialInformation));
-        Long userSocialId = getSocialUserIdFaceBook(socialInformation.getAccessInfo());
-        if (Objects.equals(socialNetwork.getTitle(), SocialNetworkEnum.FaceBook.getTitle())){
-           User user = userAuthServiceSocial.loadUserBySocialIdNetworkId(socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
-            if (null == user){
+        if (Objects.equals(socialNetwork.getTitle(), SocialNetworkEnum.FaceBook.getTitle())) {
+            User user = userAuthServiceSocial.loadUserBySocialIdNetworkId(socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
+            if (null == user) {
                 return registerFaceBookUser(socialInformation);
-            }else {
-                return new UserAuthentication(user,socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
+            } else {
+                updateFaceBookUser(socialNetwork.getId(), socialInformation.getIdUserInSocialNetwork(), socialInformation.getAccessInfo());
+                changeSocialInformation(SocialNetworkEnum.FaceBook.getId(), user, socialInformation.getAccessInfo());
+                return new UserAuthentication(user, socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
             }
         }
 
 
-
-//        Long id = getSocialUserIdFaceBook(userAuthentication.getDetails().getSocialInformations().iterator().next().getAccessInfo());
+//        Long id = getSocialUserId(userAuthentication.getDetails().getSocialInformations().iterator().next().getAccessInfo());
 //        Long idSocialNetwork = getSocialNetworkId(userAuthentication.getDetails().getSocialInformations().iterator().next());
 //        User user = ((User) authentication.getDetails());
 //        SocialInformation socialInformation = user.getSocialInformations().iterator().next();
@@ -102,7 +102,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
     }
 
     private UserAuthentication registerFaceBookUser(SocialInformation socialInformation) {
-        Facebook facebook = new FacebookTemplate(getFaceBookAccessToken(socialInformation.getAccessInfo()));
+        Facebook facebook = new FacebookTemplate(FaceBookUtils.getFaceBookAccessToken(socialInformation.getAccessInfo()));
         org.springframework.social.facebook.api.User profile = facebook.userOperations().getUserProfile();
         User user = createNewUser(profile);
         userService.insertUser(user, new ArrayList<>(Collections.singletonList(RoleEnum.getRole(RoleEnum.ROLE_STUDENT))));
@@ -111,27 +111,11 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         return new UserAuthentication(user, socialInformation.getIdUserInSocialNetwork(), socialInformation.getSocialNetwork().getId());
     }
 
-    private void updateFaceBookUser(String accessToken, User user){
-        //TODO
-        SocialInformation socialInformation = null;
-        for (SocialInformation information : user.getSocialInformations()) {
-            if (Objects.equals(information.getSocialNetwork().getId(), SocialNetworkEnum.FaceBook.getId())){
-                socialInformation = information;
-            }
-        }
-        socialInformation.setAccessInfo(accessToken);
-        socialInformationService.updateSocialInformation(socialInformation);
+    private void updateFaceBookUser(Long idSocialNetwork, Long idSocialUser, String info) {
+        int i = socialInformationService.updateSocialInformation(idSocialNetwork, idSocialUser, info);
     }
 
-    private Long getSocialNetworkId(SocialInformation socialInformation) {
-        return socialInformation.getSocialNetwork().getId();
-    }
-
-    private String getFaceBookAccessToken(String info) {
-        return ((JsonObject) new JsonParser().parse(info)).get(ACCESS_TOKEN_TITLE).getAsString();
-    }
-
-    private User createNewUser(org.springframework.social.facebook.api.User profile){
+    private User createNewUser(org.springframework.social.facebook.api.User profile) {
         User user = new UserImpl(profile.getEmail(),
                 profile.getFirstName(),
                 profile.getMiddleName(),
@@ -141,18 +125,24 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
                 new Timestamp(System.currentTimeMillis()),
                 NO_CONFIRM_TOKEN
         );
-        user.setRoles(new HashSet<Role>(){{
+        user.setRoles(new HashSet<Role>() {{
             add(RoleEnum.getRole(RoleEnum.ROLE_STUDENT));
         }});
         return user;
     }
 
-    private Long getSocialUserIdFaceBook(String info){
-        return ((JsonObject) new JsonParser().parse(info)).get("userID").getAsLong();
+    private Long getSocialNetworkId(SocialInformation socialInformation) {
+        return socialInformation.getSocialNetwork().getId();
     }
 
-    private SocialInformation getSocialInformation(UserAuthentication userAuthentication){
+    private static SocialInformation getSocialInformation(UserAuthentication userAuthentication) {
         return userAuthentication.getDetails().getSocialInformations().iterator().next();
+    }
+
+    private static void changeSocialInformation(Long id, User user, String info){
+        user.getSocialInformations().stream().filter(socialInformation -> Objects.equals(socialInformation.getSocialNetwork().getId(), id)).forEach(socialInformation -> {
+            socialInformation.setAccessInfo(info);
+        });
     }
 }
 

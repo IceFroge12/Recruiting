@@ -1,5 +1,6 @@
 package ua.kpi.nc.service.impl;
 
+import ua.kpi.nc.controller.auth.UserAuthentication;
 import ua.kpi.nc.persistence.dao.SocialInformationDao;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
@@ -64,5 +65,10 @@ public class SocialInformationServiceImpl implements SocialInformationService {
     @Override
     public SocialInformation getByIdUserInSocialNetworkSocialType(Long idUserInSocialNetwork, Long idSocialNetwork) {
         return socialInformationDao.getByIdUserInSocialNetworkSocialType(idUserInSocialNetwork,idSocialNetwork);
+    }
+
+    @Override
+    public int updateSocialInformation(Long idNetwork, Long idUser, String info) {
+        return socialInformationDao.updateSocialInformation(idNetwork, idUser, info);
     }
 }

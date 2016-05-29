@@ -28,4 +28,6 @@ public interface SocialInformationService {
     boolean isExist(Long idUserInSocialNetwork, Long idSocialNetwork);
 
     SocialInformation getByIdUserInSocialNetworkSocialType(Long idUserInSocialNetwork, Long idSocialNetwork);
+
+    int updateSocialInformation(Long idNetwork, Long idUser, String info);
 }
