@@ -77,7 +77,7 @@ public class SocialInformationDaoImpl implements SocialInformationDao {
     public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork) {
         log.info("Inserting social information with id_user, id_social_network  = {}, {}", user.getId(),
                 socialNetwork.getId());
-        return this.getJdbcTemplate().insert(SQL_INSERT, socialInformation.getAccessInfo(), user.getId(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, socialInformation.getAccessInfo(), user.getId(),
                 socialNetwork.getId(), socialInformation.getIdUserInSocialNetwork());
     }
 
