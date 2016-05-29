@@ -66,6 +66,11 @@ angular.module('appAuthorization', ['angular-loading-bar'])
         }
     };
 });
+VK.init(function() {
+    apiId:5484909   
+}, function() {
+
+}, '5.52');
 
 window.fbAsyncInit = function() {
     FB.init({
@@ -74,6 +79,7 @@ window.fbAsyncInit = function() {
         version    : 'v2.6'
     });
 };
+
 
 (function(d, s, id){
     var js, fjs = d.getElementsByTagName(s)[0];

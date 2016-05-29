@@ -77,6 +77,24 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
         );
     };
 
+    $scope.vkLogin = function () {
+        $http({
+            method: 'GET',
+            url : 'https://oauth.vk.com/authorize',
+            params : {
+                client_id : 5484909,
+                redirect_uri : 'http://localhost:8082/',
+                display : 'page',
+                response_type : 'token',
+                v : '5.52'
+            }
+        }).success(function (data, status, headers) {
+            console.log(data);
+            console.log(status);
+            console.log(headers);
+        })
+    };
+
     $scope.registration = function () {
         console.log("registation");
         $location.path('/registration');
