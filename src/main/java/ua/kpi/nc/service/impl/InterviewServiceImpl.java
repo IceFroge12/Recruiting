@@ -129,6 +129,7 @@ public class InterviewServiceImpl implements InterviewService {
 	}
 
 	public void assignStudent(ApplicationForm applicationForm, User interviewer, Role role) {
+		log.info("Interviewer {} is assigning student {} for role {}", interviewer.getId(), applicationForm.getId(), role.getRoleName());
 		RoleService roleService = ServiceFactory.getRoleService();
 		ApplicationFormService applicationFormService = ServiceFactory.getApplicationFormService();
 		if (roleService.isInterviewerRole(role)
