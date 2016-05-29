@@ -18,7 +18,7 @@
                 <button ng-click="update()" type="submit" class="btn btn-info search-element btn-left">Confirm</button>
             </form>
         </div>
-        <div ng-if="schedule.priorities == null">
+        <div ng-if="schedule.priorities == null && schedule.message == null">
             <h4>Congratulations!</h4>
             <h4>You are invited to interviews with specialists of the company.</h4>
             <h4>Your interviews date: <b>{{schedule}}</b></h4>
