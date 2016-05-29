@@ -108,7 +108,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         userService.insertUser(user, new ArrayList<>(Collections.singletonList(RoleEnum.getRole(RoleEnum.ROLE_STUDENT))));
         socialInformation.setUser(user);
         socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork());
-        return new UserAuthentication(user);
+        return new UserAuthentication(user, socialInformation.getIdUserInSocialNetwork(), socialInformation.getSocialNetwork().getId());
     }
 
     private void updateFaceBookUser(String accessToken, User user){

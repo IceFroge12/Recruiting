@@ -50,6 +50,7 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        UserAuthentication userAuthentication  = ((UserAuthentication) authResult);
         tokenAuthenticationService.addAuthentication(response, authResult);
         SecurityContextHolder.getContext().setAuthentication(authResult);
         AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess(request,response,authResult);
