@@ -13,6 +13,12 @@ function staffSchedulingService(http) {
             return response.data;
         });
     };
+
+    service.getUserFinalTimePoints = function () {
+        return http.get('/staff/getFinalTimePoints').then(function (response) {
+            return response.data;
+        })
+    };
     
     service.saveTimePriorities = function (userTimePriorityListDto) {
         console.log("save Time Priorities");

@@ -24,4 +24,8 @@ public interface SocialInformationService {
     boolean isExist(String email, Long idSocialNetwork);
 
     SocialInformation getByUserEmailSocialNetworkType(String email, Long socialNetworkId);
+
+    boolean isExist(Long idUserInSocialNetwork, Long idSocialNetwork);
+
+    SocialInformation getByIdUserInSocialNetworkSocialType(Long idUserInSocialNetwork, Long idSocialNetwork);
 }

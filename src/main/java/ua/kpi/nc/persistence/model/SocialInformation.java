@@ -27,4 +27,8 @@ public interface SocialInformation extends Serializable{
     SocialNetwork getSocialNetwork();
 
     void setSocialNetwork(SocialNetwork socialNetwork);
+
+    Long getIdUserInSocialNetwork();
+
+    void setIdUserInSocialNetwork(Long idUserInSocialNetwork);
 }
