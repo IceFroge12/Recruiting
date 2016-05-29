@@ -54,12 +54,12 @@ function schedulingService($http) {
         })
     };
 
-    service.deleteUserTimeFinal = function(id, timePointId){
+    service.deleteUserTimeFinal = function(userId, timePointId){
         return $http({
             method : 'POST',
             url : '/scheduling/deleteUserTimeFinal',
-            params : {id1:id,
-                id2:timePointId}
+            params : {userId:userId,
+                timePointId:timePointId}
         })
     };
 

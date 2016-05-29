@@ -62,7 +62,7 @@ public class AdminManagementStaffController {
 
     private final static String CAN_NOT_DELETE = "Can't remove assignet user";
 
-    private final static String CAN_NOT_EDIT="Cannot edit employee.";
+    private final static String CAN_NOT_EDIT = "Cannot edit employee.";
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
@@ -143,7 +143,6 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST)
     public ResponseEntity editEmployeeParams(@RequestBody UserDto userDto) {
-        System.out.println(userDto);
         User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());

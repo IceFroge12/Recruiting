@@ -126,7 +126,7 @@ public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
 
     @Override
     public int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint) {
-        log.info("Deleting user_time_final with user id = ", user.getId());
+        log.info("Deleting user_time_final with user id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(DELETE_USER_TIME_FINAL, user.getId(), scheduleTimePoint.getId());
     }
 
