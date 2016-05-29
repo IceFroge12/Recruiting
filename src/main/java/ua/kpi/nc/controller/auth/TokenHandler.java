@@ -26,7 +26,7 @@ public abstract class TokenHandler{
     }
 
 
-    public abstract User parseUserFromToken(String token);
+    public abstract UserAuthentication parseUserFromToken(String token);
 
     public abstract String createTokenForUser(UserAuthentication userAuthentication);
 }

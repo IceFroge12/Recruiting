@@ -35,14 +35,19 @@ public class TokenHandlerSocial extends TokenHandler {
     }
 
     @Override
-    public User parseUserFromToken(String token) {
+    public UserAuthentication parseUserFromToken(String token) {
         try{
             Claims claims = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
             JsonObject jsonObject = ((JsonObject) new JsonParser().parse(claims.getSubject()));
-            return userAuthServiceSocial.loadUserBySocialIdNetworkId(jsonObject.get("idUserSocial").getAsLong(), jsonObject.get("idNetwork").getAsLong());
+            Long idUserSocial = jsonObject.get("idUserSocial").getAsLong();
+            Long idNetwork = jsonObject.get("idNetwork").getAsLong();
+            User user =  userAuthServiceSocial.loadUserBySocialIdNetworkId(idUserSocial, idNetwork);
+            if (null != user){
+                return new UserAuthentication(user, idUserSocial, idNetwork);
+            }
         } catch (ExpiredJwtException e) {
             log.error("Token expired", e);
         }

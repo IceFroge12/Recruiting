@@ -34,14 +34,17 @@ public class TokenHandlerLoginPassword extends TokenHandler {
         return TokenHandlerLoginPasswordHolder.HOLDER;
     }
 
-    public User parseUserFromToken(String token) {
+    public UserAuthentication parseUserFromToken(String token) {
         log.info("Start parsing tokne - {}", token);
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
-            return userService.loadUserByUsername(claims.getSubject());
+            User user = userService.loadUserByUsername(claims.getSubject());
+            if (null != user){
+                return new UserAuthentication(user);
+            }
         } catch (ExpiredJwtException e) {
             log.error("Token expired", e);
         }

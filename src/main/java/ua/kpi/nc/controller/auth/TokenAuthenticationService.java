@@ -40,12 +40,11 @@ public class TokenAuthenticationService {
         }
         if (token != null) {
             log.info("Token found");
-            final ua.kpi.nc.persistence.model.User user = tokenHandler.parseUserFromToken(token);
+            UserAuthentication user = tokenHandler.parseUserFromToken(token);
             if (user != null) {
-                UserAuthentication userAuthentication = new UserAuthentication(user);
                 log.info("User found");
-                addToken(userAuthentication, response);
-                return new UserAuthentication(user);
+                addToken(user, response);
+                return user;
             }
         }
         log.info("User with token - {} not exist", token);
