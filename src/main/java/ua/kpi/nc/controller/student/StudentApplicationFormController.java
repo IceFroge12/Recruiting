@@ -40,7 +40,6 @@ import ua.kpi.nc.persistence.model.impl.real.ApplicationFormImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.service.ApplicationFormService;
 import ua.kpi.nc.service.FormAnswerService;
-import ua.kpi.nc.service.FormAnswerVariantService;
 import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.RecruitmentService;
 import ua.kpi.nc.service.RoleService;
@@ -61,7 +60,6 @@ public class StudentApplicationFormController {
 	private ApplicationFormService applicationFormService;
 	private UserService userService;
 	private FormQuestionService formQuestionService;
-	private FormAnswerVariantService formAnswerVariantService;
 	private RoleService roleService;
 
 	private static Logger log = LoggerFactory.getLogger(StudentApplicationFormController.class);
@@ -74,10 +72,9 @@ public class StudentApplicationFormController {
 		applicationFormService = ServiceFactory.getApplicationFormService();
 		userService = ServiceFactory.getUserService();
 		formQuestionService = ServiceFactory.getFormQuestionService();
-		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
 		roleService = ServiceFactory.getRoleService();
 	}
-
+	
 	private static Gson gson = new Gson();
 
 	private static final String WRONG_INPUT_MESSAGE = gson.toJson(new MessageDto("Wrong input.", MessageDtoType.ERROR));
@@ -134,6 +131,7 @@ public class StudentApplicationFormController {
 		boolean newForm = false;
 		Set<FormQuestion> remainedQuestions;
 		ApplicationForm applicationForm = getApplicationFormForSave(user);
+		log.info("Saving application form of user {}", user.getId());
 		if (applicationForm == null || !applicationForm.isActive()) {
 			newForm = true;
 			if (file.isEmpty()) {
@@ -258,12 +256,13 @@ public class StudentApplicationFormController {
 			String photoScope = applicationForm.getId() + "." + fileExtension;
 			String photoDirPath = PropertiesReader.getInstance().propertiesReader("photodir.path");
 			File photoFile = new File(photoDirPath, photoScope);
+			log.info("Saving photo to {}", photoFile.getAbsolutePath());
 			file.transferTo(photoFile);
 			applicationForm.setPhotoScope(photoScope);
 			applicationFormService.updateApplicationForm(applicationForm);
 			return true;
 		} catch (IOException e) {
-			log.error("Cannot save photo {}", e);
+			log.error("Cannot save photo", e);
 			return false;
 		}
 	}
