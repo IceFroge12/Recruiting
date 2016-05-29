@@ -156,4 +156,12 @@ public class InterviewDaoImpl implements InterviewDao {
         log.trace("Checking is form with id = {} assigned to inteviewer with id = {}", applicationForm.getId(), interviewer.getId());
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1), applicationForm.getId(), interviewer.getId());
     }
+
+	@Override
+	public int updateInterview(Interview interview, Connection connection) {
+		log.info("Update interview with id = {}", interview.getId());
+		return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, interview.getMark(), interview.getDate(),
+				interview.getInterviewer().getId(), interview.getRole().getId(), interview.isAdequateMark(),
+				interview.getApplicationForm().getId(), interview.getId());
+	}
 }

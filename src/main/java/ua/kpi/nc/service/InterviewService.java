@@ -25,7 +25,7 @@ public interface InterviewService {
 
 	boolean insertInterviewWithAnswers(Interview interview, List<FormAnswer> formAnswers);
 
-	int updateInterview(Interview interview);
+	boolean updateInterview(Interview interview);
 
 	int deleteInterview(Interview interview);
 

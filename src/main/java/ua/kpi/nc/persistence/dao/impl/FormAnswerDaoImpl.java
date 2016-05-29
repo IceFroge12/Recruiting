@@ -67,7 +67,8 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + ANSWER_COL + " = ?, " + ID_VARIANT_COL
             + " = ? WHERE " + ID_COL + "= ?;";
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = ?;";
-    private static final String SQL_DELETE_NOT_PRESENTED = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_APPLICATION_FORM_COL + " = ? ";
+    private static final String SQL_DELETE_NOT_PRESENTED_APP_FORM = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_APPLICATION_FORM_COL + " = ? ";
+    private static final String SQL_DELETE_NOT_PRESENTED_INTERVIEW = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_INTERVIEW_COL + " = ? ";
     private static Logger log = LoggerFactory.getLogger(FormAnswerDaoImpl.class.getName());
 
     public FormAnswerDaoImpl(DataSource dataSource) {
@@ -166,9 +167,21 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
     }
 
 	@Override
-	public void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm, Connection connection) {
+	public void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm,
+			Connection connection) {
 		log.trace("Deleting form answers from appliction form {}", applicationForm.getId());
-		String sql = SQL_DELETE_NOT_PRESENTED;
+		String sql = getDeleteNotPresentedSql(SQL_DELETE_NOT_PRESENTED_APP_FORM, presentedAnswers);
+		jdbcDaoSupport.getJdbcTemplate().update(sql, connection, applicationForm.getId());
+	}
+
+	@Override
+	public void deleteNotPresented(List<FormAnswer> presentedAnswers, Interview interview, Connection connection) {
+		log.trace("Deleting form answers from interview {}", interview.getId());
+		String sql = getDeleteNotPresentedSql(SQL_DELETE_NOT_PRESENTED_INTERVIEW, presentedAnswers);
+		jdbcDaoSupport.getJdbcTemplate().update(sql, connection, interview.getId());
+	}
+	
+	private String getDeleteNotPresentedSql(String startSql, List<FormAnswer> presentedAnswers) {
 		if(!presentedAnswers.isEmpty()) {
 			StringBuilder notInQuery = new StringBuilder(" AND " + ID_COL + " NOT IN (");
 			int i = 0;
@@ -181,9 +194,8 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
 				}
 			}
 			notInQuery.append(')');
-			sql += notInQuery;
-			System.out.println(sql);
-		}		
-		jdbcDaoSupport.getJdbcTemplate().update(sql, connection, applicationForm.getId());
+			startSql += notInQuery;
+		}	
+		return startSql;
 	}
 }

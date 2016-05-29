@@ -22,6 +22,7 @@ import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
 import ua.kpi.nc.service.*;
 import ua.kpi.nc.util.export.ExportApplicationForm;
 import ua.kpi.nc.util.export.ExportApplicationFormImp;
+import util.form.FormAnswerProcessor;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -97,15 +98,19 @@ public class StaffInterviewController {
 		if (interview.getInterviewer().getId().equals(interviewer.getId())) {
 			interview.setAdequateMark(interviewDto.isAdequateMark());
 			interview.setMark(interviewDto.getMark());
+			FormAnswerProcessor formAnswerProcessor = new FormAnswerProcessor(interview);
 			for (StudentAppFormQuestionDto questionDto : interviewDto.getQuestions()) {
 				FormQuestion formQuestion = formQuestionService.getById(questionDto.getId());
+				formAnswerProcessor.setFormQuestion(formQuestion);
 				List<FormAnswer> answers = formAnswerService.getByInterviewAndQuestion(interview, formQuestion);
-				updateAnswers(formQuestion, answers, questionDto.getAnswers(), interview);
+				formAnswerProcessor.updateAnswers(questionDto.getAnswers(), answers);
 			}
+			interview.setAnswers(formAnswerProcessor.getAnswers());
 			interviewService.updateInterview(interview);
 			return INTERVIEW_UPDATED_MESSAGE;
+		} else {
+			return NOT_ASSIGNED_MESSAGE;
 		}
-		return NOT_ASSIGNED_MESSAGE;
 	}
 
 	@RequestMapping(value = "getRoles/{applicationFormId}", method = RequestMethod.GET)
@@ -133,58 +138,4 @@ public class StaffInterviewController {
         User interviewer = userService.getAuthorizedUser();
         return interviewService.haveNonAdequateMark(applicationFormId,interviewer.getId());
     }
-	//TODO duplicate
-	private void updateAnswers(FormQuestion formQuestion, List<FormAnswer> answers, List<StudentAnswerDto> answersDto,
-			Interview interview) {
-		String questionType = formQuestion.getQuestionType().getTypeTitle();
-		if (FormQuestionTypeEnum.CHECKBOX.getTitle().equals(questionType)) {
-			int i;
-			for (i = 0; i < answersDto.size() && i < answers.size(); i++) {
-				StudentAnswerDto answerDto = answersDto.get(i);
-				FormAnswer answer = answers.get(i);
-				FormAnswerVariant variant = formAnswerVariantService
-						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-				answer.setFormAnswerVariant(variant);
-				formAnswerService.updateFormAnswer(answer);
-			}
-			if (answersDto.size() < answers.size()) {
-				for (; i < answers.size() - 1; i++) {
-					FormAnswer answer = answers.get(i);
-					formAnswerService.deleteFormAnswer(answer);
-				}
-				FormAnswer answer = answers.get(answers.size() - 1);
-				answer.setFormAnswerVariant(null);
-				formAnswerService.updateFormAnswer(answer);
-			} else {
-				for (; i < answersDto.size(); i++) {
-					StudentAnswerDto answerDto = answersDto.get(i);
-					FormAnswer formAnswer = createFormAnswer(interview, formQuestion);
-					FormAnswerVariant variant = formAnswerVariantService
-							.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-					formAnswer.setFormAnswerVariant(variant);
-					formAnswerService.insertFormAnswerForInterview(formAnswer);
-				}
-			}
-		} else {
-			FormAnswer formAnswer = answers.get(0);
-			if (FormQuestionTypeEnum.RADIO.getTitle().equals(questionType)
-					|| FormQuestionTypeEnum.SELECT.getTitle().equals(questionType)) {
-
-				StudentAnswerDto answerDto = answersDto.get(0);
-				FormAnswerVariant variant = formAnswerVariantService
-						.getAnswerVariantByTitleAndQuestion(answerDto.getAnswer(), formQuestion);
-				formAnswer.setFormAnswerVariant(variant);
-			} else {
-				formAnswer.setAnswer(answersDto.get(0).getAnswer());
-			}
-			formAnswerService.updateFormAnswer(formAnswer);
-		}
-	}
-
-	private FormAnswer createFormAnswer(Interview interview, FormQuestion question) {
-		FormAnswer answer = new FormAnswerImpl();
-		answer.setInterview(interview);
-		answer.setFormQuestion(question);
-		return answer;
-	}
 }

@@ -37,4 +37,6 @@ public interface FormAnswerDao {
 
 	void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm, Connection connection);
 
+	void deleteNotPresented(List<FormAnswer> presentedAnswers, Interview interview, Connection connection);
+
 }

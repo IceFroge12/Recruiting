@@ -35,4 +35,6 @@ public interface InterviewDao {
     boolean haveNonAdequateMarkForAdmin (Long applicationFormID);
 
 	boolean isFormAssigned(ApplicationForm applicationForm, User interviewer);
+
+	int updateInterview(Interview interview, Connection connection);
 }

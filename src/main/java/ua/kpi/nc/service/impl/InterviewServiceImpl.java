@@ -84,8 +84,28 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public int updateInterview(Interview interview) {
-        return interviewDao.updateInterview(interview);
+    public boolean updateInterview(Interview interview) {
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+			connection.setAutoCommit(false);
+			interviewDao.updateInterview(interview, connection);
+			FormAnswerDao formAnswerDao = DaoFactory.getFormAnswerDao();
+			formAnswerDao.deleteNotPresented(interview.getAnswers(), interview, connection);
+			for (FormAnswer formAnswer : interview.getAnswers()) {
+				if (formAnswer.getId() == null) {
+					formAnswerDao.insertFormAnswerForInterview(formAnswer, formAnswer.getFormQuestion(),formAnswer.getFormAnswerVariant(),
+							interview, connection);
+				} else {
+					formAnswerDao.updateFormAnswer(formAnswer);
+				}
+			}
+			connection.commit();
+		} catch (SQLException e) {
+			if (log.isWarnEnabled()) {
+				log.error("Cannot update Interview", e);
+			}
+			return false;
+		}
+		return true;
     }
 
     @Override
