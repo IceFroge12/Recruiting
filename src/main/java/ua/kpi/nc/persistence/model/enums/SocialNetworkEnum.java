@@ -6,12 +6,15 @@ import ua.kpi.nc.persistence.model.SocialNetwork;
  * Created by IO on 27.05.2016.
  */
 public enum SocialNetworkEnum {
-    FaceBook(1L);
+    FaceBook(1L, "FaceBook");
 
     private final Long id;
+    private final String title;
 
-    SocialNetworkEnum(Long id) {
+
+    SocialNetworkEnum(Long id, String title) {
         this.id = id;
+        this.title = title;
     }
 
     public Long getId() {
@@ -34,5 +37,9 @@ public enum SocialNetworkEnum {
             default:
                 throw new IllegalStateException("Social network not found");
         }
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

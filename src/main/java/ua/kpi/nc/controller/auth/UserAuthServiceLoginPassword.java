@@ -1,5 +1,6 @@
 package ua.kpi.nc.controller.auth;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ua.kpi.nc.persistence.model.User;
@@ -9,19 +10,19 @@ import ua.kpi.nc.service.UserService;
 /**
  * Created by dima on 13.04.16.
  */
-public class UserAuthService implements UserDetailsService {
+public class UserAuthServiceLoginPassword implements UserDetailsService {
 
     private UserService userService;
 
-    private UserAuthService(){
+    private UserAuthServiceLoginPassword(){
         userService = ServiceFactory.getUserService();
     }
 
     private static class UserAuthServiceHolder{
-        private static final UserAuthService HOLDER = new UserAuthService();
+        private static final UserAuthServiceLoginPassword HOLDER = new UserAuthServiceLoginPassword();
     }
 
-    public static UserAuthService getInstance(){
+    public static UserAuthServiceLoginPassword getInstance(){
         return UserAuthServiceHolder.HOLDER;
     }
 

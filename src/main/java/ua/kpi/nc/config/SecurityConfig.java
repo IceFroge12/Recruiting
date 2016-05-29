@@ -14,7 +14,6 @@ import ua.kpi.nc.controller.auth.*;
 import ua.kpi.nc.filter.SocialLoginFilter;
 import ua.kpi.nc.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.filter.StatelessLoginFilter;
-import ua.kpi.nc.persistence.model.SocialNetwork;
 
 
 /**
@@ -34,9 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationSuccessHandler authenticationSuccessHandler = AuthenticationSuccessHandlerService.getInstance();
 
-    private UserAuthService userAuthService = UserAuthService.getInstance();
+    private UserAuthServiceLoginPassword userAuthServiceLoginPassword = UserAuthServiceLoginPassword.getInstance();
 
-    private TokenAuthenticationService tokenAuthenticationService = new TokenAuthenticationService(SECRET_KEY, userAuthService);
+    private TokenHandler tokenHandlerLoginPassword = TokenHandlerLoginPassword.getInstance();
+
+    private TokenHandler tokenHandlerSocial = TokenHandlerSocial.getInstance();
+
+    private TokenAuthenticationService tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
+
+    private TokenAuthenticationService tokenAuthenticationServiceSocial = new TokenAuthenticationService(tokenHandlerSocial);
 
 
     @Override
@@ -65,9 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationService, loginPasswordAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager, authenticationSuccessHandler, tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword, tokenAuthenticationServiceSocial), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword, loginPasswordAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager, authenticationSuccessHandler, tokenAuthenticationServiceSocial), UsernamePasswordAuthenticationFilter.class)
 
 
                 .exceptionHandling().and()
@@ -80,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userAuthService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userAuthServiceLoginPassword).passwordEncoder(new BCryptPasswordEncoder());
     }
 
 }
