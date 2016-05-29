@@ -18,14 +18,14 @@ import java.util.Date;
 public class TokenHandler {
 
     private final String secret;
-    private final UserAuthService userService;
+    private final UserAuthServiceLoginPassword userService;
     private static Logger log = LoggerFactory.getLogger(TokenHandler.class);
 
     private final long epriretime = 60 * 1000 * 60;
 
-    public TokenHandler(String secret, UserAuthService userAuthService) {
+    public TokenHandler(String secret, UserAuthServiceLoginPassword userAuthServiceLoginPassword) {
         this.secret = StringConditions.checkNotBlank(secret);
-        this.userService = Preconditions.checkNotNull(userAuthService);
+        this.userService = Preconditions.checkNotNull(userAuthServiceLoginPassword);
     }
 
     public User parseUserFromToken(String token) {

@@ -2,13 +2,11 @@ package ua.kpi.nc.controller.auth;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import ua.kpi.nc.persistence.model.Role;
@@ -35,13 +33,13 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
     private final static String NO_PASSWORD = "";
     private final static String NO_CONFIRM_TOKEN = "";
 
-    private UserAuthService userAuthService;
+    private UserAuthServiceLoginPassword userAuthServiceLoginPassword;
     private UserService userService;
     private SocialInformationService socialInformationService;
 
 
     private SocialNetworkAuthenticationManager() {
-        userAuthService = UserAuthService.getInstance();
+        userAuthServiceLoginPassword = UserAuthServiceLoginPassword.getInstance();
         socialInformationService = ServiceFactory.getSocialInformationService();
         userService = ServiceFactory.getUserService();
     }
@@ -59,7 +57,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         User user = ((User) authentication.getDetails());
         SocialInformation socialInformation = user.getSocialInformations().iterator().next();
-        User existUser = userAuthService.loadUserByUsername(user.getEmail());
+        User existUser = userAuthServiceLoginPassword.loadUserByUsername(user.getEmail());
         if (null != existUser) {
             if (socialInformationService.isExist(user.getEmail(), user.getSocialInformations().iterator().next().getSocialNetwork().getId())) {
                 updateFaceBookUser(socialInformation.getAccessInfo(), existUser);

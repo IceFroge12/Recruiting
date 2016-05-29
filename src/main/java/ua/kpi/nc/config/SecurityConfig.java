@@ -14,7 +14,6 @@ import ua.kpi.nc.controller.auth.*;
 import ua.kpi.nc.filter.SocialLoginFilter;
 import ua.kpi.nc.filter.StatelessAuthenticationFilter;
 import ua.kpi.nc.filter.StatelessLoginFilter;
-import ua.kpi.nc.persistence.model.SocialNetwork;
 
 
 /**
@@ -34,9 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationSuccessHandler authenticationSuccessHandler = AuthenticationSuccessHandlerService.getInstance();
 
-    private UserAuthService userAuthService = UserAuthService.getInstance();
+    private UserAuthServiceLoginPassword userAuthServiceLoginPassword = UserAuthServiceLoginPassword.getInstance();
 
-    private TokenAuthenticationService tokenAuthenticationService = new TokenAuthenticationService(SECRET_KEY, userAuthService);
+    private TokenAuthenticationService tokenAuthenticationService = new TokenAuthenticationService(SECRET_KEY, userAuthServiceLoginPassword);
 
 
 
@@ -84,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userAuthService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userAuthServiceLoginPassword).passwordEncoder(new BCryptPasswordEncoder());
     }
 
 }

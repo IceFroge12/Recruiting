@@ -21,8 +21,8 @@ public class TokenAuthenticationService {
 
 
 
-    public TokenAuthenticationService(String secret, UserAuthService userAuthService) {
-        tokenHandler = new TokenHandler(secret, userAuthService);
+    public TokenAuthenticationService(String secret, UserAuthServiceLoginPassword userAuthServiceLoginPassword) {
+        tokenHandler = new TokenHandler(secret, userAuthServiceLoginPassword);
     }
 
     public String addAuthentication(HttpServletResponse response, Authentication authentication) {

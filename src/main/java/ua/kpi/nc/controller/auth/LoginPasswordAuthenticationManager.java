@@ -16,11 +16,11 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
 
     private static Logger log = LoggerFactory.getLogger(LoginPasswordAuthenticationManager.class.getName());
 
-    private UserAuthService userAuthService;
+    private UserAuthServiceLoginPassword userAuthServiceLoginPassword;
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 
     private LoginPasswordAuthenticationManager() {
-        this.userAuthService = UserAuthService.getInstance();
+        this.userAuthServiceLoginPassword = UserAuthServiceLoginPassword.getInstance();
         this.passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
     }
 
@@ -38,7 +38,7 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
         String password = (String) authentication.getCredentials();
 
         log.info("Looking user - {} in data base", username);
-        User user = userAuthService.loadUserByUsername(username);
+        User user = userAuthServiceLoginPassword.loadUserByUsername(username);
 
         if (!user.isActive()){
             log.info("User - {} is not active", username);
