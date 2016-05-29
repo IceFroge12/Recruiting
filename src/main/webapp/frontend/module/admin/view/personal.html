@@ -24,11 +24,8 @@
                 <br>
 
                 <div class="row">
-                    <input ng-model="confirmNewPassword" type="password"  placeholder="confirm new password" name="confirmNewPassword" required ng-minlength="4" ng-maxlength="16" ng-pattern="/^[a-zA-Z0-9]+$/"><br>
-                    <span ng-show="recoverPassword.confirmNewPassword.$error.required" class="text-danger">The field can not be empty.</span>
-                    <span ng-show="recoverPassword.confirmNewPassword.$error.minlength" class="text-danger">Must be at least 4 characters.</span>
-                    <span ng-show="recoverPassword.confirmNewPassword.$error.maxlength" class="text-danger">Password should be no more than 16 characters.</span>
-                    <span ng-show="recoverPassword.confirmNewPassword.$error.pattern" class="text-danger">Can contain only numbers and letters.</span>
+                    <input ng-model="confirmNewPassword" type="password"  placeholder="confirm new password" name="confirmNewPassword" nx-equal="newPassword"><br>
+                    <span ng-show="recoverPassword.confirmNewPassword.$error.nxEqual" class="text-danger">New password and confirm password must be equals!</span>
                 </div>
                 <button type="submit" ng-click="changePassword()" class="btn btn-info search-element btn-left" ng-disabled="recoverPassword.$invalid">Confirm</button>
             </form>
