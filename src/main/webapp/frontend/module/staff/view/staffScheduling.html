@@ -3,7 +3,7 @@
 <div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
-            <form ng-if="show">
+            <form ng-show="showTimePriority==true" >
                 <div class="row">
                     <h4>Choose appropriate variant for each date.</h4>
                     <div class="col-md-3 day-point">
@@ -22,7 +22,7 @@
                     </button>
                 </div>
             </form>
-            <form>
+            <form >
                 <h4 style="margin-right: 1000px">Your interviews dates: </h4>
                 <div style="margin-right: 1000px" ng-repeat="finalTimePoint in finalTimePoints">
                      <p class="par"><h4>{{finalTimePoint | date: "MM/dd/yyyy HH:mm:ss"}}</h4></p>

@@ -20,12 +20,12 @@ public class AdminNotificationController {
     private NotificationTypeService notificationTypeService = ServiceFactory.getNotificationTypeService();
     private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
 
-    @RequestMapping(value = "/getAllNotificationType", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAllNotificationType", method = RequestMethod.GET)
     public Set<NotificationType> getAllNotificationType() {
         return notificationTypeService.getAll();
     }
 
-    @RequestMapping(value = "/showTemplate", method = RequestMethod.POST)
+    @RequestMapping(value = "/showTemplate", method = RequestMethod.GET)
     public EmailTemplate showTemplate(@RequestParam String title) {
         return emailTemplateService.getByTitle(title);
     }

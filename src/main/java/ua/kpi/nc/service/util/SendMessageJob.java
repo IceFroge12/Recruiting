@@ -30,7 +30,6 @@ public class SendMessageJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext ctx) throws JobExecutionException {
         List<Message> messageServiceList = sendMessageService.getAll();
         for (Message message : messageServiceList) {
-
             try {
                 sendMessageService.delete(message);
                 senderService.send(message.getEmail(), message.getSubject(), message.getText());
