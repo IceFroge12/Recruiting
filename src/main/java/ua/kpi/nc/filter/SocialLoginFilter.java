@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import ua.kpi.nc.controller.auth.AuthenticationSuccessHandlerService;
+import ua.kpi.nc.controller.auth.TokenAuthenticationService;
 import ua.kpi.nc.controller.auth.UserAuthentication;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.enums.SocialNetworkEnum;
@@ -30,11 +31,14 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
     private final static String INFO_OBJECT = "info";
     private final static String EMAIL_TITLE = "email";
     private final static String SOCiAL_NETWORK_INFO = "info";
+    private final TokenAuthenticationService tokenAuthenticationService;
 
-    public SocialLoginFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationManager authenticationManager, AuthenticationSuccessHandler authenticationSuccessHandler) {
+
+    public SocialLoginFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationManager authenticationManager, AuthenticationSuccessHandler authenticationSuccessHandler, TokenAuthenticationService tokenAuthenticationService) {
         super(requiresAuthenticationRequestMatcher);
         setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
 
@@ -46,13 +50,14 @@ public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        tokenAuthenticationService.addAuthentication(response, authResult);
         SecurityContextHolder.getContext().setAuthentication(authResult);
         AuthenticationSuccessHandlerService.getInstance().onAuthenticationSuccess(request,response,authResult);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        System.out.println();
+        
     }
 
 

@@ -15,16 +15,14 @@ import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.RoleEnum;
+import ua.kpi.nc.persistence.model.enums.SocialNetworkEnum;
 import ua.kpi.nc.persistence.model.impl.real.UserImpl;
 import ua.kpi.nc.service.ServiceFactory;
 import ua.kpi.nc.service.SocialInformationService;
 import ua.kpi.nc.service.UserService;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by IO on 27.05.2016.
@@ -64,7 +62,8 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         User existUser = userAuthService.loadUserByUsername(user.getEmail());
         if (null != existUser) {
             if (socialInformationService.isExist(user.getEmail(), user.getSocialInformations().iterator().next().getSocialNetwork().getId())) {
-                throw new UsernameNotFoundException("");
+                updateFaceBookUser(socialInformation.getAccessInfo(), existUser);
+                return new UserAuthentication(existUser);
             } else {
                 return new UserAuthentication(existUser);
             }
@@ -87,8 +86,20 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         org.springframework.social.facebook.api.User profile = facebook.userOperations().getUserProfile();
         User user = createNewUser(profile);
         userService.insertUser(user, new ArrayList<>(Collections.singletonList(RoleEnum.getRole(RoleEnum.ROLE_STUDENT))));
-        socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork(), new Timestamp(System.currentTimeMillis()));
+        socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork());
         return new UserAuthentication(user);
+    }
+
+    private void updateFaceBookUser(String accessToken, User user){
+        //TODO
+        SocialInformation socialInformation = null;
+        for (SocialInformation information : user.getSocialInformations()) {
+            if (Objects.equals(information.getSocialNetwork().getId(), SocialNetworkEnum.FaceBook.getId())){
+                socialInformation = information;
+            }
+        }
+        socialInformation.setAccessInfo(accessToken);
+        socialInformationService.updateSocialInformation(socialInformation);
     }
 
     private Long getSocialNetworkId(SocialInformation socialInformation) {

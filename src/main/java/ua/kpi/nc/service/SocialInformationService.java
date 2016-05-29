@@ -15,7 +15,7 @@ public interface SocialInformationService {
 
     Set<SocialInformation> getByUserId(Long id);
 
-    Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork, Timestamp writeTime);
+    Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork);
 
     int updateSocialInformation(SocialInformation socialInformation);
 

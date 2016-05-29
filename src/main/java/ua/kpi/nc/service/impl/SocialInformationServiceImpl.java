@@ -32,8 +32,8 @@ public class SocialInformationServiceImpl implements SocialInformationService {
     }
 
     @Override
-    public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork, Timestamp writeTime) {
-        return socialInformationDao.insertSocialInformation(socialInformation, user, socialNetwork, writeTime);
+    public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork) {
+        return socialInformationDao.insertSocialInformation(socialInformation, user, socialNetwork);
     }
 
     @Override

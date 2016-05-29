@@ -53,8 +53,18 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                             url: '/socialAuth/facebookAuth',
                             contentType: 'application/json',
                             data: {info: data}
-                        }).then(function (response) {
-                            console.log(response);
+                        }).success(function (data, status, headers) {
+                            TokenStorage.store(headers('X-AUTH-TOKEN'));
+                            $rootScope.username = data.username;
+                            $rootScope.id = data.id;
+                            $rootScope.role = data.role;
+                            $location.path(data.redirectURL);
+                            $scope.errorcredential = false;
+                        }).error(function (data, status, headers) {
+                            console.log(data);
+                            if (status == 401) {
+                                $scope.errorcredential = true;
+                            }
                         });
                         $scope.$apply();
                     });

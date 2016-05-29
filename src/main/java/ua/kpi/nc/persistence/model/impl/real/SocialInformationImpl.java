@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.model.User;
+import ua.kpi.nc.persistence.model.impl.proxy.UserProxy;
 
 import java.sql.Timestamp;
 
@@ -34,12 +35,11 @@ public class SocialInformationImpl implements SocialInformation {
 
 
 
-    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork, Timestamp writeTime) {
+    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork) {
         this.id = id;
         this.accessInfo = accessInfo;
         this.user = user;
         this.socialNetwork = socialNetwork;
-        this.writeTime = writeTime;
     }
 
     public SocialInformationImpl(String accessInfo, User user, SocialNetwork socialNetwork) {
@@ -47,6 +47,8 @@ public class SocialInformationImpl implements SocialInformation {
         this.user = user;
         this.socialNetwork = socialNetwork;
     }
+
+
 
     @Override
     public Long getId() {

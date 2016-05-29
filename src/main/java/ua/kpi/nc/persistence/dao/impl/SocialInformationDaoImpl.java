@@ -32,29 +32,26 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
 
     private ResultSetExtractor<SocialInformation> extractor = resultSet -> {
         long socialInformationId = resultSet.getLong("id");
-        Timestamp writeTime = resultSet.getTimestamp("writetime");
         SocialInformation socialInformation;
         socialInformation = new SocialInformationImpl(socialInformationId,
                 resultSet.getString("access_info"), new UserProxy(resultSet.getLong("id_user")),
-                new SocialNetwork(resultSet.getLong("id_social_network"), resultSet.getString("title")), writeTime);
+                new SocialNetwork(resultSet.getLong("id_social_network"), resultSet.getString("title")));
         return socialInformation;
     };
 
-    private static final String SQL_GET_BY_ID = "SELECT si.id, si.id_social_network, si.id_user, si.access_info, sn.title, sn.writetime"
-            + "FROM \"social_information \" si" + "\n INNER JOIN social_network sn ON sn.id = si.id_social_network "
-            + "WHERE si.id = ?";
+    private static final String SQL_GET_BY_ID = "SELECT si.id, si.access_info, si.id_user, si.id_social_network, sn.title FROM public.social_information si JOIN public.social_network sn ON si.id_social_network = sn.id WHERE si.id = ?;";
 
-    private static final String SQL_GET_BY_USER_ID = "SELECT si.id, si.id_social_network, si.id_user, si.access_info, sn.title, sn.writetime"
+    private static final String SQL_GET_BY_USER_ID = "SELECT si.id, si.id_social_network, si.id_user, si.access_info, sn.title"
             + "FROM \"social_information \" si" + "\n INNER JOIN social_network sn ON sn.id = si.id_social_network "
             + "WHERE si.id_user = ?";
 
-    private static final String SQL_INSERT = "INSERT INTO social_information (access_info, id_user, id_social_network, writetime) VALUES (?, ?, ?, ?)";
+    private static final String SQL_INSERT = "INSERT INTO social_information (access_info, id_user, id_social_network) VALUES (?, ?, ?)";
 
     private static final String SQL_UPDATE = "UPDATE social_information set access_info = ? WHERE social_information.id = ?";
 
     private static final String SQL_DELETE = "DELETE FROM \"social_information\" WHERE \"social_information\".id = ?";
 
-    private static final String SQL_GET_BY_USER_EMAIL_SOCIAL_TYPE = "SELECT si.id, si.id_social_network, si.id_user, si.access_info, sn.title, sn.writetime FROM public.user u JOIN public.social_information si ON u.id = si.id_user JOIN public.social_network sn ON si.id_social_network = sn.id WHERE u.email = ? AND si.id_social_network = ?;";
+    private static final String SQL_GET_BY_USER_EMAIL_SOCIAL_TYPE = "SELECT si.id, si.id_social_network, si.id_user, si.access_info, sn.title FROM public.user u JOIN public.social_information si ON u.id = si.id_user JOIN public.social_network sn ON si.id_social_network = sn.id WHERE u.email = ? AND si.id_social_network = ?;";
 
     @Override
     public SocialInformation getById(Long id) {
@@ -69,11 +66,11 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
     }
 
     @Override
-    public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork, Timestamp writeTime) {
+    public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork) {
         log.trace("Inserting social information with id_user, id_social_network  = ", user.getId(),
                 socialNetwork.getId());
         return this.getJdbcTemplate().insert(SQL_INSERT, socialInformation.getAccessInfo(), user.getId(),
-                socialNetwork.getId(), writeTime);
+                socialNetwork.getId());
     }
 
     @Override
@@ -107,7 +104,7 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
         List<SocialInformation> list = this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_EMAIL_SOCIAL_TYPE, extractor, email, idSocialType);
         if (list.size() == 0){
             return null;
-        } else if (list.size() < 1){
+        } else if (list.size() <= 1){
             return list.iterator().next();
         } else {
             throw new  IllegalStateException("Data base error, more then one social information for one user for one social network");
