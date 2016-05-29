@@ -1,6 +1,5 @@
 package ua.kpi.nc.controller.staff;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,20 +14,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import ua.kpi.nc.persistence.dto.AssignedInterviewDto;
+import ua.kpi.nc.persistence.dto.AssignedStudentDto;
 import ua.kpi.nc.persistence.dto.AssigningDto;
 import ua.kpi.nc.persistence.dto.MessageDto;
 import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.model.ApplicationForm;
-import ua.kpi.nc.persistence.model.FormAnswer;
-import ua.kpi.nc.persistence.model.FormQuestion;
 import ua.kpi.nc.persistence.model.Interview;
 import ua.kpi.nc.persistence.model.Role;
 import ua.kpi.nc.persistence.model.User;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
-import ua.kpi.nc.persistence.model.impl.real.FormAnswerImpl;
-import ua.kpi.nc.persistence.model.impl.real.InterviewImpl;
 import ua.kpi.nc.service.ApplicationFormService;
-import ua.kpi.nc.service.FormQuestionService;
 import ua.kpi.nc.service.InterviewService;
 import ua.kpi.nc.service.RoleService;
 import ua.kpi.nc.service.ServiceFactory;
@@ -55,7 +51,7 @@ public class StaffStudentManagementController {
 	private static final String CANNOT_ASSIGN_MESSAGE = gson.toJson(new MessageDto("Cannot assign this student.", MessageDtoType.ERROR));
 	private static final String MUST_CHOOSE_ROLE_MESSAGE = gson.toJson(new MessageDto("You must choose role to assign.", MessageDtoType.WARNING));
 	private static final String ASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("This student was assigned to you.", MessageDtoType.SUCCESS));
-	private static final String UNASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("Student was unassigned.", MessageDtoType.SUCCESS));;
+	private static final String UNASSIGN_SUCCESS_MESSAGE = gson.toJson(new MessageDto("Student was unassigned.", MessageDtoType.SUCCESS));
 	private static final String UNASSIGN_ERROR_MESSAGE = gson.toJson(new MessageDto("Cannot deassign this application form.", MessageDtoType.ERROR));
 	
 	
@@ -124,56 +120,56 @@ public class StaffStudentManagementController {
 				StatusEnum.APPROVED.getId());
 	}
 	
-	private JsonObject applicationFormToJson(ApplicationForm applicationForm) {
+	private AssignedStudentDto applicationFormToJson(ApplicationForm applicationForm) {
 		User student = applicationForm.getUser();
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("id", applicationForm.getId());
-		jsonObject.addProperty("photoScope", applicationForm.getPhotoScope());
-		jsonObject.addProperty("firstName", student.getFirstName());
-		jsonObject.addProperty("secondName", student.getSecondName());
-		jsonObject.addProperty("lastName", student.getLastName());
-		return jsonObject;
+		AssignedStudentDto assignedStudentDto = new AssignedStudentDto();
+		assignedStudentDto.setFirstName(student.getFirstName());
+		assignedStudentDto.setId(applicationForm.getId());
+		assignedStudentDto.setLastName(student.getLastName());
+		assignedStudentDto.setPhotoScope(applicationForm.getPhotoScope());
+		assignedStudentDto.setSecondName(student.getSecondName());
+		return assignedStudentDto;
 	}
 
-	private JsonArray assignedInterviewsToJson(ApplicationForm applicationForm, User interviewer) {
-		JsonArray jsonInterviews = new JsonArray();
+	private List<AssignedInterviewDto> assignedInterviewsToJson(ApplicationForm applicationForm, User interviewer) {
+		List<AssignedInterviewDto> assignedInterviews = new ArrayList<>();
 		for (Interview interview : applicationForm.getInterviews()) {
 			if (interview.getInterviewer().getId().equals(interviewer.getId())) {
-				JsonObject jsonInterview = new JsonObject();
-				jsonInterview.addProperty("id", interview.getId());
-				jsonInterview.addProperty("role", interview.getRole().getId());
-				jsonInterview.addProperty("hasMark", interview.getMark() != null);
-				jsonInterviews.add(jsonInterview);
+				AssignedInterviewDto assignedInterview = new AssignedInterviewDto();
+				assignedInterview.setId(interview.getId());
+				assignedInterview.setRole(interview.getRole().getId());
+				assignedInterview.setHasMark(interview.getMark() != null);
+				assignedInterviews.add(assignedInterview);
 			}
 		}
-		return jsonInterviews;
+		return assignedInterviews;
 	}
 
-	private JsonArray possibleInterviewsToJson(List<Role> possibleRoles) {
-		JsonArray jsonInterviews = new JsonArray();
+	private List<AssignedInterviewDto> possibleInterviewsToJson(List<Role> possibleRoles) {
+		List<AssignedInterviewDto> assignedInterviews = new ArrayList<>();
 		for (Role role : possibleRoles) {
-				JsonObject jsonInterview = new JsonObject();
-				jsonInterview.addProperty("role", role.getId());
-				jsonInterviews.add(jsonInterview);
+				AssignedInterviewDto assignedInterview = new AssignedInterviewDto();
+				assignedInterview.setRole(role.getId());
+				assignedInterviews.add(assignedInterview);
 		}
-		return jsonInterviews;
+		return assignedInterviews;
 	}
 
 
-	private JsonArray assignedFormsToJson(List<ApplicationForm> assignedForms, User interviewer) {
-		JsonArray jsonStudents = new JsonArray();
+	private List<AssignedStudentDto> assignedFormsToJson(List<ApplicationForm> assignedForms, User interviewer) {
+		List<AssignedStudentDto> assignedStudents = new ArrayList<>();
 		for (ApplicationForm applicationForm : assignedForms) {
-			JsonObject jsonStudent = applicationFormToJson(applicationForm);
-			jsonStudent.add("interviews", assignedInterviewsToJson(applicationForm, interviewer));
-			jsonStudents.add(jsonStudent);
+			AssignedStudentDto assignedStudent = applicationFormToJson(applicationForm);
+			assignedStudent.setInterviews(assignedInterviewsToJson(applicationForm, interviewer));
+			assignedStudents.add(assignedStudent);
 		}
-		return jsonStudents;
+		return assignedStudents;
 	}
 
-	private JsonObject studentToJson(ApplicationForm applicationForm, List<Role> possibleRolesToInterviews) {
-		JsonObject jsonStudent = applicationFormToJson(applicationForm);
-		jsonStudent.add("interviews", possibleInterviewsToJson(possibleRolesToInterviews));
-		return jsonStudent;
+	private AssignedStudentDto studentToJson(ApplicationForm applicationForm, List<Role> possibleRolesToInterviews) {
+		AssignedStudentDto assignedStudent = applicationFormToJson(applicationForm);
+		assignedStudent.setInterviews(possibleInterviewsToJson(possibleRolesToInterviews));
+		return assignedStudent;
 	}
 	
 }

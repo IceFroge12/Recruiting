@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
 import ua.kpi.nc.persistence.model.adapter.GsonFactory;
+import ua.kpi.nc.persistence.model.enums.EmailTemplateEnum;
 import ua.kpi.nc.persistence.model.enums.StatusEnum;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.service.*;
@@ -262,36 +263,31 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "announceResults", method = RequestMethod.POST)
     public String announceResults() throws MessagingException {
-        Gson gson = new Gson();
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+		Gson gson = new Gson();
+		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
 
-        EmailTemplate rejectedTemplate = emailTemplateService.getById(INTERVIEW_RESULT_REJECTED.getId());
-        List<ApplicationForm> rejectedForms = applicationFormService.getRejectedAfterInterview(recruitment);
-        sendMessage(rejectedForms, rejectedTemplate);
+		EmailTemplate rejectedTemplate = emailTemplateService.getById(INTERVIEW_RESULT_REJECTED.getId());
+		List<ApplicationForm> rejectedForms = applicationFormService.getRejectedAfterInterview(recruitment);
+		sendMessages(rejectedForms, rejectedTemplate);
 
-        Status approvedToJobStatus = statusService.getStatusById(APPROVED_TO_JOB.getId());
-        List<ApplicationForm> approvedToJobForms = applicationFormService.getByStatusAndRecruitment(
-                approvedToJobStatus, recruitment);
-        EmailTemplate approvedToJobTemplate = emailTemplateService.getById(INTERVIEW_RESULT_APPROVED_JOB.getId());
-        sendMessage(approvedToJobForms, approvedToJobTemplate);
+		StatusEnum[] statusEnums = { APPROVED_TO_JOB, APPROVED_TO_ADVANCED_COURSES, APPROVED_TO_GENERAL_COURSES };
+		EmailTemplateEnum[] emailTemplateEnums = { INTERVIEW_RESULT_APPROVED_JOB, INTERVIEW_RESULT_APPROVED_ADVANCED,
+				INTERVIEW_RESULT_APPROVED };
 
-        Status approvedToAdvancedStatus = statusService.getStatusById(APPROVED_TO_ADVANCED_COURSES.getId());
-        List<ApplicationForm> approvedToAdvancedForms = applicationFormService.getByStatusAndRecruitment(
-                approvedToAdvancedStatus, recruitment);
-        EmailTemplate approvedToAdvancedTemplate = emailTemplateService.getById(INTERVIEW_RESULT_APPROVED_ADVANCED.getId());
-        sendMessage(approvedToAdvancedForms, approvedToAdvancedTemplate);
+		for (int i = 0; i < statusEnums.length; i++) {
+			StatusEnum statusEnum = statusEnums[i];
+			Status status = statusService.getStatusById(statusEnum.getId());
+			List<ApplicationForm> formsWithThisStatus = applicationFormService.getByStatusAndRecruitment(status,
+					recruitment);
+			EmailTemplateEnum emailTemplateEnum = emailTemplateEnums[i];
+			EmailTemplate emailTemplate = emailTemplateService.getById(emailTemplateEnum.getId());
+			sendMessages(formsWithThisStatus, emailTemplate);
+		}
 
-        Status approvedToGeneralStatus = statusService.getStatusById(APPROVED_TO_GENERAL_COURSES.getId());
-        List<ApplicationForm> approvedToGeneralForms = applicationFormService.getByStatusAndRecruitment(
-                approvedToGeneralStatus, recruitment);
-        EmailTemplate approvedToGeneralTemplate = emailTemplateService.getById(INTERVIEW_RESULT_APPROVED.getId());
-        sendMessage(approvedToGeneralForms, approvedToGeneralTemplate);
-        return gson.toJson(new MessageDto("Results were announced.",
-                MessageDtoType.SUCCESS));
+		return gson.toJson(new MessageDto("Results were announced.", MessageDtoType.SUCCESS));
     }
 
-    //TODO duplicate
-    private void sendMessage(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
+    private void sendMessages(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
         for (ApplicationForm applicationForm : applicationForms) {
             User student = applicationForm.getUser();
             String subject = emailTemplate.getTitle();
@@ -330,32 +326,23 @@ public class AdminManagementStudentController {
     }
 
     private void processApprovedStudents(Recruitment recruitment) throws MessagingException {
-        Status approvedStatus = statusService.getStatusById(StatusEnum.APPROVED.getId());
-        EmailTemplate approvedTemplate = emailTemplateService.getById(5L);
-        List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
-                recruitment);
-
-        for (ApplicationForm applicationForm : approvedForms) {
-            User student = applicationForm.getUser();
-            String subject = approvedTemplate.getTitle();
-            String text = emailTemplateService.showTemplateParams(approvedTemplate.getText(), student);
-            senderService.send(student.getEmail(), subject, text);
-            userTimePriorityService.createStudentTimePriotities(student);
-        }
+		Status approvedStatus = statusService.getStatusById(StatusEnum.APPROVED.getId());
+		EmailTemplate approvedTemplate = emailTemplateService.getById(5L);
+		List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
+				recruitment);
+		sendMessages(approvedForms, approvedTemplate);
+		for (ApplicationForm applicationForm : approvedForms) {
+			User student = applicationForm.getUser();
+			userTimePriorityService.createStudentTimePriotities(student);
+		}
     }
 
-    //TODO duplicate
     private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
-        Status rejectedStatus = statusService.getStatusById(StatusEnum.REJECTED.getId());
-        EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);
-        List<ApplicationForm> rejectedForms = applicationFormService.getByStatusAndRecruitment(rejectedStatus,
-                recruitment);
-        for (ApplicationForm applicationForm : rejectedForms) {
-            User student = applicationForm.getUser();
-            String subject = rejectedTemplate.getTitle();
-            String text = emailTemplateService.showTemplateParams(rejectedTemplate.getText(), student);
-            senderService.send(student.getEmail(), subject, text);
-        }
+		Status rejectedStatus = statusService.getStatusById(REJECTED.getId());
+		EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);
+		List<ApplicationForm> rejectedForms = applicationFormService.getByStatusAndRecruitment(rejectedStatus,
+				recruitment);
+		sendMessages(rejectedForms, rejectedTemplate);
     }
 
 
@@ -371,13 +358,12 @@ public class AdminManagementStudentController {
     @RequestMapping(value = "getRecruitmentStatus", method = RequestMethod.GET)
     public String getRecruitmentStatus() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        RecruitmentStatusDto recruitmentStatusDto = new RecruitmentStatusDto();
         if (recruitment != null) {
-            RecruitmentStatusDto recruitmentStatusDto = new RecruitmentStatusDto();
             recruitmentStatusDto.setRecruitmentExists(true);
-            recruitmentStatusDto.setScheduleExists(scheduleTimePointService.isScheduleExists());
-            return new Gson().toJson(recruitmentStatusDto);
-        }
-        return null;
+            recruitmentStatusDto.setScheduleExists(userTimePriorityService.isSchedulePrioritiesExistStudent());
+        } 
+        return new Gson().toJson(recruitmentStatusDto);
     }
 
     @RequestMapping(value = "getTimePoints", method = RequestMethod.GET)

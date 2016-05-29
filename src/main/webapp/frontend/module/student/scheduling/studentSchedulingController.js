@@ -15,7 +15,7 @@ function studentSchedulingController($scope, ngToast, $http) {
 
 	$scope.update = function() {
 		var jsonData = angular.toJson($scope.schedule.timePoints);
-		var req= $http.post('../../student/updateSchedule', $scope.schedule.timePoints);
+		var req= $http.post('../../student/updateSchedule', $scope.schedule.priorities);
 		req.success(function(data) {
 			$scope.resultMessage = data;
 			var toastMessage = {
