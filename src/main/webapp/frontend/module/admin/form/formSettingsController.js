@@ -133,7 +133,13 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         console.log("delete"+ $scope.currentQuestion.id);
         formAppService.deleteQuestion( $scope.currentQuestion.id).then(function (response) {
             if (response.status === 200) {
-                getInfoToast("Question deleted")
+                getInfoToast("Question deleted");
+                angular.forEach($scope.questions,function (item,i) {
+                    if(item.id === $scope.currentQuestion.id ){
+                        $scope.questions.splice(i,1);
+                    }
+                });
+               
             }
         }).catch(function () {
             getInfoToast("Question not deleted");
@@ -244,7 +250,11 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         formAppService.addQuestion($scope.addText, selectedValue,$scope.selectActiveValue,
             $scope.selectMandatoryValue, variantArray, role, $scope.addOrder).then(function (response) {
             if (response.status === 200) {
+                var questionTmp = {enable: $scope.selectActiveValue, mandatory: $scope.selectMandatoryValue, order: $scope.addOrder,
+                    title: $scope.addText, type: selectedValue,variants:variantArray}
+
                 getInfoToast("Question added");
+                $scope.questions.push(questionTmp);
             }
         }).catch(function () {
             getInfoToast("Question not added");

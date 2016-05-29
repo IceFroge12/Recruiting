@@ -218,13 +218,15 @@
                     <span class="glyphicon glyphicon-remove"></span></button>
 
                 <h4 class="modal-title">Add Question</h4>
+                <form name="myForm">
                 <div>
                     <h3>{{questionRole}}</h3>
                     <table class="table">
                         <tr>
                             <td> Order</td>
-                            <td><input ng-model-options="{ debounce: 1000 }"
-                                       type="text" ng-model="addOrder" ng-change="changeOrder(addOrder)"></td>
+                            <span ng-show="myForm.order_field.$error.maxlength" class="text-danger">Order id should be no more than 20 characters.</span>
+                            <td><input type="number" ng-maxlength="20" ng-model-options="{ debounce: 1000 }"
+                                        ng-model="addOrder" ng-change="changeOrder(addOrder)" name="order_field" required></td>
                         </tr>
                         <tr>
                             <td> Text Question</td>
@@ -264,6 +266,7 @@
                         </tr>
                     </table>
                 </div>
+                    </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" ng-click="saveForm()" type="button"
