@@ -54,7 +54,15 @@ public class SocialInformationServiceImpl implements SocialInformationService {
     @Override
     public boolean isExist(String email, Long idSocialNetwork) {
         return socialInformationDao.isExist(email, idSocialNetwork);
+    }
 
+    @Override
+    public boolean isExist(Long idUserInSocialNetwork, Long idSocialNetwork) {
+        return socialInformationDao.isExist(idUserInSocialNetwork,idSocialNetwork);
+    }
 
+    @Override
+    public SocialInformation getByIdUserInSocialNetworkSocialType(Long idUserInSocialNetwork, Long idSocialNetwork) {
+        return socialInformationDao.getByIdUserInSocialNetworkSocialType(idUserInSocialNetwork,idSocialNetwork);
     }
 }

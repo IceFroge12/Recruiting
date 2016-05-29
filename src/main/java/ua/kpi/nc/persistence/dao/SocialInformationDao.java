@@ -25,4 +25,8 @@ public interface SocialInformationDao {
 	int deleteSocialInformation(SocialInformation socialInformation);
 
 	boolean isExist(String email, Long idSocialNetwork);
+
+	boolean isExist(Long idUserInSocialNetwork, Long idSocialNetwork);
+
+	SocialInformation getByIdUserInSocialNetworkSocialType(Long idUserInSocialNetwork, Long idSocialNetwork);
 }

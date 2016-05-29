@@ -214,6 +214,7 @@ h4 {
 .par {
     text-align: left;
     padding-left: 10px;
+    margin-left: 20px;
 }
 
 .table-cells {
@@ -461,4 +462,12 @@ canvas {
     margin-right: auto;
     display: block;
     width: 800px;
+}
+
+.my-slider{
+    height: 490px;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
 }

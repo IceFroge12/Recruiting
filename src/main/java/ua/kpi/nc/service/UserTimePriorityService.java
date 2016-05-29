@@ -35,6 +35,6 @@ public interface UserTimePriorityService {
     
     boolean isSchedulePrioritiesExistStudent();
 
-    public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId);
+    List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId);
 
 }

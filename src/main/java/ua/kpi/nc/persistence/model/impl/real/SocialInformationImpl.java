@@ -19,6 +19,7 @@ public class SocialInformationImpl implements SocialInformation {
     private String accessInfo;
     private User user;
     private SocialNetwork socialNetwork;
+    private Long idUserInSocialNetwork;
     private Timestamp writeTime;
 
     public SocialInformationImpl(Long id, SocialNetwork socialNetwork, String accessInfo) {
@@ -35,11 +36,12 @@ public class SocialInformationImpl implements SocialInformation {
 
 
 
-    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork) {
+    public SocialInformationImpl(Long id, String accessInfo, User user, SocialNetwork socialNetwork, Long idUserInSocialNetwork) {
         this.id = id;
         this.accessInfo = accessInfo;
         this.user = user;
         this.socialNetwork = socialNetwork;
+        this.idUserInSocialNetwork = idUserInSocialNetwork;
     }
 
     public SocialInformationImpl(String accessInfo, User user, SocialNetwork socialNetwork) {
@@ -91,11 +93,22 @@ public class SocialInformationImpl implements SocialInformation {
     }
 
     @Override
+    public Long getIdUserInSocialNetwork() {
+        return idUserInSocialNetwork;
+    }
+    @Override
+    public void setIdUserInSocialNetwork(Long idUserInSocialNetwork) {
+        this.idUserInSocialNetwork = idUserInSocialNetwork;
+    }
+
+    @Override
     public String toString() {
-        return "SocialInformation: " +
+        return "SocialInformationImpl{" +
                 "accessInfo='" + accessInfo + '\'' +
                 ", user=" + user +
-                ", socialNetwork=" + socialNetwork;
+                ", socialNetwork=" + socialNetwork +
+                ", idUserInSocialNetwork=" + idUserInSocialNetwork +
+                '}';
     }
 
     @Override
@@ -110,6 +123,7 @@ public class SocialInformationImpl implements SocialInformation {
                 .append(accessInfo, that.accessInfo)
                 .append(user, that.user)
                 .append(socialNetwork, that.socialNetwork)
+                .append(idUserInSocialNetwork, that.idUserInSocialNetwork)
                 .isEquals();
     }
 
@@ -119,6 +133,7 @@ public class SocialInformationImpl implements SocialInformation {
                 .append(accessInfo)
                 .append(user)
                 .append(socialNetwork)
+                .append(idUserInSocialNetwork)
                 .toHashCode();
     }
 }

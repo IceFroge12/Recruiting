@@ -353,16 +353,19 @@ function schedulingController($scope, ngToast, schedulingService) {
                 $scope.map.length = 0;
                 $scope.selectedDates.length = 0;
                 $scope.currentStatus = 5;
-                getSuccessToast('Days selection has been cancelled')
+                getSuccessToast('Days selection has been cancelled');
             }
             else {
-                getWarningToast('Error! Days selection has not been cancelled')
+                getWarningToast('Error! Days selection has not been cancelled');
             }
         })
 
     };
 
     $scope.saveInterviewParameters = function (softDuration, techDuration) {
+        if(softDuration==techDuration){
+            techDuration= techDuration+1;
+        }
         schedulingService.saveInterviewParametersService(softDuration, techDuration).then(function (response) {
             if (response.status == 200) {
                 getSuccessToast('Interview parameters have been saved')

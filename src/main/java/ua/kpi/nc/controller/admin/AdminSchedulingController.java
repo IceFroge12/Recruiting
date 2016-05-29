@@ -164,7 +164,7 @@ public class AdminSchedulingController {
         }
     }
 
-    @RequestMapping(value = "cancelDaySelect", method = RequestMethod.GET)
+    @RequestMapping(value = "cancelSchedulingStatus", method = RequestMethod.GET)
     public void cancelDaySelect() {
         schedulingSettingsService.deleteAll();
         timePointService.deleteAll();

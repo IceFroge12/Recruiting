@@ -73,6 +73,18 @@ public class SocialInformationProxy implements SocialInformation {
         socialInformation.setSocialNetwork(socialNetwork);
     }
 
+    @Override
+    public Long getIdUserInSocialNetwork() {
+        checkSocialInformationForExist();
+        return socialInformation.getIdUserInSocialNetwork();
+    }
+
+    @Override
+    public void setIdUserInSocialNetwork(Long idUserInSocialNetwork) {
+        checkSocialInformationForExist();
+        socialInformation.setIdUserInSocialNetwork(idUserInSocialNetwork);
+    }
+
     private void checkSocialInformationForExist(){
         if (socialInformation == null) {
             socialInformationService = ServiceFactory.getSocialInformationService();
