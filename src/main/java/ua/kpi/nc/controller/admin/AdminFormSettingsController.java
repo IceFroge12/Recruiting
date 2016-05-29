@@ -1,14 +1,10 @@
 package ua.kpi.nc.controller.admin;
 
-import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.FormQuestionDto;
-import ua.kpi.nc.persistence.dto.MessageDto;
-import ua.kpi.nc.persistence.dto.MessageDtoType;
 import ua.kpi.nc.persistence.model.*;
-import ua.kpi.nc.persistence.model.adapter.GsonFactory;
 import ua.kpi.nc.persistence.model.impl.real.FormAnswerVariantImpl;
 import ua.kpi.nc.persistence.model.impl.real.FormQuestionImpl;
 import ua.kpi.nc.persistence.util.FormQuestionComparator;
@@ -28,26 +24,35 @@ import static ua.kpi.nc.persistence.model.enums.FormQuestionTypeEnum.*;
 public class AdminFormSettingsController {
 
     private DecisionService decisionService = ServiceFactory.getDecisionService();
-
     private FormQuestionService formQuestionService = ServiceFactory.getFormQuestionService();
-
     private RoleService roleService = ServiceFactory.getRoleService();
-
     private QuestionTypeService questionTypeService = ServiceFactory.getQuestionTypeService();
 
 
-    @RequestMapping(value = "getQuestions", method = RequestMethod.POST)
-    public List<String> getQuestions(@RequestParam String role) {
+    @RequestMapping(value = "getQuestions", method = RequestMethod.GET)
+    public List<FormQuestionDto> getQuestions(@RequestParam String role) {
         Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
         Collections.sort(formQuestionList, new FormQuestionComparator());
-        List<String> adapterFormQuestionList = new ArrayList<>();
+        List<FormQuestionDto> formQuestionListDto = new ArrayList<>();
         for (FormQuestion formQuestion : formQuestionList) {
-            Gson questionGson = GsonFactory.getFormQuestionGson();
-            String jsonResult = questionGson.toJson(formQuestion);
-            adapterFormQuestionList.add(jsonResult);
+            FormQuestionDto formQuestionDto = new FormQuestionDto();
+            formQuestionDto.setId(formQuestion.getId());
+            formQuestionDto.setType(formQuestion.getQuestionType().getTypeTitle());
+            formQuestionDto.setMandatory(formQuestion.isMandatory());
+            formQuestionDto.setEnable(formQuestion.isEnable());
+            formQuestionDto.setQuestion(formQuestion.getTitle());
+            formQuestionDto.setOrder(formQuestion.getOrder());
+            formQuestionDto.setFormAnswerVariants(new ArrayList<>());
+            if (formQuestion.getFormAnswerVariants() == null) {
+                formQuestion.setFormAnswerVariants(new ArrayList<>());
+            }
+            for (FormAnswerVariant answerVariant : formQuestion.getFormAnswerVariants()) {
+                formQuestionDto.getFormAnswerVariants().add(answerVariant.getAnswer());
+            }
+            formQuestionListDto.add(formQuestionDto);
         }
-        return adapterFormQuestionList;
+        return formQuestionListDto;
     }
 
     @RequestMapping(value = "addQuestion", method = RequestMethod.POST)
@@ -96,7 +101,7 @@ public class AdminFormSettingsController {
         formQuestionService.updateQuestions(formQuestion, formAnswerVariantList);
     }
 
-    @RequestMapping(value = "getAllQuestionType")
+    @RequestMapping(value = "getAllQuestionType", method = RequestMethod.GET)
     public List<QuestionType> getAllQuestionType() {
         return questionTypeService.getAllQuestionType();
     }
@@ -123,13 +128,13 @@ public class AdminFormSettingsController {
     }
 
     @RequestMapping(value = "saveDecisionMatrix", method = RequestMethod.POST)
-    public String saveDecisionMatrix(@RequestBody List<Decision> decisionMatrix) {
+    public ResponseEntity saveDecisionMatrix(@RequestBody List<Decision> decisionMatrix) {
         decisionService.updateDecisionMatrix(decisionMatrix);
-        return new Gson().toJson(new MessageDto("Decision matrix was updated", MessageDtoType.SUCCESS));
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "deleteQuestion", method = RequestMethod.GET)
-    public ResponseEntity delete(@RequestParam Long id){
+    public ResponseEntity delete(@RequestParam Long id) {
         FormQuestion formQuestion = formQuestionService.getById(id);
         formQuestionService.deleteFormQuestion(formQuestion);
         return ResponseEntity.status(HttpStatus.OK).body(null);

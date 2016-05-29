@@ -66,12 +66,12 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     function getAllQuestion(role) {
         formAppService.getAllQuestion(role).then(function success(data) {
+            console.log(data);
             for (var i = 0, len = data.length; i < len; i++) {
-                if (typeof data[i].variants !== "undefined"
-                    && data[i].variants !== "undefined") {
-                    data[i].variants = JSON.parse(data[i].variants);
+                if (typeof data[i].formAnswerVariants !== undefined
+                    && data[i].formAnswerVariants !== undefined) {
+                    data[i].variants = data[i].formAnswerVariants;
                     $scope.questions = data;
-                    console.log($scope.questions);
                 }
             }
             console.log($scope.questions);
@@ -80,7 +80,8 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
     $scope.types = [];
     formAppService.getAllQuestionType().then(function success(data) {
-        angular.forEach(data.data, function (item, i) {
+        angular.forEach(data, function (item, i) {
+            console.log(item.typeTitle);
             $scope.types.push(item.typeTitle);
         });
     });
@@ -90,7 +91,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
 
         $scope.question = question;
 
-        $scope.text = question.title;
+        $scope.text = question.question;
 
         $scope.type = question.type;
 
@@ -99,16 +100,16 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         $scope.editVariant = [];
         angular.forEach(question.variants, function (item, i) {
             if (i == 0) {
-                $scope.editVariant += item.variant;
+                $scope.editVariant += item;
             } else {
-                $scope.editVariant += " , " + item.variant;
+                $scope.editVariant += " , " + item;
             }
         });
     };
 
     $scope.roles = ["ROLE_STUDENT", "ROLE_TECH", "ROLE_SOFT"];
     $scope.sce = $sce;
-    
+
     var selectedValue;
     $scope.showSelectValue = function (mySelect) {
         console.log(mySelect);
@@ -121,25 +122,25 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             $scope.canMoveForward = false;
         }
     };
-    
-  
+
+
     $scope.currentQuestion;
     $scope.getQuestion = function (question) {
         console.log(question);
         $scope.currentQuestion = question;
     };
-    
-    $scope.deleteQuestion = function() {
-        console.log("delete"+ $scope.currentQuestion.id);
-        formAppService.deleteQuestion( $scope.currentQuestion.id).then(function (response) {
+
+    $scope.deleteQuestion = function () {
+        console.log("delete" + $scope.currentQuestion.id);
+        formAppService.deleteQuestion($scope.currentQuestion.id).then(function (response) {
             if (response.status === 200) {
                 getInfoToast("Question deleted");
-                angular.forEach($scope.questions,function (item,i) {
-                    if(item.id === $scope.currentQuestion.id ){
-                        $scope.questions.splice(i,1);
+                angular.forEach($scope.questions, function (item, i) {
+                    if (item.id === $scope.currentQuestion.id) {
+                        $scope.questions.splice(i, 1);
                     }
                 });
-               
+
             }
         }).catch(function () {
             getInfoToast("Question not deleted");
@@ -194,7 +195,7 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
             }
             console.log("break");
         }
-        
+
     };
 
     $scope.changeEditOrder = function (questionOrder) {
@@ -243,16 +244,17 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         if ($scope.questionRole == "Soft question") {
             role = "ROLE_SOFT";
         }
-        
-        console.log($scope.addText+" "+ selectedValue+" "+$scope.selectActiveValue+" "+
-            $scope.selectMandatoryValue+" "+ variantArray+" "+ role+" " +$scope.addOrder);
-        
-        formAppService.addQuestion($scope.addText, selectedValue,$scope.selectActiveValue,
+
+        console.log($scope.addText + " " + selectedValue + " " + $scope.selectActiveValue + " " +
+            $scope.selectMandatoryValue + " " + variantArray + " " + role + " " + $scope.addOrder);
+
+        formAppService.addQuestion($scope.addText, selectedValue, $scope.selectActiveValue,
             $scope.selectMandatoryValue, variantArray, role, $scope.addOrder).then(function (response) {
             if (response.status === 200) {
-                var questionTmp = {enable: $scope.selectActiveValue, mandatory: $scope.selectMandatoryValue, order: $scope.addOrder,
-                    title: $scope.addText, type: selectedValue,variants:variantArray}
-
+                var questionTmp = {
+                    enable: $scope.selectActiveValue, mandatory: $scope.selectMandatoryValue, order: $scope.addOrder,
+                    title: $scope.addText, type: selectedValue, formAnswerVariants: variantArray
+                };
                 getInfoToast("Question added");
                 $scope.questions.push(questionTmp);
             }
@@ -294,26 +296,14 @@ function formSettingsController($scope, ngToast, $sce, formAppService) {
         formAppService.saveDecisionMatrix($scope.decisionMatrix).then(function success(data) {
             console.log('Updating decision');
             console.log(data);
-            $scope.resultMessage = data.data;
-            var toastMessage = {
-                content: $scope.resultMessage.message,
-                timeout: 5000,
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                dismissOnClick: true,
-                combineDuplications: true,
-                maxNumber: 2
-            };
-            if ($scope.resultMessage.type == 'ERROR') {
-                var myToastMsg = ngToast.warning(toastMessage);
+            if (data.status === 200) {
+                getInfoToast("Matrix updated");
             }
-            else if ($scope.resultMessage.type == 'SUCCESS') {
-                var myToastMsg = ngToast.success(toastMessage);
-            }
+        }).catch(function () {
+            getInfoToast("Question not added");
         });
-    }
-
-};
+    };
+}
 
 angular.module('appAdminForm')
     .controller('formSettingsController', ['$scope', 'ngToast', '$sce', 'formSettingsService', formSettingsController]);

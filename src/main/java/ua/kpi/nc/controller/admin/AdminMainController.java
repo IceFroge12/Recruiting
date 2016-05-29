@@ -21,7 +21,7 @@ public class AdminMainController {
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     public Recruitment getRecruitmentData() {
         if(null == recruitmentService.getCurrentRecruitmnet()){
-           return recruitmentService.getLastRecruitment();
+            return recruitmentService.getLastRecruitment();
         }
         return recruitmentService.getCurrentRecruitmnet();
     }

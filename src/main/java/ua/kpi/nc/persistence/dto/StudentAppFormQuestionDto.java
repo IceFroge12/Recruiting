@@ -11,8 +11,8 @@ public class StudentAppFormQuestionDto {
     private String questionTitle;
     private String questionType;
     private boolean isMandatory;
-    private List<StudentAnswerDto> answers = new ArrayList<StudentAnswerDto>();
-    private List<QuestionVariantDto> variants = new ArrayList<QuestionVariantDto>();
+    private List<StudentAnswerDto> answers = new ArrayList<>();
+    private List<QuestionVariantDto> variants = new ArrayList<>();
 
     public StudentAppFormQuestionDto() {
     }
