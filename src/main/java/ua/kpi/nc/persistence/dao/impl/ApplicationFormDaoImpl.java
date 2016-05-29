@@ -176,7 +176,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
 
     private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
 
-    private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =?";
+    private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount from application_form WHERE id_recruitment =? and id_status=?";
 
     private static final String SQL_GET_All = "SELECT a.id,  a.id_status, a.is_active,a."
             + "id_recruitment, a.photo_scope, a.id_user, a.date_create, a.feedback, s.title \n" + "FROM \""
@@ -352,7 +352,7 @@ public class ApplicationFormDaoImpl extends JdbcDaoSupport implements Applicatio
             public Long extractData(ResultSet resultSet) throws SQLException {
                 return resultSet.getLong("rowcount");
             }
-        }, id);
+        }, id, 3);
     }
 
 
