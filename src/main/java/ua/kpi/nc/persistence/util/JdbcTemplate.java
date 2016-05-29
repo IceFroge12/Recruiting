@@ -32,28 +32,26 @@ public class JdbcTemplate {
     public int update(String sql, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            log.trace("Open connection, create prepared statement");
             int rowNum = 1;
             for (Object object : objects) {
                 statement.setObject(rowNum++, object);
             }
             return statement.executeUpdate();
         } catch (SQLException e) {
-            log.error("Cannot read objects ", e);
+            log.error("Cannot update objects ", e);
             return 0;
         }
     }
 
     public int update(String sql, Connection connection, Object... objects) {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            log.trace("Create prepared statement");
             int rowNum = 1;
             for (Object object : objects) {
                 statement.setObject(rowNum++, object);
             }
             return statement.executeUpdate();
         } catch (SQLException e) {
-            log.error("Cannot read objects ", e);
+            log.error("Cannot update objects ", e);
             return 0;
         }
     }
@@ -61,20 +59,18 @@ public class JdbcTemplate {
     public Long insert(String sql, Object... objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            log.trace("Open connection, create prepared statement");
             return insert(statement, objects);
         } catch (SQLException e) {
-            log.error("Cannot read objects ", e);
+            log.error("Cannot insert objects ", e);
             return 0L;
         }
     }
 
     public Long insert(String sql, Connection connection, Object... objects) {
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            log.trace("Create prepared statement");
             return insert(statement, objects);
         } catch (SQLException e) {
-            log.error("Cannot read objects ", e);
+            log.error("Cannot insert objects ", e);
             return 0L;
         }
     }
@@ -97,7 +93,7 @@ public class JdbcTemplate {
             }
             return collection;
         } catch (SQLException e) {
-            log.error("Cannot read object ", e);
+            log.error("Cannot read objects ", e);
         }
         return collection;
     }
@@ -107,7 +103,6 @@ public class JdbcTemplate {
     }
 
     private Long insert(PreparedStatement statement, Object... objects) {
-        log.trace("Get result");
         int rowNum = 1;
         try {
             for (Object object : objects) {
@@ -119,7 +114,7 @@ public class JdbcTemplate {
                 return resultSet.getLong(1);
             }
         } catch (SQLException e) {
-            log.error("Cannot insert objects ", e);
+            log.error("Cannot insert object ", e);
         }
         return 0L;
     }
@@ -127,8 +122,7 @@ public class JdbcTemplate {
     public int[] batchUpdate(String sql, Object[][] objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            log.trace("Open connection");
-            int rowNum = 1;
+           int rowNum = 1;
             for (Object[] objectsForSql : objects) {
                 for (Object object : objectsForSql) {
                     statement.setObject(rowNum++, object);
@@ -151,12 +145,11 @@ public class JdbcTemplate {
                 statement.setObject(rowNum++, object);
             }
             ResultSet resultSet = statement.executeQuery();
-            log.trace("Open connection, create prepared statement");
             if (resultSet.next()) {
                 return resultSetExtractor.extractData(resultSet);
             }
         } catch (SQLException e) {
-            log.error("Cannot read objects ", e);
+            log.error("Cannot read object ", e);
         }
         return null;
     }

@@ -1,22 +1,20 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ua.kpi.nc.persistence.dao.SocialNetworkDao;
 import ua.kpi.nc.persistence.model.SocialNetwork;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
+import javax.sql.DataSource;
+
 /**
  * Created by IO on 16.04.2016.
  */
-public class SocialNetworkDaoImpl extends JdbcDaoSupport implements SocialNetworkDao {
+public class SocialNetworkDaoImpl implements SocialNetworkDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(SocialNetworkDaoImpl.class.getName());
 
@@ -30,13 +28,14 @@ public class SocialNetworkDaoImpl extends JdbcDaoSupport implements SocialNetwor
             + "WHERE s.id = ?";
 
     public SocialNetworkDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public SocialNetwork getByID(Long id) {
-        log.trace("Looking for social network with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        log.info("Looking for social network with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
 }

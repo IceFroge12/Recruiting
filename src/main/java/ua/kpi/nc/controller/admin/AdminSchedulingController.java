@@ -3,10 +3,8 @@ package ua.kpi.nc.controller.admin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.kpi.nc.persistence.dao.DaoUtil;
 import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
-import ua.kpi.nc.persistence.model.enums.RoleEnum;
 import ua.kpi.nc.persistence.model.enums.SchedulingStatusEnum;
 import ua.kpi.nc.service.*;
 
@@ -34,16 +32,16 @@ public class AdminSchedulingController {
     private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
 
 
-    private final static String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
-    private final static String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
-    private final static String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
-    private final static String EDIT_SELECTED_DAY_ERROR = "Error during edit selected day, refresh page or try again later";
-    private final static String GET_USERS_BY_ROLE_TIME_PRIORITY_ERROR = "Error during get users, refresh page or try again later";
-    private final static String CHANGE_STATUS_ERROR = "Action has been not complete";
-    private final static String RECRUITMENT_NOT_STARTED = "Any recruitment not started";
-    private final static String STAFF_STUDENT_NOT_CONFIRM = "Student and staff hasn't been confirm";
-    private final static String STAFF_NOT_CONFIRM = "Staff hasn't been confirm";
-    private final static String STUDENT_NOT_CONFIRM = "Student hasn't been confirm";
+    private static final  String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
+    private static final String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
+    private static final String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
+    private static final String EDIT_SELECTED_DAY_ERROR = "Error during edit selected day, refresh page or try again later";
+    private static final String GET_USERS_BY_ROLE_TIME_PRIORITY_ERROR = "Error during get users, refresh page or try again later";
+    private static final String CHANGE_STATUS_ERROR = "Action has been not complete";
+    private static final String RECRUITMENT_NOT_STARTED = "Any recruitment not started";
+    private static final String STAFF_STUDENT_NOT_CONFIRM = "Student and staff hasn't been confirm";
+    private static final String STAFF_NOT_CONFIRM = "Staff hasn't been confirm";
+    private static final String STUDENT_NOT_CONFIRM = "Student hasn't been confirm";
 
 
     @RequestMapping(value = "getCurrentStatus", method = RequestMethod.GET)
@@ -66,7 +64,8 @@ public class AdminSchedulingController {
                 ROLE_TECH.getId());
 
         return new SchedulingSettingDto(
-                applicationFormService.getCountRecruitmentStudents(recruitmentService.getCurrentRecruitmnet().getId()),
+                applicationFormService.getCountApprovedStudentsByRecruitmentId(recruitmentService.getCurrentRecruitmnet()
+                        .getId()),
                 activeSoft,
                 activeTech
         );

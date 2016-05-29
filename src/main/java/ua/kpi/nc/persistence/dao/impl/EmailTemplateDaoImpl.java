@@ -13,8 +13,10 @@ import javax.sql.DataSource;
 /**
  * @author Korzh
  */
-public class EmailTemplateDaoImpl extends JdbcDaoSupport implements EmailTemplateDao {
+public class EmailTemplateDaoImpl implements EmailTemplateDao {
     private static Logger log = LoggerFactory.getLogger(EmailTemplateDaoImpl.class.getName());
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<EmailTemplate> extractor = resultSet -> {
         EmailTemplate emailTemplate = new EmailTemplate();
@@ -48,38 +50,39 @@ public class EmailTemplateDaoImpl extends JdbcDaoSupport implements EmailTemplat
     private static final String DELETE_EMAIL_TEMPLATE = "DELETE FROM public." + TABLE_NAME + " WHERE id = ?;";
 
     public EmailTemplateDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public EmailTemplate getById(Long id) {
-        log.trace("Looking for form email template with id  = ", id);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
+        log.info("Looking for form email template with id  = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_ID, extractor, id);
     }
 
     @Override
     public EmailTemplate getByTitle(String title) {
-        log.trace("Looking for form email template with title  = ", title);
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_TITLE, extractor, title);
+        log.info("Looking for form email template with title  = {}", title);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_TITLE, extractor, title);
     }
 
     @Override
     public EmailTemplate getByNotificationType(NotificationType notificationType) {
-        log.trace("Looking for form email template with notificationType  = ", notificationType.getTitle());
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_NOTIFICATION_TYPE, extractor,
+        log.info("Looking for form email template with notificationType = {}", notificationType.getTitle());
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_NOTIFICATION_TYPE, extractor,
                 notificationType.getId());
     }
 
     @Override
     public int updateEmailTemplate(EmailTemplate emailTemplate) {
-        log.trace("Updating email template with id  = ", emailTemplate.getId());
-        return this.getJdbcTemplate().update(UPDATE_EMAIL_TEMPLATE, emailTemplate.getTitle(), emailTemplate.getText(),
+        log.info("Updating email template with id  = {}", emailTemplate.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(UPDATE_EMAIL_TEMPLATE, emailTemplate.getTitle(), emailTemplate.getText(),
                 emailTemplate.getId());
     }
 
     @Override
     public int deleteEmailTemplate(EmailTemplate emailTemplate) {
-        log.trace("Deleting email template with id  = ", emailTemplate.getId());
-        return this.getJdbcTemplate().update(DELETE_EMAIL_TEMPLATE, emailTemplate.getId());
+        log.info("Deleting email template with id  = {}", emailTemplate.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_EMAIL_TEMPLATE, emailTemplate.getId());
     }
 }

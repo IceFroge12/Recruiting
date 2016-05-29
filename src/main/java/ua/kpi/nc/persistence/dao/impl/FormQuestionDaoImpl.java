@@ -22,7 +22,9 @@ import java.util.Set;
 /**
  * Created by Nikita on 23.04.2016.
  */
-public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionDao {
+public class FormQuestionDaoImpl implements FormQuestionDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<FormQuestion> extractor = resultSet -> {
         FormQuestion formQuestion = new FormQuestionImpl();
@@ -92,21 +94,22 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     private static Logger log = LoggerFactory.getLogger(FormQuestionDaoImpl.class.getName());
 
     public FormQuestionDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public Long insertFormQuestion(FormQuestion formQuestion, Connection connection) {
         log.info("Insert question with title, enable, mandatory = {}, {}, {}", formQuestion.getTitle(),
                 formQuestion.isEnable(), formQuestion.isMandatory());
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formQuestion.getTitle(), formQuestion.isEnable(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, formQuestion.getTitle(), formQuestion.isEnable(),
                 formQuestion.isMandatory(), formQuestion.getQuestionType().getId(), formQuestion.getOrder());
     }
 
     @Override
     public int deleteFormQuestion(FormQuestion formQuestion) {
         log.info("Deleting form question with id = ", formQuestion.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, formQuestion.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, formQuestion.getId());
     }
 
     private static final String SQL_ROLE_MAP_INSERT = "INSERT INTO " + ROLE_MAP_TABLE_NAME + " ("
@@ -118,7 +121,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             log.warn("User don`t have id", formQuestion.getTitle());
             return false;
         }
-        return this.getJdbcTemplate().insert(SQL_ROLE_MAP_INSERT, formQuestion.getId(), role.getId()) > 0;
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_ROLE_MAP_INSERT, formQuestion.getId(), role.getId()) > 0;
     }
 
     @Override
@@ -127,7 +130,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             log.warn("User: don`t have id", formQuestion.getTitle());
             return false;
         }
-        return this.getJdbcTemplate().insert(SQL_ROLE_MAP_INSERT, connection, formQuestion.getId(), role.getId()) > 0;
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_ROLE_MAP_INSERT, connection, formQuestion.getId(), role.getId()) > 0;
     }
 
     @Override
@@ -136,7 +139,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             log.warn("Form question: don`t have id", formQuestion.getTitle());
             return 0;
         }
-        return this.getJdbcTemplate().update("DELETE FROM " + ROLE_MAP_TABLE_NAME + " WHERE "
+        return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM " + ROLE_MAP_TABLE_NAME + " WHERE "
                         + ROLE_MAP_TABLE_FORM_QUESTION_ID + "= ? AND " + ROLE_MAP_TABLE_ROLE_ID + "=?;", formQuestion.getId(),
                 role.getId());
     }
@@ -144,29 +147,29 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     @Override
     public FormQuestion getById(Long id) {
         log.info("Looking for form question with id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<FormQuestion> getByRole(Role role) {
         log.info("Looking for form question by role = {}", role.getRoleName());
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE, extractor, role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE, extractor, role.getId());
     }
 
     @Override
     public List<FormQuestion> getByRoleNonText(Role role) {
         log.info("Looking for non text form question by role = {}", role.getRoleName());
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE_NONTEXT, extractor, role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_ROLE_NONTEXT, extractor, role.getId());
     }
 
     @Override
     public List<FormQuestion> getAll() {
         log.info("Get all form questions");
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
     private List<Role> getRoles(Long formQuestionID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT fqr." + ROLE_MAP_TABLE_ROLE_ID + " FROM "
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT fqr." + ROLE_MAP_TABLE_ROLE_ID + " FROM "
                         + ROLE_MAP_TABLE_NAME + " fqr\n" + "WHERE fqr." + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = ?;",
                 resultSet -> {
                     List<Role> roles = new ArrayList<>();
@@ -178,7 +181,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     }
 
     private List<FormAnswerVariant> getAnswerVariants(Long formQuestionID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT fav.id FROM form_answer_variant fav WHERE fav.id_question = ? ORDER BY fav.id",
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT fav.id FROM form_answer_variant fav WHERE fav.id_question = ? ORDER BY fav.id",
                 resultSet -> {
                     List<FormAnswerVariant> answersVariants = new ArrayList<>();
                     do {
@@ -194,7 +197,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             log.warn("Form question: don`t have id", formQuestion.getTitle());
             return 0;
         }
-        return this.getJdbcTemplate().update(SQL_UPDATE, formQuestion.getTitle(), formQuestion.isEnable(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, formQuestion.getTitle(), formQuestion.isEnable(),
                 formQuestion.getQuestionType().getId(), formQuestion.isMandatory(), formQuestion.getOrder(),
                 formQuestion.getId());
     }
@@ -206,7 +209,7 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
             return 0;
         }
         log.info("Updating Question with Id = {}", formQuestion.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, connection, formQuestion.getTitle(), formQuestion.isEnable(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, formQuestion.getTitle(), formQuestion.isEnable(),
                 formQuestion.getQuestionType().getId(), formQuestion.isMandatory(), formQuestion.getOrder(),
                 formQuestion.getId());
     }
@@ -214,29 +217,28 @@ public class FormQuestionDaoImpl extends JdbcDaoSupport implements FormQuestionD
     @Override
     public Set<FormQuestion> getEnableByRoleAsSet(Role role) {
         log.info("Looking for set of form questions by role = {}", role.getRoleName());
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
     }
 
     @Override
     public List<FormQuestion> getEnableByRole(Role role) {
         log.info("Looking for form question by role = {}", role.getRoleName());
-        return this.getJdbcTemplate().queryForList(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
     }
 
     @Override
     public Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm) {
-        return this.getJdbcTemplate().queryForSet(SQL_ENABLE_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_ENABLE_GET_BY_APPLICATION_FORM, extractor, applicationForm.getId());
     }
 
     @Override
     public List<FormQuestion> getEnableUnconnectedQuestion(Role role, ApplicationForm applicationForm) {
-        return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED, extractor, applicationForm.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_UNCONNECTED, extractor, applicationForm.getId());
     }
 
 	@Override
 	public List<FormQuestion> getWithVariantsByRole(Role role) {
 		log.trace("Getting form questions with variants and role = {}", role.getRoleName());
-		return this.getJdbcTemplate().queryForList(SQL_GET_WITH_VARIANTS_BY_ROLE, extractor, role.getId());
+		return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_WITH_VARIANTS_BY_ROLE, extractor, role.getId());
 	}
-
 }

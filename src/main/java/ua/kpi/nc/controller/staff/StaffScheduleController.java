@@ -61,7 +61,6 @@ public class StaffScheduleController {
                     userTimePriority.setTimePriorityType(new TimePriorityType(userTimePriorityListDto.get(i).getIdPriorityType()));
                     return userTimePriority;
                 }).collect(Collectors.toList());
-
         userTimePriorityService.batchUpdateUserPriority(updatingUserTimePriorities);
 
         return ResponseEntity.status(HttpStatus.OK).body(null);

@@ -15,7 +15,9 @@ import java.util.List;
 /**
  * Created by IO on 21.04.2016.
  */
-public class QuestionTypeDaoImpl extends JdbcDaoSupport implements QuestionTypeDao {
+public class QuestionTypeDaoImpl implements QuestionTypeDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(QuestionTypeDaoImpl.class.getName());
 
@@ -43,34 +45,33 @@ public class QuestionTypeDaoImpl extends JdbcDaoSupport implements QuestionTypeD
     private static final String SQL_GET_ALL = "SELECT " + ID_COL + ", " + TYPE_TITLE_COL + " FROM " + TABLE_NAME;
 
     public QuestionTypeDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     public List<QuestionType> getAllQuestionType() {
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
     @Override
     public QuestionType getById(Long id) {
-        log.trace("Looking for form question with id  = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_ID, extractor, id);
+        log.info("Looking for form question with id  = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_ID, extractor, id);
     }
 
     @Override
     public QuestionType getByName(String name) {
-        log.trace("Looking for form question with name  = ", name);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_NAME, extractor, name);
+        log.info("Looking for form question with name  = {}", name);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_NAME, extractor, name);
     }
 
     @Override
     public Long persistQuestionType(QuestionType questionType) {
-        return this.getJdbcTemplate().insert(SQL_INSERT, questionType.getTypeTitle());
-
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, questionType.getTypeTitle());
     }
 
     @Override
     public int deleteQuestionType(QuestionType questionType) {
-        return this.getJdbcTemplate().update(SQL_DELETE, questionType.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, questionType.getId());
     }
-
 }

@@ -1,15 +1,7 @@
 package ua.kpi.nc.persistence.dao.impl;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Set;
-
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ua.kpi.nc.persistence.dao.SocialInformationDao;
 import ua.kpi.nc.persistence.model.SocialInformation;
 import ua.kpi.nc.persistence.model.SocialNetwork;
@@ -19,15 +11,22 @@ import ua.kpi.nc.persistence.model.impl.real.SocialInformationImpl;
 import ua.kpi.nc.persistence.util.JdbcTemplate;
 import ua.kpi.nc.persistence.util.ResultSetExtractor;
 
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by Chalienko on 15.04.2016.
  */
-public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialInformationDao {
+public class SocialInformationDaoImpl implements SocialInformationDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(SocialInformationDaoImpl.class.getName());
 
     public SocialInformationDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private ResultSetExtractor<SocialInformation> extractor = resultSet -> {
@@ -64,34 +63,34 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
 
     @Override
     public SocialInformation getById(Long id) {
-        log.trace("Looking for social information with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        log.info("Looking for social information with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public Set<SocialInformation> getByUserId(Long id) {
-        log.trace("Looking for social informations with id_user = ", id);
-        return this.getJdbcTemplate().queryForSet(SQL_GET_BY_USER_ID, extractor, id);
+        log.info("Looking for social informations with id_user = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_BY_USER_ID, extractor, id);
     }
 
     @Override
     public Long insertSocialInformation(SocialInformation socialInformation, User user, SocialNetwork socialNetwork) {
-        log.trace("Inserting social information with id_user, id_social_network  = ", user.getId(),
+        log.info("Inserting social information with id_user, id_social_network  = {}, {}", user.getId(),
                 socialNetwork.getId());
-        return this.getJdbcTemplate().insert(SQL_INSERT, socialInformation.getAccessInfo(), user.getId(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, socialInformation.getAccessInfo(), user.getId(),
                 socialNetwork.getId(), socialInformation.getIdUserInSocialNetwork());
     }
 
     @Override
     public int updateSocialInformation(SocialInformation socialInformation) {
-        log.trace("Updating social_information with id = ", socialInformation.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, socialInformation.getAccessInfo(), socialInformation.getId());
+        log.info("Updating social_information with id = {}", socialInformation.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, socialInformation.getAccessInfo(), socialInformation.getId());
     }
 
     @Override
     public int deleteSocialInformation(SocialInformation socialInformation) {
-        log.trace("Deleting social information with id = ", socialInformation.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, socialInformation.getId());
+        log.info("Deleting social information with id = ", socialInformation.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, socialInformation.getId());
     }
 
 
@@ -104,26 +103,26 @@ public class SocialInformationDaoImpl extends JdbcDaoSupport implements SocialIn
 
     @Override
     public boolean isExist(String email, Long idSocialNetwork) {
-        log.trace("Search user social information by email = {}", email);
+        log.info("Search user social information by email = {}", email);
         return getByUserEmailSocialType(email, idSocialNetwork) != null;
     }
 
     @Override
     public SocialInformation getByIdUserInSocialNetworkSocialType(Long idUserInSocialNetwork, Long idSocialNetwork) {
-        log.trace("Search user social information by Id User In Social Network and Social Type = {}, {}",idUserInSocialNetwork,idSocialNetwork);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID_IN_SOCIAL_NETWORK_AND_SOCIAL_TYPE, extractor,idSocialNetwork,idUserInSocialNetwork);
+        log.info("Search user social information by Id User In Social Network and Social Type = {}, {}",idUserInSocialNetwork,idSocialNetwork);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID_IN_SOCIAL_NETWORK_AND_SOCIAL_TYPE, extractor,idSocialNetwork,idUserInSocialNetwork);
     }
 
     @Override
     public boolean isExist(Long idUserInSocialNetwork, Long idSocialNetwork) {
-        log.trace("Search user exists social information by Id User In Social Network and Social Type = {}, {}",idUserInSocialNetwork,idSocialNetwork);
-        return this.getJdbcTemplate().queryWithParameters(SQL_EXIST_ID_IN_SOCIAL_NETWORK_AND_SOCIAL_TYPE, resultSet -> resultSet.getBoolean(1),idSocialNetwork,idUserInSocialNetwork );
+        log.info("Search user exists social information by Id User In Social Network and Social Type = {}, {}",idUserInSocialNetwork,idSocialNetwork);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST_ID_IN_SOCIAL_NETWORK_AND_SOCIAL_TYPE, resultSet -> resultSet.getBoolean(1),idSocialNetwork,idUserInSocialNetwork );
     }
 
     @Override
     public SocialInformation getByUserEmailSocialType(String email, Long idSocialType) {
-        List<SocialInformation> list = this.getJdbcTemplate().queryForList(SQL_GET_BY_USER_EMAIL_SOCIAL_TYPE, extractor, email, idSocialType);
-        if (list.size() == 0){
+        List<SocialInformation> list = jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_USER_EMAIL_SOCIAL_TYPE, extractor, email, idSocialType);
+        if (list.isEmpty()){
             return null;
         } else if (list.size() <= 1){
             return list.iterator().next();

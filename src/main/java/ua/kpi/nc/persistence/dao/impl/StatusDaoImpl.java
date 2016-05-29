@@ -16,12 +16,15 @@ import java.util.List;
 /**
  * Created by IO on 21.04.2016.
  */
-public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
+public class StatusDaoImpl implements StatusDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(StatusDaoImpl.class.getName());
 
     public StatusDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private ResultSetExtractor<Status> extractor = resultSet -> {
@@ -34,39 +37,39 @@ public class StatusDaoImpl extends JdbcDaoSupport implements StatusDao {
 
     @Override
     public Status getById(Long id) {
-        log.trace("Looking for user with id = ", id);
-        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.id = ?;",
+        log.info("Looking for user with id = {}", id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.id = ?;",
                 extractor, id);
     }
 
     @Override
     public List<Status> getAllStatuses() {
-        log.trace("Looking for all statuses");
-        return this.getJdbcTemplate().queryForList("SELECT s.id, s.title FROM \"status\" s", extractor);
+        log.info("Looking for all statuses");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList("SELECT s.id, s.title FROM \"status\" s", extractor);
     }
 
     @Override
     public int insertStatus(Status status) {
-        log.trace("Insert status");
-        return this.getJdbcTemplate().update("INSERT INTO public.status(status.title) VALUES(?);", status.getTitle());
+        log.info("Insert status");
+        return jdbcDaoSupport.getJdbcTemplate().update("INSERT INTO public.status(status.title) VALUES(?);", status.getTitle());
     }
 
     @Override
     public int updateStatus(Status status) {
-        log.trace("Update status with id = ", status.getId());
-        return this.getJdbcTemplate().update("UPDATE public.status SET status.title = ? WHERE status.id = ?;",
+        log.info("Update status with id = ", status.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update("UPDATE public.status SET status.title = ? WHERE status.id = ?;",
                 status.getTitle(), status.getId());
     }
 
     @Override
     public int deleteStatus(Status status) {
-        log.trace("Delete status with id = ", status.getId());
-        return this.getJdbcTemplate().update("DELETE FROM public.status WHERE status.id = ?;", status.getId());
+        log.info("Delete status with id = ", status.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM public.status WHERE status.id = ?;", status.getId());
     }
 
     @Override
     public Status getByName(String name) {
-        log.trace("Looking for user with name = ", name);
-        return this.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.title = ?;", extractor, name);
+        log.info("Looking for user with name = ", name);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT status.id, status.title FROM public.status WHERE status.title = ?;", extractor, name);
     }
 }

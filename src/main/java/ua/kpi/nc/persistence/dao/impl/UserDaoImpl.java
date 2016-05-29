@@ -22,14 +22,14 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
+public class UserDaoImpl implements UserDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     private static final int ROLE_STUDENT = 3;
     private static final int APPROVED_STATUS = 3;
-
-    private static String direction;
 
     private ResultSetExtractor<User> extractor = resultSet -> {
         User user = new UserImpl();
@@ -48,7 +48,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     };
 
     public UserDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
@@ -202,43 +203,43 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
-        return this.getJdbcTemplate().queryForList(SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE,
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE,
                 resultSet -> resultSet.getInt("count"), role.getId());
     }
 
     @Override
     public List<User> getActiveStaffByRole(Role role) {
         log.info("Get all active staffs with role {}", role.getId());
-        return this.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, extractor, role.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, extractor, role.getId());
     }
 
     @Override
     public List<User> getAllNotScheduleStudents() {
         log.info("Get all not schedule students");
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
     }
 
     @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public User getByUsername(String email) {
         log.info("Looking for user with email = {}", email);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
     }
 
     @Override
     public boolean isExist(String email) {
-        return this.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
     }
 
     @Override
     public Long insertUser(User user, Connection connection) {
         log.info("Insert user with email = {}", user.getEmail());
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
     }
 
@@ -253,13 +254,13 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
                     user.getId()};
             count++;
         }
-        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
+        return jdbcDaoSupport.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
     }
 
     @Override
     public int updateUser(User user) {
         log.info("Update user with id = {}", user.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
     }
@@ -267,16 +268,15 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public int updateUser(User user, Connection connection) {
         log.info("Update user with id = {}", user.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
     }
 
-
     @Override
     public int deleteUser(User user) {
-        log.info("Delete user with id = ", user.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, user.getId());
+        log.info("Delete user with id = {}", user.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, user.getId());
     }
 
     @Override
@@ -285,7 +285,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.warn(String.format("User: %s don`t have id", user.getEmail()));
             return false;
         }
-        return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
+        return jdbcDaoSupport.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
                 user.getId(), role.getId()) > 0;
     }
 
@@ -295,7 +295,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.warn("User: don`t have id", user.getEmail());
             return false;
         }
-        return this.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);", connection,
+        return jdbcDaoSupport.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);", connection,
                 user.getId(), role.getId()) > 0;
     }
 
@@ -305,7 +305,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.warn("User: don`t have id, {}", user.getEmail());
             return 0;
         }
-        return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
+        return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
                 "id_role = ?", user.getId(), role.getId());
     }
 
@@ -315,38 +315,38 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.warn("User: don`t have id, {}", user.getEmail());
             return 0;
         }
-        return this.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", connection, user.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", connection, user.getId());
     }
 
     @Override
     public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
         log.info("Insert Final Time Point");
-        return this.getJdbcTemplate().insert(INSERT_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
+        return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
     }
 
     @Override
     public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
         log.info("Delete Final Time Point");
-        return this.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
     }
 
     @Override
     public User getUserByToken(String token) {
         log.info("Get users by token");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_USERS_BY_TOKEN, extractor, token);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_USERS_BY_TOKEN, extractor, token);
     }
 
 
     @Override
     public Set<User> getAssignedStudents(Long id) {
         log.info("Get Assigned Students");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, extractor, id);
     }
 
     @Override
     public Set<User> getAllStudents() {
         log.info("Get all Students");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
     }
 
     @Override
@@ -355,7 +355,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         String sql = SQL_GET_ALL_EMPLOYEES_FOR_ROWS;
         sql += sortingCol.toString();
         sql += increase ? SQL_QUERY_ENDING_ASC : SQL_QUERY_ENDING_DESC;
-        return this.getJdbcTemplate().queryForList(sql, extractor,
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(sql, extractor,
                 fromRows, rowsNum);
     }
 
@@ -363,7 +363,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
         log.info("Get Students From To Rows");
         String sql = increase ? SQL_GET_ALL_STUDENTS_FOR_ROWS_ASK : SQL_GET_ALL_STUDENTS_FOR_ROWS_DESK;
-        return this.getJdbcTemplate().queryForList(sql, extractor, sortingCol,
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(sql, extractor, sortingCol,
                 fromRows, rowsNum);
     }
 
@@ -385,7 +385,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         String inQuery = sb.toString();
 
         String active = interviewer ? (notIntrviewer ? "{true,false}" : "{true}") : (notIntrviewer ? "{false}" : "{}");
-        return this.getJdbcTemplate().queryForList(sql, extractor, idStart, idFinish, inQuery, active,
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(sql, extractor, idStart, idFinish, inQuery, active,
                 fromRows, rowsNum);
     }
 
@@ -393,17 +393,17 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public Set<User> getAllEmploees() {
         log.info("Get all Employees");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, extractor);
     }
 
     @Override
     public Set<User> getAll() {
         log.info("Get all Users");
-        return this.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
     }
 
     private Set<Role> getRoles(Long userID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT ur.id_role\n" +
                 "FROM user_role ur " +
                 "WHERE ur.id_user = ?;", resultSet -> {
             Set<Role> roles = new HashSet<>();
@@ -415,7 +415,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     private Set<SocialInformation> getSocialInfomations(Long userID) {
-        return this.getJdbcTemplate().queryWithParameters("SELECT si.id\n" +
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT si.id\n" +
                 "FROM \"social_information\" si\n" +
                 "WHERE si.id_user = ?;", resultSet -> {
             Set<SocialInformation> set = new HashSet<>();
@@ -434,19 +434,19 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public Long getStudentCount() {
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_STUDENT_COUNT, resultSet ->
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_STUDENT_COUNT, resultSet ->
                 resultSet.getLong(1));
     }
 
     @Override
     public int deleteToken(Long id) {
         log.info("Delete token user with id = {}", id);
-        return this.getJdbcTemplate().update(SQL_DELETE_TOKEN, id);
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE_TOKEN, id);
     }
 
     @Override
     public List<ScheduleTimePoint> getFinalTimePoints(Long timeID) {
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
             List<ScheduleTimePoint> list = new ArrayList<ScheduleTimePoint>();
             do {
                 list.add(new ScheduleTimePointProxy(resultSet.getLong("id")));
@@ -463,7 +463,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return this.getJdbcTemplate().queryForList(SQL_SEARCH_EMPLOYEE_BY_NAME, extractor, id, "%" + lastName + "%");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_SEARCH_EMPLOYEE_BY_NAME, extractor, id, "%" + lastName + "%");
     }
 
     @Override
@@ -474,18 +474,18 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return this.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, id, "%" + lastName + "%",
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_SEARCH_STUDENT_BY_LAST_NAME, extractor, id, "%" + lastName + "%",
                 fromRows, rowsNum);
     }
 
     @Override
     public Long getUserCount() {
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_MAX_ID, resultSet -> resultSet.getLong(1));
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_MAX_ID, resultSet -> resultSet.getLong(1));
     }
 
     @Override
     public List<String> getNotMarkedInterviwers() {
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_NOT_MARKED_INTERVIEWERS, resultSet -> {
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_NOT_MARKED_INTERVIEWERS, resultSet -> {
             List<String> list = new ArrayList<>();
             do {
                 list.add(resultSet.getString("email"));
@@ -498,14 +498,14 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     @Override
     public Long getActiveEmployees(Long idRole0, Long idRole1) {
         log.info("Looking for count employees");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_EMPLOYEES,
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_EMPLOYEES,
                 resultSet -> resultSet.getLong(1), idRole0, idRole1);
     }
 
     @Override
     public Long getCountActiveDoubleRoleEmployee() {
         log.info("Looking for count of active double role employees");
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_DOUBLE_ROLE_EMPLOYEES,
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_ACTIVE_DOUBLE_ROLE_EMPLOYEES,
                 resultSet -> resultSet.getLong(1));
     }
 
@@ -524,28 +524,27 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         String inQuery = sb.toString();
 
         String active = interviewer ? (notIntrviewer ? "{true,false}" : "{true}") : (notIntrviewer ? "{false}" : "{}");
-        return this.getJdbcTemplate().queryWithParameters(sql, resultSet -> resultSet.getLong(1), idStart, idFinish, inQuery, active, sortingCol,
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(sql, resultSet -> resultSet.getLong(1), idStart, idFinish, inQuery, active, sortingCol,
                 fromRows, rowsNum);
     }
 
     @Override
     public int disableAllStaff() {
-        return this.getJdbcTemplate().update(SQL_DISABLE_STAFF);
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DISABLE_STAFF);
     }
 
     @Override
     public List<User> getStudentsWithNotconnectedForms() {
-        return this.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_UNCONNECTED_FORMS, extractor);
     }
 
     @Override
     public List<User> getUsersWithoutInterview(Long roleId) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor, roleId);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor, roleId);
     }
 
     @Override
     public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE, extractor, scheduleTimePointId, roleId);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_USERS_BY_TIME_POINT_ROLE, extractor, scheduleTimePointId, roleId);
     }
-
 }

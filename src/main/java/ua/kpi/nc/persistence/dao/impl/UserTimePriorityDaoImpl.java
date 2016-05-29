@@ -20,11 +20,15 @@ import java.util.List;
 /**
  * @author Korzh
  */
-public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimePriorityDao {
+public class UserTimePriorityDaoImpl implements UserTimePriorityDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
+
     private static Logger log = LoggerFactory.getLogger(UserTimePriorityDaoImpl.class.getName());
 
     public UserTimePriorityDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private ResultSetExtractor<UserTimePriority> extractor = resultSet -> {
@@ -49,10 +53,10 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
     private static final String INSERT_USER_TIME_PRIORITY = "INSERT INTO user_time_priority (id_user, id_time_point, id_priority_type) VALUES (?,?,?);";
     private static final String UPDATE_USER_TIME_PRIORITY = "UPDATE user_time_priority p set id_priority_type = ? WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String DELETE_USER_TIME_PRIORITY = "DELETE FROM public.user_time_priority p WHERE p.id_user = ? and p.id_time_point = ?;";
-	private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice "
-			+ "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) "
-			+ "INNER JOIN schedule_time_point stp on stp.id = p.id_time_point "
-			+ " WHERE p.id_user = ? ORDER BY stp.time_point";
+    private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice "
+            + "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) "
+            + "INNER JOIN schedule_time_point stp on stp.id = p.id_time_point "
+            + " WHERE p.id_user = ? ORDER BY stp.time_point";
     private static final String IS_PRIORITIES_EXIST_FOR_STAFF = "SELECT EXISTS(SELECT 1\n" +
             "              FROM user_time_priority utp\n" +
             "JOIN \"user\" u on utp.id_user = u.id\n" +
@@ -66,7 +70,7 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
 
     private static final String GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID = "SELECT\n" +
             "  p.id_priority_type,\n" +
-            "  p.id_time_point,"+
+            "  p.id_time_point," +
             "  stp.time_point\n" +
             "FROM public.user_time_priority p join public.time_priority_type pt\n" +
             "    on (p.id_priority_type= pt.id) JOIN schedule_time_point stp ON  " +
@@ -74,88 +78,87 @@ public class UserTimePriorityDaoImpl extends JdbcDaoSupport implements UserTimeP
 
     @Override
     public UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint) {
-        log.trace("Looking for User time priority  with id user,  id  scheduleTimePoint = ", user.getId()
+        log.info("Looking for User time priority  with id user,  id  scheduleTimePoint = ", user.getId()
                 , scheduleTimePoint.getId());
-        return this.getJdbcTemplate().queryWithParameters(GET_BY_USER_ID_TIME_POINT_ID,
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(GET_BY_USER_ID_TIME_POINT_ID,
                 extractor, user.getId(), scheduleTimePoint.getId());
     }
 
     @Override
     public Long insertUserPriority(UserTimePriority userTimePriority) {
-        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = ",
+        log.info("Inserting User time priority  with id user,  id  scheduleTimePoint = ",
                 userTimePriority.getUser().getId(), userTimePriority.getScheduleTimePoint().getId());
-        return this.getJdbcTemplate().insert(INSERT_USER_TIME_PRIORITY, userTimePriority.getUser().getId(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_USER_TIME_PRIORITY, userTimePriority.getUser().getId(),
                 userTimePriority.getScheduleTimePoint().getId(), userTimePriority.getTimePriorityType().getId());
     }
 
     @Override
     public int updateUserPriority(UserTimePriority userTimePriority) {
-        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = {}",
+        log.info("Inserting User time priority  with id user,  id  scheduleTimePoint = {}",
                 userTimePriority.getUser().getId(), userTimePriority.getScheduleTimePoint().getId());
-        return this.getJdbcTemplate().update(UPDATE_USER_TIME_PRIORITY, userTimePriority.getTimePriorityType().getId(), userTimePriority.getUser().getId(),
+        return jdbcDaoSupport.getJdbcTemplate().update(UPDATE_USER_TIME_PRIORITY, userTimePriority.getTimePriorityType().getId(), userTimePriority.getUser().getId(),
                 userTimePriority.getScheduleTimePoint().getId());
     }
 
     @Override
     public int[] batchUpdateUserPriority(List<UserTimePriority> userTimePriorities) {
-        log.trace("Updating User time priority  with id user,  id  scheduleTimePoint = {}");
+        log.info("Updating User time priority  with id user,  id  scheduleTimePoint = {}");
         Object[][] objects = new Object[userTimePriorities.size()][];
         int count = 0;
-        for (UserTimePriority userTimePriority : userTimePriorities){
+        for (UserTimePriority userTimePriority : userTimePriorities) {
             objects[count] = new Object[]{
                     userTimePriority.getTimePriorityType().getId(),
                     userTimePriority.getUser().getId(),
                     userTimePriority.getScheduleTimePoint().getId()};
             count++;
         }
-        return this.getJdbcTemplate().batchUpdate(UPDATE_USER_TIME_PRIORITY, objects);
+        return jdbcDaoSupport.getJdbcTemplate().batchUpdate(UPDATE_USER_TIME_PRIORITY, objects);
     }
 
     @Override
     public int[] batchCreateUserPriority(List<UserTimePriority> userTimePriorities) {
-        log.trace("Inserting User time priority  with id user,  id  scheduleTimePoint = {}");
+        log.info("Inserting User time priority  with id user,  id  scheduleTimePoint = {}");
         Object[][] objects = new Object[userTimePriorities.size()][];
         int count = 0;
-        for (UserTimePriority userTimePriority : userTimePriorities){
+        for (UserTimePriority userTimePriority : userTimePriorities) {
             objects[count] = new Object[]{
                     userTimePriority.getUser().getId(),
                     userTimePriority.getScheduleTimePoint().getId(),
                     userTimePriority.getTimePriorityType().getId()};
             count++;
         }
-        return this.getJdbcTemplate().batchUpdate(INSERT_USER_TIME_PRIORITY,objects);
+        return jdbcDaoSupport.getJdbcTemplate().batchUpdate(INSERT_USER_TIME_PRIORITY, objects);
     }
 
     @Override
     public int deleteUserPriority(UserTimePriority userTimePriority) {
-        log.trace("Deleting User time priority  with id user,  id  scheduleTimePoint = ",
+        log.info("Deleting User time priority  with id user,  id  scheduleTimePoint = ",
                 userTimePriority.getUser().getId(), userTimePriority.getScheduleTimePoint().getId());
-        return this.getJdbcTemplate().update(DELETE_USER_TIME_PRIORITY, userTimePriority.getUser().getId(),
+        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_USER_TIME_PRIORITY, userTimePriority.getUser().getId(),
                 userTimePriority.getScheduleTimePoint().getId());
     }
 
     @Override
     public List<UserTimePriority> getAllUserTimePriorities(Long userId) {
-        log.trace("Getting all User time priorities ");
-        return this.getJdbcTemplate().queryForList(GET_ALL_USER_TIME_PRIORITY, extractor, userId);
+        log.info("Getting all User time priorities ");
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL_USER_TIME_PRIORITY, extractor, userId);
     }
 
     @Override
-    public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId){
-        log.trace("Getting all time priorities for user with id ={} ", userId);
-        return this.getJdbcTemplate().queryForList(GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID, extractorDto,userId);
+    public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId) {
+        log.info("Getting all time priorities for user with id ={} ", userId);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID, extractorDto, userId);
     }
 
-	@Override
-	public boolean isSchedulePrioritiesExistStudent() {
-		log.trace("Check the existing of user time priorities.");
-		return this.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST_FOR_STUDENT, resultSet -> resultSet.getBoolean(1));
-	}
+    @Override
+    public boolean isSchedulePrioritiesExistStudent() {
+        log.info("Check the existing of user time priorities.");
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST_FOR_STUDENT, resultSet -> resultSet.getBoolean(1));
+    }
+
     @Override
     public boolean isSchedulePrioritiesExistStaff() {
-        log.trace("Check the existing of user time priorities.");
-        return this.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST_FOR_STAFF, resultSet -> resultSet.getBoolean(1));
+        log.info("Check the existing of user time priorities.");
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(IS_PRIORITIES_EXIST_FOR_STAFF, resultSet -> resultSet.getBoolean(1));
     }
-
-
 }

@@ -13,16 +13,18 @@ import java.util.List;
 /**
  * Created by Алексей on 22.04.2016.
  */
-public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
+public class DecisionDaoImpl implements DecisionDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(DecisionDaoImpl.class.getName());
 
     public DecisionDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     static final String TABLE_NAME = "decision_matrix";
-
     static final String SOFT_MARK_COL = "soft_mark";
     static final String TECH_MARK_COL = "tech_mark";
     static final String FINAL_MARK_COL = "final_mark";
@@ -60,7 +62,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
         if (log.isInfoEnabled()) {
             log.info("Looking for decision with soft_mark = " + softMark + " and tech_mark = " + techMark);
         }
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_IDS, extractor, softMark, techMark);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_IDS, extractor, softMark, techMark);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
             log.info("Insert decision with soft_mark = " + decision.getSoftMark() + " tech_mark = "
                     + decision.getTechMark() + " and final_mark = " + decision.getFinalMark());
         }
-        return this.getJdbcTemplate().insert(SQL_INSERT, decision.getSoftMark(), decision.getTechMark(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, decision.getSoftMark(), decision.getTechMark(),
                 decision.getFinalMark());
     }
 
@@ -79,7 +81,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
             log.info("Update decision with soft_mark = " + decision.getSoftMark() + " and tech_mark = "
                     + decision.getTechMark());
         }
-        return this.getJdbcTemplate().update(SQL_UPDATE, decision.getFinalMark(), decision.getSoftMark(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, decision.getFinalMark(), decision.getSoftMark(),
                 decision.getTechMark());
     }
 
@@ -89,7 +91,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
             log.info("Delete decision with soft_mark = " + decision.getSoftMark() + " tech_mark = "
                     + decision.getTechMark() + " and final_mark = " + decision.getFinalMark());
         }
-        return this.getJdbcTemplate().update(SQL_DELETE, decision.getSoftMark(), decision.getTechMark(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, decision.getSoftMark(), decision.getTechMark(),
                 decision.getFinalMark());
     }
 
@@ -98,7 +100,7 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
         if (log.isInfoEnabled()) {
             log.info("Getting all decisions");
         }
-        return this.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL, extractor);
     }
 
     @Override
@@ -111,8 +113,6 @@ public class DecisionDaoImpl extends JdbcDaoSupport implements DecisionDao {
             paramObjects[i][1] = decision.getSoftMark();
             paramObjects[i++][2] = decision.getTechMark();
         }
-        return this.getJdbcTemplate().batchUpdate(SQL_UPDATE, paramObjects);
+        return jdbcDaoSupport.getJdbcTemplate().batchUpdate(SQL_UPDATE, paramObjects);
     }
-
-
 }

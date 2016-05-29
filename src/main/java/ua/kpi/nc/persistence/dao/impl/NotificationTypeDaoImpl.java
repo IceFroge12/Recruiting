@@ -13,12 +13,13 @@ import java.util.Set;
 /**
  * @author Korzh
  */
-public class NotificationTypeDaoImpl extends JdbcDaoSupport implements NotificationTypeDao {
+public class NotificationTypeDaoImpl implements NotificationTypeDao {
+    private final JdbcDaoSupport jdbcDaoSupport;
 
-    static final String ID_COL = "id";
-    static final String TITLE_COL = "n_title";
+    private static final String ID_COL = "id";
+    private static final String TITLE_COL = "n_title";
 
-    static final String TABLE_NAME = "notification_type";
+    private static final String TABLE_NAME = "notification_type";
 
     private static final String SQL_GET = "SELECT n." + ID_COL + ", n." + TITLE_COL + " FROM public." + TABLE_NAME
             + "  n ";
@@ -40,37 +41,38 @@ public class NotificationTypeDaoImpl extends JdbcDaoSupport implements Notificat
 
 
     public NotificationTypeDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     @Override
     public NotificationType getById(Long id) {
         log.trace("Looking for form notification type with id  = ", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public NotificationType getByTitle(String title) {
         log.trace("Looking for form notification type with title  = ", title);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE, extractor, title);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE, extractor, title);
     }
 
     @Override
     public int updateNotificationType(NotificationType notificationType) {
         log.trace("Updating notification type with id  = ", notificationType.getId());
-        return this.getJdbcTemplate().update(SQL_UPDATE_NOTIFICATION_TYPE, notificationType.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE_NOTIFICATION_TYPE, notificationType.getId());
     }
 
     @Override
     public int deleteNotificationType(NotificationType notificationType) {
         log.trace("Deleting notification type with id  = ", notificationType.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE_NOTIFICATION_TYPE, notificationType.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE_NOTIFICATION_TYPE, notificationType.getId());
     }
 
     @Override
     public Set<NotificationType> getAll() {
         log.trace("Getting All Notification Types");
-        return this.getJdbcTemplate().queryForSet(SQL_GET, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET, extractor);
     }
 
 }

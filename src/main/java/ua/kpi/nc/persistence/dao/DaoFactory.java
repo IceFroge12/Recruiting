@@ -30,6 +30,9 @@ public class DaoFactory {
     private static SchedulingSettingsDao schedulingSettingsDao;
     private static DaoUtil daoUtil;
 
+    private DaoFactory() {
+    }
+
     public static RecruitmentDAO getRecruitmentDao() {
         if (recruitmentDAO == null) {
             recruitmentDAO = new RecruitmentDaoImpl(DataSourceSingleton.getInstance());
@@ -183,7 +186,5 @@ public class DaoFactory {
         }
         return daoUtil;
     }
-
-
 }
 

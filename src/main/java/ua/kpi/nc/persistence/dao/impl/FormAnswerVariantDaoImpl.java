@@ -21,12 +21,15 @@ import ua.kpi.nc.persistence.util.ResultSetExtractor;
 /**
  * Created by Алексей on 22.04.2016.
  */
-public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnswerVariantDao {
+public class FormAnswerVariantDaoImpl implements FormAnswerVariantDao {
+
+    private final JdbcDaoSupport jdbcDaoSupport;
 
     private static Logger log = LoggerFactory.getLogger(FormAnswerVariantDaoImpl.class.getName());
 
     public FormAnswerVariantDaoImpl(DataSource dataSource) {
-        this.setJdbcTemplate(new JdbcTemplate(dataSource));
+        this.jdbcDaoSupport = new JdbcDaoSupport();
+        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }
 
     private ResultSetExtractor<FormAnswerVariant> extractor = resultSet -> {
@@ -63,57 +66,57 @@ public class FormAnswerVariantDaoImpl extends JdbcDaoSupport implements FormAnsw
     @Override
     public FormAnswerVariant getById(Long id) {
         log.info("Looking for FormAnswerVarian with id = {}", id);
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
     public List<FormAnswerVariant> getByQuestionId(Long id) {
         log.info("Looking for FormAnswerVarian with QuestionId = {}", id);
-        return this.getJdbcTemplate().queryForList(SQL_GET_BY_QUESTION_ID, extractor, id);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_BY_QUESTION_ID, extractor, id);
     }
 
     @Override
     public Long insertFormAnswerVariant(FormAnswerVariant formatVariant, Connection connection) {
         log.info("Insert FormAnswerVariant with answer = {}", formatVariant.getAnswer());
-        return this.getJdbcTemplate().insert(SQL_INSERT, connection, formatVariant.getAnswer(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, formatVariant.getAnswer(),
                 formatVariant.getFormQuestion().getId());
     }
 
     @Override
     public Long insertFormAnswerVariant(FormAnswerVariant formatVariant) {
         log.info("Insert FormAnswerVariant with answer = {}", formatVariant.getAnswer());
-        return this.getJdbcTemplate().insert(SQL_INSERT, formatVariant.getAnswer(),
+        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, formatVariant.getAnswer(),
                 formatVariant.getFormQuestion().getId());
     }
 
     @Override
     public int updateFormAnswerVariant(FormAnswerVariant formAnswerVariant) {
         log.info("Update FormAnswerVariant with answer = {}", formAnswerVariant.getAnswer());
-        return this.getJdbcTemplate().update(SQL_UPDATE, formAnswerVariant.getAnswer(),
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, formAnswerVariant.getAnswer(),
                 formAnswerVariant.getFormQuestion().getId(), formAnswerVariant.getId());
     }
 
     @Override
     public int deleteFormAnswerVariant(FormAnswerVariant formVariant) {
         log.info("Delete formVariant with id = {}", formVariant.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, formVariant.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, formVariant.getId());
     }
 
     @Override
     public int deleteFormAnswerVariant(FormAnswerVariant formVariant, Connection connection) {
         log.info("Delete formVariant with id = {}", formVariant.getId());
-        return this.getJdbcTemplate().update(SQL_DELETE, connection, formVariant.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, connection, formVariant.getId());
     }
 
     @Override
     public List<FormAnswerVariant> getAll() {
         log.info("Get all FormAnswerVariant");
-        return this.getJdbcTemplate().queryForList(SQL_GET, extractor);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET, extractor);
     }
 
     @Override
     public FormAnswerVariant getAnswerVariantByTitleAndQuestion(String title, FormQuestion question) {
         log.trace("Looking for answer variant with title = {} and questionId = {})", title, question.getId());
-        return this.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE_QUESTION, extractor, title, question.getId());
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_TITLE_QUESTION, extractor, title, question.getId());
     }
 }

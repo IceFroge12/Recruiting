@@ -16,16 +16,31 @@ public class DataSourceSingleton {
 
     private static Logger log = LoggerFactory.getLogger(DataSourceSingleton.class.getName());
 
+    private DataSource dataSource;
+
+    private PropertiesReader propertiesReader = PropertiesReader.getInstance();
+
+    private String databasePassword = propertiesReader.propertiesReader("db.password");
+
+    private String databaseServerName = propertiesReader.propertiesReader("db.server.name");
+
+    private String databaseUsername = propertiesReader.propertiesReader("db.username");
+
+    private String databaseName = propertiesReader.propertiesReader("db.name");
+
+    private int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));
+
     private DataSourceSingleton() {
         try {
             dataSource = setUpDataSource();
+            log.info("Data source has been created");
         } catch (NamingException e) {
             log.error("Cannot set up data source", e);
         }
     }
 
     private static class DataSourceSingletonHolder{
-        static DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
+        public static final DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
         private DataSourceSingletonHolder() {
         }
     }
@@ -34,33 +49,18 @@ public class DataSourceSingleton {
         return DataSourceSingletonHolder.HOLDER_INSTANCE.getDataSource();
     }
 
-    private static PGPoolingDataSource dataSource;
-
-    private static PropertiesReader propertiesReader = PropertiesReader.getInstance();
-
-    private static String databasePassword = propertiesReader.propertiesReader("db.password");
-
-    private static String databaseServerName = propertiesReader.propertiesReader("db.server.name");
-
-    private static String databaseUsername = propertiesReader.propertiesReader("db.username");
-
-    private static String databaseName = propertiesReader.propertiesReader("db.name");
-
-    private static int maxConnections = Integer.parseInt(propertiesReader.propertiesReader("db.connections"));
-
-
-    private PGPoolingDataSource setUpDataSource() throws NamingException {
-        dataSource = new PGPoolingDataSource();
-        dataSource.setDataSourceName("dataSource");
-        dataSource.setServerName(databaseServerName);
-        dataSource.setDatabaseName(databaseName);
-        dataSource.setUser(databaseUsername);
-        dataSource.setPassword(databasePassword);
-        dataSource.setMaxConnections(maxConnections);
-        return dataSource;
+    private DataSource setUpDataSource() throws NamingException {
+        PGPoolingDataSource pgDataSource = new PGPoolingDataSource();
+        pgDataSource.setDataSourceName("dataSource");
+        pgDataSource.setServerName(databaseServerName);
+        pgDataSource.setDatabaseName(databaseName);
+        pgDataSource.setUser(databaseUsername);
+        pgDataSource.setPassword(databasePassword);
+        pgDataSource.setMaxConnections(maxConnections);
+        return pgDataSource;
     }
 
-    private PGPoolingDataSource getDataSource(){
+    private DataSource getDataSource(){
         return dataSource;
     }
 }
