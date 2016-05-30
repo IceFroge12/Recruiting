@@ -147,8 +147,8 @@
                             </tr>
                             <tr ng-repeat="question in questions | filter:searchQuestion">
                                 <td>{{question.order}}</td>
-                                <td>{{question.title}}</td>
                                 <td>{{question.question}}</td>
+                                <td>{{question.type}}</td>
                                 <td>
                                     <button ng-click="changeStatus(question)"
                                             ng-class="{'btn btn-success' : question.enable, 'btn btn-danger' : !question.enable}"

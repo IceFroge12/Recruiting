@@ -36,11 +36,6 @@ function staffSchedulingController($scope,ngToast, staffSchedulingService) {
         
         $scope.timePoints = data;
         
-        // $scope.show = true;
-        // if($scope.timePoints == ""){
-        //     $scope.show = false;
-        // }
-        
         angular.forEach($scope.timePoints, function (item, i) {
             item.i = i;
         });
