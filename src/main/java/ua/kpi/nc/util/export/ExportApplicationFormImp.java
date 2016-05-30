@@ -53,7 +53,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
             base = BaseFont.createFont(urlFont.getPath(), BaseFont.IDENTITY_H, false);
         } else {
             log.error("Error initializing font for checkboxes");
-            throw new FileNotFoundException();
+            throw new FileNotFoundException("Error initializing font for checkboxes");
         }
         fontCheckboxes = new Font(base, 16f, Font.BOLD);
     }
@@ -219,7 +219,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
             }
         } catch (DocumentException e) {
             log.error("Error while inserting Radio and Checkbox Answers And Questions {}", e);
-            throw new DocumentException();
+            throw new DocumentException("Cannot Radio and Checkbox Answers And Questions");
         }
 
     }
@@ -243,7 +243,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
             }
         } catch (DocumentException e) {
             log.error("Error while inserting TextArea Answers And Questions {}", e);
-            throw new DocumentException();
+            throw new DocumentException("Cannot insert TextArea Answers And Questions");
         }
     }
 

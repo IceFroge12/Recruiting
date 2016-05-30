@@ -78,24 +78,15 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "saveSelectedDays", method = RequestMethod.POST)
-    public void saveSelectedDays() throws MessagingException {
-//        long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
-//                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
-//                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
-//        ));
-//        if (id == 0) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(SAVE_SELECTED_DAYS_ERROR));
-//        }
-        EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.INTERVIEW_INVITE.getId());
-        List<User> userList = userService.getUserWithFinalTimePoint();
-        for (User user : userList) {
-
-            String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
-            String subject = emailTemplate.getTitle();
-            senderService.send(user.getEmail(), subject, template);
-            System.out.println(user);
+    public ResponseEntity saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto) {
+        long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
+                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
+                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
+        ));
+        if (id == 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(SAVE_SELECTED_DAYS_ERROR));
         }
-//        return ResponseEntity.ok(id);
+        return ResponseEntity.ok(id);
     }
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)
