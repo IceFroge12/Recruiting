@@ -33,7 +33,7 @@ public class AdminFormSettingsController {
     public List<FormQuestionDto> getQuestions(@RequestParam String role) {
         Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
-        Collections.sort(formQuestionList, new FormQuestionComparator());
+//        Collections.sort(formQuestionList, new FormQuestionComparator());
         List<FormQuestionDto> formQuestionListDto = new ArrayList<>();
         for (FormQuestion formQuestion : formQuestionList) {
             FormQuestionDto formQuestionDto = new FormQuestionDto();

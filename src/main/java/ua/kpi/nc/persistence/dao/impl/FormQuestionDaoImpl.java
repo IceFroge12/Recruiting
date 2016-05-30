@@ -61,8 +61,9 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
 
     private static final String SQL_GET_BY_ID = SQL_GET_ALL + " WHERE fq." + ID_COL + " = ?;";
 
-    private static final String SQL_GET_BY_ROLE = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
-            + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ?;";
+    private static final String SQL_GET_BY_ROLE = "SELECT fq.id, fq.title, fq.id_question_type, fq.enable, fq.mandatory, fq.order, fqt.type_title FROM form_question fq\n" +
+            "  INNER JOIN form_question_type fqt ON fqt.id = fq.id_question_type\n" +
+            "  INNER JOIN form_question_role fqr ON fqr.id_form_question = fq.id WHERE fqr.id_role = ? ORDER BY fq.order";
 
     private static final String SQL_GET_BY_ROLE_NONTEXT = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
             + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ? AND (fq."
