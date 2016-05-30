@@ -42,7 +42,7 @@ public class DeadlineController {
     public void setRegisteredDeadline(Timestamp date){
         registeredStatusDeadline.schedule(() -> {
             actionForRegisteredDeadline();
-            registeredStatusDeadline.shutdown();
+         //   registeredStatusDeadline.shutdown();
         }, calculateDate(date), TimeUnit.MILLISECONDS);
     }
 

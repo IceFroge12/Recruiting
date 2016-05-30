@@ -51,7 +51,10 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         BaseFont base = null;
         if (urlFont != null) {
             base = BaseFont.createFont(urlFont.getPath(), BaseFont.IDENTITY_H, false);
-        } else throw new FileNotFoundException();
+        } else {
+            log.error("Error initializing font for checkboxes");
+            throw new FileNotFoundException();
+        }
         fontCheckboxes = new Font(base, 16f, Font.BOLD);
     }
 

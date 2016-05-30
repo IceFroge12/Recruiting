@@ -121,17 +121,14 @@
                        </span>
                             </td>
                             <td ng-if="question.questionType == 'radio'">
-                       <span ng-repeat="variant in question.variants track by $index">
-                           <p>
-                               <input type="radio" ng-model="question.answers[0].answer" name="question.questionTitle"
-                                      ng-value="variant.variant"> {{variant.variant}}
-                           </p>
-                       </span>
+                                <div ng-repeat="variant in question.variants">
+                                    <input type="radio" name="{{$parent.question.title}}" ng-model="$parent.question.answers[0].answer"	name="question.questionTitle" ng-value="variant.variant">{{variant.variant}}</input>
+                                </div>
                             </td>
                             <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                                 <p>
-                                    <input ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
-                                           value="{{answer.answer}}"> {{variant.variant}}
+                                    <textarea ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
+                                           value="{{answer.answer}}">{{answer.answer}}</textarea>
                                 </p>
 
                             </td>
@@ -190,8 +187,8 @@
 							</td>
 							<td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
                                 <p>
-                                    <input ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
-                                           value="{{answer.answer}}"> {{variant.variant}}
+                                    <textarea ng-model="answer.answer" ng-model="answer.ID" class="form-control" type="text"
+                                              value="{{answer.answer}}">{{answer.answer}}</textarea>
                                 </p>
                             </td>
                         </tr>
