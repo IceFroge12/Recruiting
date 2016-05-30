@@ -199,6 +199,9 @@ public class UserDaoImpl implements UserDao {
             "  JOIN application_form af ON af.id = interview.id_application_form " +
             "WHERE ur.id_role <> 3 AND u.is_active = TRUE and af.is_active = true and interview.mark is null;";
 
+    private static final String SQL_GET_USERS_WITH_FINAL_TIME_POINT = "Select u.id, u.email, u.first_name,u.last_name, u.second_name,\n" +
+            "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
+            "from public.user u JOIN user_time_final uf on uf.id_user=u.id and uf.id_time_point IS NOT NULL";
 
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
@@ -492,7 +495,6 @@ public class UserDaoImpl implements UserDao {
             } while (resultSet.next());
             return list;
         });
-
     }
 
     @Override
@@ -541,6 +543,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsersWithoutInterview(Long roleId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_WITHOUT_INTERVIEW, extractor, roleId);
+    }
+
+    @Override
+    public List<User> getUserWithFinalTimePoint() {
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_USERS_WITH_FINAL_TIME_POINT, extractor);
     }
 
     @Override

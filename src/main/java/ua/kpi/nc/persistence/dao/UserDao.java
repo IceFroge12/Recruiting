@@ -92,4 +92,6 @@ public interface UserDao {
     public List<String> getNotMarkedInterviwers();
 
     List<User> getUsersWithoutInterview(Long roleId);
+
+    List<User> getUserWithFinalTimePoint();
 }

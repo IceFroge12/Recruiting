@@ -5,9 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.nc.persistence.dto.*;
 import ua.kpi.nc.persistence.model.*;
+import ua.kpi.nc.persistence.model.enums.EmailTemplateEnum;
 import ua.kpi.nc.persistence.model.enums.SchedulingStatusEnum;
 import ua.kpi.nc.service.*;
+import ua.kpi.nc.service.util.SenderService;
+import ua.kpi.nc.service.util.SenderServiceImpl;
 
+import javax.mail.MessagingException;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,9 +34,11 @@ public class AdminSchedulingController {
     private ScheduleTimePointService timePointService = ServiceFactory.getScheduleTimePointService();
     private DaoUtilService daoUtilService = ServiceFactory.getDaoUtilService();
     private UserTimePriorityService userTimePriorityService = ServiceFactory.getUserTimePriorityService();
+    private EmailTemplateService emailTemplateService = ServiceFactory.getEmailTemplateService();
+    private SenderService senderService = SenderServiceImpl.getInstance();
 
 
-    private static final  String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
+    private static final String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
     private static final String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
     private static final String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
     private static final String EDIT_SELECTED_DAY_ERROR = "Error during edit selected day, refresh page or try again later";
@@ -72,15 +78,24 @@ public class AdminSchedulingController {
     }
 
     @RequestMapping(value = "saveSelectedDays", method = RequestMethod.POST)
-    public ResponseEntity saveSelectedDays(@RequestBody SchedulingDaysDto schedulingDaysDto) {
-        long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
-                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
-                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
-        ));
-        if (id == 0) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(SAVE_SELECTED_DAYS_ERROR));
+    public void saveSelectedDays() throws MessagingException {
+//        long id = schedulingSettingsService.insertTimeRange(new SchedulingSettings(
+//                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourStart() * HOURS_FACTOR),
+//                new Timestamp(schedulingDaysDto.getDay() + schedulingDaysDto.getHourEnd() * HOURS_FACTOR)
+//        ));
+//        if (id == 0) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(SAVE_SELECTED_DAYS_ERROR));
+//        }
+        EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.INTERVIEW_INVITE.getId());
+        List<User> userList = userService.getUserWithFinalTimePoint();
+        for (User user : userList) {
+
+            String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+            String subject = emailTemplate.getTitle();
+            senderService.send(user.getEmail(), subject, template);
+            System.out.println(user);
         }
-        return ResponseEntity.ok(id);
+//        return ResponseEntity.ok(id);
     }
 
     @RequestMapping(value = "getSelectedDays", method = RequestMethod.POST)

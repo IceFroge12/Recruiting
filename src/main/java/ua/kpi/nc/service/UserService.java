@@ -85,7 +85,9 @@ public interface UserService {
 
     List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId);
 
-    public List<String> getNotMarkedInterviwers();
+    List<String> getNotMarkedInterviwers();
 
     List<User> getUsersWithoutInterview(Long roleId);
+
+    List<User> getUserWithFinalTimePoint();
 }

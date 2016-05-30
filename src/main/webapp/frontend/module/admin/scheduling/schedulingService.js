@@ -35,7 +35,6 @@ function schedulingService($http) {
         return $http({
             method: 'POST',
             url: '/scheduling/saveSelectedDays',
-            data: data
         })
     };
 

@@ -250,5 +250,10 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersWithoutInterview(Long roleId) {
         return userDao.getUsersWithoutInterview(roleId);
     }
+
+    @Override
+    public List<User> getUserWithFinalTimePoint() {
+        return userDao.getUserWithFinalTimePoint();
+    }
 }
 
